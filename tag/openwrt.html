@@ -3,8 +3,7 @@
 <head>
         <meta charset="utf-8" />
         <title>Solarck - openwrt</title>
-        <link rel="stylesheet" href="//solarck.com/theme/css/main.css" />
-        <link href="https://solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Solarck Atom Feed" />
+        <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -13,26 +12,26 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="https://solarck.com/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
+                <h1><a href="/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
                 <nav><ul>
-                    <li><a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></li>
-                    <li><a href="https://solarck.com/category/jin-rong-bi-ji.html">金融笔记</a></li>
+                    <li><a href="/category/itbi-ji.html">IT笔记</a></li>
+                    <li><a href="/category/jin-rong-bi-ji.html">金融笔记</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://solarck.com/openwrt-samba.html">openwrt开启Samba作为共享中心</a></h1>
+                    <h1 class="entry-title"><a href="/openwrt-samba.html">openwrt开启Samba作为共享中心</a></h1>
 <footer class="post-info">
         <abbr class="published" title="2014-01-05T01:29:00+08:00">
                 发布时间: 一月 05, 2014
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="https://solarck.com/tag/openwrt.html">openwrt</a> </p>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/openwrt.html">openwrt</a> </p>
 </footer><!-- /.post-info --><p>为Openwrt接入一个大U盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机BT下载提供一个基础。</p>
 <h3>安装</h3>
 <div class="highlight"><pre><span></span>opkg update
@@ -173,7 +172,7 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
 </pre></div>
 
 
-<p>Samba共享就全部完成，之后再继续研究BT下载，配合Samba的共享就等于免费拥有了一个简版NAS。</p><p>There are <a href="https://solarck.com/openwrt-samba.html#disqus_thread">comments</a>.</p>                </article>
+<p>Samba共享就全部完成，之后再继续研究BT下载，配合Samba的共享就等于免费拥有了一个简版NAS。</p><p>There are <a href="/openwrt-samba.html#disqus_thread">comments</a>.</p>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
@@ -182,7 +181,7 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="https://solarck.com/openwrt-extroot.html" rel="bookmark"
+                    <h1><a href="/openwrt-extroot.html" rel="bookmark"
                            title="Permalink to 用extroot为openwrt扩充存储空间">用extroot为openwrt扩充存储空间</a></h1>
                 </header>
 
@@ -193,10 +192,10 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="https://solarck.com/tag/openwrt.html">openwrt</a> </p>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/openwrt.html">openwrt</a> </p>
 </footer><!-- /.post-info -->                <p>水星这款MW4350r内存为128M，运行很多程序都不在话下。但是却只提供了8M&nbsp;Flash存储空间，而路由器系统还占了1.9M，剩下的5M空间不足以支持安装很多软件，比如我在安装python的时候就报错提示存储空间不足，这确实很郁闷，但幸好Openwrt还提供了extroot方式来扩展存储，来发挥路由器和Openwrt系统的真正实力。</p>
 <p><strong>pivot-overlay还是pivot-root？</strong></p>
 <blockquote>
@@ -213,14 +212,14 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
 
 
 <p>e2fsprogs包提供了mkfs（mkfs.ext3 …</p>
-                <a class="readmore" href="https://solarck.com/openwrt-extroot.html">查看全文</a>
-                <!--<p>There are <a href="https://solarck.com/openwrt-extroot.html#disqus_thread">comments</a>.</p>-->
+                <a class="readmore" href="/openwrt-extroot.html">查看全文</a>
+                <!--<p>There are <a href="/openwrt-extroot.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="https://solarck.com/install-openwrt-on-mw4530r.html" rel="bookmark"
+                    <h1><a href="/install-openwrt-on-mw4530r.html" rel="bookmark"
                            title="Permalink to 水星（Mercury）MW4530r刷Openwrt">水星（Mercury）MW4530r刷Openwrt</a></h1>
                 </header>
 
@@ -231,10 +230,10 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="https://solarck.com/tag/openwrt.html">openwrt</a> </p>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/openwrt.html">openwrt</a> </p>
 </footer><!-- /.post-info -->                <p>经过两天的不屑折腾，终于为我的Mw4530r安装上了Openwrt。从最后安装成功往回看，其实整个过程非常简单，但是由于是第一次接触，走了不少弯路，本应该一个小时就完成的工作，却整整花了我两天时间。再次发篇文章庆祝下，也给其他朋友一些参考。</p>
 <h3>下载文件</h3>
 <p>水星这款路由器是ar71xx芯片的，因为较新，所以还没有官方的稳定版。在Openwrt的<a href="http://downloads.openwrt.org/snapshots/trunk/ar71xx/">snapshots/trunk</a>目录搜索下载我们需要的刷机文件，一般情况一个型号有两个文件，一个名字里带factory，从其他固件系统刷Openwrt下载这个文件；一个名字带sysupgrade，已经是Openwrt系统的用此文件升级。</p>
@@ -249,8 +248,8 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
 
 
 <p>Linux系统自带命令，Windows用户需要在控制面板 …</p>
-                <a class="readmore" href="https://solarck.com/install-openwrt-on-mw4530r.html">查看全文</a>
-                <!--<p>There are <a href="https://solarck.com/install-openwrt-on-mw4530r.html#disqus_thread">comments</a>.</p>-->
+                <a class="readmore" href="/install-openwrt-on-mw4530r.html">查看全文</a>
+                <!--<p>There are <a href="/install-openwrt-on-mw4530r.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
                 </ol><!-- /#posts-list -->
@@ -267,7 +266,6 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
                 <div class="social">
                         <h2>社交网站</h2>
                         <ul>
-                            <li><a href="https://solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
 
                             <li><a href="https://github.com/princelai">Github</a></li>
                             <li><a href="https://plus.google.com/100073068742779779797">G+</a></li>
@@ -292,7 +290,7 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
     ga('create', 'UA-1337838-7', 'auto');
     ga('send', 'pageview');
     </script>
-<script type="text/javascript">
+<!--<script type="text/javascript">
     var disqus_shortname = 'solarck';
     (function () {
         var s = document.createElement('script'); s.async = true;
@@ -301,5 +299,6 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
         (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
     }());
 </script>
+-->
 </body>
 </html>

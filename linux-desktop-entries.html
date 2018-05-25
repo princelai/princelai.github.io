@@ -3,8 +3,7 @@
 <head>
         <meta charset="utf-8" />
         <title>自定义Linux桌面启动程序</title>
-        <link rel="stylesheet" href="//solarck.com/theme/css/main.css" />
-        <link href="https://solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Solarck Atom Feed" />
+        <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -13,17 +12,17 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="https://solarck.com/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
+                <h1><a href="/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
                 <nav><ul>
-                    <li class="active"><a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></li>
-                    <li><a href="https://solarck.com/category/jin-rong-bi-ji.html">金融笔记</a></li>
+                    <li class="active"><a href="/category/itbi-ji.html">IT笔记</a></li>
+                    <li><a href="/category/jin-rong-bi-ji.html">金融笔记</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 <section id="content" class="body">
   <article>
     <header>
       <h1 class="entry-title">
-        <a href="https://solarck.com/linux-desktop-entries.html" rel="bookmark"
+        <a href="/linux-desktop-entries.html" rel="bookmark"
            title="Permalink to 自定义Linux桌面启动程序">自定义Linux桌面启动程序</a></h1>
     </header>
 
@@ -34,10 +33,10 @@
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="https://solarck.com/tag/linux.html">linux</a> </p>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/linux.html">linux</a> </p>
 </footer><!-- /.post-info -->      <p>Anaconda自带的Spyder是一个我最喜欢使用的IDE，对于科学计算有很好的支持，但是在Linux上它并没有自带.desktop文件，所以并不能在程序列表里找到，每次都要手动在命令行执行才能开启，非常不方便，所以决定自己搜索下方法，自己给它添加一个桌面快捷方式。</p>
 <p>Linux的主流DE的桌面文件都遵循<a href="https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#recognized-keys">桌面配置项规范</a>，按照这个规范配置一个相应的.desktop文件，放在指定的目录即可，当然你也可以放在<code>~/.local/share/applications/</code>目录里，这样这个快捷方式只针对当前用户。</p>
 <!--more-->
@@ -63,21 +62,6 @@
 Icon是快捷方式的图标，没有的话可以去网上下载一个或者根据自己喜好随便放一个。
 更多内容可以参考这篇<a href="https://wiki.archlinux.org/index.php/Desktop_entries_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">Wiki</a></p>
     </div><!-- /.entry-content -->
-    <div class="comments">
-      <h2>Comments !</h2>
-      <div id="disqus_thread"></div>
-      <script type="text/javascript">
-        var disqus_shortname = 'solarck';
-        var disqus_identifier = 'linux-desktop-entries.html';
-        var disqus_url = 'https://solarck.com/linux-desktop-entries.html';
-        (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//solarck.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-      </script>
-      <noscript>Please enable JavaScript to view the comments.</noscript>
-    </div>
 
   </article>
 </section>
@@ -93,7 +77,6 @@ Icon是快捷方式的图标，没有的话可以去网上下载一个或者根�
                 <div class="social">
                         <h2>社交网站</h2>
                         <ul>
-                            <li><a href="https://solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
 
                             <li><a href="https://github.com/princelai">Github</a></li>
                             <li><a href="https://plus.google.com/100073068742779779797">G+</a></li>
@@ -118,7 +101,7 @@ Icon是快捷方式的图标，没有的话可以去网上下载一个或者根�
     ga('create', 'UA-1337838-7', 'auto');
     ga('send', 'pageview');
     </script>
-<script type="text/javascript">
+<!--<script type="text/javascript">
     var disqus_shortname = 'solarck';
     (function () {
         var s = document.createElement('script'); s.async = true;
@@ -127,5 +110,6 @@ Icon是快捷方式的图标，没有的话可以去网上下载一个或者根�
         (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
     }());
 </script>
+-->
 </body>
 </html>

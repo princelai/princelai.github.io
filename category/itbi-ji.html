@@ -3,8 +3,7 @@
 <head>
         <meta charset="utf-8" />
         <title>Solarck - IT笔记</title>
-        <link rel="stylesheet" href="//solarck.com/theme/css/main.css" />
-        <link href="https://solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Solarck Atom Feed" />
+        <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -13,26 +12,26 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="https://solarck.com/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
+                <h1><a href="/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
                 <nav><ul>
-                    <li class="active"><a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></li>
-                    <li><a href="https://solarck.com/category/jin-rong-bi-ji.html">金融笔记</a></li>
+                    <li class="active"><a href="/category/itbi-ji.html">IT笔记</a></li>
+                    <li><a href="/category/jin-rong-bi-ji.html">金融笔记</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://solarck.com/argparse-brief-usage.html">argparse模块简要用法</a></h1>
+                    <h1 class="entry-title"><a href="/argparse-brief-usage.html">argparse模块简要用法</a></h1>
 <footer class="post-info">
         <abbr class="published" title="2018-01-08T17:41:00+08:00">
                 发布时间: 一月 08, 2018
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="https://solarck.com/tag/python.html">python</a> <a href="https://solarck.com/tag/argparse.html">argparse</a> </p>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/argparse.html">argparse</a> </p>
 </footer><!-- /.post-info --><p>argparse是Python用于解析命令行参数的模块，拥有更强大的功能、更友好的使用方法，用来替代原始的sys.argv。</p>
 <p>argparse的大致用法如下：</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span> <span class="c1">#导入模块</span>
@@ -160,7 +159,7 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
 <ol>
 <li><a href="https://docs.python.org/3/library/argparse.html">官方文档</a></li>
 <li><a href="http://python.usyiyi.cn/translate/python_352/library/argparse.html">中文文档</a></li>
-</ol><p>There are <a href="https://solarck.com/argparse-brief-usage.html#disqus_thread">comments</a>.</p>                </article>
+</ol><p>There are <a href="/argparse-brief-usage.html#disqus_thread">comments</a>.</p>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
@@ -169,7 +168,7 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="https://solarck.com/matplotlib-chinese-fonts.html" rel="bookmark"
+                    <h1><a href="/matplotlib-chinese-fonts.html" rel="bookmark"
                            title="Permalink to matplotlib中文字体配置">matplotlib中文字体配置</a></h1>
                 </header>
 
@@ -180,10 +179,10 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="https://solarck.com/tag/python.html">python</a> <a href="https://solarck.com/tag/matplotlib.html">matplotlib</a> </p>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/matplotlib.html">matplotlib</a> </p>
 </footer><!-- /.post-info -->                <p>matplotlib是Python的优秀绘图包，但是不论是在Windows还是Linux中默认都是不支持中文的，尤其是在Linux中设置更加复杂一点，设置方法如下：</p>
 <p>首先我们需要获取到matplotlib配置文件的文件夹</p>
 <div class="highlight"><pre><span></span>python -c <span class="s2">&quot;import matplotlib as mpl;print(mpl.get_configdir())&quot;</span>
@@ -202,14 +201,14 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
 <p>这个位置会根据每个人安装位置不同而改变</p>
 <p>然后把默认的rc文件拷贝到用户的配置文件夹</p>
 <div class="highlight"><pre><span></span>cp /opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc ~/.config …</pre></div>
-                <a class="readmore" href="https://solarck.com/matplotlib-chinese-fonts.html">查看全文</a>
-                <!--<p>There are <a href="https://solarck.com/matplotlib-chinese-fonts.html#disqus_thread">comments</a>.</p>-->
+                <a class="readmore" href="/matplotlib-chinese-fonts.html">查看全文</a>
+                <!--<p>There are <a href="/matplotlib-chinese-fonts.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="https://solarck.com/linux-desktop-entries.html" rel="bookmark"
+                    <h1><a href="/linux-desktop-entries.html" rel="bookmark"
                            title="Permalink to 自定义Linux桌面启动程序">自定义Linux桌面启动程序</a></h1>
                 </header>
 
@@ -220,10 +219,10 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="https://solarck.com/tag/linux.html">linux</a> </p>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/linux.html">linux</a> </p>
 </footer><!-- /.post-info -->                <p>Anaconda自带的Spyder是一个我最喜欢使用的IDE，对于科学计算有很好的支持，但是在Linux上它并没有自带.desktop文件，所以并不能在程序列表里找到，每次都要手动在命令行执行才能开启，非常不方便，所以决定自己搜索下方法，自己给它添加一个桌面快捷方式。</p>
 <p>Linux的主流DE的桌面文件都遵循<a href="https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#recognized-keys">桌面配置项规范</a>，按照这个规范配置一个相应的.desktop文件，放在指定的目录即可，当然你也可以放在<code>~/.local/share/applications/</code>目录里，这样这个快捷方式只针对当前用户。</p>
 <!--more-->
@@ -238,14 +237,14 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
 <span class="n">Comment</span><span class="o">=</span><span class="n">Scientific</span> <span class="n">Python</span> <span class="n">Development</span> <span class="n">EnviRonment</span>
 <span class="n">TryExec</span><span class="o">=/</span><span class="n">opt</span><span class="o">/</span><span class="n">anaconda</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">spyder</span>
 <span class="n">Exec</span><span class="o">=/</span><span class="n">opt …</span></pre></div>
-                <a class="readmore" href="https://solarck.com/linux-desktop-entries.html">查看全文</a>
-                <!--<p>There are <a href="https://solarck.com/linux-desktop-entries.html#disqus_thread">comments</a>.</p>-->
+                <a class="readmore" href="/linux-desktop-entries.html">查看全文</a>
+                <!--<p>There are <a href="/linux-desktop-entries.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="https://solarck.com/shadowsocks-libev.html" rel="bookmark"
+                    <h1><a href="/shadowsocks-libev.html" rel="bookmark"
                            title="Permalink to VPS搭梯子指南——shadowsocks+BBR+obfs">VPS搭梯子指南——shadowsocks+<span class="caps">BBR</span>+obfs</a></h1>
                 </header>
 
@@ -256,10 +255,10 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="https://solarck.com/tag/shadowsocks.html">shadowsocks</a> </p>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/shadowsocks.html">shadowsocks</a> </p>
 </footer><!-- /.post-info -->                <p>近期开会导致墙越来越高，迫不得已升级自建的ss服务，由于shadowsocks原版已经停更，shadowsocksR也已经删库，所以就锁定libev版本。
 <strong><em>注：以下服务器端内容请切换到root操作</em></strong></p>
 <h3>1.&nbsp;升级Debian</h3>
@@ -286,14 +285,14 @@ apt upgrade
 <p>再次更新升级</p>
 <div class="highlight"><pre><span></span> apt update
  apt …</pre></div>
-                <a class="readmore" href="https://solarck.com/shadowsocks-libev.html">查看全文</a>
-                <!--<p>There are <a href="https://solarck.com/shadowsocks-libev.html#disqus_thread">comments</a>.</p>-->
+                <a class="readmore" href="/shadowsocks-libev.html">查看全文</a>
+                <!--<p>There are <a href="/shadowsocks-libev.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="https://solarck.com/config-pip-conda.html" rel="bookmark"
+                    <h1><a href="/config-pip-conda.html" rel="bookmark"
                            title="Permalink to 配置pip和conda">配置pip和conda</a></h1>
                 </header>
 
@@ -304,10 +303,10 @@ apt upgrade
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="https://solarck.com/tag/pip.html">pip</a> <a href="https://solarck.com/tag/conda.html">conda</a> <a href="https://solarck.com/tag/python.html">python</a> </p>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/pip.html">pip</a> <a href="/tag/conda.html">conda</a> <a href="/tag/python.html">python</a> </p>
 </footer><!-- /.post-info -->                <p>首先需要确认已经安装Python环境，建议用于科学计算的朋友下载安装<a href="https://www.anaconda.com/download/">Anaconda</a>或者<a href="https://conda.io/miniconda.html">Miniconda</a>。</p>
 <h3>环境变量和启用配置</h3>
 <p>安装好后还需要把安装路径添加到系统环境变量</p>
@@ -337,14 +336,14 @@ apt upgrade
 <p>如果没有效果，可是尝试编辑~/.profile或 ~/.bash_profile文件&nbsp;zsh或其他shell用户可以自行修改</p>
 <p>Windows用户在cmd执行如下命令，如果不是默认安装到用户目录，需要手动修改下路径。如果创建了自定义env，那么root改为你自己的env名字。</p>
 <div class="highlight"><pre><span></span><span class="nb">set</span> <span class="nv">PATH</span><span class="o">=</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="p">;</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="se">\L</span>ibrary<span class="se">\b</span>in …</pre></div>
-                <a class="readmore" href="https://solarck.com/config-pip-conda.html">查看全文</a>
-                <!--<p>There are <a href="https://solarck.com/config-pip-conda.html#disqus_thread">comments</a>.</p>-->
+                <a class="readmore" href="/config-pip-conda.html">查看全文</a>
+                <!--<p>There are <a href="/config-pip-conda.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
                 </ol><!-- /#posts-list -->
 <p class="paginator">
     Page 1 / 2
-        <a href="https://solarck.com/category/itbi-ji2.html">&raquo;</a>
+        <a href="/category/itbi-ji2.html">&raquo;</a>
 </p>
                 </section><!-- /#content -->
         <section id="extras" class="body">
@@ -359,7 +358,6 @@ apt upgrade
                 <div class="social">
                         <h2>社交网站</h2>
                         <ul>
-                            <li><a href="https://solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
 
                             <li><a href="https://github.com/princelai">Github</a></li>
                             <li><a href="https://plus.google.com/100073068742779779797">G+</a></li>
@@ -384,7 +382,7 @@ apt upgrade
     ga('create', 'UA-1337838-7', 'auto');
     ga('send', 'pageview');
     </script>
-<script type="text/javascript">
+<!--<script type="text/javascript">
     var disqus_shortname = 'solarck';
     (function () {
         var s = document.createElement('script'); s.async = true;
@@ -393,5 +391,6 @@ apt upgrade
         (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
     }());
 </script>
+-->
 </body>
 </html>
