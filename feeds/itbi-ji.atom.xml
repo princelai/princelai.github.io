@@ -1,0 +1,982 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Solarck - IT笔记</title><link href="https://solarck.com/" rel="alternate"></link><link href="https://solarck.com/feeds/itbi-ji.atom.xml" rel="self"></link><id>https://solarck.com/</id><updated>2018-01-08T17:41:00+08:00</updated><entry><title>argparse模块简要用法</title><link href="https://solarck.com/argparse-brief-usage.html" rel="alternate"></link><published>2018-01-08T17:41:00+08:00</published><updated>2018-01-08T17:41:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:solarck.com,2018-01-08:/argparse-brief-usage.html</id><summary type="html">&lt;p&gt;argparse是Python用于解析命令行参数的模块，拥有更强大的功能、更友好的使用方法，用来替代原始的sys.argv。&lt;/p&gt;
+&lt;p&gt;argparse的大致用法如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;argparse&lt;/span&gt; &lt;span class="c1"&gt;#导入模块&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;argparse&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ArgumentParser&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c1"&gt;#创建解析器&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c1"&gt;#添加参数&lt;/span&gt;
+&lt;span class="n"&gt;args&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;parse_args&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c1"&gt;#解析参数&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;创建解析器时的可选参数很多，但没有特殊需求的情况下，默认参数就能很好的工作，所以这部分使用时临时查文档就能解决，不做过多记录。&lt;/p&gt;
+&lt;!--more--&gt;
+
+&lt;p&gt;这里仅记录下添加参数时的各种选项搭配，使用方法和选项如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;ArgumentParser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="n"&gt;flags&lt;/span&gt;&lt;span class="o"&gt;...&lt;/span&gt;&lt;span class="p"&gt;[,&lt;/span&gt; &lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;nargs&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;const&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;default&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="nb"&gt;type&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;choices&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;required&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;help&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;metavar&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;dest&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;每一个参数的含义：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;name or flags - 名称或选项字符串列表，例如。foo或-f,&amp;nbsp;&amp;#8212;foo …&lt;/li&gt;&lt;/ul&gt;&lt;/blockquote&gt;</summary><content type="html">&lt;p&gt;argparse是Python用于解析命令行参数的模块，拥有更强大的功能、更友好的使用方法，用来替代原始的sys.argv。&lt;/p&gt;
+&lt;p&gt;argparse的大致用法如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;argparse&lt;/span&gt; &lt;span class="c1"&gt;#导入模块&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;argparse&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ArgumentParser&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c1"&gt;#创建解析器&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c1"&gt;#添加参数&lt;/span&gt;
+&lt;span class="n"&gt;args&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;parse_args&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c1"&gt;#解析参数&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;创建解析器时的可选参数很多，但没有特殊需求的情况下，默认参数就能很好的工作，所以这部分使用时临时查文档就能解决，不做过多记录。&lt;/p&gt;
+&lt;!--more--&gt;
+
+&lt;p&gt;这里仅记录下添加参数时的各种选项搭配，使用方法和选项如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;ArgumentParser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="n"&gt;flags&lt;/span&gt;&lt;span class="o"&gt;...&lt;/span&gt;&lt;span class="p"&gt;[,&lt;/span&gt; &lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;nargs&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;const&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;default&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="nb"&gt;type&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;choices&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;required&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;help&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;metavar&lt;/span&gt;&lt;span class="p"&gt;][,&lt;/span&gt; &lt;span class="n"&gt;dest&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;每一个参数的含义：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;name or flags - 名称或选项字符串列表，例如。foo或-f,&amp;nbsp;&amp;#8212;foo。&lt;/li&gt;
+&lt;li&gt;action -&amp;nbsp;在命令行遇到此参数时要执行的操作的基本类型。&lt;/li&gt;
+&lt;li&gt;nargs -&amp;nbsp;应该使用的命令行参数数。&lt;/li&gt;
+&lt;li&gt;const -&amp;nbsp;某些动作和nargs选择所需的常量值。&lt;/li&gt;
+&lt;li&gt;default -&amp;nbsp;如果参数在命令行中不存在，则生成的值。&lt;/li&gt;
+&lt;li&gt;type -&amp;nbsp;应转换命令行参数的类型。&lt;/li&gt;
+&lt;li&gt;choices -&amp;nbsp;参数的允许值的容器。&lt;/li&gt;
+&lt;li&gt;required -&amp;nbsp;是否可以省略命令行选项（仅针对可选参数）。&lt;/li&gt;
+&lt;li&gt;help -&amp;nbsp;参数的简要说明。&lt;/li&gt;
+&lt;li&gt;metavar -&amp;nbsp;使用消息中参数的名称。&lt;/li&gt;
+&lt;li&gt;dest -&amp;nbsp;要添加到由parse_args()返回的对象的属性的名称。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;1. name or&amp;nbsp;flags&lt;/h3&gt;
+&lt;p&gt;唯一的必填参数，可以创建位置参数（必填）和可选参数&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;parser&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;argparse&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ArgumentParser&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;prog&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;PROG&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;-s&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;--save&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;db&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;parse_args&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;mysql&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="n"&gt;Out&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt; &lt;span class="n"&gt;Namespace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;db&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;mysql&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;save&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;可选参数以&lt;code&gt;-&lt;/code&gt;或&lt;code&gt;--&lt;/code&gt;开始，其余的均为位置参数
+大部分情况下，未填的可选参数默认都是&lt;code&gt;None&lt;/code&gt;,如果有&lt;code&gt;--&lt;/code&gt;开始的参数，则参数名以后面的字符串命名。&lt;/p&gt;
+&lt;h3&gt;2.&amp;nbsp;action&lt;/h3&gt;
+&lt;p&gt;action用于将命令和动作关联起来，常用的动作有如下几种：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;store -&amp;nbsp;仅保存参数后的值&lt;/li&gt;
+&lt;li&gt;store_const -&amp;nbsp;保存一个常量，由const参数给出&lt;/li&gt;
+&lt;li&gt;store_true -&amp;nbsp;给出参数则保存True值，不给出则为False&lt;/li&gt;
+&lt;li&gt;store_false -&amp;nbsp;与上面相反&lt;/li&gt;
+&lt;li&gt;append -&amp;nbsp;把多次调用的值保存为一个列表&lt;/li&gt;
+&lt;li&gt;append_const -&amp;nbsp;把多次调用的常量保存为一个列表&lt;/li&gt;
+&lt;li&gt;count -&amp;nbsp;计算参数出现的次数&lt;/li&gt;
+&lt;li&gt;help -&amp;nbsp;打印帮助信息，默认自动添加&lt;/li&gt;
+&lt;li&gt;version -&amp;nbsp;打印版本信息，配合version选项使用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;举几个例子&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;parser = argparse.ArgumentParser(prog=&amp;#39;PROG&amp;#39;)
+parser.add_argument(&amp;#39;-sh&amp;#39;,&amp;#39;--show&amp;#39;,action=&amp;#39;store_true&amp;#39;)
+parser.parse_args([&amp;#39;-sh&amp;#39;])
+Out[2]: Namespace(show=True)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;给出&lt;code&gt;-sh&lt;/code&gt;参数，则show值为True&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;parser&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;argparse&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ArgumentParser&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;prog&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;PROG&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;-a1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;--arg1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;store_const&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;const&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;-a2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;--arg2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;store_const&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;const&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;default&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;-a3&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;--arg3&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;store_const&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;const&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;default&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;parse_args&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;-a1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="n"&gt;Out&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;22&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt; &lt;span class="n"&gt;Namespace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;arg1&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;arg2&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;arg3&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;只给出a1参数，arg1的值为0。
+没有给出a2参数，则a2的const没有被调用，使用default的值，当然default默认就是None，不写也可以。
+a3参数其实就是store_true的实现。&amp;nbsp;const和default的区别就是当命令给出但是后面未接值时，使用const值，如果命令那个都没有给出，则使用default的值。&lt;/p&gt;
+&lt;h3&gt;3.&amp;nbsp;nargs&lt;/h3&gt;
+&lt;p&gt;nargs定义参数后面值的个数，可选值有几种：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;N&amp;nbsp;(一个整数)&lt;/li&gt;
+&lt;li&gt;?&lt;/li&gt;
+&lt;li&gt;*&lt;/li&gt;
+&lt;li&gt;+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如果懂正则表达式，那nargs的参数就很好理解，这里就不做过多解释，不过要注意一点，当nargs=1的时候，他的行为和不给出nargs是不一样的，前者是一个列表，后者是一个值。直接看例子：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;parser&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;argparse&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ArgumentParser&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;prog&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;PROG&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;a1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nargs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;-a2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;--args2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nargs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;?&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;const&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;-a3&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;--args3&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;nargs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;+&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;default&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;parse_args&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;a&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;b&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;-a3&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;aa&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;bb&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;span class="n"&gt;Out&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt; &lt;span class="n"&gt;Namespace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a1&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;a&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;b&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;args2&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;args3&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;aa&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;bb&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;结果很好理解，?可以配合const使用，其他的可以配合default使用，调用了就是一个列表，使用const或default就是一个值。&lt;/p&gt;
+&lt;h3&gt;4.&amp;nbsp;type和metavar&lt;/h3&gt;
+&lt;p&gt;这两个参数偶尔能用到，&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;parser&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;argparse&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ArgumentParser&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;prog&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;PROG&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;a1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nb"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;-a2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;--args2&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;metavar&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;STR&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;default&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;argparse&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;SUPPRESS&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;parse_args&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;3&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;default=argparse.SUPPRESS&lt;/code&gt;指出不给参数不存储变量，否则默认是None，&amp;nbsp;打印help说明看看&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;print_help&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;usage&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;PROG&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;h&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a2&lt;/span&gt; &lt;span class="n"&gt;STR&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;a1&lt;/span&gt;
+
+&lt;span class="n"&gt;positional&lt;/span&gt; &lt;span class="n"&gt;arguments&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+  &lt;span class="n"&gt;a1&lt;/span&gt;
+
+&lt;span class="n"&gt;optional&lt;/span&gt; &lt;span class="n"&gt;arguments&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;h&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;help&lt;/span&gt;            &lt;span class="n"&gt;show&lt;/span&gt; &lt;span class="n"&gt;this&lt;/span&gt; &lt;span class="n"&gt;help&lt;/span&gt; &lt;span class="n"&gt;message&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="nb"&gt;exit&lt;/span&gt;
+  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a2&lt;/span&gt; &lt;span class="n"&gt;STR&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;args2&lt;/span&gt; &lt;span class="n"&gt;STR&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;metavar仅改变了help说明里的变量名。&lt;/p&gt;
+&lt;h3&gt;参考文档&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="https://docs.python.org/3/library/argparse.html"&gt;官方文档&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://python.usyiyi.cn/translate/python_352/library/argparse.html"&gt;中文文档&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content><category term="python"></category><category term="argparse"></category></entry><entry><title>matplotlib中文字体配置</title><link href="https://solarck.com/matplotlib-chinese-fonts.html" rel="alternate"></link><published>2017-12-18T16:01:00+08:00</published><updated>2017-12-18T16:01:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:solarck.com,2017-12-18:/matplotlib-chinese-fonts.html</id><summary type="html">&lt;p&gt;matplotlib是Python的优秀绘图包，但是不论是在Windows还是Linux中默认都是不支持中文的，尤其是在Linux中设置更加复杂一点，设置方法如下：&lt;/p&gt;
+&lt;p&gt;首先我们需要获取到matplotlib配置文件的文件夹&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;python -c &lt;span class="s2"&gt;&amp;quot;import matplotlib as mpl;print(mpl.get_configdir())&amp;quot;&lt;/span&gt;
+/home/kevin/.config/matplotlib
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;!--more--&gt;
+
+&lt;p&gt;然后需要一个默认的matplotlibrc文件用于修改&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;python -c &lt;span class="s2"&gt;&amp;quot;import matplotlib as mpl;print(mpl.matplotlib_fname())&amp;quot;&lt;/span&gt;
+/opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这个位置会根据每个人安装位置不同而改变&lt;/p&gt;
+&lt;p&gt;然后把默认的rc文件拷贝到用户的配置文件夹&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;cp /opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc ~/.config …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;matplotlib是Python的优秀绘图包，但是不论是在Windows还是Linux中默认都是不支持中文的，尤其是在Linux中设置更加复杂一点，设置方法如下：&lt;/p&gt;
+&lt;p&gt;首先我们需要获取到matplotlib配置文件的文件夹&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;python -c &lt;span class="s2"&gt;&amp;quot;import matplotlib as mpl;print(mpl.get_configdir())&amp;quot;&lt;/span&gt;
+/home/kevin/.config/matplotlib
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;!--more--&gt;
+
+&lt;p&gt;然后需要一个默认的matplotlibrc文件用于修改&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;python -c &lt;span class="s2"&gt;&amp;quot;import matplotlib as mpl;print(mpl.matplotlib_fname())&amp;quot;&lt;/span&gt;
+/opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;这个位置会根据每个人安装位置不同而改变&lt;/p&gt;
+&lt;p&gt;然后把默认的rc文件拷贝到用户的配置文件夹&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;cp /opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc ~/.config/matplotlib
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;之后的工作都是围绕这个rc文件，一般情况下只需要修改如下两个字段，把注释打开。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;font.sans-serif     : DejaVu Sans, Bitstream Vera Sans, Lucida Grande, Verdana, Geneva
+axes.unicode_minus  : False
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;第一个字段负责中文字体显示，但是目前还没有，第二个负责正负号的显示。&lt;/p&gt;
+&lt;p&gt;由于matplotlib不使用系统字体，所以需要找到一个matplotlib支持的字体且已在系统中&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;fc-list :lang=zh |grep -i ttf
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;在shell中执行这个命令，就能找到几个字体，选择一个填到上面第一行第一个即可，通常建议选择&lt;code&gt;Droid Sans Fallback&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;修改好后重启整个python或ipython之后应该就可以看到中文，不过还是不可以的话可以使用下面方案二查找，这个方法出自&lt;a href="https://segmentfault.com/a/1190000000621721"&gt;segmentfault&lt;/a&gt;。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#! /usr/bin/env python&lt;/span&gt;
+&lt;span class="c1"&gt;# -*- coding: utf-8 -*-&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.font_manager&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;FontManager&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;subprocess&lt;/span&gt;
+
+&lt;span class="n"&gt;fm&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;FontManager&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;mat_fonts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;set&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;fm&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ttflist&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;output&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;subprocess&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;check_output&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;fc-list :lang=zh -f &amp;quot;%{family}&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s1"&gt;&amp;quot;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;shell&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;output&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;utf8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;zh_fonts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;set&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;split&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="n"&gt;available&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;mat_fonts&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt; &lt;span class="n"&gt;zh_fonts&lt;/span&gt;
+
+&lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;*&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;可用的字体&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;*&amp;#39;&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;f&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;available&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;f&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;如果不想使用rc文件来配置，那么可以在每次使用的时候在python中执行以下命令即可。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;plt&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rcParams&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;font.sans-serif&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Droid Sans Fallback&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;plt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rcParams&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;axes.unicode_minus&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;</content><category term="python"></category><category term="matplotlib"></category></entry><entry><title>自定义Linux桌面启动程序</title><link href="https://solarck.com/linux-desktop-entries.html" rel="alternate"></link><published>2017-11-17T15:58:00+08:00</published><updated>2017-11-17T15:58:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:solarck.com,2017-11-17:/linux-desktop-entries.html</id><summary type="html">&lt;p&gt;Anaconda自带的Spyder是一个我最喜欢使用的IDE，对于科学计算有很好的支持，但是在Linux上它并没有自带.desktop文件，所以并不能在程序列表里找到，每次都要手动在命令行执行才能开启，非常不方便，所以决定自己搜索下方法，自己给它添加一个桌面快捷方式。&lt;/p&gt;
+&lt;p&gt;Linux的主流DE的桌面文件都遵循&lt;a href="https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#recognized-keys"&gt;桌面配置项规范&lt;/a&gt;，按照这个规范配置一个相应的.desktop文件，放在指定的目录即可，当然你也可以放在&lt;code&gt;~/.local/share/applications/&lt;/code&gt;目录里，这样这个快捷方式只针对当前用户。&lt;/p&gt;
+&lt;!--more--&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="n"&gt;vim&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;usr&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;share&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;applications&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;spyder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;desktop&lt;/span&gt;
+
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Desktop&lt;/span&gt; &lt;span class="n"&gt;Entry&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;Version&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;1.0&lt;/span&gt;
+&lt;span class="n"&gt;Type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Application&lt;/span&gt;
+&lt;span class="n"&gt;Name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Spyder&lt;/span&gt;
+&lt;span class="n"&gt;GenericName&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Spyder&lt;/span&gt;
+&lt;span class="n"&gt;Comment&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Scientific&lt;/span&gt; &lt;span class="n"&gt;Python&lt;/span&gt; &lt;span class="n"&gt;Development&lt;/span&gt; &lt;span class="n"&gt;EnviRonment&lt;/span&gt;
+&lt;span class="n"&gt;TryExec&lt;/span&gt;&lt;span class="o"&gt;=/&lt;/span&gt;&lt;span class="n"&gt;opt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;anaconda&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;spyder&lt;/span&gt;
+&lt;span class="n"&gt;Exec&lt;/span&gt;&lt;span class="o"&gt;=/&lt;/span&gt;&lt;span class="n"&gt;opt …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;Anaconda自带的Spyder是一个我最喜欢使用的IDE，对于科学计算有很好的支持，但是在Linux上它并没有自带.desktop文件，所以并不能在程序列表里找到，每次都要手动在命令行执行才能开启，非常不方便，所以决定自己搜索下方法，自己给它添加一个桌面快捷方式。&lt;/p&gt;
+&lt;p&gt;Linux的主流DE的桌面文件都遵循&lt;a href="https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#recognized-keys"&gt;桌面配置项规范&lt;/a&gt;，按照这个规范配置一个相应的.desktop文件，放在指定的目录即可，当然你也可以放在&lt;code&gt;~/.local/share/applications/&lt;/code&gt;目录里，这样这个快捷方式只针对当前用户。&lt;/p&gt;
+&lt;!--more--&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="n"&gt;vim&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;usr&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;share&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;applications&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;spyder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;desktop&lt;/span&gt;
+
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Desktop&lt;/span&gt; &lt;span class="n"&gt;Entry&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;Version&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mf"&gt;1.0&lt;/span&gt;
+&lt;span class="n"&gt;Type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Application&lt;/span&gt;
+&lt;span class="n"&gt;Name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Spyder&lt;/span&gt;
+&lt;span class="n"&gt;GenericName&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Spyder&lt;/span&gt;
+&lt;span class="n"&gt;Comment&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Scientific&lt;/span&gt; &lt;span class="n"&gt;Python&lt;/span&gt; &lt;span class="n"&gt;Development&lt;/span&gt; &lt;span class="n"&gt;EnviRonment&lt;/span&gt;
+&lt;span class="n"&gt;TryExec&lt;/span&gt;&lt;span class="o"&gt;=/&lt;/span&gt;&lt;span class="n"&gt;opt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;anaconda&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;spyder&lt;/span&gt;
+&lt;span class="n"&gt;Exec&lt;/span&gt;&lt;span class="o"&gt;=/&lt;/span&gt;&lt;span class="n"&gt;opt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;anaconda&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;spyder&lt;/span&gt;
+&lt;span class="n"&gt;Categories&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;Development&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="n"&gt;Science&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="n"&gt;IDE&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="n"&gt;Qt&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;Icon&lt;/span&gt;&lt;span class="o"&gt;=/&lt;/span&gt;&lt;span class="n"&gt;opt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;anaconda&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;lib&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;python3&lt;/span&gt;&lt;span class="mf"&gt;.6&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;site&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;packages&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;spyder&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;images&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;spyder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;png&lt;/span&gt;
+&lt;span class="n"&gt;Terminal&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;false&lt;/span&gt;
+&lt;span class="n"&gt;StartupNotify&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;false&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;TryExec和Exec后面是可执行文件的地址，可以只写后者
+Icon是快捷方式的图标，没有的话可以去网上下载一个或者根据自己喜好随便放一个。
+更多内容可以参考这篇&lt;a href="https://wiki.archlinux.org/index.php/Desktop_entries_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)"&gt;Wiki&lt;/a&gt;&lt;/p&gt;</content><category term="linux"></category></entry><entry><title>VPS搭梯子指南——shadowsocks+BBR+obfs</title><link href="https://solarck.com/shadowsocks-libev.html" rel="alternate"></link><published>2017-11-13T15:55:00+08:00</published><updated>2017-11-13T15:55:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:solarck.com,2017-11-13:/shadowsocks-libev.html</id><summary type="html">&lt;p&gt;近期开会导致墙越来越高，迫不得已升级自建的ss服务，由于shadowsocks原版已经停更，shadowsocksR也已经删库，所以就锁定libev版本。
+&lt;strong&gt;&lt;em&gt;注：以下服务器端内容请切换到root操作&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h3&gt;1.&amp;nbsp;升级Debian&lt;/h3&gt;
+&lt;p&gt;在升级之前，我需要先把服务器从Debian 8升级到Debian&amp;nbsp;9，如果不是Debian用户，或者不想升级的可以跳过，这一步不影响后续操作，但是部分代码可能需要修改。&lt;/p&gt;
+&lt;p&gt;首先要把Debian&amp;nbsp;8升级到最新版本&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;apt update
+apt upgrade
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;备份源列表&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;cp /etc/apt/sources.list /etc/apt/sources.list-jessie
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;!--more--&gt;
+
+&lt;p&gt;修改源列表，把jessie 替换为&amp;nbsp;stretch&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vim /etc/apt/sources.list
+:s/jessie/stretch/g
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;再次更新升级&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; apt update
+ apt …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;近期开会导致墙越来越高，迫不得已升级自建的ss服务，由于shadowsocks原版已经停更，shadowsocksR也已经删库，所以就锁定libev版本。
+&lt;strong&gt;&lt;em&gt;注：以下服务器端内容请切换到root操作&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h3&gt;1.&amp;nbsp;升级Debian&lt;/h3&gt;
+&lt;p&gt;在升级之前，我需要先把服务器从Debian 8升级到Debian&amp;nbsp;9，如果不是Debian用户，或者不想升级的可以跳过，这一步不影响后续操作，但是部分代码可能需要修改。&lt;/p&gt;
+&lt;p&gt;首先要把Debian&amp;nbsp;8升级到最新版本&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;apt update
+apt upgrade
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;备份源列表&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;cp /etc/apt/sources.list /etc/apt/sources.list-jessie
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;!--more--&gt;
+
+&lt;p&gt;修改源列表，把jessie 替换为&amp;nbsp;stretch&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vim /etc/apt/sources.list
+:s/jessie/stretch/g
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;再次更新升级&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt; apt update
+ apt upgrade
+ apt dist-upgrade
+ apt autoremove
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;2.&amp;nbsp;开启BBR&lt;/h3&gt;
+&lt;p&gt;使用一键脚本安装并开启bbr，此步除OpenVZ以外的服务器都可以开启，跳过不影响后续内容。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget --no-check-certificate https://raw.githubusercontent.com/princelai/across/master/bbr.sh
+chmod +x bbr.sh
+./bbr.sh
+echo &amp;quot;net.core.default_qdisc=fq&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
+echo &amp;quot;net.ipv4.tcp_congestion_control=bbr&amp;quot; &amp;gt;&amp;gt; /etc/sysctl.conf
+sysctl -p
+lsmod | grep bbr
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;3.&amp;nbsp;安装shadowsocks-libev和simple-obfs混淆&lt;/h3&gt;
+&lt;p&gt;需要从stretch-backports库中安装，非Debian 9用户请参考&lt;a href="https://github.com/shadowsocks/shadowsocks-libev#pre-build-configure-guide"&gt;文档&lt;/a&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sh -c &lt;span class="s1"&gt;&amp;#39;printf &amp;quot;deb http://deb.debian.org/debian stretch-backports main&amp;quot; &amp;gt; /etc/apt/sources.list.d/stretch-backports.list&amp;#39;&lt;/span&gt;
+apt update
+apt -t stretch-backports install shadowsocks-libev simple-obfs
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;4.&amp;nbsp;优化TCP网络&lt;/h3&gt;
+&lt;p&gt;编辑sysctl文件，把下面的内容复制过去，&amp;nbsp;如果第二步中没有开启bbr，那么请删除前两行。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="na"&gt;vim /etc/sysctl.conf&lt;/span&gt;
+
+&lt;span class="na"&gt;net.core.default_qdisc&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;fq&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.tcp_congestion_control&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;bbr&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.tcp_fastopen&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;3&lt;/span&gt;
+&lt;span class="na"&gt;fs.file-max&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;1024000&lt;/span&gt;
+&lt;span class="na"&gt;net.core.rmem_max&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;67108864&lt;/span&gt;
+&lt;span class="na"&gt;net.core.wmem_max&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;67108864&lt;/span&gt;
+&lt;span class="na"&gt;net.core.rmem_default&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;65536&lt;/span&gt;
+&lt;span class="na"&gt;net.core.wmem_default&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;65536&lt;/span&gt;
+&lt;span class="na"&gt;net.core.netdev_max_backlog&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;4096&lt;/span&gt;
+&lt;span class="na"&gt;net.core.somaxconn&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;4096&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.tcp_syncookies&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;1&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.tcp_tw_reuse&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;1&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.tcp_tw_recycle&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;0&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.tcp_fin_timeout&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;30&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.tcp_keepalive_time&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;1200&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.ip_local_port_range&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;10000 65000&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.tcp_max_syn_backlog&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;4096&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.tcp_max_tw_buckets&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;5000&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.tcp_rmem&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;4096 87380 67108864&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.tcp_wmem&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;4096 65536 67108864&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.tcp_mtu_probing&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;1&lt;/span&gt;
+&lt;span class="na"&gt;net.ipv4.ip_forward&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;更改保存后执行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sysctl -p
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;5.&amp;nbsp;配置服务端&lt;/h3&gt;
+&lt;p&gt;编辑配置文件，填上自己的密码，端口建议使用443，别的端口封杀的太严重。
+关于加密方式，现在新版都支持AEAD加密方式，详细内容请点&lt;a href="https://shadowsocks.org/en/spec/AEAD-Ciphers.html"&gt;这里&lt;/a&gt;。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;vim&lt;/span&gt; &lt;span class="err"&gt;/etc/shadowsocks-libev/config.json&lt;/span&gt;
+
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;server&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;0.0.0.0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;server_port&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;443&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;local_port&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1080&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;timeout&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;method&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;chacha20-ietf-poly1305&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;mode&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;tcp_and_udp&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;fast_open&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;plugin&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;obfs-server&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;plugin_opts&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;obfs=http;fast-open&amp;quot;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;6.&amp;nbsp;配置客户端&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;Windows&lt;/strong&gt;
+下载&lt;a href="https://github.com/shadowsocks/shadowsocks-windows/releases"&gt;shadowsocks-windows&lt;/a&gt;解压缩，
+下载&lt;a href="https://github.com/imgk/simple-obfs-Cygwin/releases"&gt;simple-obfs&lt;/a&gt;中的obfs-local.exe和msys-2.0.dll放到shadowsocks-windows目录中,obfs-host随意写一个中国可以访问的网站。
+&lt;img alt="shadowsocks-windows" src="http://kevinstuchuang.qiniudn.com/shadowsocks-windows.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Linux&lt;/strong&gt;&amp;nbsp;安装客户端和obfs&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo pacman -Syu
+sudo pacman -S shadowsocks-libev simple-obfs
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;开启本地服务&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;nohup ss-local -c config.json --plugin obfs-local --plugin-opts &amp;quot;obfs=http;obfs-host=www.baidu.com&amp;quot;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;开机启动，编辑启动文件&amp;nbsp;，添加obfs混淆&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="na"&gt;vim /usr/lib/systemd/system/shadowsocks-libev@.service&lt;/span&gt;
+
+&lt;span class="k"&gt;[Unit]&lt;/span&gt;
+&lt;span class="na"&gt;Description&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;Shadowsocks-Libev Client Service&lt;/span&gt;
+&lt;span class="na"&gt;After&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;network.target&lt;/span&gt;
+
+&lt;span class="k"&gt;[Service]&lt;/span&gt;
+&lt;span class="na"&gt;Type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;simple&lt;/span&gt;
+&lt;span class="na"&gt;User&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;root&lt;/span&gt;
+&lt;span class="na"&gt;CapabilityBoundingSet&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;CAP_NET_BIND_SERVICE&lt;/span&gt;
+&lt;span class="na"&gt;ExecStart&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;/usr/bin/ss-local -c /etc/shadowsocks/%i.json --plugin obfs-local --plugin-opts &amp;quot;obfs=http;obfs-host=www.baidu.com&amp;quot;&lt;/span&gt;
+
+&lt;span class="k"&gt;[Install]&lt;/span&gt;
+&lt;span class="na"&gt;WantedBy&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;multi-user.target&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;编辑配置文件&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;vim&lt;/span&gt; &lt;span class="err"&gt;/etc/shadowsocks/libev.json&lt;/span&gt;
+
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;server&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;你的服务器IP&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;server_port&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;443&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;local_address&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;127.0.0.1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;local_port&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;65509&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;你的密码&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;timeout&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;300&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;method&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;chacha20-ietf-poly1305&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;fast_open&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;workers&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;prefer_ipv6&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;false&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;开启服务，@后面要和json文件同名&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;systemctl start shadowsocks-libev@libev
+sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt;  shadowsocks-libev@libev
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;其他内容请参考&lt;a href="https://wiki.archlinux.org/index.php/Shadowsocks_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E5.91.BD.E4.BB.A4.E8.A1.8C"&gt;Archlinux Wiki&lt;/a&gt;&amp;nbsp;shadowsocks-qt5目前功能严重缺失，不建议使用，Linux平台最好是命令行模式&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif?hl=zh-CN"&gt;SwitchyOmega&lt;/a&gt;是目前Chome最好的代理插件，可以在&lt;a href="https://www.switchyomega.com/download.html"&gt;官网&lt;/a&gt;下载最新版本安装。&lt;/p&gt;
+&lt;h3&gt;7.Android客户端配置&lt;/h3&gt;
+&lt;p&gt;如果Android手机可以访问Google&amp;nbsp;Play，则可以直接在上面搜shadowsocks和obfs分别安装后再配置即可。&lt;/p&gt;
+&lt;p&gt;如果当前手机不能访问Play，可以在github releases上分别下载&lt;a href="https://github.com/shadowsocks/shadowsocks-android/releases"&gt;shadowsocks-android&lt;/a&gt;和&lt;a href="https://github.com/shadowsocks/simple-obfs-android/releases"&gt;simple-obfs-android&lt;/a&gt;，安装后再配置自己的服务端信息。&lt;/p&gt;
+&lt;h3&gt;8.socks5转http/https&lt;/h3&gt;
+&lt;p&gt;实际使用中，经常会遇到命令行终端或本地程序需要代理，但是他们只支持http或https协议，所以就需要把socks5协议的代理转换协议，以Archlinux为例，方法也很简单。&lt;/p&gt;
+&lt;p&gt;安装privoxy&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo pacman -S privoxy
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;修改配置，找到如下两行打开注释，注意listen后的端口是未来我们要使用的端口，默认为8118，forward后的端口是shadowsocks使用的本地端口，这个依据自己的配置修改，不要忘了最后的&amp;#8221;.&amp;#8221;。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo vim /etc/privoxy/config
+listen-address  &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1:8118
+forward-socks5t   /   &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1:65509 .
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;保存配置后，启动或重启服务&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo systemctl start privoxy
+sudo systemctl restart privoxy
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;以后需要使用时，修改两个本地变量即可&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;https_proxy&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;127&lt;/span&gt;.0.0.1:8118
+&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;http_proxy&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;127&lt;/span&gt;.0.0.1:8118
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;9.&amp;nbsp;服务器端常用的命令&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#测试ss+obfs是否正常启动&lt;/span&gt;
+ss-server -c config.json --plugin obfs-server --plugin-opts &lt;span class="s2"&gt;&amp;quot;obfs=http&amp;quot;&lt;/span&gt;
+&lt;span class="c1"&gt;#查看obfs的进程编号&lt;/span&gt;
+ps ax&lt;span class="p"&gt;|&lt;/span&gt;grep obfs
+&lt;span class="c1"&gt;#查看ss的进程编号&lt;/span&gt;
+ps ax&lt;span class="p"&gt;|&lt;/span&gt;grep ss-server
+&lt;span class="c1"&gt;#查看ss监听端口&lt;/span&gt;
+netstat -nlp &lt;span class="p"&gt;|&lt;/span&gt;grep ss-server
+&lt;/pre&gt;&lt;/div&gt;</content><category term="shadowsocks"></category></entry><entry><title>配置pip和conda</title><link href="https://solarck.com/config-pip-conda.html" rel="alternate"></link><published>2017-11-07T11:43:00+08:00</published><updated>2017-11-07T11:43:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:solarck.com,2017-11-07:/config-pip-conda.html</id><summary type="html">&lt;p&gt;首先需要确认已经安装Python环境，建议用于科学计算的朋友下载安装&lt;a href="https://www.anaconda.com/download/"&gt;Anaconda&lt;/a&gt;或者&lt;a href="https://conda.io/miniconda.html"&gt;Miniconda&lt;/a&gt;。&lt;/p&gt;
+&lt;h3&gt;环境变量和启用配置&lt;/h3&gt;
+&lt;p&gt;安装好后还需要把安装路径添加到系统环境变量&lt;/p&gt;
+&lt;p&gt;Linux用户查看系统环境变量&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;$PATH&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Windows用户查看系统环境变量&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; %PATH%
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;如果没有Anaconda的路径，就需要自己手动添加&lt;/p&gt;
+&lt;!--more--&gt;
+
+&lt;p&gt;Linux用户编辑~/.bashrc，在最后添加以下内容，注意自己修改安装路径&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/anaconda3/bin:&lt;/span&gt;&lt;span class="nv"&gt;$PATH&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;最后再执行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;source&lt;/span&gt; ~/.bashrc
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;如果没有效果，可是尝试编辑~/.profile或 ~/.bash_profile文件&amp;nbsp;zsh或其他shell用户可以自行修改&lt;/p&gt;
+&lt;p&gt;Windows用户在cmd执行如下命令，如果不是默认安装到用户目录，需要手动修改下路径。如果创建了自定义env，那么root改为你自己的env名字。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;set&lt;/span&gt; &lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;%USERPROFILE%&lt;span class="se"&gt;\A&lt;/span&gt;naconda3&lt;span class="p"&gt;;&lt;/span&gt;%USERPROFILE%&lt;span class="se"&gt;\A&lt;/span&gt;naconda3&lt;span class="se"&gt;\L&lt;/span&gt;ibrary&lt;span class="se"&gt;\b&lt;/span&gt;in …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;首先需要确认已经安装Python环境，建议用于科学计算的朋友下载安装&lt;a href="https://www.anaconda.com/download/"&gt;Anaconda&lt;/a&gt;或者&lt;a href="https://conda.io/miniconda.html"&gt;Miniconda&lt;/a&gt;。&lt;/p&gt;
+&lt;h3&gt;环境变量和启用配置&lt;/h3&gt;
+&lt;p&gt;安装好后还需要把安装路径添加到系统环境变量&lt;/p&gt;
+&lt;p&gt;Linux用户查看系统环境变量&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;$PATH&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Windows用户查看系统环境变量&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; %PATH%
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;如果没有Anaconda的路径，就需要自己手动添加&lt;/p&gt;
+&lt;!--more--&gt;
+
+&lt;p&gt;Linux用户编辑~/.bashrc，在最后添加以下内容，注意自己修改安装路径&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;export&lt;/span&gt; &lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;&lt;span class="s2"&gt;/anaconda3/bin:&lt;/span&gt;&lt;span class="nv"&gt;$PATH&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;最后再执行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;source&lt;/span&gt; ~/.bashrc
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;如果没有效果，可是尝试编辑~/.profile或 ~/.bash_profile文件&amp;nbsp;zsh或其他shell用户可以自行修改&lt;/p&gt;
+&lt;p&gt;Windows用户在cmd执行如下命令，如果不是默认安装到用户目录，需要手动修改下路径。如果创建了自定义env，那么root改为你自己的env名字。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;set&lt;/span&gt; &lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;%USERPROFILE%&lt;span class="se"&gt;\A&lt;/span&gt;naconda3&lt;span class="p"&gt;;&lt;/span&gt;%USERPROFILE%&lt;span class="se"&gt;\A&lt;/span&gt;naconda3&lt;span class="se"&gt;\L&lt;/span&gt;ibrary&lt;span class="se"&gt;\b&lt;/span&gt;in&lt;span class="p"&gt;;&lt;/span&gt;%USERPROFILE%&lt;span class="se"&gt;\A&lt;/span&gt;naconda3&lt;span class="se"&gt;\S&lt;/span&gt;cripts&lt;span class="p"&gt;;&lt;/span&gt;%PATH%
+activate root
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;更换源&lt;/h3&gt;
+&lt;p&gt;conda官方源非常慢，甚至有时候经常无法连接；pip时快时慢，也是经常无法连接，所以我们把更新源换为国内的，加快更新速度。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;pip&lt;/strong&gt;
+目前国内常用的pip源有&lt;a href="http://mirrors.aliyun.com/help/pypi"&gt;阿里云&lt;/a&gt;和豆瓣。&lt;/p&gt;
+&lt;p&gt;Linux用户编辑~/.pip/pip.conf文件，粘贴以下内容&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;[global]&lt;/span&gt;
+&lt;span class="na"&gt;index-url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;https://pypi.doubanio.com/simple/&lt;/span&gt;
+&lt;span class="na"&gt;format&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;columns&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;或&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;[global]&lt;/span&gt;
+&lt;span class="na"&gt;index-url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;https://mirrors.aliyun.com/pypi/simple/&lt;/span&gt;
+&lt;span class="na"&gt;format&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;columns&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Windows用户编辑%&lt;span class="caps"&gt;USERPROFILE&lt;/span&gt;%\pip\pip.ini，没有就新建一个，内容和Linux一样。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;conda&lt;/strong&gt;
+目前国内常用的conda源有&lt;a href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/"&gt;清华&lt;/a&gt;和&lt;a href="http://mirrors.ustc.edu.cn/help/anaconda.html"&gt;中科大&lt;/a&gt;两个&lt;/p&gt;
+&lt;p&gt;Linux和Windows用户执行下面的命令添加conda源&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --set show_channel_urls yes
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
+conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
+conda config --set show_channel_urls yes
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;更新&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;conda&lt;/strong&gt;&amp;nbsp;conda常用更新命令&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;conda update XXX        &lt;span class="c1"&gt;#更新XXX包&lt;/span&gt;
+conda update --all      &lt;span class="c1"&gt;#更新所有可更新的包到最新&lt;/span&gt;
+conda update conda      &lt;span class="c1"&gt;#conda整体升级，并不一定最新，但是稳定&lt;/span&gt;
+conda update anaconda   &lt;span class="c1"&gt;#同上&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;conda其他常用命令&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;conda info              &lt;span class="c1"&gt;#当前conda环境信息&lt;/span&gt;
+conda install XXX       &lt;span class="c1"&gt;#安装XXX&lt;/span&gt;
+conda search XXX        &lt;span class="c1"&gt;#搜索XXX&lt;/span&gt;
+conda clean --all       &lt;span class="c1"&gt;#清除无用包和缓存&lt;/span&gt;
+conda list &amp;gt; a.txt      &lt;span class="c1"&gt;#输出所有已安装的包&lt;/span&gt;
+conda remove XXX        &lt;span class="c1"&gt;#卸载XXX&lt;/span&gt;
+conda config --get channels     &lt;span class="c1"&gt;#获取当前使用的源，配合下面的命令使用&lt;/span&gt;
+conda config --remove channels https://XXX
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;pip&lt;/strong&gt;&amp;nbsp;pip常用更新命令&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip search XXX      &lt;span class="c1"&gt;#搜索&lt;/span&gt;
+pip install XXX     &lt;span class="c1"&gt;#安装&lt;/span&gt;
+pip uninstall XXX   &lt;span class="c1"&gt;#卸载&lt;/span&gt;
+pip list &amp;gt; b.txt    &lt;span class="c1"&gt;#列出所有已安装的包&lt;/span&gt;
+pip list -o         &lt;span class="c1"&gt;#列出所有可更新的包&lt;/span&gt;
+pip show XXX        &lt;span class="c1"&gt;#查看包的路径和依赖等信息&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;hr&gt;</content><category term="pip"></category><category term="conda"></category><category term="python"></category></entry><entry><title>openwrt开启Samba作为共享中心</title><link href="https://solarck.com/openwrt-samba.html" rel="alternate"></link><published>2014-01-05T01:29:00+08:00</published><updated>2014-01-05T01:29:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:solarck.com,2014-01-05:/openwrt-samba.html</id><summary type="html">&lt;p&gt;为Openwrt接入一个大U盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机BT下载提供一个基础。&lt;/p&gt;
+&lt;h3&gt;安装&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg install samba36-server luci-app-samba
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;!--more--&gt;
+
+&lt;h4&gt;配置文件&lt;/h4&gt;
+&lt;p&gt;samba的配置文件只有两个，而且默认配置稍作修改就可以使用&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;root@openwrt:~# vi /etc/samba/smb.conf.template
+&lt;span class="o"&gt;[&lt;/span&gt;global&lt;span class="o"&gt;]&lt;/span&gt;
+    netbios &lt;span class="nv"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; OpenWrt
+    display &lt;span class="nv"&gt;charset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; UTF-8
+    &lt;span class="nv"&gt;interfaces&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1/8 lo &lt;span class="m"&gt;192&lt;/span&gt;.168.3.1/24 fd73:3a9a:156::1/60 br-lan &lt;span class="c1"&gt;#内网IP&lt;/span&gt;
+    server &lt;span class="nv"&gt;string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; OpenWrt …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;为Openwrt接入一个大U盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机BT下载提供一个基础。&lt;/p&gt;
+&lt;h3&gt;安装&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg install samba36-server luci-app-samba
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;!--more--&gt;
+
+&lt;h4&gt;配置文件&lt;/h4&gt;
+&lt;p&gt;samba的配置文件只有两个，而且默认配置稍作修改就可以使用&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;root@openwrt:~# vi /etc/samba/smb.conf.template
+&lt;span class="o"&gt;[&lt;/span&gt;global&lt;span class="o"&gt;]&lt;/span&gt;
+    netbios &lt;span class="nv"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; OpenWrt
+    display &lt;span class="nv"&gt;charset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; UTF-8
+    &lt;span class="nv"&gt;interfaces&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1/8 lo &lt;span class="m"&gt;192&lt;/span&gt;.168.3.1/24 fd73:3a9a:156::1/60 br-lan &lt;span class="c1"&gt;#内网IP&lt;/span&gt;
+    server &lt;span class="nv"&gt;string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; OpenWrt
+    unix &lt;span class="nv"&gt;charset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; UTF-8
+    &lt;span class="nv"&gt;workgroup&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; WORKGROUP
+    &lt;span class="nv"&gt;browseable&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; yes
+    &lt;span class="nv"&gt;deadtime&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;30&lt;/span&gt;
+    domain &lt;span class="nv"&gt;master&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; yes
+    encrypt &lt;span class="nv"&gt;passwords&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+    &lt;span class="nb"&gt;enable&lt;/span&gt; core &lt;span class="nv"&gt;files&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; no
+    guest &lt;span class="nv"&gt;account&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; nobody &lt;span class="c1"&gt;#匿名用户&lt;/span&gt;
+    guest &lt;span class="nv"&gt;ok&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; yes &lt;span class="c1"&gt;#匿名用户&lt;/span&gt;
+    invalid &lt;span class="nv"&gt;users&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; root
+    &lt;span class="nb"&gt;local&lt;/span&gt; &lt;span class="nv"&gt;master&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; yes
+    load &lt;span class="nv"&gt;printers&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; no
+    map to &lt;span class="nv"&gt;guest&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; Bad User
+    max &lt;span class="nv"&gt;protocol&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; SMB2
+    min receivefile &lt;span class="nv"&gt;size&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;16384&lt;/span&gt;
+    null &lt;span class="nv"&gt;passwords&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; yes &lt;span class="c1"&gt;#无需密码&lt;/span&gt;
+    obey pam &lt;span class="nv"&gt;restrictions&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; yes
+    os &lt;span class="nv"&gt;level&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;20&lt;/span&gt;
+    passdb &lt;span class="nv"&gt;backend&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; smbpasswd
+    preferred &lt;span class="nv"&gt;master&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; yes
+    &lt;span class="nv"&gt;printable&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; no
+    &lt;span class="nv"&gt;security&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; user
+    smb &lt;span class="nv"&gt;encrypt&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; disabled
+    smb passwd &lt;span class="nv"&gt;file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; /etc/samba/smbpasswd
+    socket &lt;span class="nv"&gt;options&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; TCP_NODELAY IPTOS_LOWDELAY
+    &lt;span class="nv"&gt;syslog&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;2&lt;/span&gt;
+    use &lt;span class="nv"&gt;sendfile&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; yes
+    &lt;span class="nv"&gt;writeable&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; yes &lt;span class="c1"&gt;#可写&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;root@openwrt:~# vi /etc/config/samba
+config samba
+    option &lt;span class="s1"&gt;&amp;#39;name&amp;#39;&lt;/span&gt;           &lt;span class="s1"&gt;&amp;#39;OpenWrt&amp;#39;&lt;/span&gt;
+    option &lt;span class="s1"&gt;&amp;#39;workgroup&amp;#39;&lt;/span&gt;      &lt;span class="s1"&gt;&amp;#39;WORKGROUP&amp;#39;&lt;/span&gt;
+    option &lt;span class="s1"&gt;&amp;#39;description&amp;#39;&lt;/span&gt;        &lt;span class="s1"&gt;&amp;#39;OpenWrt&amp;#39;&lt;/span&gt;
+    option &lt;span class="s1"&gt;&amp;#39;homes&amp;#39;&lt;/span&gt;          &lt;span class="s1"&gt;&amp;#39;1&amp;#39;&lt;/span&gt;
+
+config &lt;span class="s1"&gt;&amp;#39;sambashare&amp;#39;&lt;/span&gt;
+    option &lt;span class="s1"&gt;&amp;#39;name&amp;#39;&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;Shares&amp;#39;&lt;/span&gt;
+    option &lt;span class="s1"&gt;&amp;#39;path&amp;#39;&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/share&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;#samba所在目录&lt;/span&gt;
+&lt;span class="c1"&gt;#   option &amp;#39;users&amp;#39; &amp;#39;sandra&amp;#39;&lt;/span&gt;
+    option &lt;span class="s1"&gt;&amp;#39;guest_ok&amp;#39;&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;
+    option &lt;span class="s1"&gt;&amp;#39;create_mask&amp;#39;&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;0777&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;#所有用户可写&lt;/span&gt;
+    option &lt;span class="s1"&gt;&amp;#39;dir_mask&amp;#39;&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;0777&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;#所有用户可写&lt;/span&gt;
+    option &lt;span class="s1"&gt;&amp;#39;read_only&amp;#39;&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;no&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;我的配置是无需密码所有用户都可以访问，可上传可下载。&lt;/p&gt;
+&lt;p&gt;配置完还需要对目录进行权限提升&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;chmod a+w /share
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;或者更改文件夹用户&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;chown nobody:nobody /share
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;最后重启samba服务并开机启动&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/etc/init.d/samba restart
+/etc/init.d/samba &lt;span class="nb"&gt;enable&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;访问&lt;/h3&gt;
+&lt;p&gt;Windows用户很容易访问，在网络邻居（网络）里就可以看到WORKGROUP&amp;#8212;&amp;gt;&lt;span class="caps"&gt;OPENWRT&lt;/span&gt;&amp;#8212;&amp;gt;Share文件夹了，但是linux用户需要一些其他命令。  &lt;br&gt;
+&lt;strong&gt;1.&amp;nbsp;安装g2sc&lt;/strong&gt;    &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yaourt -S g2sc
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;安装完就可以像Windows一样看到工作组和文件夹，但是只能下载，没有上传功能。    &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2. sambclient&lt;/strong&gt;&amp;nbsp;安装工具&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yaourt -S sambaclient
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;连接主机    &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;kevin@kevin:pts/2 ~$: smbclient -L OPENWRT
+Enter kevins password:  &lt;span class="c1"&gt;#没设密码直接回车&lt;/span&gt;
+
+    Sharename       Type      Comment
+    ---------       ----      -------
+    Shares          Disk      
+    IPC$            IPC       IPC Service &lt;span class="o"&gt;(&lt;/span&gt;OpenWrt&lt;span class="o"&gt;)&lt;/span&gt;
+
+    Server               Comment
+    ---------            -------
+    CHEN-PC              
+    OPENWRT              OpenWrt
+
+    Workgroup            Master
+    ---------            -------
+    WORKGROUP            OPENWRT
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;kevin@kevin:pts/2 ~$: smbclient //OPENWRT/Shares &lt;span class="c1"&gt;#格式为//Servername/Sharename&lt;/span&gt;
+smb: &lt;span class="se"&gt;\&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;出现了smb的命令行&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;get ****    &lt;span class="c1"&gt;#下载某个文件    &lt;/span&gt;
+put ****    &lt;span class="c1"&gt;#上传某个文件&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;更多命令输入?查看&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3.&amp;nbsp;mount挂载&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;kevin@kevin:pts/2 ~$: mkdir /mnt/samba
+kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;完成&lt;/h3&gt;
+&lt;p&gt;由于安装了Luci，所以开启了uhttp服务，把共享目录链接到/www目录同样可以通过浏览器直接下载，相当于把Samba目录同样做成了FTP目录。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;kevin@kevin:pts/2 ~$: ln -s /share /www/share
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Samba共享就全部完成，之后再继续研究BT下载，配合Samba的共享就等于免费拥有了一个简版NAS。&lt;/p&gt;</content><category term="openwrt"></category></entry><entry><title>用extroot为openwrt扩充存储空间</title><link href="https://solarck.com/openwrt-extroot.html" rel="alternate"></link><published>2014-01-03T01:48:00+08:00</published><updated>2014-01-03T01:48:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:solarck.com,2014-01-03:/openwrt-extroot.html</id><summary type="html">&lt;p&gt;水星这款MW4350r内存为128M，运行很多程序都不在话下。但是却只提供了8M&amp;nbsp;Flash存储空间，而路由器系统还占了1.9M，剩下的5M空间不足以支持安装很多软件，比如我在安装python的时候就报错提示存储空间不足，这确实很郁闷，但幸好Openwrt还提供了extroot方式来扩展存储，来发挥路由器和Openwrt系统的真正实力。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;pivot-overlay还是pivot-root？&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我把两种方式都试过，pivot-overlay方式不能够把安装程序的位置移到USB存储装置上，但是pivot-root方式可以，所以我选择了后者。pivot-root方式使/覆盖掉了/overlay成为rootfs，我认为这种方式更接近原生的Linux系统。  &lt;br&gt;
+而从官方的文档来看，目前pivot-root已经没有以前的缺点和不足，选择哪个已经是个人需求而不是技术问题了。  &lt;br&gt;
+网上大部分文章帖子都是2009-2010年间的，所以大部分可能都是pivot-overlay的。如果对这部分不太理解，请仔细阅读官方Wiki：&lt;a href="http://wiki.openwrt.org/doc/howto/extroot/extroot.theory"&gt;ExtRoot: How it works&lt;/a&gt;,&lt;a href="http://wiki.openwrt.org/doc/techref/flash.layout"&gt;The OpenWrt Flash&amp;nbsp;Layout&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!--more--&gt;
+
+&lt;h3&gt;安装必要的包&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs-ext4 block-mount
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;e2fsprogs包提供了mkfs（mkfs.ext3 …&lt;/p&gt;</summary><content type="html">&lt;p&gt;水星这款MW4350r内存为128M，运行很多程序都不在话下。但是却只提供了8M&amp;nbsp;Flash存储空间，而路由器系统还占了1.9M，剩下的5M空间不足以支持安装很多软件，比如我在安装python的时候就报错提示存储空间不足，这确实很郁闷，但幸好Openwrt还提供了extroot方式来扩展存储，来发挥路由器和Openwrt系统的真正实力。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;pivot-overlay还是pivot-root？&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我把两种方式都试过，pivot-overlay方式不能够把安装程序的位置移到USB存储装置上，但是pivot-root方式可以，所以我选择了后者。pivot-root方式使/覆盖掉了/overlay成为rootfs，我认为这种方式更接近原生的Linux系统。  &lt;br&gt;
+而从官方的文档来看，目前pivot-root已经没有以前的缺点和不足，选择哪个已经是个人需求而不是技术问题了。  &lt;br&gt;
+网上大部分文章帖子都是2009-2010年间的，所以大部分可能都是pivot-overlay的。如果对这部分不太理解，请仔细阅读官方Wiki：&lt;a href="http://wiki.openwrt.org/doc/howto/extroot/extroot.theory"&gt;ExtRoot: How it works&lt;/a&gt;,&lt;a href="http://wiki.openwrt.org/doc/techref/flash.layout"&gt;The OpenWrt Flash&amp;nbsp;Layout&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!--more--&gt;
+
+&lt;h3&gt;安装必要的包&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs-ext4 block-mount
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;e2fsprogs包提供了mkfs（mkfs.ext3,mkfs.ext4）、fsck等工具。  &lt;br&gt;
+kmod-usb2只提供了USb2.0的驱动，如果你的是USB1.0（1.1）的，还需要单独安装驱动。  &lt;br&gt;
+kmod-fs-ext4是用来挂载ext4文件系统的，如果你想使用ext3文件格式就安装相应的包。  &lt;br&gt;&amp;nbsp;usbutils不是必装，仅提供了lsusb命令。&lt;/p&gt;
+&lt;h3&gt;格式化U盘&lt;/h3&gt;
+&lt;p&gt;插好U盘后，先查看下是否被系统识别出来&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;root@openwrt: ~# lsusb
+Bus &lt;span class="m"&gt;001&lt;/span&gt; Device &lt;span class="m"&gt;002&lt;/span&gt;: ID &lt;span class="m"&gt;0781&lt;/span&gt;:5571 SanDisk Corp. Cruzer Fit
+Bus &lt;span class="m"&gt;001&lt;/span&gt; Device &lt;span class="m"&gt;001&lt;/span&gt;: ID 1d6b:0002 Linux Foundation &lt;span class="m"&gt;2&lt;/span&gt;.0 root hub
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;root@openwrt: ~# ls /dev/sd*
+/dev/sda    /dev/sda1
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;已经正确识别出来了，格式化系统为ext4&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mkfs.ext4 /dev/sda1
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;挂载到当前系统&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mount /dev/sda1 /mnt
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;创建一个128M的swap文件&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;dd &lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/dev/zero &lt;span class="nv"&gt;of&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/mnt/swap &lt;span class="nv"&gt;bs&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;2048&lt;/span&gt; &lt;span class="nv"&gt;count&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;65536&lt;/span&gt;
+mkswap /mnt/swap
+swapon /mnt/swap
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;extroot&lt;/h3&gt;
+&lt;p&gt;把/目录下的文件迁移到U盘,pivot-root方式，适用于Barrier&amp;nbsp;Breaker（trunk）版本&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mkdir -p /tmp/cproot
+mount --bind / /tmp/cproot
+tar -C /tmp/cproot -cvf - . &lt;span class="p"&gt;|&lt;/span&gt; tar -C /mnt/ -xf -
+umount /tmp/cproot
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;编辑fstab&lt;/h3&gt;
+&lt;p&gt;我的系统默认没有/etc/config/fstab文件，可以用命令生成一个&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;block detect &amp;gt; /etc/config/fstab
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;编辑这个文件，添加下面这段配置&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;config mount
+        option target        /
+        option device        /dev/sda1
+        option fstype        ext4
+        option options       rw,sync
+        option enabled       &lt;span class="m"&gt;1&lt;/span&gt;
+        option enabled_fsck  &lt;span class="m"&gt;0&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;重启后，查看下空间，如果类似我这样就是成功了&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;root@openwrt: ~# df -h
+Filesystem                Size      Used Available Use% Mounted on
+rootfs                    &lt;span class="m"&gt;7&lt;/span&gt;.2G    &lt;span class="m"&gt;169&lt;/span&gt;.9M      &lt;span class="m"&gt;6&lt;/span&gt;.7G   &lt;span class="m"&gt;2&lt;/span&gt;% /
+/dev/root                 &lt;span class="m"&gt;1&lt;/span&gt;.8M      &lt;span class="m"&gt;1&lt;/span&gt;.8M         &lt;span class="m"&gt;0&lt;/span&gt; &lt;span class="m"&gt;100&lt;/span&gt;% /rom
+tmpfs                    &lt;span class="m"&gt;61&lt;/span&gt;.7M      &lt;span class="m"&gt;1&lt;/span&gt;.0M     &lt;span class="m"&gt;60&lt;/span&gt;.7M   &lt;span class="m"&gt;2&lt;/span&gt;% /tmp
+/dev/sda1                 &lt;span class="m"&gt;7&lt;/span&gt;.2G    &lt;span class="m"&gt;169&lt;/span&gt;.9M      &lt;span class="m"&gt;6&lt;/span&gt;.7G   &lt;span class="m"&gt;2&lt;/span&gt;% /
+tmpfs                   &lt;span class="m"&gt;512&lt;/span&gt;.0K         &lt;span class="m"&gt;0&lt;/span&gt;    &lt;span class="m"&gt;512&lt;/span&gt;.0K   &lt;span class="m"&gt;0&lt;/span&gt;% /dev
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;大功告成，现在系统空间足够大了，任你怎么安装怎么下载。&lt;/p&gt;</content><category term="openwrt"></category></entry><entry><title>水星（Mercury）MW4530r刷Openwrt</title><link href="https://solarck.com/install-openwrt-on-mw4530r.html" rel="alternate"></link><published>2014-01-02T01:08:00+08:00</published><updated>2014-01-02T01:08:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:solarck.com,2014-01-02:/install-openwrt-on-mw4530r.html</id><summary type="html">&lt;p&gt;经过两天的不屑折腾，终于为我的Mw4530r安装上了Openwrt。从最后安装成功往回看，其实整个过程非常简单，但是由于是第一次接触，走了不少弯路，本应该一个小时就完成的工作，却整整花了我两天时间。再次发篇文章庆祝下，也给其他朋友一些参考。&lt;/p&gt;
+&lt;h3&gt;下载文件&lt;/h3&gt;
+&lt;p&gt;水星这款路由器是ar71xx芯片的，因为较新，所以还没有官方的稳定版。在Openwrt的&lt;a href="http://downloads.openwrt.org/snapshots/trunk/ar71xx/"&gt;snapshots/trunk&lt;/a&gt;目录搜索下载我们需要的刷机文件，一般情况一个型号有两个文件，一个名字里带factory，从其他固件系统刷Openwrt下载这个文件；一个名字带sysupgrade，已经是Openwrt系统的用此文件升级。&lt;/p&gt;
+&lt;h3&gt;刷机&lt;/h3&gt;
+&lt;p&gt;组装好路由器，接通电源，电脑网卡口连接路由器任意Lan口，打开浏览器访问http://192.168.1.1&amp;nbsp;就可以看见水星的原厂界面。利用原厂固件的升级功能，提交下载好的Openwrt刷机文件即可直接刷机，非常的方便。稍等片刻等待路由器自动重启，此时刷机完成。&lt;/p&gt;
+&lt;!--more--&gt;
+
+&lt;h3&gt;初始化&lt;/h3&gt;
+&lt;p&gt;Openwrt的固件是不带UI界面的，在安装用户界面之前，用户需要先进行简单的初始化工作。  &lt;br&gt;&amp;nbsp;使用telnet登陆路由器&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;telnet &lt;span class="m"&gt;192&lt;/span&gt;.168.1.1
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Linux系统自带命令，Windows用户需要在控制面板 …&lt;/p&gt;</summary><content type="html">&lt;p&gt;经过两天的不屑折腾，终于为我的Mw4530r安装上了Openwrt。从最后安装成功往回看，其实整个过程非常简单，但是由于是第一次接触，走了不少弯路，本应该一个小时就完成的工作，却整整花了我两天时间。再次发篇文章庆祝下，也给其他朋友一些参考。&lt;/p&gt;
+&lt;h3&gt;下载文件&lt;/h3&gt;
+&lt;p&gt;水星这款路由器是ar71xx芯片的，因为较新，所以还没有官方的稳定版。在Openwrt的&lt;a href="http://downloads.openwrt.org/snapshots/trunk/ar71xx/"&gt;snapshots/trunk&lt;/a&gt;目录搜索下载我们需要的刷机文件，一般情况一个型号有两个文件，一个名字里带factory，从其他固件系统刷Openwrt下载这个文件；一个名字带sysupgrade，已经是Openwrt系统的用此文件升级。&lt;/p&gt;
+&lt;h3&gt;刷机&lt;/h3&gt;
+&lt;p&gt;组装好路由器，接通电源，电脑网卡口连接路由器任意Lan口，打开浏览器访问http://192.168.1.1&amp;nbsp;就可以看见水星的原厂界面。利用原厂固件的升级功能，提交下载好的Openwrt刷机文件即可直接刷机，非常的方便。稍等片刻等待路由器自动重启，此时刷机完成。&lt;/p&gt;
+&lt;!--more--&gt;
+
+&lt;h3&gt;初始化&lt;/h3&gt;
+&lt;p&gt;Openwrt的固件是不带UI界面的，在安装用户界面之前，用户需要先进行简单的初始化工作。  &lt;br&gt;&amp;nbsp;使用telnet登陆路由器&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;telnet &lt;span class="m"&gt;192&lt;/span&gt;.168.1.1
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Linux系统自带命令，Windows用户需要在控制面板&amp;#8212;&amp;gt;程序里面启用telnet功能。&lt;/p&gt;
+&lt;p&gt;修改登录密码&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;passwd
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;更改好密码后，dropbear（ssh）登录方式开启，telnet登录方式关闭。&lt;/p&gt;
+&lt;p&gt;退出telnet，用ssh方式登陆，Windows用户可以下载putty登陆&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;exit&lt;/span&gt;
+ssh root@192.168.1.1
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;到此我们已经成功初始化了Openwrt。&lt;/p&gt;
+&lt;h3&gt;网络配置&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;强烈建议基础配置尤其是网络设置都使用CLI界面，切勿乱修改原始配置，我就在这里经历的惨痛的教训&lt;/strong&gt;&lt;br&gt;&amp;nbsp;我使用的是联通ADSL，所以需要拨号（pppoe）才能上网。     &lt;/p&gt;
+&lt;p&gt;配置网络连接，修改wan部分&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;root@openwrt:~# vi /etc/config/network
+config interface &lt;span class="s1"&gt;&amp;#39;wan&amp;#39;&lt;/span&gt;
+    option ifname &lt;span class="s1"&gt;&amp;#39;eth0.2&amp;#39;&lt;/span&gt;
+    option proto &lt;span class="s1"&gt;&amp;#39;pppoe&amp;#39;&lt;/span&gt;
+    option username &lt;span class="s1"&gt;&amp;#39;ISP提供的用户名&amp;#39;&lt;/span&gt;
+    option password &lt;span class="s1"&gt;&amp;#39;密码&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;或者用uci方式进行配置&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;uci &lt;span class="nb"&gt;set&lt;/span&gt; network.wan.proto&lt;span class="o"&gt;=&lt;/span&gt;pppoe
+uci &lt;span class="nb"&gt;set&lt;/span&gt; network.wan.username&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;ISP提供的用户名&amp;#39;&lt;/span&gt;
+uci &lt;span class="nb"&gt;set&lt;/span&gt; network.wan.password&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;密码&amp;#39;&lt;/span&gt;
+uci commit network
+ifup wan
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;配置wifi，根据你的路由器配置生成一个默认的配置文件&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wifi detect &amp;gt; /etc/config/wireless
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;重启后，互联网和wifi都应该已经正常工作，wifi的密码和名称我们之后可以在UI界面修改，接下来安装用户界面。&lt;/p&gt;
+&lt;h3&gt;用户界面&lt;/h3&gt;
+&lt;p&gt;安装Luci    &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg install luci luci-ssl luci-i18n-chinese
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;启动Luci服务&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/etc/init.d/uhttpd start
+/etc/init.d/uhttpd &lt;span class="nb"&gt;enable&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;打开浏览器输入http://192.168.1.1&amp;nbsp;，就可以进入WebUI界面了，现在就可以向普通路由器一样进行管理了。&lt;/p&gt;
+&lt;h3&gt;小提示&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;1.MW4530r进入failsafe的方法是：路由器断电&amp;#8212;&amp;gt;接通电源&amp;#8212;&amp;gt;断续的按面板前的WPS键，直到SYS指示灯从慢闪变为快闪就是成功进入了failsafe模式了。  &lt;br&gt;
+2.初始配置尽量用CLI方式配置（或uci），最好不要用WebUI。&amp;nbsp;3.不要乱动乱删配置文件，尤其是端口路由表（switch0）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;贴一张Openwrt的路由架构图，这张图帮助我理解了端口和路由的关系。      &lt;/p&gt;
+&lt;p&gt;&lt;img src="http://www.macfreek.nl/memory/images/Linksys_internals.png" title="switch" width="450" /&gt;&lt;/p&gt;</content><category term="openwrt"></category></entry><entry><title>修复变砖的WNR2200</title><link href="https://solarck.com/repair-wnr2200.html" rel="alternate"></link><published>2013-12-31T21:51:00+08:00</published><updated>2013-12-31T21:51:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:solarck.com,2013-12-31:/repair-wnr2200.html</id><summary type="html">&lt;p&gt;手中有个NetGear&amp;nbsp;WNR2200路由器，当初买这个就是看重可以刷机,但是买回来才发现只能刷DD-wrt，于是就刷了DD安心的用了半年。  &lt;/p&gt;
+&lt;p&gt;最近看到Openwrt的trunk目录里有我这款机器的固件了，立刻操刀刷起。不幸的是刷完后telnet不通网关，failsafe模式也无法开启。无奈中发现NetGear官网提供了tftp小工具确实有效，让我变砖的路由器起死回生。&lt;/p&gt;
+&lt;p&gt;方法也很简单，官方文库里说明的很详细，这里简单记录下要点。  &lt;br&gt;
+1.下载工具和路由器官方固件  &lt;br&gt;
+2.打开下载好的软件，设置好网关192.168.1.1，加载下载好的固件，密码不用填    &lt;br&gt;&amp;nbsp;3.断开路由器电源10秒左右，之后接通电源，立刻点击软件上的Upgrade，等待修复完成&lt;/p&gt;
+&lt;!--more--&gt;
+
+&lt;p&gt;修复好后决定这个路由器还是老实的用DD-wrt，抛开扩展性和一些不是特别常用的功能，&lt;span class="caps"&gt;DD&lt;/span&gt;-wrt确实和所有路由器官方提供的固件一样人性化，当初刷完DD-wrt稳定运行了半年多，无重启、无断流，稳定性不是盖的。不想受Openwrt折磨的人可以在DD-wrt的&lt;a href="ftp://dd-wrt.com/others/eko/BrainSlayer-V24-preSP2"&gt;FTP目录&lt;/a&gt;里按照日期和型号索引自己的路由器。&lt;/p&gt;
+&lt;p&gt;当然自己也不会放弃Openwrt，自己又入手了一个水星MW4530r，300元内可刷Openwrt的性价比神器,继续折腾Openwrt去了。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="http://neclub.netgear.cn/Knowledgebase/Document_detail.aspx?Did=934"&gt;网件官方文库&lt;/a&gt;    &lt;a href="http://www.shadowsoftware.net/shadowgameworld/downloads/tftp2.exe"&gt;工具下载地址&lt;/a&gt;  &lt;br&gt;
+如果地址不可用，可Google&amp;nbsp;tftp2.exe …&lt;/p&gt;&lt;/blockquote&gt;</summary><content type="html">&lt;p&gt;手中有个NetGear&amp;nbsp;WNR2200路由器，当初买这个就是看重可以刷机,但是买回来才发现只能刷DD-wrt，于是就刷了DD安心的用了半年。  &lt;/p&gt;
+&lt;p&gt;最近看到Openwrt的trunk目录里有我这款机器的固件了，立刻操刀刷起。不幸的是刷完后telnet不通网关，failsafe模式也无法开启。无奈中发现NetGear官网提供了tftp小工具确实有效，让我变砖的路由器起死回生。&lt;/p&gt;
+&lt;p&gt;方法也很简单，官方文库里说明的很详细，这里简单记录下要点。  &lt;br&gt;
+1.下载工具和路由器官方固件  &lt;br&gt;
+2.打开下载好的软件，设置好网关192.168.1.1，加载下载好的固件，密码不用填    &lt;br&gt;&amp;nbsp;3.断开路由器电源10秒左右，之后接通电源，立刻点击软件上的Upgrade，等待修复完成&lt;/p&gt;
+&lt;!--more--&gt;
+
+&lt;p&gt;修复好后决定这个路由器还是老实的用DD-wrt，抛开扩展性和一些不是特别常用的功能，&lt;span class="caps"&gt;DD&lt;/span&gt;-wrt确实和所有路由器官方提供的固件一样人性化，当初刷完DD-wrt稳定运行了半年多，无重启、无断流，稳定性不是盖的。不想受Openwrt折磨的人可以在DD-wrt的&lt;a href="ftp://dd-wrt.com/others/eko/BrainSlayer-V24-preSP2"&gt;FTP目录&lt;/a&gt;里按照日期和型号索引自己的路由器。&lt;/p&gt;
+&lt;p&gt;当然自己也不会放弃Openwrt，自己又入手了一个水星MW4530r，300元内可刷Openwrt的性价比神器,继续折腾Openwrt去了。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="http://neclub.netgear.cn/Knowledgebase/Document_detail.aspx?Did=934"&gt;网件官方文库&lt;/a&gt;    &lt;a href="http://www.shadowsoftware.net/shadowgameworld/downloads/tftp2.exe"&gt;工具下载地址&lt;/a&gt;  &lt;br&gt;
+如果地址不可用，可Google&amp;nbsp;tftp2.exe&lt;/p&gt;
+&lt;/blockquote&gt;</content><category term="路由器"></category></entry></feed>

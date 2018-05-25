@@ -3,7 +3,8 @@
 <head>
         <meta charset="utf-8" />
         <title>Solarck - Kevin Chen</title>
-        <link rel="stylesheet" href="../theme/css/main.css" />
+        <link rel="stylesheet" href="https://solarck.com/theme/css/main.css" />
+        <link href="https://solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Solarck Atom Feed" />
 
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -12,10 +13,10 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="../">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
+                <h1><a href="https://solarck.com/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
                 <nav><ul>
-                    <li><a href="../category/itbi-ji.html">IT笔记</a></li>
-                    <li><a href="../category/jin-rong-bi-ji.html">金融笔记</a></li>
+                    <li><a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></li>
+                    <li><a href="https://solarck.com/category/jin-rong-bi-ji.html">金融笔记</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
@@ -23,7 +24,7 @@
                     <ol id="posts-list" class="hfeed" start="4">
             <li><article class="hentry">
                 <header>
-                    <h1><a href="../config-pip-conda.html" rel="bookmark"
+                    <h1><a href="https://solarck.com/config-pip-conda.html" rel="bookmark"
                            title="Permalink to 配置pip和conda">配置pip和conda</a></h1>
                 </header>
 
@@ -34,10 +35,10 @@
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="../author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="../category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="../tag/pip.html">pip</a> <a href="../tag/conda.html">conda</a> <a href="../tag/python.html">python</a> </p>
+<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="https://solarck.com/tag/pip.html">pip</a> <a href="https://solarck.com/tag/conda.html">conda</a> <a href="https://solarck.com/tag/python.html">python</a> </p>
 </footer><!-- /.post-info -->                <p>首先需要确认已经安装Python环境，建议用于科学计算的朋友下载安装<a href="https://www.anaconda.com/download/">Anaconda</a>或者<a href="https://conda.io/miniconda.html">Miniconda</a>。</p>
 <h3>环境变量和启用配置</h3>
 <p>安装好后还需要把安装路径添加到系统环境变量</p>
@@ -67,14 +68,14 @@
 <p>如果没有效果，可是尝试编辑~/.profile或 ~/.bash_profile文件&nbsp;zsh或其他shell用户可以自行修改</p>
 <p>Windows用户在cmd执行如下命令，如果不是默认安装到用户目录，需要手动修改下路径。如果创建了自定义env，那么root改为你自己的env名字。</p>
 <div class="highlight"><pre><span></span><span class="nb">set</span> <span class="nv">PATH</span><span class="o">=</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="p">;</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="se">\L</span>ibrary<span class="se">\b</span>in …</pre></div>
-                <a class="readmore" href="../config-pip-conda.html">查看全文</a>
-                <!--<p>There are <a href="../config-pip-conda.html#disqus_thread">comments</a>.</p>-->
+                <a class="readmore" href="https://solarck.com/config-pip-conda.html">查看全文</a>
+                <!--<p>There are <a href="https://solarck.com/config-pip-conda.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="../openwrt-samba.html" rel="bookmark"
+                    <h1><a href="https://solarck.com/openwrt-samba.html" rel="bookmark"
                            title="Permalink to openwrt开启Samba作为共享中心">openwrt开启Samba作为共享中心</a></h1>
                 </header>
 
@@ -85,10 +86,10 @@
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="../author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="../category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="../tag/openwrt.html">openwrt</a> </p>
+<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="https://solarck.com/tag/openwrt.html">openwrt</a> </p>
 </footer><!-- /.post-info -->                <p>为Openwrt接入一个大U盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机BT下载提供一个基础。</p>
 <h3>安装</h3>
 <div class="highlight"><pre><span></span>opkg update
@@ -106,14 +107,14 @@ opkg install samba36-server luci-app-samba
     display <span class="nv">charset</span> <span class="o">=</span> UTF-8
     <span class="nv">interfaces</span> <span class="o">=</span> <span class="m">127</span>.0.0.1/8 lo <span class="m">192</span>.168.3.1/24 fd73:3a9a:156::1/60 br-lan <span class="c1">#内网IP</span>
     server <span class="nv">string</span> <span class="o">=</span> OpenWrt …</pre></div>
-                <a class="readmore" href="../openwrt-samba.html">查看全文</a>
-                <!--<p>There are <a href="../openwrt-samba.html#disqus_thread">comments</a>.</p>-->
+                <a class="readmore" href="https://solarck.com/openwrt-samba.html">查看全文</a>
+                <!--<p>There are <a href="https://solarck.com/openwrt-samba.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="../openwrt-extroot.html" rel="bookmark"
+                    <h1><a href="https://solarck.com/openwrt-extroot.html" rel="bookmark"
                            title="Permalink to 用extroot为openwrt扩充存储空间">用extroot为openwrt扩充存储空间</a></h1>
                 </header>
 
@@ -124,10 +125,10 @@ opkg install samba36-server luci-app-samba
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="../author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="../category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="../tag/openwrt.html">openwrt</a> </p>
+<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="https://solarck.com/tag/openwrt.html">openwrt</a> </p>
 </footer><!-- /.post-info -->                <p>水星这款MW4350r内存为128M，运行很多程序都不在话下。但是却只提供了8M&nbsp;Flash存储空间，而路由器系统还占了1.9M，剩下的5M空间不足以支持安装很多软件，比如我在安装python的时候就报错提示存储空间不足，这确实很郁闷，但幸好Openwrt还提供了extroot方式来扩展存储，来发挥路由器和Openwrt系统的真正实力。</p>
 <p><strong>pivot-overlay还是pivot-root？</strong></p>
 <blockquote>
@@ -144,14 +145,14 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
 
 
 <p>e2fsprogs包提供了mkfs（mkfs.ext3 …</p>
-                <a class="readmore" href="../openwrt-extroot.html">查看全文</a>
-                <!--<p>There are <a href="../openwrt-extroot.html#disqus_thread">comments</a>.</p>-->
+                <a class="readmore" href="https://solarck.com/openwrt-extroot.html">查看全文</a>
+                <!--<p>There are <a href="https://solarck.com/openwrt-extroot.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="../install-openwrt-on-mw4530r.html" rel="bookmark"
+                    <h1><a href="https://solarck.com/install-openwrt-on-mw4530r.html" rel="bookmark"
                            title="Permalink to 水星（Mercury）MW4530r刷Openwrt">水星（Mercury）MW4530r刷Openwrt</a></h1>
                 </header>
 
@@ -162,10 +163,10 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="../author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="../category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="../tag/openwrt.html">openwrt</a> </p>
+<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="https://solarck.com/tag/openwrt.html">openwrt</a> </p>
 </footer><!-- /.post-info -->                <p>经过两天的不屑折腾，终于为我的Mw4530r安装上了Openwrt。从最后安装成功往回看，其实整个过程非常简单，但是由于是第一次接触，走了不少弯路，本应该一个小时就完成的工作，却整整花了我两天时间。再次发篇文章庆祝下，也给其他朋友一些参考。</p>
 <h3>下载文件</h3>
 <p>水星这款路由器是ar71xx芯片的，因为较新，所以还没有官方的稳定版。在Openwrt的<a href="http://downloads.openwrt.org/snapshots/trunk/ar71xx/">snapshots/trunk</a>目录搜索下载我们需要的刷机文件，一般情况一个型号有两个文件，一个名字里带factory，从其他固件系统刷Openwrt下载这个文件；一个名字带sysupgrade，已经是Openwrt系统的用此文件升级。</p>
@@ -180,14 +181,14 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
 
 
 <p>Linux系统自带命令，Windows用户需要在控制面板 …</p>
-                <a class="readmore" href="../install-openwrt-on-mw4530r.html">查看全文</a>
-                <!--<p>There are <a href="../install-openwrt-on-mw4530r.html#disqus_thread">comments</a>.</p>-->
+                <a class="readmore" href="https://solarck.com/install-openwrt-on-mw4530r.html">查看全文</a>
+                <!--<p>There are <a href="https://solarck.com/install-openwrt-on-mw4530r.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="../repair-wnr2200.html" rel="bookmark"
+                    <h1><a href="https://solarck.com/repair-wnr2200.html" rel="bookmark"
                            title="Permalink to 修复变砖的WNR2200">修复变砖的WNR2200</a></h1>
                 </header>
 
@@ -198,10 +199,10 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="../author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="../category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="../tag/lu-you-qi.html">路由器</a> </p>
+<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="https://solarck.com/tag/lu-you-qi.html">路由器</a> </p>
 </footer><!-- /.post-info -->                <p>手中有个NetGear&nbsp;WNR2200路由器，当初买这个就是看重可以刷机,但是买回来才发现只能刷DD-wrt，于是就刷了DD安心的用了半年。  </p>
 <p>最近看到Openwrt的trunk目录里有我这款机器的固件了，立刻操刀刷起。不幸的是刷完后telnet不通网关，failsafe模式也无法开启。无奈中发现NetGear官网提供了tftp小工具确实有效，让我变砖的路由器起死回生。</p>
 <p>方法也很简单，官方文库里说明的很详细，这里简单记录下要点。  <br>
@@ -214,13 +215,13 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
 <blockquote>
 <p><a href="http://neclub.netgear.cn/Knowledgebase/Document_detail.aspx?Did=934">网件官方文库</a>    <a href="http://www.shadowsoftware.net/shadowgameworld/downloads/tftp2.exe">工具下载地址</a>  <br>
 如果地址不可用，可Google&nbsp;tftp2.exe …</p></blockquote>
-                <a class="readmore" href="../repair-wnr2200.html">查看全文</a>
-                <!--<p>There are <a href="../repair-wnr2200.html#disqus_thread">comments</a>.</p>-->
+                <a class="readmore" href="https://solarck.com/repair-wnr2200.html">查看全文</a>
+                <!--<p>There are <a href="https://solarck.com/repair-wnr2200.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
                 </ol><!-- /#posts-list -->
 <p class="paginator">
-        <a href="../author/kevin-chen.html">&laquo;</a>
+        <a href="https://solarck.com/author/kevin-chen.html">&laquo;</a>
     Page 2 / 2
 </p>
                 </section><!-- /#content -->
@@ -236,6 +237,7 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
                 <div class="social">
                         <h2>社交网站</h2>
                         <ul>
+                            <li><a href="https://solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
 
                             <li><a href="https://github.com/princelai">Github</a></li>
                             <li><a href="https://plus.google.com/100073068742779779797">G+</a></li>
