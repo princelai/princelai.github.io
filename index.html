@@ -21,7 +21,81 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/using-python-descript-vaiance-std.html">用股票数据说明方差和标准差的特性</a></h1>
+                    <h1 class="entry-title"><a href="/git-and-github.html">git和github主要使用方法</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2018-05-25T17:19:00+08:00">
+                发布时间: 五月 25, 2018
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/git.html">git</a> <a href="/tag/github.html">github</a> </p>
+</footer><!-- /.post-info --><h3>ssh和密钥</h3>
+<p><code>ssh-keygen -t rsa -b 4096 -C "princelailai@gmail.com"</code>：生成密钥
+<code>cat ~/.ssh/id_rsa.pub</code>：查看密钥
+<code>ssh -T git@github.com</code>：测试密钥是否可以正常登录</p>
+<h3>设置</h3>
+<p><code>git config --list</code>：列出当前repo所有设置
+<code>git config --global user.name "princelai"</code>：设置用户名
+<code>git config --global user.email "princelailai@gmail.com"</code>：设置E-mail
+<code>echo "# mydotfiles" &gt; README.md</code>：</p>
+<h3>基本操作</h3>
+<p><code>git init</code>：初始化，创建.git文件夹
+<code>git status</code>：查看当前工作区/缓存区状态</p>
+<h3>添加和提交</h3>
+<p><code>git add &lt;文件&gt;</code>：添加文件至缓存区
+<code>git commit -m "说明"</code>：从缓存区提交至仓库
+<code>git commit -am "说明"</code>：前面两种的合并版
+<code>git commit --amend "说明"</code>：替换掉上一次的提交</p>
+<h3>删除文件</h3>
+<p><code>git rm &lt;文件&gt;</code>：从repo中删除文件
+<code>git rm --cached &lt;文件&gt;</code>：</p>
+<h3>恢复</h3>
+<p><code>git checkout -- &lt;文件&gt;</code>：撤销文件工作区的修改
+<code>git reset HEAD &lt;文件&gt;</code>：撤销文件暂存区的修改，放回工作区
+<code>git reset --hard ad93b89</code>：所有文件退回至指定版本</p>
+<h3>版本和日志</h3>
+<p><code>git log --oneline</code>:简版log
+<code>git log --graph</code>：带合并图形版log</p>
+<h3>远程仓库</h3>
+<p><code>git remote show origin</code>：查看远程仓库详情
+<code>git clone git-url</code>：从远程仓库克隆至本地
+<code>git remote add origin git-url</code>：关联远程和本地仓库</p>
+<h3>远程仓库的提交和拉取</h3>
+<p><code>git pull origin master</code>：把远程仓库拉取到本地仓库
+<code>git push origin master</code>：本地仓库推送至远程仓库，-u用于第一次关联</p>
+<h3>分支</h3>
+<p><code>git branch</code>：列出本地分支
+<code>git branch -r</code>：列出远程分支
+<code>git branch -a</code>：列出所有分支
+<code>git branch &lt;分支&gt;</code>：创建分支
+<code>git branch -d &lt;分支&gt;</code>：删除分支
+<code>git branch --set-upstream-to=origin/分支 分支</code>：本地和远程分支关联</p>
+<h3>checkout</h3>
+<p><code>git checkout 分支</code>：切换到指定分支
+<code>git checkout -b 分支</code>：创建并切换到分支</p>
+<h3>合并</h3>
+<p><code>git merge 分支</code>：把指定分支合并到当前分支
+<code>git merge --no-ff -m "说明" 分支</code>：禁止Fast&nbsp;forward模式，创建新的commit</p>
+<p>参考：
+1. <a href="https://www.jianshu.com/p/e4e29c9c3bd9">简书</a>
+2. <a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000">廖雪峰</a>
+3. <a href="http://www.ruanyifeng.com/blog/2014/06/git_remote.html">阮一峰</a></p><p>There are <a href="/git-and-github.html#disqus_thread">comments</a>.</p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/using-python-descript-vaiance-std.html" rel="bookmark"
+                           title="Permalink to 用股票数据说明方差和标准差的特性">用股票数据说明方差和标准差的特性</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2018-01-15T15:35:00+08:00">
                 发布时间: 一月 15, 2018
@@ -32,7 +106,7 @@
         </address>
 <p>分类: <a href="/category/jin-rong-bi-ji.html">金融笔记</a></p>
 <p>标签: <a href="/tag/python.html">python</a> <a href="/tag/shu-xue.html">数学</a> <a href="/tag/tong-ji-xue.html">统计学</a> </p>
-</footer><!-- /.post-info --><p><a href="https://zh.wikipedia.org/zh-cn/%E6%96%B9%E5%B7%AE">方差</a>（Variance），应用数学里的专有名词。在概率论和统计学中，一个随机变量的方差描述的是它的离散程度，也就是该变量离其期望值的距离。一个实随机变量的方差也称为它的二阶矩或二阶中心动差，恰巧也是它的二阶累积量。这里把复杂说白了，就是将各个误差将之平方（而非取绝对值，使之肯定为正数），相加之后再除以总数，透过这样的方式来算出各个数据分布、零散（相对中心点）的程度。继续延伸的话，方差的算术平方根称为该随机变量的标准差（此为相对各个数据点间）。</p>
+</footer><!-- /.post-info -->                <p><a href="https://zh.wikipedia.org/zh-cn/%E6%96%B9%E5%B7%AE">方差</a>（Variance），应用数学里的专有名词。在概率论和统计学中，一个随机变量的方差描述的是它的离散程度，也就是该变量离其期望值的距离。一个实随机变量的方差也称为它的二阶矩或二阶中心动差，恰巧也是它的二阶累积量。这里把复杂说白了，就是将各个误差将之平方（而非取绝对值，使之肯定为正数），相加之后再除以总数，透过这样的方式来算出各个数据分布、零散（相对中心点）的程度。继续延伸的话，方差的算术平方根称为该随机变量的标准差（此为相对各个数据点间）。</p>
 <p><a href="https://zh.wikipedia.org/zh-cn/%E6%A8%99%E6%BA%96%E5%B7%AE">标准差</a>（Standard Deviation，<span class="caps">SD</span>），数学符号 <span class="math">\(\sigma\)</span>（sigma），在概率统计中最常使用作为测量一组数值的离散程度之用。标准差定义：为方差开算术平方根，反映组内个体间的离散程度；标准差与期望值之比为标准离差率。</p>
 <h3>1.定义</h3>
 <p>方差的定义如下公式：
@@ -41,70 +115,7 @@
 <p>
 对上式化简后可得到如下公式：
 </p>
-<div class="math">$$\sigma^2=E[X^2]-(E[X])^2$$</div>
-<p>
-上面两个公式也可以写为下面这样：
-</p>
-<div class="math">$$\sigma^2=\frac{1}{N}\sum_{i=1}^{N}(x_i-\mu)^2=\frac{(\sum_{i=1}^{N}x_i^2-\mu^2)}{N}$$</div>
-<p>标准差的定义和公式和方差类似，就是对方差开平方根即可得到。</p>
-<div class="math">$$SD(X) = \sigma = \sqrt{E(X-E(X))^2}$$</div>
-<div class="math">$$\sigma = \sqrt{\frac{\sum_{i=1}^NX_i^2}{N}-\mu^2}$$</div>
-<div class="math">$$\sigma = \sqrt{\frac{(\sum_{i=1}^{N}x_i^2-\mu^2)}{N}}$$</div>
-<h3>2.准备数据</h3>
-<p>这里使用一个开源免费的股票数据模块tushare，获取贵州茅台的数据，并截取数据的前600天，把数据平分为2部分。获取后的数据格式为DataFrame。</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tushare</span> <span class="kn">as</span> <span class="nn">ts</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-
-<span class="n">stock</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_k_data</span><span class="p">(</span><span class="s1">&#39;600519&#39;</span><span class="p">)</span>
-<span class="n">stock</span> <span class="o">=</span> <span class="n">stock</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">600</span><span class="p">,</span><span class="n">stock</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="s1">&#39;close&#39;</span><span class="p">)]</span>
-<span class="n">stock_part1</span> <span class="o">=</span> <span class="n">stock</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">stock</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">stock_part2</span> <span class="o">=</span> <span class="n">stock</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">stock</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span><span class="o">//</span><span class="mi">2</span><span class="p">:]</span>
-<span class="n">stock_part2</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
-</pre></div>
-
-
-<h3>3.特性验证</h3>
-<p>对于方差的计算，我们可以把数据带入公式直接计算，python代码可以这样写，这里使用的是无偏估计，所以分母是N-1。</p>
-<div class="highlight"><pre><span></span><span class="p">((</span><span class="n">stock</span> <span class="o">-</span> <span class="n">stock</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">stock</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-
-
-<p>不过幸好Numpy和Pandas都提供了快速计算方差和标准差的方法，我们可以调用<code>var()</code>方法和<code>std()</code>方法使用。</p>
-<p><strong>性质1，一个常数被加至变量数列中，此数列方差不变。</strong>
-</p>
-<div class="math">$$Var(X+c) = Var(X)$$</div>
-<div class="math">$$SD(X+c) = SD(X)$$</div>
-<div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">((</span><span class="n">stock</span><span class="o">+</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">var</span><span class="p">(),</span><span class="n">stock</span><span class="o">.</span><span class="n">var</span><span class="p">())</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="bp">True</span> <span class="c1">#方差</span>
-<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">((</span><span class="n">stock</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span><span class="n">stock</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span><span class="bp">True</span> <span class="c1">#标准差</span>
-</pre></div>
-
-
-<p><strong>性质2，数列被放大一个常数倍，此数列的方差变大常数的平方倍</strong>
-</p>
-<div class="math">$$Var(cX) = c^2 \times Var(X)$$</div>
-<div class="math">$$SD(cX) = c \times SD(X)$$</div>
-<div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">((</span><span class="n">stock</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">var</span><span class="p">(),</span><span class="mi">3</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">stock</span><span class="o">.</span><span class="n">var</span><span class="p">())</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span><span class="bp">True</span> <span class="c1">#方差</span>
-<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">((</span><span class="n">stock</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span><span class="mi">4</span><span class="o">*</span><span class="n">stock</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="bp">True</span> <span class="c1">#标准差</span>
-</pre></div>
-
-
-<p><strong>性质3，两个数列和（差）的方差</strong></p>
-<div class="math">$$Var(aX+bY)=a^2Var(X)+b^2Var(Y)+2 \times ab \times Cov(X,Y)$$</div>
-<div class="math">$$Var(X-Y)=Var(X)+Var(Y)-2 \times Cov(X,Y)$$</div>
-<p>标准差也有同样的性质</p>
-<div class="math">$$SD(X+Y)=\sqrt{\sigma^2(X)+\sigma^2(Y)+2 \times Cov(X,Y)}$$</div>
-<div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">((</span><span class="n">stock_part1</span> <span class="o">+</span> <span class="n">stock_part2</span><span class="p">)</span><span class="o">.</span><span class="n">var</span><span class="p">(),</span><span class="n">stock_part1</span><span class="o">.</span><span class="n">var</span><span class="p">()</span> <span class="o">+</span> <span class="n">stock_part2</span><span class="o">.</span><span class="n">var</span><span class="p">()</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">stock_part1</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">stock_part2</span><span class="p">))</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span><span class="bp">True</span> <span class="c1">#方差</span>
-<span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">((</span><span class="n">stock_part1</span> <span class="o">+</span> <span class="n">stock_part2</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">stock_part1</span><span class="o">.</span><span class="n">var</span><span class="p">()</span> <span class="o">+</span> <span class="n">stock_part2</span><span class="o">.</span><span class="n">var</span><span class="p">()</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">stock_part1</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">stock_part2</span><span class="p">)))</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span><span class="bp">True</span> <span class="c1">#标准差</span>
-</pre></div>
-
-
-<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+<div class="math">$$\sigma^2=E[X^2]-(E …</div><script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
         linebreak = "false";
@@ -158,12 +169,11 @@
         "}";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-</script><p>There are <a href="/using-python-descript-vaiance-std.html#disqus_thread">comments</a>.</p>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+</script>
+                <a class="readmore" href="/using-python-descript-vaiance-std.html">查看全文</a>
+                <!--<p>There are <a href="/using-python-descript-vaiance-std.html#disqus_thread">comments</a>.</p>-->
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -283,57 +293,9 @@
                 <!--<p>There are <a href="/linux-desktop-entries.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/shadowsocks-libev.html" rel="bookmark"
-                           title="Permalink to VPS搭梯子指南——shadowsocks+BBR+obfs">VPS搭梯子指南——shadowsocks+<span class="caps">BBR</span>+obfs</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-11-13T15:55:00+08:00">
-                发布时间: 十一月 13, 2017
-        </abbr>
-
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/shadowsocks.html">shadowsocks</a> </p>
-</footer><!-- /.post-info -->                <p>近期开会导致墙越来越高，迫不得已升级自建的ss服务，由于shadowsocks原版已经停更，shadowsocksR也已经删库，所以就锁定libev版本。
-<strong><em>注：以下服务器端内容请切换到root操作</em></strong></p>
-<h3>1.&nbsp;升级Debian</h3>
-<p>在升级之前，我需要先把服务器从Debian 8升级到Debian&nbsp;9，如果不是Debian用户，或者不想升级的可以跳过，这一步不影响后续操作，但是部分代码可能需要修改。</p>
-<p>首先要把Debian&nbsp;8升级到最新版本</p>
-<div class="highlight"><pre><span></span>apt update
-apt upgrade
-</pre></div>
-
-
-<p>备份源列表</p>
-<div class="highlight"><pre><span></span>cp /etc/apt/sources.list /etc/apt/sources.list-jessie
-</pre></div>
-
-
-<!--more-->
-
-<p>修改源列表，把jessie 替换为&nbsp;stretch</p>
-<div class="highlight"><pre><span></span>vim /etc/apt/sources.list
-:s/jessie/stretch/g
-</pre></div>
-
-
-<p>再次更新升级</p>
-<div class="highlight"><pre><span></span> apt update
- apt …</pre></div>
-                <a class="readmore" href="/shadowsocks-libev.html">查看全文</a>
-                <!--<p>There are <a href="/shadowsocks-libev.html#disqus_thread">comments</a>.</p>-->
-                </div><!-- /.entry-content -->
-            </article></li>
                 </ol><!-- /#posts-list -->
 <p class="paginator">
-    Page 1 / 2
+    Page 1 / 3
         <a href="/index2.html">&raquo;</a>
 </p>
                 </section><!-- /#content -->

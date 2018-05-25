@@ -23,6 +23,57 @@
                     <ol id="posts-list" class="hfeed" start="4">
             <li><article class="hentry">
                 <header>
+                    <h1><a href="/config-pip-conda.html" rel="bookmark"
+                           title="Permalink to 配置pip和conda">配置pip和conda</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-11-07T11:43:00+08:00">
+                发布时间: 十一月 07, 2017
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/pip.html">pip</a> <a href="/tag/conda.html">conda</a> <a href="/tag/python.html">python</a> </p>
+</footer><!-- /.post-info -->                <p>首先需要确认已经安装Python环境，建议用于科学计算的朋友下载安装<a href="https://www.anaconda.com/download/">Anaconda</a>或者<a href="https://conda.io/miniconda.html">Miniconda</a>。</p>
+<h3>环境变量和启用配置</h3>
+<p>安装好后还需要把安装路径添加到系统环境变量</p>
+<p>Linux用户查看系统环境变量</p>
+<div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">$PATH</span>
+</pre></div>
+
+
+<p>Windows用户查看系统环境变量</p>
+<div class="highlight"><pre><span></span><span class="nb">echo</span> %PATH%
+</pre></div>
+
+
+<p>如果没有Anaconda的路径，就需要自己手动添加</p>
+<!--more-->
+
+<p>Linux用户编辑~/.bashrc，在最后添加以下内容，注意自己修改安装路径</p>
+<div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/anaconda3/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+</pre></div>
+
+
+<p>最后再执行</p>
+<div class="highlight"><pre><span></span><span class="nb">source</span> ~/.bashrc
+</pre></div>
+
+
+<p>如果没有效果，可是尝试编辑~/.profile或 ~/.bash_profile文件&nbsp;zsh或其他shell用户可以自行修改</p>
+<p>Windows用户在cmd执行如下命令，如果不是默认安装到用户目录，需要手动修改下路径。如果创建了自定义env，那么root改为你自己的env名字。</p>
+<div class="highlight"><pre><span></span><span class="nb">set</span> <span class="nv">PATH</span><span class="o">=</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="p">;</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="se">\L</span>ibrary<span class="se">\b</span>in …</pre></div>
+                <a class="readmore" href="/config-pip-conda.html">查看全文</a>
+                <!--<p>There are <a href="/config-pip-conda.html#disqus_thread">comments</a>.</p>-->
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
                     <h1><a href="/openwrt-samba.html" rel="bookmark"
                            title="Permalink to openwrt开启Samba作为共享中心">openwrt开启Samba作为共享中心</a></h1>
                 </header>

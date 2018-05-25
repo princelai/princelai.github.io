@@ -21,7 +21,81 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/argparse-brief-usage.html">argparse模块简要用法</a></h1>
+                    <h1 class="entry-title"><a href="/git-and-github.html">git和github主要使用方法</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2018-05-25T17:19:00+08:00">
+                发布时间: 五月 25, 2018
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/git.html">git</a> <a href="/tag/github.html">github</a> </p>
+</footer><!-- /.post-info --><h3>ssh和密钥</h3>
+<p><code>ssh-keygen -t rsa -b 4096 -C "princelailai@gmail.com"</code>：生成密钥
+<code>cat ~/.ssh/id_rsa.pub</code>：查看密钥
+<code>ssh -T git@github.com</code>：测试密钥是否可以正常登录</p>
+<h3>设置</h3>
+<p><code>git config --list</code>：列出当前repo所有设置
+<code>git config --global user.name "princelai"</code>：设置用户名
+<code>git config --global user.email "princelailai@gmail.com"</code>：设置E-mail
+<code>echo "# mydotfiles" &gt; README.md</code>：</p>
+<h3>基本操作</h3>
+<p><code>git init</code>：初始化，创建.git文件夹
+<code>git status</code>：查看当前工作区/缓存区状态</p>
+<h3>添加和提交</h3>
+<p><code>git add &lt;文件&gt;</code>：添加文件至缓存区
+<code>git commit -m "说明"</code>：从缓存区提交至仓库
+<code>git commit -am "说明"</code>：前面两种的合并版
+<code>git commit --amend "说明"</code>：替换掉上一次的提交</p>
+<h3>删除文件</h3>
+<p><code>git rm &lt;文件&gt;</code>：从repo中删除文件
+<code>git rm --cached &lt;文件&gt;</code>：</p>
+<h3>恢复</h3>
+<p><code>git checkout -- &lt;文件&gt;</code>：撤销文件工作区的修改
+<code>git reset HEAD &lt;文件&gt;</code>：撤销文件暂存区的修改，放回工作区
+<code>git reset --hard ad93b89</code>：所有文件退回至指定版本</p>
+<h3>版本和日志</h3>
+<p><code>git log --oneline</code>:简版log
+<code>git log --graph</code>：带合并图形版log</p>
+<h3>远程仓库</h3>
+<p><code>git remote show origin</code>：查看远程仓库详情
+<code>git clone git-url</code>：从远程仓库克隆至本地
+<code>git remote add origin git-url</code>：关联远程和本地仓库</p>
+<h3>远程仓库的提交和拉取</h3>
+<p><code>git pull origin master</code>：把远程仓库拉取到本地仓库
+<code>git push origin master</code>：本地仓库推送至远程仓库，-u用于第一次关联</p>
+<h3>分支</h3>
+<p><code>git branch</code>：列出本地分支
+<code>git branch -r</code>：列出远程分支
+<code>git branch -a</code>：列出所有分支
+<code>git branch &lt;分支&gt;</code>：创建分支
+<code>git branch -d &lt;分支&gt;</code>：删除分支
+<code>git branch --set-upstream-to=origin/分支 分支</code>：本地和远程分支关联</p>
+<h3>checkout</h3>
+<p><code>git checkout 分支</code>：切换到指定分支
+<code>git checkout -b 分支</code>：创建并切换到分支</p>
+<h3>合并</h3>
+<p><code>git merge 分支</code>：把指定分支合并到当前分支
+<code>git merge --no-ff -m "说明" 分支</code>：禁止Fast&nbsp;forward模式，创建新的commit</p>
+<p>参考：
+1. <a href="https://www.jianshu.com/p/e4e29c9c3bd9">简书</a>
+2. <a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000">廖雪峰</a>
+3. <a href="http://www.ruanyifeng.com/blog/2014/06/git_remote.html">阮一峰</a></p><p>There are <a href="/git-and-github.html#disqus_thread">comments</a>.</p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/argparse-brief-usage.html" rel="bookmark"
+                           title="Permalink to argparse模块简要用法">argparse模块简要用法</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2018-01-08T17:41:00+08:00">
                 发布时间: 一月 08, 2018
@@ -32,7 +106,7 @@
         </address>
 <p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
 <p>标签: <a href="/tag/python.html">python</a> <a href="/tag/argparse.html">argparse</a> </p>
-</footer><!-- /.post-info --><p>argparse是Python用于解析命令行参数的模块，拥有更强大的功能、更友好的使用方法，用来替代原始的sys.argv。</p>
+</footer><!-- /.post-info -->                <p>argparse是Python用于解析命令行参数的模块，拥有更强大的功能、更友好的使用方法，用来替代原始的sys.argv。</p>
 <p>argparse的大致用法如下：</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span> <span class="c1">#导入模块</span>
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span> <span class="c1">#创建解析器</span>
@@ -52,119 +126,11 @@
 <p>每一个参数的含义：</p>
 <blockquote>
 <ul>
-<li>name or flags - 名称或选项字符串列表，例如。foo或-f,&nbsp;&#8212;foo。</li>
-<li>action -&nbsp;在命令行遇到此参数时要执行的操作的基本类型。</li>
-<li>nargs -&nbsp;应该使用的命令行参数数。</li>
-<li>const -&nbsp;某些动作和nargs选择所需的常量值。</li>
-<li>default -&nbsp;如果参数在命令行中不存在，则生成的值。</li>
-<li>type -&nbsp;应转换命令行参数的类型。</li>
-<li>choices -&nbsp;参数的允许值的容器。</li>
-<li>required -&nbsp;是否可以省略命令行选项（仅针对可选参数）。</li>
-<li>help -&nbsp;参数的简要说明。</li>
-<li>metavar -&nbsp;使用消息中参数的名称。</li>
-<li>dest -&nbsp;要添加到由parse_args()返回的对象的属性的名称。</li>
-</ul>
-</blockquote>
-<h3>1. name or&nbsp;flags</h3>
-<p>唯一的必填参数，可以创建位置参数（必填）和可选参数</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="s1">&#39;--save&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;db&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;mysql&#39;</span><span class="p">])</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s1">&#39;mysql&#39;</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
-</pre></div>
-
-
-<p>可选参数以<code>-</code>或<code>--</code>开始，其余的均为位置参数
-大部分情况下，未填的可选参数默认都是<code>None</code>,如果有<code>--</code>开始的参数，则参数名以后面的字符串命名。</p>
-<h3>2.&nbsp;action</h3>
-<p>action用于将命令和动作关联起来，常用的动作有如下几种：</p>
-<ul>
-<li>store -&nbsp;仅保存参数后的值</li>
-<li>store_const -&nbsp;保存一个常量，由const参数给出</li>
-<li>store_true -&nbsp;给出参数则保存True值，不给出则为False</li>
-<li>store_false -&nbsp;与上面相反</li>
-<li>append -&nbsp;把多次调用的值保存为一个列表</li>
-<li>append_const -&nbsp;把多次调用的常量保存为一个列表</li>
-<li>count -&nbsp;计算参数出现的次数</li>
-<li>help -&nbsp;打印帮助信息，默认自动添加</li>
-<li>version -&nbsp;打印版本信息，配合version选项使用</li>
-</ul>
-<p>举几个例子</p>
-<div class="highlight"><pre><span></span>parser = argparse.ArgumentParser(prog=&#39;PROG&#39;)
-parser.add_argument(&#39;-sh&#39;,&#39;--show&#39;,action=&#39;store_true&#39;)
-parser.parse_args([&#39;-sh&#39;])
-Out[2]: Namespace(show=True)
-</pre></div>
-
-
-<p>给出<code>-sh</code>参数，则show值为True</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a1&#39;</span><span class="p">,</span><span class="s1">&#39;--arg1&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_const&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a2&#39;</span><span class="p">,</span><span class="s1">&#39;--arg2&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_const&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a3&#39;</span><span class="p">,</span><span class="s1">&#39;--arg3&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_const&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;-a1&#39;</span><span class="p">])</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">arg1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">arg3</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-</pre></div>
-
-
-<p>只给出a1参数，arg1的值为0。
-没有给出a2参数，则a2的const没有被调用，使用default的值，当然default默认就是None，不写也可以。
-a3参数其实就是store_true的实现。&nbsp;const和default的区别就是当命令给出但是后面未接值时，使用const值，如果命令那个都没有给出，则使用default的值。</p>
-<h3>3.&nbsp;nargs</h3>
-<p>nargs定义参数后面值的个数，可选值有几种：</p>
-<blockquote>
-<ul>
-<li>N&nbsp;(一个整数)</li>
-<li>?</li>
-<li>*</li>
-<li>+</li>
-</ul>
-</blockquote>
-<p>如果懂正则表达式，那nargs的参数就很好理解，这里就不做过多解释，不过要注意一点，当nargs=1的时候，他的行为和不给出nargs是不一样的，前者是一个列表，后者是一个值。直接看例子：</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a2&#39;</span><span class="p">,</span><span class="s1">&#39;--args2&#39;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a3&#39;</span><span class="p">,</span><span class="s1">&#39;--args3&#39;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;-a3&#39;</span><span class="p">,</span><span class="s1">&#39;aa&#39;</span><span class="p">,</span><span class="s1">&#39;bb&#39;</span><span class="p">])</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">args2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args3</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;aa&#39;</span><span class="p">,</span> <span class="s1">&#39;bb&#39;</span><span class="p">])</span>
-</pre></div>
-
-
-<p>结果很好理解，?可以配合const使用，其他的可以配合default使用，调用了就是一个列表，使用const或default就是一个值。</p>
-<h3>4.&nbsp;type和metavar</h3>
-<p>这两个参数偶尔能用到，</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a2&#39;</span><span class="p">,</span><span class="s1">&#39;--args2&#39;</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;STR&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">SUPPRESS</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;3&#39;</span><span class="p">])</span>
-</pre></div>
-
-
-<p><code>default=argparse.SUPPRESS</code>指出不给参数不存储变量，否则默认是None，&nbsp;打印help说明看看</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
-<span class="n">usage</span><span class="p">:</span> <span class="n">PROG</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a2</span> <span class="n">STR</span><span class="p">]</span> <span class="n">a1</span>
-
-<span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
-  <span class="n">a1</span>
-
-<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
-  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span>
-  <span class="o">-</span><span class="n">a2</span> <span class="n">STR</span><span class="p">,</span> <span class="o">--</span><span class="n">args2</span> <span class="n">STR</span>
-</pre></div>
-
-
-<p>metavar仅改变了help说明里的变量名。</p>
-<h3>参考文档</h3>
-<ol>
-<li><a href="https://docs.python.org/3/library/argparse.html">官方文档</a></li>
-<li><a href="http://python.usyiyi.cn/translate/python_352/library/argparse.html">中文文档</a></li>
-</ol><p>There are <a href="/argparse-brief-usage.html#disqus_thread">comments</a>.</p>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+<li>name or flags - 名称或选项字符串列表，例如。foo或-f,&nbsp;&#8212;foo …</li></ul></blockquote>
+                <a class="readmore" href="/argparse-brief-usage.html">查看全文</a>
+                <!--<p>There are <a href="/argparse-brief-usage.html#disqus_thread">comments</a>.</p>-->
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -287,57 +253,6 @@ apt upgrade
  apt …</pre></div>
                 <a class="readmore" href="/shadowsocks-libev.html">查看全文</a>
                 <!--<p>There are <a href="/shadowsocks-libev.html#disqus_thread">comments</a>.</p>-->
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/config-pip-conda.html" rel="bookmark"
-                           title="Permalink to 配置pip和conda">配置pip和conda</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-11-07T11:43:00+08:00">
-                发布时间: 十一月 07, 2017
-        </abbr>
-
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/pip.html">pip</a> <a href="/tag/conda.html">conda</a> <a href="/tag/python.html">python</a> </p>
-</footer><!-- /.post-info -->                <p>首先需要确认已经安装Python环境，建议用于科学计算的朋友下载安装<a href="https://www.anaconda.com/download/">Anaconda</a>或者<a href="https://conda.io/miniconda.html">Miniconda</a>。</p>
-<h3>环境变量和启用配置</h3>
-<p>安装好后还需要把安装路径添加到系统环境变量</p>
-<p>Linux用户查看系统环境变量</p>
-<div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">$PATH</span>
-</pre></div>
-
-
-<p>Windows用户查看系统环境变量</p>
-<div class="highlight"><pre><span></span><span class="nb">echo</span> %PATH%
-</pre></div>
-
-
-<p>如果没有Anaconda的路径，就需要自己手动添加</p>
-<!--more-->
-
-<p>Linux用户编辑~/.bashrc，在最后添加以下内容，注意自己修改安装路径</p>
-<div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/anaconda3/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
-</pre></div>
-
-
-<p>最后再执行</p>
-<div class="highlight"><pre><span></span><span class="nb">source</span> ~/.bashrc
-</pre></div>
-
-
-<p>如果没有效果，可是尝试编辑~/.profile或 ~/.bash_profile文件&nbsp;zsh或其他shell用户可以自行修改</p>
-<p>Windows用户在cmd执行如下命令，如果不是默认安装到用户目录，需要手动修改下路径。如果创建了自定义env，那么root改为你自己的env名字。</p>
-<div class="highlight"><pre><span></span><span class="nb">set</span> <span class="nv">PATH</span><span class="o">=</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="p">;</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="se">\L</span>ibrary<span class="se">\b</span>in …</pre></div>
-                <a class="readmore" href="/config-pip-conda.html">查看全文</a>
-                <!--<p>There are <a href="/config-pip-conda.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
                 </ol><!-- /#posts-list -->
