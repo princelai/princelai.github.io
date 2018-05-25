@@ -3,7 +3,7 @@
 <head>
         <meta charset="utf-8" />
         <title>Solarck - matplotlib</title>
-        <link rel="stylesheet" href="https://solarck.com/theme/css/main.css" />
+        <link rel="stylesheet" href="../theme/css/main.css" />
         <link href="https://solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Solarck Atom Feed" />
 
         <!--[if IE]>
@@ -13,26 +13,26 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="https://solarck.com/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
+                <h1><a href="../">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
                 <nav><ul>
-                    <li><a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></li>
-                    <li><a href="https://solarck.com/category/jin-rong-bi-ji.html">金融笔记</a></li>
+                    <li><a href="../category/itbi-ji.html">IT笔记</a></li>
+                    <li><a href="../category/jin-rong-bi-ji.html">金融笔记</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://solarck.com/matplotlib-chinese-fonts.html">matplotlib中文字体配置</a></h1>
+                    <h1 class="entry-title"><a href="../matplotlib-chinese-fonts.html">matplotlib中文字体配置</a></h1>
 <footer class="post-info">
         <abbr class="published" title="2017-12-18T16:01:00+08:00">
                 发布时间: 十二月 18, 2017
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="../author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="https://solarck.com/tag/python.html">python</a> <a href="https://solarck.com/tag/matplotlib.html">matplotlib</a> </p>
+<p>分类: <a href="../category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="../tag/python.html">python</a> <a href="../tag/matplotlib.html">matplotlib</a> </p>
 </footer><!-- /.post-info --><p>matplotlib是Python的优秀绘图包，但是不论是在Windows还是Linux中默认都是不支持中文的，尤其是在Linux中设置更加复杂一点，设置方法如下：</p>
 <p>首先我们需要获取到matplotlib配置文件的文件夹</p>
 <div class="highlight"><pre><span></span>python -c <span class="s2">&quot;import matplotlib as mpl;print(mpl.get_configdir())&quot;</span>
@@ -93,7 +93,7 @@ axes.unicode_minus  : False
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Droid Sans Fallback&#39;</span><span class="p">]</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.unicode_minus&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
-</pre></div><p>There are <a href="https://solarck.com/matplotlib-chinese-fonts.html#disqus_thread">comments</a>.</p>                </article>
+</pre></div><p>There are <a href="../matplotlib-chinese-fonts.html#disqus_thread">comments</a>.</p>                </article>
             </aside><!-- /#featured -->
         <section id="extras" class="body">
                 <div class="blogroll">

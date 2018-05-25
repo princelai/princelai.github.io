@@ -3,7 +3,7 @@
 <head>
         <meta charset="utf-8" />
         <title>水星（Mercury）MW4530r刷Openwrt</title>
-        <link rel="stylesheet" href="https://solarck.com/theme/css/main.css" />
+        <link rel="stylesheet" href="./theme/css/main.css" />
         <link href="https://solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Solarck Atom Feed" />
 
         <!--[if IE]>
@@ -13,17 +13,17 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="https://solarck.com/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
+                <h1><a href="./">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
                 <nav><ul>
-                    <li class="active"><a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></li>
-                    <li><a href="https://solarck.com/category/jin-rong-bi-ji.html">金融笔记</a></li>
+                    <li class="active"><a href="./category/itbi-ji.html">IT笔记</a></li>
+                    <li><a href="./category/jin-rong-bi-ji.html">金融笔记</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 <section id="content" class="body">
   <article>
     <header>
       <h1 class="entry-title">
-        <a href="https://solarck.com/install-openwrt-on-mw4530r.html" rel="bookmark"
+        <a href="./install-openwrt-on-mw4530r.html" rel="bookmark"
            title="Permalink to 水星（Mercury）MW4530r刷Openwrt">水星（Mercury）MW4530r刷Openwrt</a></h1>
     </header>
 
@@ -34,10 +34,10 @@
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="https://solarck.com/author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="./author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="https://solarck.com/tag/openwrt.html">openwrt</a> </p>
+<p>分类: <a href="./category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="./tag/openwrt.html">openwrt</a> </p>
 </footer><!-- /.post-info -->      <p>经过两天的不屑折腾，终于为我的Mw4530r安装上了Openwrt。从最后安装成功往回看，其实整个过程非常简单，但是由于是第一次接触，走了不少弯路，本应该一个小时就完成的工作，却整整花了我两天时间。再次发篇文章庆祝下，也给其他朋友一些参考。</p>
 <h3>下载文件</h3>
 <p>水星这款路由器是ar71xx芯片的，因为较新，所以还没有官方的稳定版。在Openwrt的<a href="http://downloads.openwrt.org/snapshots/trunk/ar71xx/">snapshots/trunk</a>目录搜索下载我们需要的刷机文件，一般情况一个型号有两个文件，一个名字里带factory，从其他固件系统刷Openwrt下载这个文件；一个名字带sysupgrade，已经是Openwrt系统的用此文件升级。</p>
@@ -120,7 +120,7 @@ opkg install luci luci-ssl luci-i18n-chinese
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
         var disqus_identifier = 'install-openwrt-on-mw4530r.html';
-        var disqus_url = 'https://solarck.com/install-openwrt-on-mw4530r.html';
+        var disqus_url = './install-openwrt-on-mw4530r.html';
         (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
         dsq.src = '//solarck.disqus.com/embed.js';
