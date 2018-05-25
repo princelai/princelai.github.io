@@ -3,7 +3,7 @@
 <head>
         <meta charset="utf-8" />
         <title>matplotlib中文字体配置</title>
-        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link rel="stylesheet" href="./theme/css/main.css" />
 
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -12,17 +12,17 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
+                <h1><a href="./">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
                 <nav><ul>
-                    <li class="active"><a href="/category/itbi-ji.html">IT笔记</a></li>
-                    <li><a href="/category/jin-rong-bi-ji.html">金融笔记</a></li>
+                    <li class="active"><a href="./category/itbi-ji.html">IT笔记</a></li>
+                    <li><a href="./category/jin-rong-bi-ji.html">金融笔记</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 <section id="content" class="body">
   <article>
     <header>
       <h1 class="entry-title">
-        <a href="/matplotlib-chinese-fonts.html" rel="bookmark"
+        <a href="./matplotlib-chinese-fonts.html" rel="bookmark"
            title="Permalink to matplotlib中文字体配置">matplotlib中文字体配置</a></h1>
     </header>
 
@@ -33,10 +33,10 @@
         </abbr>
 
         <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+                作者:                         <a class="url fn" href="./author/kevin-chen.html">Kevin Chen</a>
         </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/matplotlib.html">matplotlib</a> </p>
+<p>分类: <a href="./category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="./tag/python.html">python</a> <a href="./tag/matplotlib.html">matplotlib</a> </p>
 </footer><!-- /.post-info -->      <p>matplotlib是Python的优秀绘图包，但是不论是在Windows还是Linux中默认都是不支持中文的，尤其是在Linux中设置更加复杂一点，设置方法如下：</p>
 <p>首先我们需要获取到matplotlib配置文件的文件夹</p>
 <div class="highlight"><pre><span></span>python -c <span class="s2">&quot;import matplotlib as mpl;print(mpl.get_configdir())&quot;</span>
@@ -99,6 +99,21 @@ axes.unicode_minus  : False
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.unicode_minus&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 </pre></div>
     </div><!-- /.entry-content -->
+    <div class="comments">
+      <h2>Comments !</h2>
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'solarck';
+        var disqus_identifier = 'matplotlib-chinese-fonts.html';
+        var disqus_url = './matplotlib-chinese-fonts.html';
+        (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//solarck.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
 
   </article>
 </section>
