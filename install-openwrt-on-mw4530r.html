@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+        <meta charset="utf-8" />
+        <title>水星（Mercury）MW4530r刷Openwrt</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/itbi-ji.html">IT笔记</a></li>
+                    <li><a href="/category/jin-rong-bi-ji.html">金融笔记</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/install-openwrt-on-mw4530r.html" rel="bookmark"
+           title="Permalink to 水星（Mercury）MW4530r刷Openwrt">水星（Mercury）MW4530r刷Openwrt</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-01-02T01:08:00+08:00">
+                发布时间: 一月 02, 2014
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/openwrt.html">openwrt</a> </p>
+</footer><!-- /.post-info -->      <p>经过两天的不屑折腾，终于为我的Mw4530r安装上了Openwrt。从最后安装成功往回看，其实整个过程非常简单，但是由于是第一次接触，走了不少弯路，本应该一个小时就完成的工作，却整整花了我两天时间。再次发篇文章庆祝下，也给其他朋友一些参考。</p>
+<h3>下载文件</h3>
+<p>水星这款路由器是ar71xx芯片的，因为较新，所以还没有官方的稳定版。在Openwrt的<a href="http://downloads.openwrt.org/snapshots/trunk/ar71xx/">snapshots/trunk</a>目录搜索下载我们需要的刷机文件，一般情况一个型号有两个文件，一个名字里带factory，从其他固件系统刷Openwrt下载这个文件；一个名字带sysupgrade，已经是Openwrt系统的用此文件升级。</p>
+<h3>刷机</h3>
+<p>组装好路由器，接通电源，电脑网卡口连接路由器任意Lan口，打开浏览器访问http://192.168.1.1&nbsp;就可以看见水星的原厂界面。利用原厂固件的升级功能，提交下载好的Openwrt刷机文件即可直接刷机，非常的方便。稍等片刻等待路由器自动重启，此时刷机完成。</p>
+<!--more-->
+
+<h3>初始化</h3>
+<p>Openwrt的固件是不带UI界面的，在安装用户界面之前，用户需要先进行简单的初始化工作。  <br>&nbsp;使用telnet登陆路由器</p>
+<div class="highlight"><pre><span></span>telnet <span class="m">192</span>.168.1.1
+</pre></div>
+
+
+<p>Linux系统自带命令，Windows用户需要在控制面板&#8212;&gt;程序里面启用telnet功能。</p>
+<p>修改登录密码</p>
+<div class="highlight"><pre><span></span>passwd
+</pre></div>
+
+
+<p>更改好密码后，dropbear（ssh）登录方式开启，telnet登录方式关闭。</p>
+<p>退出telnet，用ssh方式登陆，Windows用户可以下载putty登陆</p>
+<div class="highlight"><pre><span></span><span class="nb">exit</span>
+ssh root@192.168.1.1
+</pre></div>
+
+
+<p>到此我们已经成功初始化了Openwrt。</p>
+<h3>网络配置</h3>
+<p><strong>强烈建议基础配置尤其是网络设置都使用CLI界面，切勿乱修改原始配置，我就在这里经历的惨痛的教训</strong><br>&nbsp;我使用的是联通ADSL，所以需要拨号（pppoe）才能上网。     </p>
+<p>配置网络连接，修改wan部分</p>
+<div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/config/network
+config interface <span class="s1">&#39;wan&#39;</span>
+    option ifname <span class="s1">&#39;eth0.2&#39;</span>
+    option proto <span class="s1">&#39;pppoe&#39;</span>
+    option username <span class="s1">&#39;ISP提供的用户名&#39;</span>
+    option password <span class="s1">&#39;密码&#39;</span>
+</pre></div>
+
+
+<p>或者用uci方式进行配置</p>
+<div class="highlight"><pre><span></span>uci <span class="nb">set</span> network.wan.proto<span class="o">=</span>pppoe
+uci <span class="nb">set</span> network.wan.username<span class="o">=</span><span class="s1">&#39;ISP提供的用户名&#39;</span>
+uci <span class="nb">set</span> network.wan.password<span class="o">=</span><span class="s1">&#39;密码&#39;</span>
+uci commit network
+ifup wan
+</pre></div>
+
+
+<p>配置wifi，根据你的路由器配置生成一个默认的配置文件</p>
+<div class="highlight"><pre><span></span>wifi detect &gt; /etc/config/wireless
+</pre></div>
+
+
+<p>重启后，互联网和wifi都应该已经正常工作，wifi的密码和名称我们之后可以在UI界面修改，接下来安装用户界面。</p>
+<h3>用户界面</h3>
+<p>安装Luci    </p>
+<div class="highlight"><pre><span></span>opkg update
+opkg install luci luci-ssl luci-i18n-chinese
+</pre></div>
+
+
+<p>启动Luci服务</p>
+<div class="highlight"><pre><span></span>/etc/init.d/uhttpd start
+/etc/init.d/uhttpd <span class="nb">enable</span>
+</pre></div>
+
+
+<p>打开浏览器输入http://192.168.1.1&nbsp;，就可以进入WebUI界面了，现在就可以向普通路由器一样进行管理了。</p>
+<h3>小提示</h3>
+<blockquote>
+<p>1.MW4530r进入failsafe的方法是：路由器断电&#8212;&gt;接通电源&#8212;&gt;断续的按面板前的WPS键，直到SYS指示灯从慢闪变为快闪就是成功进入了failsafe模式了。  <br>
+2.初始配置尽量用CLI方式配置（或uci），最好不要用WebUI。&nbsp;3.不要乱动乱删配置文件，尤其是端口路由表（switch0）。</p>
+</blockquote>
+<p>贴一张Openwrt的路由架构图，这张图帮助我理解了端口和路由的关系。      </p>
+<p><img src="http://www.macfreek.nl/memory/images/Linksys_internals.png" title="switch" width="450" /></p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>链接</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>社交网站</h2>
+                        <ul>
+
+                            <li><a href="https://github.com/princelai">Github</a></li>
+                            <li><a href="https://plus.google.com/100073068742779779797">G+</a></li>
+                            <li><a href="https://twitter.com/princelai">Twitter</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+        <!--
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address>
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer>-->
+    <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-1337838-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+<script type="text/javascript">
+    var disqus_shortname = 'solarck';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+</html>

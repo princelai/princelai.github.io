@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+        <meta charset="utf-8" />
+        <title>Solarck - IT笔记</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
+                <nav><ul>
+                    <li class="active"><a href="/category/itbi-ji.html">IT笔记</a></li>
+                    <li><a href="/category/jin-rong-bi-ji.html">金融笔记</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/argparse-brief-usage.html">argparse模块简要用法</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2018-01-08T17:41:00+08:00">
+                发布时间: 一月 08, 2018
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/argparse.html">argparse</a> </p>
+</footer><!-- /.post-info --><p>argparse是Python用于解析命令行参数的模块，拥有更强大的功能、更友好的使用方法，用来替代原始的sys.argv。</p>
+<p>argparse的大致用法如下：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span> <span class="c1">#导入模块</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span> <span class="c1">#创建解析器</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">()</span> <span class="c1">#添加参数</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span> <span class="c1">#解析参数</span>
+</pre></div>
+
+
+<p>创建解析器时的可选参数很多，但没有特殊需求的情况下，默认参数就能很好的工作，所以这部分使用时临时查文档就能解决，不做过多记录。</p>
+<!--more-->
+
+<p>这里仅记录下添加参数时的各种选项搭配，使用方法和选项如下：</p>
+<div class="highlight"><pre><span></span><span class="n">ArgumentParser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="n">name</span> <span class="ow">or</span> <span class="n">flags</span><span class="o">...</span><span class="p">[,</span> <span class="n">action</span><span class="p">][,</span> <span class="n">nargs</span><span class="p">][,</span> <span class="n">const</span><span class="p">][,</span> <span class="n">default</span><span class="p">][,</span> <span class="nb">type</span><span class="p">][,</span> <span class="n">choices</span><span class="p">][,</span> <span class="n">required</span><span class="p">][,</span> <span class="n">help</span><span class="p">][,</span> <span class="n">metavar</span><span class="p">][,</span> <span class="n">dest</span><span class="p">])</span>
+</pre></div>
+
+
+<p>每一个参数的含义：</p>
+<blockquote>
+<ul>
+<li>name or flags - 名称或选项字符串列表，例如。foo或-f,&nbsp;&#8212;foo。</li>
+<li>action -&nbsp;在命令行遇到此参数时要执行的操作的基本类型。</li>
+<li>nargs -&nbsp;应该使用的命令行参数数。</li>
+<li>const -&nbsp;某些动作和nargs选择所需的常量值。</li>
+<li>default -&nbsp;如果参数在命令行中不存在，则生成的值。</li>
+<li>type -&nbsp;应转换命令行参数的类型。</li>
+<li>choices -&nbsp;参数的允许值的容器。</li>
+<li>required -&nbsp;是否可以省略命令行选项（仅针对可选参数）。</li>
+<li>help -&nbsp;参数的简要说明。</li>
+<li>metavar -&nbsp;使用消息中参数的名称。</li>
+<li>dest -&nbsp;要添加到由parse_args()返回的对象的属性的名称。</li>
+</ul>
+</blockquote>
+<h3>1. name or&nbsp;flags</h3>
+<p>唯一的必填参数，可以创建位置参数（必填）和可选参数</p>
+<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="s1">&#39;--save&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;db&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;mysql&#39;</span><span class="p">])</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s1">&#39;mysql&#39;</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+
+
+<p>可选参数以<code>-</code>或<code>--</code>开始，其余的均为位置参数
+大部分情况下，未填的可选参数默认都是<code>None</code>,如果有<code>--</code>开始的参数，则参数名以后面的字符串命名。</p>
+<h3>2.&nbsp;action</h3>
+<p>action用于将命令和动作关联起来，常用的动作有如下几种：</p>
+<ul>
+<li>store -&nbsp;仅保存参数后的值</li>
+<li>store_const -&nbsp;保存一个常量，由const参数给出</li>
+<li>store_true -&nbsp;给出参数则保存True值，不给出则为False</li>
+<li>store_false -&nbsp;与上面相反</li>
+<li>append -&nbsp;把多次调用的值保存为一个列表</li>
+<li>append_const -&nbsp;把多次调用的常量保存为一个列表</li>
+<li>count -&nbsp;计算参数出现的次数</li>
+<li>help -&nbsp;打印帮助信息，默认自动添加</li>
+<li>version -&nbsp;打印版本信息，配合version选项使用</li>
+</ul>
+<p>举几个例子</p>
+<div class="highlight"><pre><span></span>parser = argparse.ArgumentParser(prog=&#39;PROG&#39;)
+parser.add_argument(&#39;-sh&#39;,&#39;--show&#39;,action=&#39;store_true&#39;)
+parser.parse_args([&#39;-sh&#39;])
+Out[2]: Namespace(show=True)
+</pre></div>
+
+
+<p>给出<code>-sh</code>参数，则show值为True</p>
+<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a1&#39;</span><span class="p">,</span><span class="s1">&#39;--arg1&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_const&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a2&#39;</span><span class="p">,</span><span class="s1">&#39;--arg2&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_const&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a3&#39;</span><span class="p">,</span><span class="s1">&#39;--arg3&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_const&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;-a1&#39;</span><span class="p">])</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">arg1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">arg3</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+
+
+<p>只给出a1参数，arg1的值为0。
+没有给出a2参数，则a2的const没有被调用，使用default的值，当然default默认就是None，不写也可以。
+a3参数其实就是store_true的实现。&nbsp;const和default的区别就是当命令给出但是后面未接值时，使用const值，如果命令那个都没有给出，则使用default的值。</p>
+<h3>3.&nbsp;nargs</h3>
+<p>nargs定义参数后面值的个数，可选值有几种：</p>
+<blockquote>
+<ul>
+<li>N&nbsp;(一个整数)</li>
+<li>?</li>
+<li>*</li>
+<li>+</li>
+</ul>
+</blockquote>
+<p>如果懂正则表达式，那nargs的参数就很好理解，这里就不做过多解释，不过要注意一点，当nargs=1的时候，他的行为和不给出nargs是不一样的，前者是一个列表，后者是一个值。直接看例子：</p>
+<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a2&#39;</span><span class="p">,</span><span class="s1">&#39;--args2&#39;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a3&#39;</span><span class="p">,</span><span class="s1">&#39;--args3&#39;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;-a3&#39;</span><span class="p">,</span><span class="s1">&#39;aa&#39;</span><span class="p">,</span><span class="s1">&#39;bb&#39;</span><span class="p">])</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">args2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args3</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;aa&#39;</span><span class="p">,</span> <span class="s1">&#39;bb&#39;</span><span class="p">])</span>
+</pre></div>
+
+
+<p>结果很好理解，?可以配合const使用，其他的可以配合default使用，调用了就是一个列表，使用const或default就是一个值。</p>
+<h3>4.&nbsp;type和metavar</h3>
+<p>这两个参数偶尔能用到，</p>
+<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a2&#39;</span><span class="p">,</span><span class="s1">&#39;--args2&#39;</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;STR&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">SUPPRESS</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;3&#39;</span><span class="p">])</span>
+</pre></div>
+
+
+<p><code>default=argparse.SUPPRESS</code>指出不给参数不存储变量，否则默认是None，&nbsp;打印help说明看看</p>
+<div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
+<span class="n">usage</span><span class="p">:</span> <span class="n">PROG</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a2</span> <span class="n">STR</span><span class="p">]</span> <span class="n">a1</span>
+
+<span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="n">a1</span>
+
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span>
+  <span class="o">-</span><span class="n">a2</span> <span class="n">STR</span><span class="p">,</span> <span class="o">--</span><span class="n">args2</span> <span class="n">STR</span>
+</pre></div>
+
+
+<p>metavar仅改变了help说明里的变量名。</p>
+<h3>参考文档</h3>
+<ol>
+<li><a href="https://docs.python.org/3/library/argparse.html">官方文档</a></li>
+<li><a href="http://python.usyiyi.cn/translate/python_352/library/argparse.html">中文文档</a></li>
+</ol><p>There are <a href="/argparse-brief-usage.html#disqus_thread">comments</a>.</p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/matplotlib-chinese-fonts.html" rel="bookmark"
+                           title="Permalink to matplotlib中文字体配置">matplotlib中文字体配置</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-12-18T16:01:00+08:00">
+                发布时间: 十二月 18, 2017
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/matplotlib.html">matplotlib</a> </p>
+</footer><!-- /.post-info -->                <p>matplotlib是Python的优秀绘图包，但是不论是在Windows还是Linux中默认都是不支持中文的，尤其是在Linux中设置更加复杂一点，设置方法如下：</p>
+<p>首先我们需要获取到matplotlib配置文件的文件夹</p>
+<div class="highlight"><pre><span></span>python -c <span class="s2">&quot;import matplotlib as mpl;print(mpl.get_configdir())&quot;</span>
+/home/kevin/.config/matplotlib
+</pre></div>
+
+
+<!--more-->
+
+<p>然后需要一个默认的matplotlibrc文件用于修改</p>
+<div class="highlight"><pre><span></span>python -c <span class="s2">&quot;import matplotlib as mpl;print(mpl.matplotlib_fname())&quot;</span>
+/opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc
+</pre></div>
+
+
+<p>这个位置会根据每个人安装位置不同而改变</p>
+<p>然后把默认的rc文件拷贝到用户的配置文件夹</p>
+<div class="highlight"><pre><span></span>cp /opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc ~/.config …</pre></div>
+                <a class="readmore" href="/matplotlib-chinese-fonts.html">查看全文</a>
+                <!--<p>There are <a href="/matplotlib-chinese-fonts.html#disqus_thread">comments</a>.</p>-->
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/linux-desktop-entries.html" rel="bookmark"
+                           title="Permalink to 自定义Linux桌面启动程序">自定义Linux桌面启动程序</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-11-17T15:58:00+08:00">
+                发布时间: 十一月 17, 2017
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/linux.html">linux</a> </p>
+</footer><!-- /.post-info -->                <p>Anaconda自带的Spyder是一个我最喜欢使用的IDE，对于科学计算有很好的支持，但是在Linux上它并没有自带.desktop文件，所以并不能在程序列表里找到，每次都要手动在命令行执行才能开启，非常不方便，所以决定自己搜索下方法，自己给它添加一个桌面快捷方式。</p>
+<p>Linux的主流DE的桌面文件都遵循<a href="https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#recognized-keys">桌面配置项规范</a>，按照这个规范配置一个相应的.desktop文件，放在指定的目录即可，当然你也可以放在<code>~/.local/share/applications/</code>目录里，这样这个快捷方式只针对当前用户。</p>
+<!--more-->
+
+<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">vim</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">applications</span><span class="o">/</span><span class="n">spyder</span><span class="p">.</span><span class="n">desktop</span>
+
+<span class="p">[</span><span class="n">Desktop</span> <span class="n">Entry</span><span class="p">]</span>
+<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
+<span class="n">Type</span><span class="o">=</span><span class="n">Application</span>
+<span class="n">Name</span><span class="o">=</span><span class="n">Spyder</span>
+<span class="n">GenericName</span><span class="o">=</span><span class="n">Spyder</span>
+<span class="n">Comment</span><span class="o">=</span><span class="n">Scientific</span> <span class="n">Python</span> <span class="n">Development</span> <span class="n">EnviRonment</span>
+<span class="n">TryExec</span><span class="o">=/</span><span class="n">opt</span><span class="o">/</span><span class="n">anaconda</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">spyder</span>
+<span class="n">Exec</span><span class="o">=/</span><span class="n">opt …</span></pre></div>
+                <a class="readmore" href="/linux-desktop-entries.html">查看全文</a>
+                <!--<p>There are <a href="/linux-desktop-entries.html#disqus_thread">comments</a>.</p>-->
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/shadowsocks-libev.html" rel="bookmark"
+                           title="Permalink to VPS搭梯子指南——shadowsocks+BBR+obfs">VPS搭梯子指南——shadowsocks+<span class="caps">BBR</span>+obfs</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-11-13T15:55:00+08:00">
+                发布时间: 十一月 13, 2017
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/shadowsocks.html">shadowsocks</a> </p>
+</footer><!-- /.post-info -->                <p>近期开会导致墙越来越高，迫不得已升级自建的ss服务，由于shadowsocks原版已经停更，shadowsocksR也已经删库，所以就锁定libev版本。
+<strong><em>注：以下服务器端内容请切换到root操作</em></strong></p>
+<h3>1.&nbsp;升级Debian</h3>
+<p>在升级之前，我需要先把服务器从Debian 8升级到Debian&nbsp;9，如果不是Debian用户，或者不想升级的可以跳过，这一步不影响后续操作，但是部分代码可能需要修改。</p>
+<p>首先要把Debian&nbsp;8升级到最新版本</p>
+<div class="highlight"><pre><span></span>apt update
+apt upgrade
+</pre></div>
+
+
+<p>备份源列表</p>
+<div class="highlight"><pre><span></span>cp /etc/apt/sources.list /etc/apt/sources.list-jessie
+</pre></div>
+
+
+<!--more-->
+
+<p>修改源列表，把jessie 替换为&nbsp;stretch</p>
+<div class="highlight"><pre><span></span>vim /etc/apt/sources.list
+:s/jessie/stretch/g
+</pre></div>
+
+
+<p>再次更新升级</p>
+<div class="highlight"><pre><span></span> apt update
+ apt …</pre></div>
+                <a class="readmore" href="/shadowsocks-libev.html">查看全文</a>
+                <!--<p>There are <a href="/shadowsocks-libev.html#disqus_thread">comments</a>.</p>-->
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/config-pip-conda.html" rel="bookmark"
+                           title="Permalink to 配置pip和conda">配置pip和conda</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-11-07T11:43:00+08:00">
+                发布时间: 十一月 07, 2017
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/pip.html">pip</a> <a href="/tag/conda.html">conda</a> <a href="/tag/python.html">python</a> </p>
+</footer><!-- /.post-info -->                <p>首先需要确认已经安装Python环境，建议用于科学计算的朋友下载安装<a href="https://www.anaconda.com/download/">Anaconda</a>或者<a href="https://conda.io/miniconda.html">Miniconda</a>。</p>
+<h3>环境变量和启用配置</h3>
+<p>安装好后还需要把安装路径添加到系统环境变量</p>
+<p>Linux用户查看系统环境变量</p>
+<div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">$PATH</span>
+</pre></div>
+
+
+<p>Windows用户查看系统环境变量</p>
+<div class="highlight"><pre><span></span><span class="nb">echo</span> %PATH%
+</pre></div>
+
+
+<p>如果没有Anaconda的路径，就需要自己手动添加</p>
+<!--more-->
+
+<p>Linux用户编辑~/.bashrc，在最后添加以下内容，注意自己修改安装路径</p>
+<div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/anaconda3/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+</pre></div>
+
+
+<p>最后再执行</p>
+<div class="highlight"><pre><span></span><span class="nb">source</span> ~/.bashrc
+</pre></div>
+
+
+<p>如果没有效果，可是尝试编辑~/.profile或 ~/.bash_profile文件&nbsp;zsh或其他shell用户可以自行修改</p>
+<p>Windows用户在cmd执行如下命令，如果不是默认安装到用户目录，需要手动修改下路径。如果创建了自定义env，那么root改为你自己的env名字。</p>
+<div class="highlight"><pre><span></span><span class="nb">set</span> <span class="nv">PATH</span><span class="o">=</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="p">;</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="se">\L</span>ibrary<span class="se">\b</span>in …</pre></div>
+                <a class="readmore" href="/config-pip-conda.html">查看全文</a>
+                <!--<p>There are <a href="/config-pip-conda.html#disqus_thread">comments</a>.</p>-->
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+<p class="paginator">
+    Page 1 / 2
+        <a href="/category/itbi-ji2.html">&raquo;</a>
+</p>
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>链接</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>社交网站</h2>
+                        <ul>
+
+                            <li><a href="https://github.com/princelai">Github</a></li>
+                            <li><a href="https://plus.google.com/100073068742779779797">G+</a></li>
+                            <li><a href="https://twitter.com/princelai">Twitter</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+        <!--
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address>
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer>-->
+    <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-1337838-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+<script type="text/javascript">
+    var disqus_shortname = 'solarck';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+</html>
