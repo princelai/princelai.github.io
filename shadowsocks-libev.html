@@ -31,6 +31,10 @@
         <abbr class="published" title="2017-11-13T15:55:00+08:00">
                 发布时间: 十一月 13, 2017
         </abbr>
+		<br />
+        <abbr class="modified" title="2018-06-05T13:01:00+08:00">
+                更新时间: 六月 05, 2018
+        </abbr>
 
         <address class="vcard author">
                 作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
@@ -51,8 +55,6 @@ apt upgrade
 <div class="highlight"><pre><span></span>cp /etc/apt/sources.list /etc/apt/sources.list-jessie
 </pre></div>
 
-
-<!--more-->
 
 <p>修改源列表，把jessie 替换为&nbsp;stretch</p>
 <div class="highlight"><pre><span></span>vim /etc/apt/sources.list
@@ -90,9 +92,8 @@ apt -t stretch-backports install shadowsocks-libev simple-obfs
 
 <h3>4.&nbsp;优化TCP网络</h3>
 <p>编辑sysctl文件，把下面的内容复制过去，&nbsp;如果第二步中没有开启bbr，那么请删除前两行。</p>
-<div class="highlight"><pre><span></span><span class="na">vim /etc/sysctl.conf</span>
-
-<span class="na">net.core.default_qdisc</span> <span class="o">=</span> <span class="s">fq</span>
+<p><code>vim /etc/sysctl.conf</code></p>
+<div class="highlight"><pre><span></span><span class="na">net.core.default_qdisc</span> <span class="o">=</span> <span class="s">fq</span>
 <span class="na">net.ipv4.tcp_congestion_control</span> <span class="o">=</span> <span class="s">bbr</span>
 <span class="na">net.ipv4.tcp_fastopen</span> <span class="o">=</span> <span class="s">3</span>
 <span class="na">fs.file-max</span> <span class="o">=</span> <span class="s">1024000</span>
@@ -123,11 +124,11 @@ apt -t stretch-backports install shadowsocks-libev simple-obfs
 
 
 <h3>5.&nbsp;配置服务端</h3>
+<p><strong>修改配置</strong></p>
 <p>编辑配置文件，填上自己的密码，端口建议使用443，别的端口封杀的太严重。
 关于加密方式，现在新版都支持AEAD加密方式，详细内容请点<a href="https://shadowsocks.org/en/spec/AEAD-Ciphers.html">这里</a>。</p>
-<div class="highlight"><pre><span></span><span class="err">vim</span> <span class="err">/etc/shadowsocks-libev/config.json</span>
-
-<span class="p">{</span>
+<p><code>vim /etc/shadowsocks-libev/config.json</code></p>
+<div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="nt">&quot;server&quot;</span><span class="p">:</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span>
     <span class="nt">&quot;server_port&quot;</span><span class="p">:</span><span class="mi">443</span><span class="p">,</span>
     <span class="nt">&quot;local_port&quot;</span><span class="p">:</span><span class="mi">1080</span><span class="p">,</span>
@@ -142,12 +143,22 @@ apt -t stretch-backports install shadowsocks-libev simple-obfs
 </pre></div>
 
 
+<p><strong>启动服务器端服务</strong></p>
+<p>如果已经按照上面编辑好配置文件，那么就可以直接用文件模式启动服务。</p>
+<div class="highlight"><pre><span></span>ss-server -c config.json <span class="c1">#测试模式</span>
+systemctl start shadowsocks-libev <span class="c1">#后台启动</span>
+systemctl <span class="nb">enable</span> shadowsocks-libev <span class="c1">#开机启动</span>
+</pre></div>
+
+
+<h3>6.&nbsp;启动服务器端服务</h3>
 <h3>6.&nbsp;配置客户端</h3>
-<p><strong>Windows</strong>
-下载<a href="https://github.com/shadowsocks/shadowsocks-windows/releases">shadowsocks-windows</a>解压缩，
+<p><strong>Windows</strong></p>
+<p>下载<a href="https://github.com/shadowsocks/shadowsocks-windows/releases">shadowsocks-windows</a>解压缩，
 下载<a href="https://github.com/imgk/simple-obfs-Cygwin/releases">simple-obfs</a>中的obfs-local.exe和msys-2.0.dll放到shadowsocks-windows目录中,obfs-host随意写一个中国可以访问的网站。
 <img alt="shadowsocks-windows" src="http://kevinstuchuang.qiniudn.com/shadowsocks-windows.png"></p>
-<p><strong>Linux</strong>&nbsp;安装客户端和obfs</p>
+<p><strong>Linux</strong></p>
+<p>安装客户端和obfs</p>
 <div class="highlight"><pre><span></span>sudo pacman -Syu
 sudo pacman -S shadowsocks-libev simple-obfs
 </pre></div>
