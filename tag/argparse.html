@@ -42,8 +42,6 @@
 
 
 <p>创建解析器时的可选参数很多，但没有特殊需求的情况下，默认参数就能很好的工作，所以这部分使用时临时查文档就能解决，不做过多记录。</p>
-<!--more-->
-
 <p>这里仅记录下添加参数时的各种选项搭配，使用方法和选项如下：</p>
 <div class="highlight"><pre><span></span><span class="n">ArgumentParser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="n">name</span> <span class="ow">or</span> <span class="n">flags</span><span class="o">...</span><span class="p">[,</span> <span class="n">action</span><span class="p">][,</span> <span class="n">nargs</span><span class="p">][,</span> <span class="n">const</span><span class="p">][,</span> <span class="n">default</span><span class="p">][,</span> <span class="nb">type</span><span class="p">][,</span> <span class="n">choices</span><span class="p">][,</span> <span class="n">required</span><span class="p">][,</span> <span class="n">help</span><span class="p">][,</span> <span class="n">metavar</span><span class="p">][,</span> <span class="n">dest</span><span class="p">])</span>
 </pre></div>
@@ -91,10 +89,10 @@
 <li>version -&nbsp;打印版本信息，配合version选项使用</li>
 </ul>
 <p>举几个例子</p>
-<div class="highlight"><pre><span></span>parser = argparse.ArgumentParser(prog=&#39;PROG&#39;)
-parser.add_argument(&#39;-sh&#39;,&#39;--show&#39;,action=&#39;store_true&#39;)
-parser.parse_args([&#39;-sh&#39;])
-Out[2]: Namespace(show=True)
+<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-sh&#39;</span><span class="p">,</span><span class="s1">&#39;--show&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;-sh&#39;</span><span class="p">])</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 
 

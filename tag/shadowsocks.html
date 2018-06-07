@@ -146,12 +146,11 @@ systemctl <span class="nb">enable</span> shadowsocks-libev <span class="c1">#开
 </pre></div>
 
 
-<h3>6.&nbsp;启动服务器端服务</h3>
 <h3>6.&nbsp;配置客户端</h3>
 <p><strong>Windows</strong></p>
 <p>下载<a href="https://github.com/shadowsocks/shadowsocks-windows/releases">shadowsocks-windows</a>解压缩，
 下载<a href="https://github.com/imgk/simple-obfs-Cygwin/releases">simple-obfs</a>中的obfs-local.exe和msys-2.0.dll放到shadowsocks-windows目录中,obfs-host随意写一个中国可以访问的网站。
-<img alt="shadowsocks-windows" src="http://kevinstuchuang.qiniudn.com/shadowsocks-windows.png"></p>
+<img alt="shadowsocks-windows" src="http://kevinstuchuang.qiniudn.com/blog-pic/shadowsocks-windows.png"></p>
 <p><strong>Linux</strong></p>
 <p>安装客户端和obfs</p>
 <div class="highlight"><pre><span></span>sudo pacman -Syu
@@ -160,14 +159,13 @@ sudo pacman -S shadowsocks-libev simple-obfs
 
 
 <p>开启本地服务</p>
-<div class="highlight"><pre><span></span>nohup ss-local -c config.json --plugin obfs-local --plugin-opts &quot;obfs=http;obfs-host=www.baidu.com&quot;
+<div class="highlight"><pre><span></span>nohup ss-local -c config.json --plugin obfs-local --plugin-opts &quot;obfs=http;obfs-host=www.baidu.com;fast-open&quot;
 </pre></div>
 
 
 <p>开机启动，编辑启动文件&nbsp;，添加obfs混淆</p>
-<div class="highlight"><pre><span></span><span class="na">vim /usr/lib/systemd/system/shadowsocks-libev@.service</span>
-
-<span class="k">[Unit]</span>
+<p><code>vim /usr/lib/systemd/system/shadowsocks-libev@.service</code></p>
+<div class="highlight"><pre><span></span><span class="k">[Unit]</span>
 <span class="na">Description</span><span class="o">=</span><span class="s">Shadowsocks-Libev Client Service</span>
 <span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
 
@@ -175,17 +173,16 @@ sudo pacman -S shadowsocks-libev simple-obfs
 <span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
 <span class="na">User</span><span class="o">=</span><span class="s">root</span>
 <span class="na">CapabilityBoundingSet</span><span class="o">=</span><span class="s">CAP_NET_BIND_SERVICE</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/ss-local -c /etc/shadowsocks/%i.json --plugin obfs-local --plugin-opts &quot;obfs=http;obfs-host=www.baidu.com&quot;</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/ss-local -c /etc/shadowsocks/%i.json --plugin obfs-local --plugin-opts &quot;obfs=http;obfs-host=www.baidu.com;fast-open&quot;</span>
 
 <span class="k">[Install]</span>
 <span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
 </pre></div>
 
 
-<p>编辑配置文件</p>
-<div class="highlight"><pre><span></span><span class="err">vim</span> <span class="err">/etc/shadowsocks/libev.json</span>
-
-<span class="p">{</span>
+<p>编辑配置文件
+<code>vim /etc/shadowsocks/libev.json</code></p>
+<div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="nt">&quot;server&quot;</span><span class="p">:</span><span class="s2">&quot;你的服务器IP&quot;</span><span class="p">,</span>
     <span class="nt">&quot;server_port&quot;</span><span class="p">:</span><span class="mi">443</span><span class="p">,</span>
     <span class="nt">&quot;local_address&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
@@ -201,7 +198,7 @@ sudo pacman -S shadowsocks-libev simple-obfs
 
 
 <p>开启服务，@后面要和json文件同名</p>
-<div class="highlight"><pre><span></span>systemctl start shadowsocks-libev@libev
+<div class="highlight"><pre><span></span>sudo systemctl start shadowsocks-libev@libev
 sudo systemctl <span class="nb">enable</span>  shadowsocks-libev@libev
 </pre></div>
 
@@ -218,9 +215,9 @@ sudo systemctl <span class="nb">enable</span>  shadowsocks-libev@libev
 </pre></div>
 
 
-<p>修改配置，找到如下两行打开注释，注意listen后的端口是未来我们要使用的端口，默认为8118，forward后的端口是shadowsocks使用的本地端口，这个依据自己的配置修改，不要忘了最后的&#8221;.&#8221;。</p>
-<div class="highlight"><pre><span></span>sudo vim /etc/privoxy/config
-listen-address  <span class="m">127</span>.0.0.1:8118
+<p>修改配置，找到如下两行打开注释，注意listen后的端口是未来我们要使用的端口，默认为8118，forward后的端口是shadowsocks使用的本地端口，这个依据自己的配置修改，不要忘了最后的&#8221;.&#8221;。
+<code>sudo vim /etc/privoxy/config</code></p>
+<div class="highlight"><pre><span></span>listen-address  <span class="m">127</span>.0.0.1:8118
 forward-socks5t   /   <span class="m">127</span>.0.0.1:65509 .
 </pre></div>
 
