@@ -21,7 +21,302 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/Is-AIP-better-than-ETF.html">用数据验证定投是否优于直接投资</a></h1>
+                    <h1 class="entry-title"><a href="/pandas-timeseries.html">Pandas时间处理函数速度对比</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2018-06-08T10:36:00+08:00">
+                发布时间: 六月 08, 2018
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/pandas.html">pandas</a> </p>
+</footer><!-- /.post-info --><p>Pandas非常擅长处理时间序列，拥有多种处理时间序列的函数和方法，自己做了几个小测试，看看内置函数都能适配哪种格式、哪种情况，速度又有多快。</p>
+<p>我用到的时间处理主要是对细粒度的时间重采样至粗粒度，之后再对重采样后的时间进行分组再进行后续操作，如求和、求平均或取最后值。</p>
+<p>所以我就设计两个场景，第一个场景是对频率为秒的时间序列重采样至一分钟然后求平均；第二个场景就是对频率为秒的时间序列重采样至3分钟然后对新的时间序列取每个时间的最新值。</p>
+<p>所以首先是要生成一组数据</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s1">&#39;2018-04-07&#39;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;2018-04-08&#39;</span><span class="p">,</span><span class="n">freq</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size</span><span class="p">),</span><span class="n">index</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+<span class="n">ser</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size</span><span class="p">),</span><span class="n">index</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;random&#39;</span><span class="p">]</span>
+<span class="n">ser</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;random&#39;</span>
+</pre></div>
+
+
+<p>df和ser分别对应DataFrame和Series，查看下数据格式</p>
+<p><code>df.head()</code></p>
+<div class="highlight"><pre><span></span>                       random
+2018-04-07 00:00:00  0.163995
+2018-04-07 00:00:01  0.756485
+2018-04-07 00:00:02 -0.179441
+2018-04-07 00:00:03  0.120944
+2018-04-07 00:00:04 -1.558763
+</pre></div>
+
+
+<p><code>ser.tail()</code></p>
+<div class="highlight"><pre><span></span>2018-04-07 23:59:56    1.276893
+2018-04-07 23:59:57    0.275050
+2018-04-07 23:59:58    1.029358
+2018-04-07 23:59:59    0.461299
+2018-04-08 00:00:00    1.222731
+Freq: S, Name: random, dtype: float64
+</pre></div>
+
+
+<p>接下来定义留个函数方法</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">method1</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_period</span><span class="p">(</span><span class="s1">&#39;Min&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_timestamp</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">method2</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M&#39;</span><span class="p">))</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">method3</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">ser_idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">ser_idx</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;00&#39;</span><span class="p">))</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">method4</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;Min&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">method5</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">&#39;3Min&#39;</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">method6</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;3Min&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+</pre></div>
+
+
+<p>方法1-方法4适用于场景一，方法5-方法6适用于场景二，接下来具体说说这六个函数和为什么要这么设计场景。</p>
+<p>方法1使用的是内置to_period方法转换周期，to_timestamp方法是为了后续操作使用timestamp更方便。</p>
+<p>方法2对索引日期进行字符串格式化然后再用内置的to_datetime方法转换回日期格式达到重采样效果。</p>
+<p>方法3看似复杂，其实和方法二类似，我之所以加上方法三是因为我本以为这个办法处理会慢很多，但是最终结果还是有点出乎我的意料的。</p>
+<p>方法4是内置的resample方法</p>
+<p>方法5是内置的asfreq方法</p>
+<p>方法6还是内置的resample方法</p>
+<p>可以看到resample方法适用范围最广，既可以对时间采取多种细粒度的操作，也能对重采样后的数据进行后续操作；而asfreq方法只能对数据进行重采样，无法进行复杂的后续操作，只能用向前/向后填充数值；to_period方法和字符串操作只能对时间进行整数采样，像45分钟，1小时30分这种更细腻的操作是不支持的。</p>
+<h3>比较速度</h3>
+<p><strong>场景1</strong></p>
+<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method1</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="nf">%timeit</span> <span class="n">method2</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="nf">%timeit</span> <span class="n">method3</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="nf">%timeit</span> <span class="n">method4</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="mf">16.4</span> <span class="n">ms</span> <span class="err">±</span> <span class="mi">391</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">10</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+<span class="mi">439</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">2.52</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
+<span class="mi">485</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">10.8</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
+<span class="mf">2.13</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">9.92</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method1</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
+<span class="nf">%timeit</span> <span class="n">method2</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
+<span class="nf">%timeit</span> <span class="n">method3</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
+<span class="nf">%timeit</span> <span class="n">method4</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
+
+<span class="mf">23.8</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">72.2</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">10</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+<span class="mi">446</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">2.71</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
+<span class="mi">492</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">3.61</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
+<span class="mf">1.63</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">15.1</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+</pre></div>
+
+
+<p>从上面对比数据得出结论，resample方法最快，to_period方法其次，两种字符串方法最慢，最快和最慢差距巨大。</p>
+<p><strong>场景2</strong></p>
+<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method5</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="nf">%timeit</span> <span class="n">method6</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="mi">746</span> <span class="err">µ</span><span class="n">s</span> <span class="err">±</span> <span class="mf">32.5</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+<span class="mf">2.42</span> <span class="n">ms</span> <span class="err">±</span> <span class="mi">24</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method5</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
+<span class="nf">%timeit</span> <span class="n">method6</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
+
+<span class="mi">772</span> <span class="err">µ</span><span class="n">s</span> <span class="err">±</span> <span class="mf">20.2</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+<span class="mf">1.87</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">50.5</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+</pre></div>
+
+
+<p>在场景二的测试中asfreq比resample快2倍多，如果不需要更多的后续操作，asfreq是很好的选择，否则resample方法更为全能。</p>
+<p>下方的表格总结了几种方法的优劣：</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>时间细粒度操作</th>
+<th>时间分组后续操作</th>
+<th>速度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>asfreq</td>
+<td>X</td>
+<td>X</td>
+<td>&radic;</td>
+</tr>
+<tr>
+<td>resample</td>
+<td>&radic;</td>
+<td>&radic;</td>
+<td>&radic;</td>
+</tr>
+<tr>
+<td>to_period</td>
+<td>X</td>
+<td>&radic;</td>
+<td>&radic;</td>
+</tr>
+<tr>
+<td>字符串</td>
+<td>X</td>
+<td>&radic;</td>
+<td>X</td>
+</tr>
+</tbody>
+</table>
+<h3>Pandas Offset&nbsp;Aliases</h3>
+<table>
+<thead>
+<tr>
+<th>Alias</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B</td>
+<td>business day frequency</td>
+</tr>
+<tr>
+<td>C</td>
+<td>custom business day frequency</td>
+</tr>
+<tr>
+<td>D</td>
+<td>calendar day frequency</td>
+</tr>
+<tr>
+<td>W</td>
+<td>weekly frequency</td>
+</tr>
+<tr>
+<td>M</td>
+<td>month end frequency</td>
+</tr>
+<tr>
+<td><span class="caps">SM</span></td>
+<td>semi-month end frequency (15th and end of month)</td>
+</tr>
+<tr>
+<td><span class="caps">BM</span></td>
+<td>business month end frequency</td>
+</tr>
+<tr>
+<td><span class="caps">CBM</span></td>
+<td>custom business month end frequency</td>
+</tr>
+<tr>
+<td><span class="caps">MS</span></td>
+<td>month start frequency</td>
+</tr>
+<tr>
+<td><span class="caps">SMS</span></td>
+<td>semi-month start frequency (1st and 15th)</td>
+</tr>
+<tr>
+<td><span class="caps">BMS</span></td>
+<td>business month start frequency</td>
+</tr>
+<tr>
+<td><span class="caps">CBMS</span></td>
+<td>custom business month start frequency</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>quarter end frequency</td>
+</tr>
+<tr>
+<td><span class="caps">BQ</span></td>
+<td>business quarter end frequency</td>
+</tr>
+<tr>
+<td><span class="caps">QS</span></td>
+<td>quarter start frequency</td>
+</tr>
+<tr>
+<td><span class="caps">BQS</span></td>
+<td>business quarter start frequency</td>
+</tr>
+<tr>
+<td>A, Y</td>
+<td>year end frequency</td>
+</tr>
+<tr>
+<td><span class="caps">BA</span>, <span class="caps">BY</span></td>
+<td>business year end frequency</td>
+</tr>
+<tr>
+<td><span class="caps">AS</span>, <span class="caps">YS</span></td>
+<td>year start frequency</td>
+</tr>
+<tr>
+<td><span class="caps">BAS</span>, <span class="caps">BYS</span></td>
+<td>business year start frequency</td>
+</tr>
+<tr>
+<td><span class="caps">BH</span></td>
+<td>business hour frequency</td>
+</tr>
+<tr>
+<td>H</td>
+<td>hourly frequency</td>
+</tr>
+<tr>
+<td>T, min</td>
+<td>minutely frequency</td>
+</tr>
+<tr>
+<td>S</td>
+<td>secondly frequency</td>
+</tr>
+<tr>
+<td>L, ms</td>
+<td>milliseconds</td>
+</tr>
+<tr>
+<td>U, us</td>
+<td>microseconds</td>
+</tr>
+<tr>
+<td>N</td>
+<td>nanoseconds</td>
+</tr>
+</tbody>
+</table>
+<h3>参考</h3>
+<p><a href="https://pandas.pydata.org/pandas-docs/stable/timeseries.html">官方文档</a> </p><!--<p>There are <a href="/pandas-timeseries.html#disqus_thread">comments</a>.</p>-->
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>过往文章</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/Is-AIP-better-than-ETF.html" rel="bookmark"
+                           title="Permalink to 用数据验证定投是否优于直接投资">用数据验证定投是否优于直接投资</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2018-06-06T17:27:00+08:00">
                 发布时间: 六月 06, 2018
@@ -32,7 +327,7 @@
         </address>
 <p>分类: <a href="/category/jin-rong-bi-ji.html">金融笔记</a></p>
 <p>标签: <a href="/tag/ding-tou.html">定投</a> <a href="/tag/etf.html">ETF</a> </p>
-</footer><!-- /.post-info --><p>一直以来，定投的营销话术都是分批建仓，上涨时投资少降低成本，下跌时投资多赚取低估价值，但定投是否真的如宣传的那么美好？今天就用数据来模拟两种投资方式，看看孰优孰劣。</p>
+</footer><!-- /.post-info -->                <p>一直以来，定投的营销话术都是分批建仓，上涨时投资少降低成本，下跌时投资多赚取低估价值，但定投是否真的如宣传的那么美好？今天就用数据来模拟两种投资方式，看看孰优孰劣。</p>
 <h3>数据说明</h3>
 <p>本次实验使用三只ETF基金作为投资和定投标的，分别为华夏上证50ETF（510050），华泰柏瑞沪深300ETF（510300），广发中证500ETF（510510），时间区间为2013年5月27日至2018年6月7日。</p>
 <p>先上图了解下这段时间ETF基金大致走势。</p>
@@ -44,222 +339,11 @@
 <p>选择这个区间的行情，是因为这五年属于一个完整的周期，活跃时波动率大，行情过后的低迷时期波动率又小，是典型的中国股市。另外从长期来看，股票波动向上才应该是上市公司内在价值增长的表现。</p>
 <p>当然，用这个区间的数据做分析是有一个缺点的，就是这三只ETF基金整体涨幅都在40%-50%之间，如果在一开始就持有至当前日期，那么一定是一次性直接投资要优于定投，不过放心，后面编程不会让这种事情发生，我会加入时间随机项，尽量减小整体上涨带来的影响。</p>
 <h3>开始实验</h3>
-<p>首先要导入用到的包</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tushare</span> <span class="kn">as</span> <span class="nn">ts</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-</pre></div>
-
-
-<p>之后利用tushare包，获取到三只ETF基金的收盘价，放入一个DataFrame内，这里我创建了一个类，主要是为了代码整洁考虑。</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">AutoInvestmentPlan</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">code_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;510050&#39;</span><span class="p">,</span><span class="s1">&#39;510300&#39;</span><span class="p">,</span><span class="s1">&#39;510510&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_date</span> <span class="o">=</span> <span class="s1">&#39;2013-05-27&#39;</span>
-
-    <span class="k">def</span> <span class="nf">get_etf_close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">code</span><span class="p">,</span><span class="n">start</span><span class="p">):</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_k_data</span><span class="p">(</span><span class="n">code</span><span class="p">,</span><span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">)</span>
-        <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-        <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">close</span>
-
-    <span class="k">def</span> <span class="nf">combin_to_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">close_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">code_list</span><span class="p">:</span>
-            <span class="n">close_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_etf_close</span><span class="p">(</span><span class="n">code</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">start_date</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">close_list</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ETF50&#39;</span><span class="p">,</span><span class="s1">&#39;ETF300&#39;</span><span class="p">,</span><span class="s1">&#39;ETF500&#39;</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">combin_to_df</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">monthly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">&#39;M&#39;</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">weekly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="p">)</span>
-</pre></div>
-
-
-<p>获取数据需要对类实例化，然后就得到了周和月数据</p>
-<div class="highlight"><pre><span></span><span class="n">aip</span> <span class="o">=</span> <span class="n">AutoInvestmentPlan</span><span class="p">()</span>
-<span class="n">aip</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
-</pre></div>
-
-
-<p>这里需要等待几秒种，运行完成后就可以查看我们的数据了</p>
-<p><strong>周数据最新的5个收盘价</strong></p>
-<p><code>aip.weekly.tail()</code></p>
-<div class="highlight"><pre><span></span>            ETF50  ETF300  ETF500
-date                             
-2018-05-06  2.634   3.770   1.646
-2018-05-13  2.716   3.873   1.667
-2018-05-20  2.733   3.899   1.670
-2018-05-27  2.654   3.811   1.649
-2018-06-03  2.643   3.777   1.588
-</pre></div>
-
-
-<p><strong>月收益率数据</strong></p>
-<p><code>aip.monthly.pct_change().describe()</code></p>
-<div class="highlight"><pre><span></span>           ETF50     ETF300     ETF500
-count  60.000000  60.000000  60.000000
-mean    0.008889   0.009014   0.009978
-std     0.076945   0.073923   0.081489
-min    -0.182533  -0.224457  -0.279845
-25%    -0.022543  -0.018264  -0.025160
-50%     0.002254   0.006061   0.015203
-75%     0.035246   0.041125   0.049516
-max     0.334728   0.254035   0.204142
-</pre></div>
-
-
-<p>接下来在定义用来比较的函数</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="n">underlying</span><span class="p">,</span><span class="n">df_period</span><span class="p">,</span><span class="n">times</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">money</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">plot</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="n">df_period</span><span class="p">[</span><span class="n">underlying</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;{} close price&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">underlying</span><span class="p">))</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">df_period</span><span class="o">.</span><span class="n">index</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="n">df_period</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)])</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">df_period</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">):]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">df_period</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">,:]</span>
-        <span class="n">cumsum_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">((</span><span class="n">money</span> <span class="o">/</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">underlying</span><span class="p">]))</span>
-        <span class="n">cumsum_values</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;share_period&#39;</span><span class="p">]</span>
-        <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;share_cum&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;share_period&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
-        <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumsum_values</span><span class="o">.</span><span class="n">share_cum</span> <span class="o">*</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">underlying</span><span class="p">]</span>
-        <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;payoff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">money</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">cumsum_values</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
-
-        <span class="n">a</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">underlying</span><span class="p">]</span> <span class="o">/</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">underlying</span><span class="p">]</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;payoff&#39;</span><span class="p">]</span>
-        <span class="n">b</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;AIP&#39;</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
-            <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-        <span class="n">exceed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="o">*</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;from {} to {},dirctly invest ETF exceed AIP {:.2%}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span><span class="n">end</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span><span class="n">exceed</span><span class="p">))</span>
-        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">exceed</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">In {} times simulation,dirctly invest ETF exceed AIP</span><span class="se">\&#39;</span><span class="s1">s mean is {:.2%}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">times</span><span class="p">,</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">result</span><span class="p">)))</span>
-</pre></div>
-
-
-<p>这个比较函数从给定的ETF基金中的前半段时间随机选取一个日期，然后至少持有18个月，至多持有到当前日期，用这段时间的数据分别模拟在初始日期全部投资至结束和在区间内定投的收益情况。使用方法如下：</p>
-<div class="highlight"><pre><span></span>#用每月定投1000元ETF50来比较
-compare(&#39;ETF50&#39;,aip.monthly)
-
-#用每周定投1000元ETF500来比较
-compare(&#39;ETF500&#39;,aip.weekly)
-
-#用每周定投500元ETF300来比较，共模拟10次，每次打印出走势对比图
-compare(&#39;ETF300&#39;,aip.weekly,times=10,money=500,plot=True)
-</pre></div>
-
-
-<h3>比较结果</h3>
-<p><code>compare('ETF50',aip.monthly)</code></p>
-<div class="highlight"><pre><span></span>from 2015-09-30 to 2017-08-31,dirctly invest ETF exceed AIP 8.07%
-from 2014-07-31 to 2016-06-30,dirctly invest ETF exceed AIP 30.34%
-from 2014-09-30 to 2017-08-31,dirctly invest ETF exceed AIP 45.93%
-from 2015-05-31 to 2017-12-31,dirctly invest ETF exceed AIP -26.74%
-from 2014-03-31 to 2017-06-30,dirctly invest ETF exceed AIP 54.43%
-from 2015-09-30 to 2017-04-30,dirctly invest ETF exceed AIP 4.29%
-from 2015-07-31 to 2017-04-30,dirctly invest ETF exceed AIP -9.27%
-from 2014-06-30 to 2016-10-31,dirctly invest ETF exceed AIP 47.17%
-from 2015-07-31 to 2017-09-30,dirctly invest ETF exceed AIP -7.44%
-from 2014-10-31 to 2016-06-30,dirctly invest ETF exceed AIP 31.91%
-from 2014-07-31 to 2017-11-30,dirctly invest ETF exceed AIP 46.67%
-from 2015-06-30 to 2017-08-31,dirctly invest ETF exceed AIP -22.72%
-from 2014-04-30 to 2017-06-30,dirctly invest ETF exceed AIP 52.55%
-from 2014-04-30 to 2016-12-31,dirctly invest ETF exceed AIP 44.92%
-from 2014-04-30 to 2015-10-31,dirctly invest ETF exceed AIP 41.97%
-
-In 15 times simulation,dirctly invest ETF exceed AIP&#39;s mean is 22.81%
-</pre></div>
-
-
-<p><code>compare('ETF500',aip.weekly)</code></p>
-<div class="highlight"><pre><span></span>from 2014-09-28 to 2017-07-09,dirctly invest ETF exceed AIP 28.72%
-from 2014-06-08 to 2017-05-07,dirctly invest ETF exceed AIP 56.41%
-from 2015-05-10 to 2018-04-29,dirctly invest ETF exceed AIP -20.97%
-from 2014-02-09 to 2017-06-18,dirctly invest ETF exceed AIP 45.50%
-from 2014-06-29 to 2016-07-17,dirctly invest ETF exceed AIP 55.89%
-from 2015-07-12 to 2017-10-15,dirctly invest ETF exceed AIP -15.83%
-from 2013-06-02 to 2017-04-30,dirctly invest ETF exceed AIP 40.71%
-from 2014-06-08 to 2016-10-02,dirctly invest ETF exceed AIP 57.17%
-from 2014-05-11 to 2018-01-07,dirctly invest ETF exceed AIP 64.35%
-from 2014-09-07 to 2017-04-02,dirctly invest ETF exceed AIP 33.36%
-from 2014-07-20 to 2018-03-25,dirctly invest ETF exceed AIP 47.74%
-from 2014-03-30 to 2017-06-11,dirctly invest ETF exceed AIP 50.51%
-from 2013-09-15 to 2015-11-22,dirctly invest ETF exceed AIP 44.02%
-from 2015-03-08 to 2017-04-09,dirctly invest ETF exceed AIP 6.61%
-from 2015-04-05 to 2017-01-29,dirctly invest ETF exceed AIP -13.85%
-
-In 15 times simulation,dirctly invest ETF exceed AIP&#39;s mean is 32.02%
-</pre></div>
-
-
-<p>从上面的运行结果来看，把资金一次性全部投入比定投的平均收益是要高的，如果有兴趣，可以自己修改程序，改变开始和结束时间来验证结果，相信结论应该上面的相差不会太多。</p>
-<p>当然，定投也不是一无是处，至少对于当前资金不足，只想从每月工资中拿出一部分来投资的人来说，还是一种很好的投资方式的。</p>
-<h3>完整代码</h3>
-<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="kn">import</span> <span class="nn">tushare</span> <span class="kn">as</span> <span class="nn">ts</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-
-<span class="k">class</span> <span class="nc">AutoInvestmentPlan</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">code_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;510050&#39;</span><span class="p">,</span><span class="s1">&#39;510300&#39;</span><span class="p">,</span><span class="s1">&#39;510510&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_date</span> <span class="o">=</span> <span class="s1">&#39;2013-05-27&#39;</span>
-
-    <span class="k">def</span> <span class="nf">get_etf_close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">code</span><span class="p">,</span><span class="n">start</span><span class="p">):</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_k_data</span><span class="p">(</span><span class="n">code</span><span class="p">,</span><span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">)</span>
-        <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-        <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">close</span>
-
-    <span class="k">def</span> <span class="nf">combin_to_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">close_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">code_list</span><span class="p">:</span>
-            <span class="n">close_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_etf_close</span><span class="p">(</span><span class="n">code</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">start_date</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">close_list</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ETF50&#39;</span><span class="p">,</span><span class="s1">&#39;ETF300&#39;</span><span class="p">,</span><span class="s1">&#39;ETF500&#39;</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">combin_to_df</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">monthly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">&#39;M&#39;</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">weekly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="n">underlying</span><span class="p">,</span><span class="n">df_period</span><span class="p">,</span><span class="n">times</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">money</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">plot</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="n">df_period</span><span class="p">[</span><span class="n">underlying</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;{} close price&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">underlying</span><span class="p">))</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">df_period</span><span class="o">.</span><span class="n">index</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="n">df_period</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)])</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">df_period</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">):]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">df_period</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">,:]</span>
-        <span class="n">cumsum_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">((</span><span class="n">money</span> <span class="o">/</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">underlying</span><span class="p">]))</span>
-        <span class="n">cumsum_values</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;share_period&#39;</span><span class="p">]</span>
-        <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;share_cum&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;share_period&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
-        <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumsum_values</span><span class="o">.</span><span class="n">share_cum</span> <span class="o">*</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">underlying</span><span class="p">]</span>
-        <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;payoff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">money</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">cumsum_values</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
-
-        <span class="n">a</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">underlying</span><span class="p">]</span> <span class="o">/</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">underlying</span><span class="p">]</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;payoff&#39;</span><span class="p">]</span>
-        <span class="n">b</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;AIP&#39;</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
-            <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-        <span class="n">exceed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="o">*</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;from {} to {},dirctly invest ETF exceed AIP {:.2%}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span><span class="n">end</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span><span class="n">exceed</span><span class="p">))</span>
-        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">exceed</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">In {} times simulation,dirctly invest ETF exceed AIP</span><span class="se">\&#39;</span><span class="s1">s mean is {:.2%}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">times</span><span class="p">,</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">result</span><span class="p">)))</span>
-</pre></div><!--<p>There are <a href="/Is-AIP-better-than-ETF.html#disqus_thread">comments</a>.</p>-->
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>过往文章</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+<p>首先要导入用到的包 …</p>
+                <a class="readmore" href="/Is-AIP-better-than-ETF.html">查看全文</a>
+                <!--<p>There are <a href="/Is-AIP-better-than-ETF.html#disqus_thread">comments</a>.</p>-->
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -418,46 +502,6 @@ In 15 times simulation,dirctly invest ETF exceed AIP&#39;s mean is 32.02%
 <li>name or flags - 名称或选项字符串列表，例如。foo或-f,&nbsp;&#8212;foo …</li></ul></blockquote>
                 <a class="readmore" href="/argparse-brief-usage.html">查看全文</a>
                 <!--<p>There are <a href="/argparse-brief-usage.html#disqus_thread">comments</a>.</p>-->
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/matplotlib-chinese-fonts.html" rel="bookmark"
-                           title="Permalink to matplotlib中文字体配置">matplotlib中文字体配置</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-12-18T16:01:00+08:00">
-                发布时间: 十二月 18, 2017
-        </abbr>
-
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/matplotlib.html">matplotlib</a> </p>
-</footer><!-- /.post-info -->                <p>matplotlib是Python的优秀绘图包，但是不论是在Windows还是Linux中默认都是不支持中文的，尤其是在Linux中设置更加复杂一点，设置方法如下：</p>
-<p>首先我们需要获取到matplotlib配置文件的文件夹</p>
-<div class="highlight"><pre><span></span>python -c <span class="s2">&quot;import matplotlib as mpl;print(mpl.get_configdir())&quot;</span>
-/home/kevin/.config/matplotlib
-</pre></div>
-
-
-<!--more-->
-
-<p>然后需要一个默认的matplotlibrc文件用于修改</p>
-<div class="highlight"><pre><span></span>python -c <span class="s2">&quot;import matplotlib as mpl;print(mpl.matplotlib_fname())&quot;</span>
-/opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc
-</pre></div>
-
-
-<p>这个位置会根据每个人安装位置不同而改变</p>
-<p>然后把默认的rc文件拷贝到用户的配置文件夹</p>
-<div class="highlight"><pre><span></span>cp /opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc ~/.config …</pre></div>
-                <a class="readmore" href="/matplotlib-chinese-fonts.html">查看全文</a>
-                <!--<p>There are <a href="/matplotlib-chinese-fonts.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
                 </ol><!-- /#posts-list -->

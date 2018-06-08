@@ -23,6 +23,46 @@
                     <ol id="posts-list" class="hfeed" start="4">
             <li><article class="hentry">
                 <header>
+                    <h1><a href="/matplotlib-chinese-fonts.html" rel="bookmark"
+                           title="Permalink to matplotlib中文字体配置">matplotlib中文字体配置</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-12-18T16:01:00+08:00">
+                发布时间: 十二月 18, 2017
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/matplotlib.html">matplotlib</a> </p>
+</footer><!-- /.post-info -->                <p>matplotlib是Python的优秀绘图包，但是不论是在Windows还是Linux中默认都是不支持中文的，尤其是在Linux中设置更加复杂一点，设置方法如下：</p>
+<p>首先我们需要获取到matplotlib配置文件的文件夹</p>
+<div class="highlight"><pre><span></span>python -c <span class="s2">&quot;import matplotlib as mpl;print(mpl.get_configdir())&quot;</span>
+/home/kevin/.config/matplotlib
+</pre></div>
+
+
+<!--more-->
+
+<p>然后需要一个默认的matplotlibrc文件用于修改</p>
+<div class="highlight"><pre><span></span>python -c <span class="s2">&quot;import matplotlib as mpl;print(mpl.matplotlib_fname())&quot;</span>
+/opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc
+</pre></div>
+
+
+<p>这个位置会根据每个人安装位置不同而改变</p>
+<p>然后把默认的rc文件拷贝到用户的配置文件夹</p>
+<div class="highlight"><pre><span></span>cp /opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc ~/.config …</pre></div>
+                <a class="readmore" href="/matplotlib-chinese-fonts.html">查看全文</a>
+                <!--<p>There are <a href="/matplotlib-chinese-fonts.html#disqus_thread">comments</a>.</p>-->
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
                     <h1><a href="/linux-desktop-entries.html" rel="bookmark"
                            title="Permalink to 自定义Linux桌面启动程序">自定义Linux桌面启动程序</a></h1>
                 </header>
@@ -194,44 +234,6 @@ opkg install samba36-server luci-app-samba
     server <span class="nv">string</span> <span class="o">=</span> OpenWrt …</pre></div>
                 <a class="readmore" href="/openwrt-samba.html">查看全文</a>
                 <!--<p>There are <a href="/openwrt-samba.html#disqus_thread">comments</a>.</p>-->
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/openwrt-extroot.html" rel="bookmark"
-                           title="Permalink to 用extroot为openwrt扩充存储空间">用extroot为openwrt扩充存储空间</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2014-01-03T01:48:00+08:00">
-                发布时间: 一月 03, 2014
-        </abbr>
-
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/openwrt.html">openwrt</a> </p>
-</footer><!-- /.post-info -->                <p>水星这款MW4350r内存为128M，运行很多程序都不在话下。但是却只提供了8M&nbsp;Flash存储空间，而路由器系统还占了1.9M，剩下的5M空间不足以支持安装很多软件，比如我在安装python的时候就报错提示存储空间不足，这确实很郁闷，但幸好Openwrt还提供了extroot方式来扩展存储，来发挥路由器和Openwrt系统的真正实力。</p>
-<p><strong>pivot-overlay还是pivot-root？</strong></p>
-<blockquote>
-<p>我把两种方式都试过，pivot-overlay方式不能够把安装程序的位置移到USB存储装置上，但是pivot-root方式可以，所以我选择了后者。pivot-root方式使/覆盖掉了/overlay成为rootfs，我认为这种方式更接近原生的Linux系统。  <br>
-而从官方的文档来看，目前pivot-root已经没有以前的缺点和不足，选择哪个已经是个人需求而不是技术问题了。  <br>
-网上大部分文章帖子都是2009-2010年间的，所以大部分可能都是pivot-overlay的。如果对这部分不太理解，请仔细阅读官方Wiki：<a href="http://wiki.openwrt.org/doc/howto/extroot/extroot.theory">ExtRoot: How it works</a>,<a href="http://wiki.openwrt.org/doc/techref/flash.layout">The OpenWrt Flash&nbsp;Layout</a></p>
-</blockquote>
-<!--more-->
-
-<h3>安装必要的包</h3>
-<div class="highlight"><pre><span></span>opkg update
-opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs-ext4 block-mount
-</pre></div>
-
-
-<p>e2fsprogs包提供了mkfs（mkfs.ext3 …</p>
-                <a class="readmore" href="/openwrt-extroot.html">查看全文</a>
-                <!--<p>There are <a href="/openwrt-extroot.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
                 </ol><!-- /#posts-list -->
