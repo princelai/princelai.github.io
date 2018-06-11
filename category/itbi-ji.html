@@ -21,7 +21,174 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/python-send-gmail.html">使用Python发送Gmail</a></h1>
+                    <h1 class="entry-title"><a href="/centos6-datebase-server.html">CentOS6数据库服务器配置</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2018-06-11T16:52:00+08:00">
+                发布时间: 六月 11, 2018
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/centos.html">centos</a> <a href="/tag/ssh.html">ssh</a> <a href="/tag/linux.html">linux</a> </p>
+</footer><!-- /.post-info --><p>本文章仅用于记录在公司服务器上通过yum&nbsp;repo来安装官方提供的数据库程序，而非通过编译方式来安装。通过官方仓库来安装有很多好处，比如升级、打补丁都很方便，不用编译浪费时间，更不需要安装多个版本的gcc来满足各种不同软件的要求。</p>
+<h3>Mysql</h3>
+<p><strong>下载安装mysql&nbsp;repo</strong></p>
+<p><code>rpm -Uvh https://repo.mysql.com//mysql80-community-release-el6-1.noarch.rpm</code></p>
+<p><strong>升级至57版本</strong></p>
+<p><code>yum --disablerepo=mysql80-community --enablerepo=mysql57-community upgrade</code></p>
+<p>当前默认是80版本，如果未来需要升级，如果未来一直要维持在57版本，那么建议修改配置文件，以免每次都带上两个参数</p>
+<p><code>vim /etc/yum.repos.d/mysql-community.repo</code></p>
+<div class="highlight"><pre><span></span><span class="c1"># Enable to use MySQL 5.7</span>
+<span class="k">[mysql57-community]</span>
+<span class="na">name</span><span class="o">=</span><span class="s">MySQL 5.7 Community Server</span>
+<span class="na">baseurl</span><span class="o">=</span><span class="s">http://repo.mysql.com/yum/mysql-5.7-community/el/6/$basearch/</span>
+<span class="na">enabled</span><span class="o">=</span><span class="s">1</span>
+<span class="na">gpgcheck</span><span class="o">=</span><span class="s">1</span>
+<span class="na">gpgkey</span><span class="o">=</span><span class="s">file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span>
+
+<span class="k">[mysql80-community]</span>
+<span class="na">name</span><span class="o">=</span><span class="s">MySQL 8.0 Community Server</span>
+<span class="na">baseurl</span><span class="o">=</span><span class="s">http://repo.mysql.com/yum/mysql-8.0-community/el/6/$basearch/</span>
+<span class="na">enabled</span><span class="o">=</span><span class="s">0</span>
+<span class="na">gpgcheck</span><span class="o">=</span><span class="s">1</span>
+<span class="na">gpgkey</span><span class="o">=</span><span class="s">file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span>
+</pre></div>
+
+
+<p><strong>安装mysql-server</strong></p>
+<p><code>yum install mysql-community-server</code></p>
+<p><strong>开启服务</strong></p>
+<p><code>service mysqld start</code></p>
+<p>当然这时候还未配置mysql，开启服务可能会失败。默认配置文件在<code>/etc/my.cnf</code>。</p>
+<p>更多安装细节可以参照<a href="https://dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/">mysql官方指南</a>。</p>
+<h3>Mongo</h3>
+<p><strong>创建repo文件</strong></p>
+<p><code>vim /etc/yum.repos.d/mongodb-org-3.6.repo</code></p>
+<div class="highlight"><pre><span></span><span class="k">[mongodb-org-3.6]</span>
+<span class="na">name</span><span class="o">=</span><span class="s">MongoDB Repository</span>
+<span class="na">baseurl</span><span class="o">=</span><span class="s">https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.6/x86_64/</span>
+<span class="na">gpgcheck</span><span class="o">=</span><span class="s">1</span>
+<span class="na">enabled</span><span class="o">=</span><span class="s">1</span>
+<span class="na">gpgkey</span><span class="o">=</span><span class="s">https://www.mongodb.org/static/pgp/server-3.6.asc</span>
+</pre></div>
+
+
+<p><strong>安装mongo组件合集</strong></p>
+<p><code>yum install -y mongodb-org</code></p>
+<p>mongo-org是一个合集，如果想精简安装各个组件，请参照下表。</p>
+<table>
+<thead>
+<tr>
+<th>Package Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mongodb-org</code></td>
+<td>A metapackage that will automatically install the four component packages listed below.</td>
+</tr>
+<tr>
+<td><code>mongodb-org-server</code></td>
+<td>Contains the mongod daemon and associated configuration and init scripts.</td>
+</tr>
+<tr>
+<td><code>mongodb-org-mongos</code></td>
+<td>Contains the mongos daemon.</td>
+</tr>
+<tr>
+<td><code>mongodb-org-shell</code></td>
+<td>Contains the mongo shell.</td>
+</tr>
+<tr>
+<td><code>mongodb-org-tools</code></td>
+<td>Contains the following MongoDB tools: mongoimport bsondump, mongodump, mongoexport, mongofiles, mongoperf, mongorestore, mongostat, and mongotop.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>启动服务</strong></p>
+<p><code>mongod -f /etc/mongod.conf</code></p>
+<p>mongo默认不加载conf文件，所以用service方法是无法正常启动的，暂时使用自带方法开启服务。</p>
+<p>更多安装细节可以参照<a href="https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/">mongo官方指南</a>。</p>
+<h3>Nginx</h3>
+<p><strong>创建repo文件</strong></p>
+<p><code>vim /etc/yum.repos.d/nginx.repo</code></p>
+<div class="highlight"><pre><span></span><span class="k">[nginx]</span>
+<span class="na">name</span><span class="o">=</span><span class="s">nginx repo</span>
+<span class="na">baseurl</span><span class="o">=</span><span class="s">http://nginx.org/packages/centos/$releasever/$basearch/</span>
+<span class="na">gpgcheck</span><span class="o">=</span><span class="s">0</span>
+<span class="na">enabled</span><span class="o">=</span><span class="s">1</span>
+</pre></div>
+
+
+<p><strong>安装和开启服务</strong></p>
+<div class="highlight"><pre><span></span>yum install -y nginx
+service nginx start
+</pre></div>
+
+
+<p>service方法启动nginx默认会加载<code>/etc/nginx/nginx.conf</code>配置。</p>
+<h3>查看系统安装路径</h3>
+<p>使用仓库安装有一点不是很清晰，那就是安装目录并非自己指定，有时需要修改一些文件时找不到文件在哪里，我们可以通过如下方法找到软件的所有文件目录。</p>
+<p><code>rpm -qa |grep mongodb</code></p>
+<div class="highlight"><pre><span></span>mongodb-org-mongos-3.6.5-1.el6.x86_64
+mongodb-org-server-3.6.5-1.el6.x86_64
+mongodb-org-tools-3.6.5-1.el6.x86_64
+mongodb-org-3.6.5-1.el6.x86_64
+mongodb-org-shell-3.6.5-1.el6.x86_64
+</pre></div>
+
+
+<p>例如我们要查看server的所有文件目录，则执行</p>
+<p><code>rpm -ql mongodb-org-server-3.6.5-1.el6.x86_64</code></p>
+<div class="highlight"><pre><span></span>/etc/init.d/mongod
+/etc/mongod.conf
+/etc/sysconfig/mongod
+/usr/bin/mongod
+/usr/share/doc/mongodb-org-server-3.6.5
+/usr/share/doc/mongodb-org-server-3.6.5/GNU-AGPL-3.0
+/usr/share/doc/mongodb-org-server-3.6.5/MPL-2
+/usr/share/doc/mongodb-org-server-3.6.5/README
+/usr/share/doc/mongodb-org-server-3.6.5/THIRD-PARTY-NOTICES
+/usr/share/man/man1/mongod.1
+/var/lib/mongo
+/var/log/mongodb
+/var/log/mongodb/mongod.log
+/var/run/mongodb
+</pre></div>
+
+
+<h3>SSH免密登录服务器</h3>
+<p>Linux上免密登录通常用RSA公钥和密钥实现，本地生成钥匙后，公钥上传至服务器，之后便可以免密登录了。</p>
+<p><strong>本地生成公钥密钥</strong></p>
+<p><code>ssh-keygen -t rsa -b 4096</code></p>
+<p>默认公钥会存储在<code>~/.ssh/id_rsa.pub</code>，备用。</p>
+<p><strong>修改服务器sshd配置</strong></p>
+<p><code>vim /etc/ssh/sshd_config</code></p>
+<div class="highlight"><pre><span></span>PubkeyAuthentication yes #解开注释
+AuthorizedKeysFile .ssh/authorized_keys #解开注释
+</pre></div>
+
+
+<p><strong>上传本地公钥至服务器</strong></p>
+<p><code>ssh-copy-id -i .ssh/id_rsa.pub -p port user@ip</code></p>
+<p>修改上面的端口、用户名和ip，再在本地<code>.bashrc</code>或<code>.zshrc</code>新建一条alias就可以非常方便快捷的登录了。</p><!--<p>There are <a href="/centos6-datebase-server.html#disqus_thread">comments</a>.</p>-->
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>过往文章</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/python-send-gmail.html" rel="bookmark"
+                           title="Permalink to 使用Python发送Gmail">使用Python发送Gmail</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2018-06-11T14:20:00+08:00">
                 发布时间: 六月 11, 2018
@@ -32,144 +199,18 @@
         </address>
 <p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
 <p>标签: <a href="/tag/python.html">python</a> <a href="/tag/gmail.html">gmail</a> </p>
-</footer><!-- /.post-info --><p>本文基于一个真实的项目，使用python3.6和最新官方smtplib接口。项目的目的是爬取网站，然后通过邮件给自己发送邮件提醒新文章。最后使用linux系统的crond服务定时执行。</p>
+</footer><!-- /.post-info -->                <p>本文基于一个真实的项目，使用python3.6和最新官方smtplib接口。项目的目的是爬取网站，然后通过邮件给自己发送邮件提醒新文章。最后使用linux系统的crond服务定时执行。</p>
 <h3>发邮件方法</h3>
 <p>在定义发邮件方法之前，我们还定义了一个类和类中的爬虫，单拿出来发邮件来说，代码如下：</p>
 <div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">sent_email</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">fromaddr</span> <span class="o">=</span> <span class="s1">&#39;princelailai@gmail.com&#39;</span>
         <span class="n">toaddrs</span>  <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;princelailai@gmail.com&#39;</span><span class="p">]</span>
         <span class="n">subject</span> <span class="o">=</span> <span class="s2">&quot;{}{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y年%m月</span><span class="si">%d</span><span class="s1">日&#39;</span><span class="p">),</span><span class="s1">&#39;共有产权房信息&#39;</span><span class="p">)</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;日期:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">标题:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">地址:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="n">MIMEText</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s1">&#39;plain&#39;</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="n">fromaddr</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">Header</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">toaddrs</span><span class="p">),</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;Subject&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="c1">#message = f&quot;From: {fromaddr}\nTo: {&#39;,&#39;.join(toaddrs)}\nSubject: {subject}\n\n{msg}&quot;</span>
-        <span class="n">username</span> <span class="o">=</span> <span class="s1">&#39;princelailai@gmail.com&#39;</span>
-        <span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;app password&#39;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="s1">&#39;smtp.gmail.com&#39;</span><span class="p">,</span><span class="s1">&#39;587&#39;</span><span class="p">)</span>
-            <span class="n">server</span><span class="o">.</span><span class="n">ehlo</span><span class="p">()</span>
-            <span class="n">server</span><span class="o">.</span><span class="n">starttls</span><span class="p">()</span>
-            <span class="n">server</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">)</span>
-            <span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">fromaddr</span><span class="p">,</span> <span class="n">toaddrs</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">as_string</span><span class="p">())</span>
-            <span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Send Email Successful.&#39;</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Send Email Failed.&#39;</span><span class="p">)</span>
-</pre></div>
-
-
-<p>需要注意的有几点：</p>
-<ol>
-<li>邮件正文需要是MIMEText格式的</li>
-<li>发信人、收信人、主题要用Header添加</li>
-<li>你过你的Google账号开启了两步验证，那么你的邮箱密码就不是登录密码，而是app密码，关于app密码怎么生成可以查看这篇文章<a href="https://support.google.com/accounts/answer/185833#generate">Sign in using App&nbsp;Passwords</a></li>
-<li>其他关于smtp地址和端口的问题，可以查看这篇文章<a href="https://support.google.com/mail/answer/7126229?visit_id=1-636642850165284125-2014875658&amp;hl=en&amp;rd=1">Use <span class="caps">IMAP</span> to check Gmail on other email&nbsp;clients</a></li>
-</ol>
-<h3>定时启动</h3>
-<p>创建一个文本文件，用于创建单一用户的crond文件</p>
-<div class="highlight"><pre><span></span><span class="m">0</span> <span class="m">6</span> */3 * * /root/miniconda3/bin/python /root/monitor_house_info/monitor_house_info.py
-</pre></div>
-
-
-<p>关于crond配置，网上教程很多，或者<code>man 5 crontab</code>就可以看到详细的用法。</p>
-<p>最后输入<code>crontab file</code>导入文件，就可以坐等收邮件了。</p>
-<h3>全部代码</h3>
-<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
-
-
-<span class="kn">from</span> <span class="nn">requests_html</span> <span class="kn">import</span> <span class="n">HTMLSession</span>
-<span class="kn">import</span> <span class="nn">smtplib</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">email.mime.text</span> <span class="kn">import</span> <span class="n">MIMEText</span>
-<span class="kn">from</span> <span class="nn">email.header</span> <span class="kn">import</span> <span class="n">Header</span>
-
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
-
-<span class="k">class</span> <span class="nc">monitor_house_info</span><span class="p">:</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">realpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">realdb</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">realpath</span><span class="p">,</span><span class="s1">&#39;db.json&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;http://cpzjw.bjchp.gov.cn/cpzjw/336693/index.html&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;http://cpzjw.bjchp.gov.cn/cpzjw/336551/336554/index.html&#39;</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">read_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">realdb</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">realdb</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Readed json db.&#39;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">get_news</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">url</span><span class="p">):</span>
-        <span class="n">session</span> <span class="o">=</span> <span class="n">HTMLSession</span><span class="p">()</span>
-        <span class="n">resp</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="n">element_date</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;div.easysite-article-content &gt; ul &gt; li &gt; span.date04&#39;</span><span class="p">)</span>
-        <span class="n">date</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">text</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">element_date</span><span class="p">]</span>
-        <span class="n">element_content</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;div.easysite-article-content &gt; ul &gt; li &gt; span.title04&#39;</span><span class="p">)</span>
-        <span class="n">content</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">element_content</span><span class="p">]</span>
-        <span class="n">link</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">absolute_links</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">element_content</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">l</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">link</span><span class="p">,</span><span class="n">date</span><span class="p">,</span><span class="n">content</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">,</span><span class="n">c</span><span class="p">]</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;geted web content.&#39;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">valid_news</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">realdb</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
-            <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">,</span><span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;valided news.&#39;</span><span class="p">)</span>
-
-
-    <span class="k">def</span> <span class="nf">sent_email</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">fromaddr</span> <span class="o">=</span> <span class="s1">&#39;princelailai@gmail.com&#39;</span>
-        <span class="n">toaddrs</span>  <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;princelailai@gmail.com&#39;</span><span class="p">]</span>
-        <span class="n">subject</span> <span class="o">=</span> <span class="s2">&quot;{}{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y年%m月</span><span class="si">%d</span><span class="s1">日&#39;</span><span class="p">),</span><span class="s1">&#39;共有产权房信息&#39;</span><span class="p">)</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;日期:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">标题:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">地址:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="n">MIMEText</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s1">&#39;plain&#39;</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="n">fromaddr</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">Header</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">toaddrs</span><span class="p">),</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;Subject&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">username</span> <span class="o">=</span> <span class="s1">&#39;princelailai@gmail.com&#39;</span>
-        <span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;app password&#39;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="s1">&#39;smtp.gmail.com&#39;</span><span class="p">,</span><span class="s1">&#39;587&#39;</span><span class="p">)</span>
-            <span class="n">server</span><span class="o">.</span><span class="n">ehlo</span><span class="p">()</span>
-            <span class="n">server</span><span class="o">.</span><span class="n">starttls</span><span class="p">()</span>
-            <span class="n">server</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">)</span>
-            <span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">fromaddr</span><span class="p">,</span> <span class="n">toaddrs</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">as_string</span><span class="p">())</span>
-            <span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Send Email Successful.&#39;</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Send Email Failed.&#39;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">read_json</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">get_news</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">valid_news</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sent_email</span><span class="p">()</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">moni</span> <span class="o">=</span> <span class="n">monitor_house_info</span><span class="p">()</span>
-    <span class="n">moni</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</pre></div><!--<p>There are <a href="/python-send-gmail.html#disqus_thread">comments</a>.</p>-->
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>过往文章</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;日期:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">标题:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">地址:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">k …</span></pre></div>
+                <a class="readmore" href="/python-send-gmail.html">查看全文</a>
+                <!--<p>There are <a href="/python-send-gmail.html#disqus_thread">comments</a>.</p>-->
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -221,14 +262,14 @@
 <p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
 <p>标签: <a href="/tag/git.html">git</a> <a href="/tag/github.html">github</a> </p>
 </footer><!-- /.post-info -->                <h3>ssh和密钥</h3>
-<p><code>ssh-keygen -t rsa -b 4096 -C "princelailai@gmail.com"</code>：生成密钥
-<code>cat ~/.ssh/id_rsa.pub</code>：查看密钥
-<code>ssh -T git@github.com</code>：测试密钥是否可以正常登录</p>
+<p><code>ssh-keygen -t rsa -b 4096 -C "princelailai@gmail.com"</code>：生成密钥</p>
+<p><code>cat ~/.ssh/id_rsa.pub</code>：查看密钥</p>
+<p><code>ssh -T git@github.com</code>：测试密钥是否可以正常登录</p>
 <h3>设置</h3>
-<p><code>git config --list</code>：列出当前repo所有设置
-<code>git config --global user.name "princelai"</code>：设置用户名
-<code>git config --global user.email "princelailai@gmail.com"</code>：设置E-mail
-<code>echo "# mydotfiles" &gt; README.md</code>：</p>
+<p><code>git config --list</code>：列出当前repo所有设置</p>
+<p><code>git config --global user.name "princelai"</code>：设置用户名</p>
+<p><code>git config --global user.email "princelailai@gmail.com"</code>：设置E-mail</p>
+<p><code>echo "# mydotfiles" &gt; README.md</code>：</p>
 <h3>基本操作</h3>
 <p><code>git init …</code></p>
                 <a class="readmore" href="/git-and-github.html">查看全文</a>
@@ -274,46 +315,6 @@
 <li>name or flags - 名称或选项字符串列表，例如。foo或-f,&nbsp;&#8212;foo …</li></ul></blockquote>
                 <a class="readmore" href="/argparse-brief-usage.html">查看全文</a>
                 <!--<p>There are <a href="/argparse-brief-usage.html#disqus_thread">comments</a>.</p>-->
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/matplotlib-chinese-fonts.html" rel="bookmark"
-                           title="Permalink to matplotlib中文字体配置">matplotlib中文字体配置</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-12-18T16:01:00+08:00">
-                发布时间: 十二月 18, 2017
-        </abbr>
-
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/matplotlib.html">matplotlib</a> </p>
-</footer><!-- /.post-info -->                <p>matplotlib是Python的优秀绘图包，但是不论是在Windows还是Linux中默认都是不支持中文的，尤其是在Linux中设置更加复杂一点，设置方法如下：</p>
-<p>首先我们需要获取到matplotlib配置文件的文件夹</p>
-<div class="highlight"><pre><span></span>python -c <span class="s2">&quot;import matplotlib as mpl;print(mpl.get_configdir())&quot;</span>
-/home/kevin/.config/matplotlib
-</pre></div>
-
-
-<!--more-->
-
-<p>然后需要一个默认的matplotlibrc文件用于修改</p>
-<div class="highlight"><pre><span></span>python -c <span class="s2">&quot;import matplotlib as mpl;print(mpl.matplotlib_fname())&quot;</span>
-/opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc
-</pre></div>
-
-
-<p>这个位置会根据每个人安装位置不同而改变</p>
-<p>然后把默认的rc文件拷贝到用户的配置文件夹</p>
-<div class="highlight"><pre><span></span>cp /opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc ~/.config …</pre></div>
-                <a class="readmore" href="/matplotlib-chinese-fonts.html">查看全文</a>
-                <!--<p>There are <a href="/matplotlib-chinese-fonts.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
                 </ol><!-- /#posts-list -->
