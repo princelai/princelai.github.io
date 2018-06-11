@@ -23,6 +23,47 @@
                     <ol id="posts-list" class="hfeed" start="4">
             <li><article class="hentry">
                 <header>
+                    <h1><a href="/argparse-brief-usage.html" rel="bookmark"
+                           title="Permalink to argparse模块简要用法">argparse模块简要用法</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-01-08T17:41:00+08:00">
+                发布时间: 一月 08, 2018
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/argparse.html">argparse</a> </p>
+</footer><!-- /.post-info -->                <p>argparse是Python用于解析命令行参数的模块，拥有更强大的功能、更友好的使用方法，用来替代原始的sys.argv。</p>
+<p>argparse的大致用法如下：</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span> <span class="c1">#导入模块</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span> <span class="c1">#创建解析器</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">()</span> <span class="c1">#添加参数</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span> <span class="c1">#解析参数</span>
+</pre></div>
+
+
+<p>创建解析器时的可选参数很多，但没有特殊需求的情况下，默认参数就能很好的工作，所以这部分使用时临时查文档就能解决，不做过多记录。</p>
+<p>这里仅记录下添加参数时的各种选项搭配，使用方法和选项如下：</p>
+<div class="highlight"><pre><span></span><span class="n">ArgumentParser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="n">name</span> <span class="ow">or</span> <span class="n">flags</span><span class="o">...</span><span class="p">[,</span> <span class="n">action</span><span class="p">][,</span> <span class="n">nargs</span><span class="p">][,</span> <span class="n">const</span><span class="p">][,</span> <span class="n">default</span><span class="p">][,</span> <span class="nb">type</span><span class="p">][,</span> <span class="n">choices</span><span class="p">][,</span> <span class="n">required</span><span class="p">][,</span> <span class="n">help</span><span class="p">][,</span> <span class="n">metavar</span><span class="p">][,</span> <span class="n">dest</span><span class="p">])</span>
+</pre></div>
+
+
+<p>每一个参数的含义：</p>
+<blockquote>
+<ul>
+<li>name or flags - 名称或选项字符串列表，例如。foo或-f,&nbsp;&#8212;foo …</li></ul></blockquote>
+                <a class="readmore" href="/argparse-brief-usage.html">查看全文</a>
+                <!--<p>There are <a href="/argparse-brief-usage.html#disqus_thread">comments</a>.</p>-->
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
                     <h1><a href="/matplotlib-chinese-fonts.html" rel="bookmark"
                            title="Permalink to matplotlib中文字体配置">matplotlib中文字体配置</a></h1>
                 </header>
@@ -195,45 +236,6 @@ apt upgrade
 <div class="highlight"><pre><span></span><span class="nb">set</span> <span class="nv">PATH</span><span class="o">=</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="p">;</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="se">\L</span>ibrary<span class="se">\b</span>in …</pre></div>
                 <a class="readmore" href="/config-pip-conda.html">查看全文</a>
                 <!--<p>There are <a href="/config-pip-conda.html#disqus_thread">comments</a>.</p>-->
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/openwrt-samba.html" rel="bookmark"
-                           title="Permalink to openwrt开启Samba作为共享中心">openwrt开启Samba作为共享中心</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2014-01-05T01:29:00+08:00">
-                发布时间: 一月 05, 2014
-        </abbr>
-
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/openwrt.html">openwrt</a> </p>
-</footer><!-- /.post-info -->                <p>为Openwrt接入一个大U盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机BT下载提供一个基础。</p>
-<h3>安装</h3>
-<div class="highlight"><pre><span></span>opkg update
-opkg install samba36-server luci-app-samba
-</pre></div>
-
-
-<!--more-->
-
-<h4>配置文件</h4>
-<p>samba的配置文件只有两个，而且默认配置稍作修改就可以使用</p>
-<div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/samba/smb.conf.template
-<span class="o">[</span>global<span class="o">]</span>
-    netbios <span class="nv">name</span> <span class="o">=</span> OpenWrt
-    display <span class="nv">charset</span> <span class="o">=</span> UTF-8
-    <span class="nv">interfaces</span> <span class="o">=</span> <span class="m">127</span>.0.0.1/8 lo <span class="m">192</span>.168.3.1/24 fd73:3a9a:156::1/60 br-lan <span class="c1">#内网IP</span>
-    server <span class="nv">string</span> <span class="o">=</span> OpenWrt …</pre></div>
-                <a class="readmore" href="/openwrt-samba.html">查看全文</a>
-                <!--<p>There are <a href="/openwrt-samba.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
                 </ol><!-- /#posts-list -->

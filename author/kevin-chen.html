@@ -21,7 +21,163 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/pandas-timeseries.html">Pandas时间处理函数速度对比</a></h1>
+                    <h1 class="entry-title"><a href="/python-send-gmail.html">使用Python发送Gmail</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2018-06-11T14:20:00+08:00">
+                发布时间: 六月 11, 2018
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/gmail.html">gmail</a> </p>
+</footer><!-- /.post-info --><p>本文基于一个真实的项目，使用python3.6和最新官方smtplib接口。项目的目的是爬取网站，然后通过邮件给自己发送邮件提醒新文章。最后使用linux系统的crond服务定时执行。</p>
+<h3>发邮件方法</h3>
+<p>在定义发邮件方法之前，我们还定义了一个类和类中的爬虫，单拿出来发邮件来说，代码如下：</p>
+<div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">sent_email</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fromaddr</span> <span class="o">=</span> <span class="s1">&#39;princelailai@gmail.com&#39;</span>
+        <span class="n">toaddrs</span>  <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;princelailai@gmail.com&#39;</span><span class="p">]</span>
+        <span class="n">subject</span> <span class="o">=</span> <span class="s2">&quot;{}{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y年%m月</span><span class="si">%d</span><span class="s1">日&#39;</span><span class="p">),</span><span class="s1">&#39;共有产权房信息&#39;</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;日期:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">标题:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">地址:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">MIMEText</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s1">&#39;plain&#39;</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="n">fromaddr</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">Header</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">toaddrs</span><span class="p">),</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;Subject&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="c1">#message = f&quot;From: {fromaddr}\nTo: {&#39;,&#39;.join(toaddrs)}\nSubject: {subject}\n\n{msg}&quot;</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="s1">&#39;princelailai@gmail.com&#39;</span>
+        <span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;app password&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="s1">&#39;smtp.gmail.com&#39;</span><span class="p">,</span><span class="s1">&#39;587&#39;</span><span class="p">)</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">ehlo</span><span class="p">()</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">starttls</span><span class="p">()</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">)</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">fromaddr</span><span class="p">,</span> <span class="n">toaddrs</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">as_string</span><span class="p">())</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Send Email Successful.&#39;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Send Email Failed.&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>需要注意的有几点：</p>
+<ol>
+<li>邮件正文需要是MIMEText格式的</li>
+<li>发信人、收信人、主题要用Header添加</li>
+<li>你过你的Google账号开启了两步验证，那么你的邮箱密码就不是登录密码，而是app密码，关于app密码怎么生成可以查看这篇文章<a href="https://support.google.com/accounts/answer/185833#generate">Sign in using App&nbsp;Passwords</a></li>
+<li>其他关于smtp地址和端口的问题，可以查看这篇文章<a href="https://support.google.com/mail/answer/7126229?visit_id=1-636642850165284125-2014875658&amp;hl=en&amp;rd=1">Use <span class="caps">IMAP</span> to check Gmail on other email&nbsp;clients</a></li>
+</ol>
+<h3>定时启动</h3>
+<p>创建一个文本文件，用于创建单一用户的crond文件</p>
+<div class="highlight"><pre><span></span><span class="m">0</span> <span class="m">6</span> */3 * * /root/miniconda3/bin/python /root/monitor_house_info/monitor_house_info.py
+</pre></div>
+
+
+<p>关于crond配置，网上教程很多，或者<code>man 5 crontab</code>就可以看到详细的用法。</p>
+<p>最后输入<code>crontab file</code>导入文件，就可以坐等收邮件了。</p>
+<h3>全部代码</h3>
+<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+
+<span class="kn">from</span> <span class="nn">requests_html</span> <span class="kn">import</span> <span class="n">HTMLSession</span>
+<span class="kn">import</span> <span class="nn">smtplib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">email.mime.text</span> <span class="kn">import</span> <span class="n">MIMEText</span>
+<span class="kn">from</span> <span class="nn">email.header</span> <span class="kn">import</span> <span class="n">Header</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">monitor_house_info</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">realpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">realdb</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">realpath</span><span class="p">,</span><span class="s1">&#39;db.json&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;http://cpzjw.bjchp.gov.cn/cpzjw/336693/index.html&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;http://cpzjw.bjchp.gov.cn/cpzjw/336551/336554/index.html&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">read_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">realdb</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">realdb</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Readed json db.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_news</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">url</span><span class="p">):</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">HTMLSession</span><span class="p">()</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">element_date</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;div.easysite-article-content &gt; ul &gt; li &gt; span.date04&#39;</span><span class="p">)</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">text</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">element_date</span><span class="p">]</span>
+        <span class="n">element_content</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;div.easysite-article-content &gt; ul &gt; li &gt; span.title04&#39;</span><span class="p">)</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">element_content</span><span class="p">]</span>
+        <span class="n">link</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">absolute_links</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">element_content</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">l</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">link</span><span class="p">,</span><span class="n">date</span><span class="p">,</span><span class="n">content</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">,</span><span class="n">c</span><span class="p">]</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;geted web content.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">valid_news</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">realdb</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">,</span><span class="n">ensure_ascii</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;valided news.&#39;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">sent_email</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fromaddr</span> <span class="o">=</span> <span class="s1">&#39;princelailai@gmail.com&#39;</span>
+        <span class="n">toaddrs</span>  <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;princelailai@gmail.com&#39;</span><span class="p">]</span>
+        <span class="n">subject</span> <span class="o">=</span> <span class="s2">&quot;{}{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y年%m月</span><span class="si">%d</span><span class="s1">日&#39;</span><span class="p">),</span><span class="s1">&#39;共有产权房信息&#39;</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;日期:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">标题:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">地址:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">MIMEText</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s1">&#39;plain&#39;</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;From&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="n">fromaddr</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;To&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">Header</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">toaddrs</span><span class="p">),</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;Subject&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="s1">&#39;princelailai@gmail.com&#39;</span>
+        <span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;app password&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="s1">&#39;smtp.gmail.com&#39;</span><span class="p">,</span><span class="s1">&#39;587&#39;</span><span class="p">)</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">ehlo</span><span class="p">()</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">starttls</span><span class="p">()</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">)</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">fromaddr</span><span class="p">,</span> <span class="n">toaddrs</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">as_string</span><span class="p">())</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Send Email Successful.&#39;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Send Email Failed.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_json</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_news</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_news</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sent_email</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">moni</span> <span class="o">=</span> <span class="n">monitor_house_info</span><span class="p">()</span>
+    <span class="n">moni</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div><!--<p>There are <a href="/python-send-gmail.html#disqus_thread">comments</a>.</p>-->
+                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>过往文章</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/pandas-timeseries.html" rel="bookmark"
+                           title="Permalink to Pandas时间处理函数速度对比">Pandas时间处理函数速度对比</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2018-06-08T10:36:00+08:00">
                 发布时间: 六月 08, 2018
@@ -32,7 +188,7 @@
         </address>
 <p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
 <p>标签: <a href="/tag/python.html">python</a> <a href="/tag/pandas.html">pandas</a> </p>
-</footer><!-- /.post-info --><p>Pandas非常擅长处理时间序列，拥有多种处理时间序列的函数和方法，自己做了几个小测试，看看内置函数都能适配哪种格式、哪种情况，速度又有多快。</p>
+</footer><!-- /.post-info -->                <p>Pandas非常擅长处理时间序列，拥有多种处理时间序列的函数和方法，自己做了几个小测试，看看内置函数都能适配哪种格式、哪种情况，速度又有多快。</p>
 <p>我用到的时间处理主要是对细粒度的时间重采样至粗粒度，之后再对重采样后的时间进行分组再进行后续操作，如求和、求平均或取最后值。</p>
 <p>所以我就设计两个场景，第一个场景是对频率为秒的时间序列重采样至一分钟然后求平均；第二个场景就是对频率为秒的时间序列重采样至3分钟然后对新的时间序列取每个时间的最新值。</p>
 <p>所以首先是要生成一组数据</p>
@@ -41,274 +197,11 @@
 <span class="n">rng</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s1">&#39;2018-04-07&#39;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;2018-04-08&#39;</span><span class="p">,</span><span class="n">freq</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size</span><span class="p">),</span><span class="n">index</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
 <span class="n">ser</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size</span><span class="p">),</span><span class="n">index</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;random&#39;</span><span class="p">]</span>
-<span class="n">ser</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;random&#39;</span>
-</pre></div>
-
-
-<p>df和ser分别对应DataFrame和Series，查看下数据格式</p>
-<p><code>df.head()</code></p>
-<div class="highlight"><pre><span></span>                       random
-2018-04-07 00:00:00  0.163995
-2018-04-07 00:00:01  0.756485
-2018-04-07 00:00:02 -0.179441
-2018-04-07 00:00:03  0.120944
-2018-04-07 00:00:04 -1.558763
-</pre></div>
-
-
-<p><code>ser.tail()</code></p>
-<div class="highlight"><pre><span></span>2018-04-07 23:59:56    1.276893
-2018-04-07 23:59:57    0.275050
-2018-04-07 23:59:58    1.029358
-2018-04-07 23:59:59    0.461299
-2018-04-08 00:00:00    1.222731
-Freq: S, Name: random, dtype: float64
-</pre></div>
-
-
-<p>接下来定义六个函数方法</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">method1</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_period</span><span class="p">(</span><span class="s1">&#39;Min&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_timestamp</span><span class="p">()</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-
-<span class="k">def</span> <span class="nf">method2</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M&#39;</span><span class="p">))</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-
-<span class="k">def</span> <span class="nf">method3</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">ser_idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">ser_idx</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;00&#39;</span><span class="p">))</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-
-<span class="k">def</span> <span class="nf">method4</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;Min&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-
-<span class="k">def</span> <span class="nf">method5</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">&#39;3Min&#39;</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">method6</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;3Min&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
-</pre></div>
-
-
-<p>方法1-方法4适用于场景一，方法5-方法6适用于场景二，接下来具体说说这六个函数和为什么要这么设计场景。</p>
-<p>方法1使用的是内置to_period方法转换周期，to_timestamp方法是为了后续操作使用timestamp更方便。</p>
-<p>方法2对索引日期进行字符串格式化然后再用内置的to_datetime方法转换回日期格式达到重采样效果。</p>
-<p>方法3看似复杂，其实和方法二类似，我之所以加上方法三是因为我本以为这个办法处理会慢很多，但是最终结果还是有点出乎我的意料的。</p>
-<p>方法4是内置的resample方法</p>
-<p>方法5是内置的asfreq方法</p>
-<p>方法6还是内置的resample方法</p>
-<p>可以看到resample方法适用范围最广，既可以对时间采取多种细粒度的操作，也能对重采样后的数据进行后续操作；而asfreq方法只能对数据进行重采样，无法进行复杂的后续操作，只能用向前/向后填充数值；to_period方法和字符串操作只能对时间进行整数采样，像45分钟，1小时30分这种更细腻的操作是不支持的。</p>
-<h3>比较速度</h3>
-<p><strong>场景1</strong></p>
-<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method1</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method2</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method3</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method4</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-
-<span class="mf">16.4</span> <span class="n">ms</span> <span class="err">±</span> <span class="mi">391</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">10</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-<span class="mi">439</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">2.52</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
-<span class="mi">485</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">10.8</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
-<span class="mf">2.13</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">9.92</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-</pre></div>
-
-
-<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method1</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method2</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method3</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method4</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
-
-<span class="mf">23.8</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">72.2</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">10</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-<span class="mi">446</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">2.71</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
-<span class="mi">492</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">3.61</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
-<span class="mf">1.63</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">15.1</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-</pre></div>
-
-
-<p>从上面对比数据得出结论，resample方法最快，to_period方法其次，两种字符串方法最慢，最快和最慢差距巨大。</p>
-<p><strong>场景2</strong></p>
-<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method5</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method6</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-
-<span class="mi">746</span> <span class="err">µ</span><span class="n">s</span> <span class="err">±</span> <span class="mf">32.5</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-<span class="mf">2.42</span> <span class="n">ms</span> <span class="err">±</span> <span class="mi">24</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-</pre></div>
-
-
-<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method5</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method6</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
-
-<span class="mi">772</span> <span class="err">µ</span><span class="n">s</span> <span class="err">±</span> <span class="mf">20.2</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-<span class="mf">1.87</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">50.5</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-</pre></div>
-
-
-<p>在场景二的测试中asfreq比resample快2倍多，如果不需要更多的后续操作，asfreq是很好的选择，否则resample方法更为全能。</p>
-<p>下方的表格总结了几种方法的优劣：</p>
-<table>
-<thead>
-<tr>
-<th>函数</th>
-<th>时间细粒度操作</th>
-<th>时间分组后续操作</th>
-<th>速度</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>asfreq</td>
-<td>X</td>
-<td>X</td>
-<td>&radic;</td>
-</tr>
-<tr>
-<td>resample</td>
-<td>&radic;</td>
-<td>&radic;</td>
-<td>&radic;</td>
-</tr>
-<tr>
-<td>to_period</td>
-<td>X</td>
-<td>&radic;</td>
-<td>&radic;</td>
-</tr>
-<tr>
-<td>字符串</td>
-<td>X</td>
-<td>&radic;</td>
-<td>X</td>
-</tr>
-</tbody>
-</table>
-<h3>Pandas Offset&nbsp;Aliases</h3>
-<table>
-<thead>
-<tr>
-<th>Alias</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>B</td>
-<td>business day frequency</td>
-</tr>
-<tr>
-<td>C</td>
-<td>custom business day frequency</td>
-</tr>
-<tr>
-<td>D</td>
-<td>calendar day frequency</td>
-</tr>
-<tr>
-<td>W</td>
-<td>weekly frequency</td>
-</tr>
-<tr>
-<td>M</td>
-<td>month end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">SM</span></td>
-<td>semi-month end frequency (15th and end of month)</td>
-</tr>
-<tr>
-<td><span class="caps">BM</span></td>
-<td>business month end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">CBM</span></td>
-<td>custom business month end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">MS</span></td>
-<td>month start frequency</td>
-</tr>
-<tr>
-<td><span class="caps">SMS</span></td>
-<td>semi-month start frequency (1st and 15th)</td>
-</tr>
-<tr>
-<td><span class="caps">BMS</span></td>
-<td>business month start frequency</td>
-</tr>
-<tr>
-<td><span class="caps">CBMS</span></td>
-<td>custom business month start frequency</td>
-</tr>
-<tr>
-<td>Q</td>
-<td>quarter end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">BQ</span></td>
-<td>business quarter end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">QS</span></td>
-<td>quarter start frequency</td>
-</tr>
-<tr>
-<td><span class="caps">BQS</span></td>
-<td>business quarter start frequency</td>
-</tr>
-<tr>
-<td>A, Y</td>
-<td>year end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">BA</span>, <span class="caps">BY</span></td>
-<td>business year end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">AS</span>, <span class="caps">YS</span></td>
-<td>year start frequency</td>
-</tr>
-<tr>
-<td><span class="caps">BAS</span>, <span class="caps">BYS</span></td>
-<td>business year start frequency</td>
-</tr>
-<tr>
-<td><span class="caps">BH</span></td>
-<td>business hour frequency</td>
-</tr>
-<tr>
-<td>H</td>
-<td>hourly frequency</td>
-</tr>
-<tr>
-<td>T, min</td>
-<td>minutely frequency</td>
-</tr>
-<tr>
-<td>S</td>
-<td>secondly frequency</td>
-</tr>
-<tr>
-<td>L, ms</td>
-<td>milliseconds</td>
-</tr>
-<tr>
-<td>U, us</td>
-<td>microseconds</td>
-</tr>
-<tr>
-<td>N</td>
-<td>nanoseconds</td>
-</tr>
-</tbody>
-</table>
-<h3>参考</h3>
-<p><a href="https://pandas.pydata.org/pandas-docs/stable/timeseries.html">官方文档</a> </p><!--<p>There are <a href="/pandas-timeseries.html#disqus_thread">comments</a>.</p>-->
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>过往文章</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+<span class="n">df …</span></pre></div>
+                <a class="readmore" href="/pandas-timeseries.html">查看全文</a>
+                <!--<p>There are <a href="/pandas-timeseries.html#disqus_thread">comments</a>.</p>-->
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -461,47 +354,6 @@ Freq: S, Name: random, dtype: float64
 </script>
                 <a class="readmore" href="/using-python-descript-vaiance-std.html">查看全文</a>
                 <!--<p>There are <a href="/using-python-descript-vaiance-std.html#disqus_thread">comments</a>.</p>-->
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/argparse-brief-usage.html" rel="bookmark"
-                           title="Permalink to argparse模块简要用法">argparse模块简要用法</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2018-01-08T17:41:00+08:00">
-                发布时间: 一月 08, 2018
-        </abbr>
-
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/argparse.html">argparse</a> </p>
-</footer><!-- /.post-info -->                <p>argparse是Python用于解析命令行参数的模块，拥有更强大的功能、更友好的使用方法，用来替代原始的sys.argv。</p>
-<p>argparse的大致用法如下：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span> <span class="c1">#导入模块</span>
-<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span> <span class="c1">#创建解析器</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">()</span> <span class="c1">#添加参数</span>
-<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span> <span class="c1">#解析参数</span>
-</pre></div>
-
-
-<p>创建解析器时的可选参数很多，但没有特殊需求的情况下，默认参数就能很好的工作，所以这部分使用时临时查文档就能解决，不做过多记录。</p>
-<p>这里仅记录下添加参数时的各种选项搭配，使用方法和选项如下：</p>
-<div class="highlight"><pre><span></span><span class="n">ArgumentParser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="n">name</span> <span class="ow">or</span> <span class="n">flags</span><span class="o">...</span><span class="p">[,</span> <span class="n">action</span><span class="p">][,</span> <span class="n">nargs</span><span class="p">][,</span> <span class="n">const</span><span class="p">][,</span> <span class="n">default</span><span class="p">][,</span> <span class="nb">type</span><span class="p">][,</span> <span class="n">choices</span><span class="p">][,</span> <span class="n">required</span><span class="p">][,</span> <span class="n">help</span><span class="p">][,</span> <span class="n">metavar</span><span class="p">][,</span> <span class="n">dest</span><span class="p">])</span>
-</pre></div>
-
-
-<p>每一个参数的含义：</p>
-<blockquote>
-<ul>
-<li>name or flags - 名称或选项字符串列表，例如。foo或-f,&nbsp;&#8212;foo …</li></ul></blockquote>
-                <a class="readmore" href="/argparse-brief-usage.html">查看全文</a>
-                <!--<p>There are <a href="/argparse-brief-usage.html#disqus_thread">comments</a>.</p>-->
                 </div><!-- /.entry-content -->
             </article></li>
                 </ol><!-- /#posts-list -->

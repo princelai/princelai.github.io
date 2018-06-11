@@ -23,6 +23,45 @@
                     <ol id="posts-list" class="hfeed" start="4">
             <li><article class="hentry">
                 <header>
+                    <h1><a href="/openwrt-samba.html" rel="bookmark"
+                           title="Permalink to openwrt开启Samba作为共享中心">openwrt开启Samba作为共享中心</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-01-05T01:29:00+08:00">
+                发布时间: 一月 05, 2014
+        </abbr>
+
+        <address class="vcard author">
+                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
+        </address>
+<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
+<p>标签: <a href="/tag/openwrt.html">openwrt</a> </p>
+</footer><!-- /.post-info -->                <p>为Openwrt接入一个大U盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机BT下载提供一个基础。</p>
+<h3>安装</h3>
+<div class="highlight"><pre><span></span>opkg update
+opkg install samba36-server luci-app-samba
+</pre></div>
+
+
+<!--more-->
+
+<h4>配置文件</h4>
+<p>samba的配置文件只有两个，而且默认配置稍作修改就可以使用</p>
+<div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/samba/smb.conf.template
+<span class="o">[</span>global<span class="o">]</span>
+    netbios <span class="nv">name</span> <span class="o">=</span> OpenWrt
+    display <span class="nv">charset</span> <span class="o">=</span> UTF-8
+    <span class="nv">interfaces</span> <span class="o">=</span> <span class="m">127</span>.0.0.1/8 lo <span class="m">192</span>.168.3.1/24 fd73:3a9a:156::1/60 br-lan <span class="c1">#内网IP</span>
+    server <span class="nv">string</span> <span class="o">=</span> OpenWrt …</pre></div>
+                <a class="readmore" href="/openwrt-samba.html">查看全文</a>
+                <!--<p>There are <a href="/openwrt-samba.html#disqus_thread">comments</a>.</p>-->
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
                     <h1><a href="/openwrt-extroot.html" rel="bookmark"
                            title="Permalink to 用extroot为openwrt扩充存储空间">用extroot为openwrt扩充存储空间</a></h1>
                 </header>
