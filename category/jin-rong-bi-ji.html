@@ -1,380 +1,194 @@
 <!DOCTYPE html>
 <html lang="zh">
-<head>
-        <meta charset="utf-8" />
-        <title>Solarck - 金融笔记</title>
-        <link rel="stylesheet" href="/theme/css/main.css" />
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
+    <title>  金融笔记
+ | Solarck</title>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
-                <nav><ul>
-                    <li><a href="/category/itbi-ji.html">IT笔记</a></li>
-                    <li class="active"><a href="/category/jin-rong-bi-ji.html">金融笔记</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
+    <meta name="author" content="Kevin Chen"/>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/Is-AIP-better-than-ETF.html">用数据验证定投是否优于直接投资</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2018-06-06T17:27:00+08:00">
-                发布时间: 六月 06, 2018
-        </abbr>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css"/>
+    <link rel="stylesheet" href="/theme/css/jquery.mglass.css"/>
+    <link rel="stylesheet" href="/theme/css/pygment-solarized-dark.css"/>
+    <link rel="stylesheet" href="/theme/css/style.css"/>
 
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/jin-rong-bi-ji.html">金融笔记</a></p>
-<p>标签: <a href="/tag/ding-tou.html">定投</a> <a href="/tag/etf.html">ETF</a> </p>
-</footer><!-- /.post-info --><p>一直以来，定投的营销话术都是分批建仓，上涨时投资少降低成本，下跌时投资多赚取低估价值，但定投是否真的如宣传的那么美好？今天就用数据来模拟两种投资方式，看看孰优孰劣。</p>
-<h3>数据说明</h3>
-<p>本次实验使用三只ETF基金作为投资和定投标的，分别为华夏上证50ETF（510050），华泰柏瑞沪深300ETF（510300），广发中证500ETF（510510），时间区间为2013年5月27日至2018年6月7日。</p>
-<p>先上图了解下这段时间ETF基金大致走势。</p>
-<p><em>50ETF月线</em></p>
-<p><img alt="上证50ETF" src="http://kevinstuchuang.qiniudn.com/blog-pic/ETF50close.png"></p>
-<p><em>500ETF周线</em></p>
-<p><img alt="500ETF" src="http://kevinstuchuang.qiniudn.com/blog-pic/ETF500close.png"></p>
-<p>这段区间整体来看是上涨的，大盘股涨的多，小盘股涨得少。分段来看2013年中至2014年中，属于震荡行情，2014年中至2015年中是暴涨行情，2015年中至2016年初是暴跌行情，2016年初至2018年中行情分化，大盘股再次进入牛市，中盘股属于慢牛，小盘股是横盘震荡走势。</p>
-<p>选择这个区间的行情，是因为这五年属于一个完整的周期，活跃时波动率大，行情过后的低迷时期波动率又小，是典型的中国股市。另外从长期来看，股票波动向上才应该是上市公司内在价值增长的表现。</p>
-<p>当然，用这个区间的数据做分析是有一个缺点的，就是这三只ETF基金整体涨幅都在40%-50%之间，如果在一开始就持有至当前日期，那么一定是一次性直接投资要优于定投，不过放心，后面编程不会让这种事情发生，我会加入时间随机项，尽量减小整体上涨带来的影响。</p>
-<h3>开始实验</h3>
-<p>首先要导入用到的包</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tushare</span> <span class="kn">as</span> <span class="nn">ts</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-</pre></div>
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Istok+Web' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
+      <link href='https://fonts.googleapis.com/css?family=Expletus+Sans' rel='stylesheet' type='text/css'>
 
 
-<p>之后利用tushare包，获取到三只ETF基金的收盘价，放入一个DataFrame内，这里我创建了一个类，主要是为了代码整洁考虑。</p>
-<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">AutoInvestmentPlan</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">code_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;510050&#39;</span><span class="p">,</span><span class="s1">&#39;510300&#39;</span><span class="p">,</span><span class="s1">&#39;510510&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_date</span> <span class="o">=</span> <span class="s1">&#39;2013-05-27&#39;</span>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
-    <span class="k">def</span> <span class="nf">get_etf_close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">code</span><span class="p">,</span><span class="n">start</span><span class="p">):</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_k_data</span><span class="p">(</span><span class="n">code</span><span class="p">,</span><span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">)</span>
-        <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-        <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">close</span>
-
-    <span class="k">def</span> <span class="nf">combin_to_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">close_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">code_list</span><span class="p">:</span>
-            <span class="n">close_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_etf_close</span><span class="p">(</span><span class="n">code</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">start_date</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">close_list</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ETF50&#39;</span><span class="p">,</span><span class="s1">&#39;ETF300&#39;</span><span class="p">,</span><span class="s1">&#39;ETF500&#39;</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">combin_to_df</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">monthly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">&#39;M&#39;</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">weekly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="p">)</span>
-</pre></div>
+    <!-- Feeds -->
 
 
-<p>获取数据需要对类实例化，然后就得到了周和月数据</p>
-<div class="highlight"><pre><span></span><span class="n">aip</span> <span class="o">=</span> <span class="n">AutoInvestmentPlan</span><span class="p">()</span>
-<span class="n">aip</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
-</pre></div>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="page-header">
+          <a href="" class="avatar-container pull-left">
+            <div class="avatar ">
+              <div class="side"><img src="static/avatar.jpg" class="img-responsive"/></div>
+            </div>
+          </a>
+        <h1><a href="">Solarck</a> <small>金融民工与程序猿的结合体</small></h1>
+      </div>
+
+      <nav class="navbar navbar-default">
+
+        <!-- Hamburger menu for mobile -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#plumage-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="" title="金融民工与程序猿的结合体">Solarck</a>
+        </div>
+
+        <!-- Menus and search forms -->
+        <div class="collapse navbar-collapse" id="plumage-navbar-collapse-1">
+
+          <ul class="nav navbar-nav">
+<li >
+                <a href="">主页</a>
+              </li>
+<li >
+                <a href="about">关于</a>
+              </li>
+<li >
+                <a href="resume">简历</a>
+              </li>
+<li >
+                  <a href="/category/itbi-ji.html">IT笔记</a>
+                </li>
+<li  class="active" >
+                  <a href="/category/jin-rong-bi-ji.html">金融笔记 <span class="sr-only">(current)</span></a>
+                </li>
+          </ul>
 
 
-<p>这里需要等待几秒种，运行完成后就可以查看我们的数据了</p>
-<p><strong>周数据最新的5个收盘价</strong></p>
-<p><code>aip.weekly.tail()</code></p>
-<div class="highlight"><pre><span></span>            ETF50  ETF300  ETF500
-date                             
-2018-05-06  2.634   3.770   1.646
-2018-05-13  2.716   3.873   1.667
-2018-05-20  2.733   3.899   1.670
-2018-05-27  2.654   3.811   1.649
-2018-06-03  2.643   3.777   1.588
-</pre></div>
+            <form class="navbar-form navbar-right" role="search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fa
+                        fa-search fa-fw"></i></button>
+                  </span>
+                </div>
+              </div>
+            </form>
+
+        </div>
+
+      </nav>
+
+    </div>
 
 
-<p><strong>月收益率数据</strong></p>
-<p><code>aip.monthly.pct_change().describe()</code></p>
-<div class="highlight"><pre><span></span>           ETF50     ETF300     ETF500
-count  60.000000  60.000000  60.000000
-mean    0.008889   0.009014   0.009978
-std     0.076945   0.073923   0.081489
-min    -0.182533  -0.224457  -0.279845
-25%    -0.022543  -0.018264  -0.025160
-50%     0.002254   0.006061   0.015203
-75%     0.035246   0.041125   0.049516
-max     0.334728   0.254035   0.204142
-</pre></div>
+    <div class="container main">
 
 
-<p>接下来在定义用来比较的函数</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="n">underlying</span><span class="p">,</span><span class="n">df_period</span><span class="p">,</span><span class="n">times</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">money</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">plot</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="n">df_period</span><span class="p">[</span><span class="n">underlying</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;{} close price&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">underlying</span><span class="p">))</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">df_period</span><span class="o">.</span><span class="n">index</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="n">df_period</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)])</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">df_period</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">):]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">df_period</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">,:]</span>
-        <span class="n">cumsum_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">((</span><span class="n">money</span> <span class="o">/</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">underlying</span><span class="p">]))</span>
-        <span class="n">cumsum_values</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;share_period&#39;</span><span class="p">]</span>
-        <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;share_cum&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;share_period&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
-        <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumsum_values</span><span class="o">.</span><span class="n">share_cum</span> <span class="o">*</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">underlying</span><span class="p">]</span>
-        <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;payoff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">money</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">cumsum_values</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+      <div class="row">
+        <div class=" col-md-12  ">
+  <h1>
+    <a  href="/category/jin-rong-bi-ji.html" rel="bookmark" title="Permalink to 金融笔记 articles">金融笔记 articles</a>
+  </h1>
+        </div>
+      </div>
 
-        <span class="n">a</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">underlying</span><span class="p">]</span> <span class="o">/</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">underlying</span><span class="p">]</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;payoff&#39;</span><span class="p">]</span>
-        <span class="n">b</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;AIP&#39;</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
-            <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-        <span class="n">exceed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="o">*</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;from {} to {},dirctly invest ETF exceed AIP {:.2%}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span><span class="n">end</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span><span class="n">exceed</span><span class="p">))</span>
-        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">exceed</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">In {} times simulation,dirctly invest ETF exceed AIP</span><span class="se">\&#39;</span><span class="s1">s mean is {:.2%}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">times</span><span class="p">,</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">result</span><span class="p">)))</span>
-</pre></div>
+      <div class="row">
 
 
-<p>这个比较函数从给定的ETF基金中的前半段时间随机选取一个日期，然后至少持有18个月，至多持有到当前日期，用这段时间的数据分别模拟在初始日期全部投资至结束和在区间内定投的收益情况。使用方法如下：</p>
-<div class="highlight"><pre><span></span>#用每月定投1000元ETF50来比较
-compare(&#39;ETF50&#39;,aip.monthly)
-
-#用每周定投1000元ETF500来比较
-compare(&#39;ETF500&#39;,aip.weekly)
-
-#用每周定投500元ETF300来比较，共模拟10次，每次打印出走势对比图
-compare(&#39;ETF300&#39;,aip.weekly,times=10,money=500,plot=True)
-</pre></div>
+        <div class=" col-md-12 " id="content" role="main">
+  <dl class="dl-horizontal">
+      <dt><abbr class="published" title="2018-06-06T17:27:00+08:00">六月 06, 2018</abbr></dt>
+      <dd><a href="/Is-AIP-better-than-ETF.html">用数据验证定投是否优于直接投资</a></dd>
+      <dt><abbr class="published" title="2018-01-15T15:35:00+08:00">一月 15, 2018</abbr></dt>
+      <dd><a href="/using-python-descript-vaiance-std.html">用股票数据说明方差和标准差的特性</a></dd>
+  </dl>
+        </div>
 
 
-<h3>比较结果</h3>
-<p><code>compare('ETF50',aip.monthly)</code></p>
-<div class="highlight"><pre><span></span>from 2015-09-30 to 2017-08-31,dirctly invest ETF exceed AIP 8.07%
-from 2014-07-31 to 2016-06-30,dirctly invest ETF exceed AIP 30.34%
-from 2014-09-30 to 2017-08-31,dirctly invest ETF exceed AIP 45.93%
-from 2015-05-31 to 2017-12-31,dirctly invest ETF exceed AIP -26.74%
-from 2014-03-31 to 2017-06-30,dirctly invest ETF exceed AIP 54.43%
-from 2015-09-30 to 2017-04-30,dirctly invest ETF exceed AIP 4.29%
-from 2015-07-31 to 2017-04-30,dirctly invest ETF exceed AIP -9.27%
-from 2014-06-30 to 2016-10-31,dirctly invest ETF exceed AIP 47.17%
-from 2015-07-31 to 2017-09-30,dirctly invest ETF exceed AIP -7.44%
-from 2014-10-31 to 2016-06-30,dirctly invest ETF exceed AIP 31.91%
-from 2014-07-31 to 2017-11-30,dirctly invest ETF exceed AIP 46.67%
-from 2015-06-30 to 2017-08-31,dirctly invest ETF exceed AIP -22.72%
-from 2014-04-30 to 2017-06-30,dirctly invest ETF exceed AIP 52.55%
-from 2014-04-30 to 2016-12-31,dirctly invest ETF exceed AIP 44.92%
-from 2014-04-30 to 2015-10-31,dirctly invest ETF exceed AIP 41.97%
+      </div>
 
-In 15 times simulation,dirctly invest ETF exceed AIP&#39;s mean is 22.81%
-</pre></div>
+    </div>
 
+    <!-- TODO: make footer sticky -->
+    <footer class="container-fluid">
+      <div class="container">
+        <div class="row">
 
-<p><code>compare('ETF500',aip.weekly)</code></p>
-<div class="highlight"><pre><span></span>from 2014-09-28 to 2017-07-09,dirctly invest ETF exceed AIP 28.72%
-from 2014-06-08 to 2017-05-07,dirctly invest ETF exceed AIP 56.41%
-from 2015-05-10 to 2018-04-29,dirctly invest ETF exceed AIP -20.97%
-from 2014-02-09 to 2017-06-18,dirctly invest ETF exceed AIP 45.50%
-from 2014-06-29 to 2016-07-17,dirctly invest ETF exceed AIP 55.89%
-from 2015-07-12 to 2017-10-15,dirctly invest ETF exceed AIP -15.83%
-from 2013-06-02 to 2017-04-30,dirctly invest ETF exceed AIP 40.71%
-from 2014-06-08 to 2016-10-02,dirctly invest ETF exceed AIP 57.17%
-from 2014-05-11 to 2018-01-07,dirctly invest ETF exceed AIP 64.35%
-from 2014-09-07 to 2017-04-02,dirctly invest ETF exceed AIP 33.36%
-from 2014-07-20 to 2018-03-25,dirctly invest ETF exceed AIP 47.74%
-from 2014-03-30 to 2017-06-11,dirctly invest ETF exceed AIP 50.51%
-from 2013-09-15 to 2015-11-22,dirctly invest ETF exceed AIP 44.02%
-from 2015-03-08 to 2017-04-09,dirctly invest ETF exceed AIP 6.61%
-from 2015-04-05 to 2017-01-29,dirctly invest ETF exceed AIP -13.85%
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+                <h5>链接</h5>
+                <ul class="list-unstyled">
+                  <li>  <a href="http://getpelican.com/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
+    Pelican
+  </a></li>
+                  <li>  <a href="http://python.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
+    Python.org
+  </a></li>
+                  <li>  <a href="http://jinja.pocoo.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
+    Jinja2
+  </a></li>
+                </ul>
+            </div>
 
-In 15 times simulation,dirctly invest ETF exceed AIP&#39;s mean is 32.02%
-</pre></div>
+          <div class="col-md-2">
+            <h5>归档</h5>
+            <ul class="list-unstyled">
+                <li><a href="/categories.html"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="/archives.html"><i class="fa fa-calendar"></i> Dates</a></li>
+                <li><a href="/tags.html"><i class="fa fa-tag"></i> Tags</a></li>
+            </ul>
+          </div>
 
-
-<p>从上面的运行结果来看，把资金一次性全部投入比定投的平均收益是要高的，如果有兴趣，可以自己修改程序，改变开始和结束时间来验证结果，相信结论应该上面的相差不会太多。</p>
-<p>当然，定投也不是一无是处，至少对于当前资金不足，只想从每月工资中拿出一部分来投资的人来说，还是一种很好的投资方式的。</p>
-<h3>完整代码</h3>
-<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="kn">import</span> <span class="nn">tushare</span> <span class="kn">as</span> <span class="nn">ts</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-
-<span class="k">class</span> <span class="nc">AutoInvestmentPlan</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">code_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;510050&#39;</span><span class="p">,</span><span class="s1">&#39;510300&#39;</span><span class="p">,</span><span class="s1">&#39;510510&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_date</span> <span class="o">=</span> <span class="s1">&#39;2013-05-27&#39;</span>
-
-    <span class="k">def</span> <span class="nf">get_etf_close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">code</span><span class="p">,</span><span class="n">start</span><span class="p">):</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_k_data</span><span class="p">(</span><span class="n">code</span><span class="p">,</span><span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">)</span>
-        <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-        <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">close</span>
-
-    <span class="k">def</span> <span class="nf">combin_to_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">close_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">code_list</span><span class="p">:</span>
-            <span class="n">close_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_etf_close</span><span class="p">(</span><span class="n">code</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">start_date</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">close_list</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ETF50&#39;</span><span class="p">,</span><span class="s1">&#39;ETF300&#39;</span><span class="p">,</span><span class="s1">&#39;ETF500&#39;</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">combin_to_df</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">monthly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">&#39;M&#39;</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">weekly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="n">underlying</span><span class="p">,</span><span class="n">df_period</span><span class="p">,</span><span class="n">times</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">money</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">plot</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="n">df_period</span><span class="p">[</span><span class="n">underlying</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;{} close price&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">underlying</span><span class="p">))</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">df_period</span><span class="o">.</span><span class="n">index</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="n">df_period</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)])</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">df_period</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;M&#39;</span><span class="p">):]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">df_period</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">,:]</span>
-        <span class="n">cumsum_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">((</span><span class="n">money</span> <span class="o">/</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">underlying</span><span class="p">]))</span>
-        <span class="n">cumsum_values</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;share_period&#39;</span><span class="p">]</span>
-        <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;share_cum&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;share_period&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
-        <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumsum_values</span><span class="o">.</span><span class="n">share_cum</span> <span class="o">*</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">underlying</span><span class="p">]</span>
-        <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;payoff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">money</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">cumsum_values</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
-
-        <span class="n">a</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">underlying</span><span class="p">]</span> <span class="o">/</span> <span class="n">d</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">underlying</span><span class="p">]</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">cumsum_values</span><span class="p">[</span><span class="s1">&#39;payoff&#39;</span><span class="p">]</span>
-        <span class="n">b</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;AIP&#39;</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
-            <span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-        <span class="n">exceed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="o">*</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;from {} to {},dirctly invest ETF exceed AIP {:.2%}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">start</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span><span class="n">end</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">),</span><span class="n">exceed</span><span class="p">))</span>
-        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">exceed</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">In {} times simulation,dirctly invest ETF exceed AIP</span><span class="se">\&#39;</span><span class="s1">s mean is {:.2%}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">times</span><span class="p">,</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">result</span><span class="p">)))</span>
-</pre></div><!--<p>There are <a href="/Is-AIP-better-than-ETF.html#disqus_thread">comments</a>.</p>-->
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>过往文章</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/using-python-descript-vaiance-std.html" rel="bookmark"
-                           title="Permalink to 用股票数据说明方差和标准差的特性">用股票数据说明方差和标准差的特性</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2018-01-15T15:35:00+08:00">
-                发布时间: 一月 15, 2018
-        </abbr>
-
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/jin-rong-bi-ji.html">金融笔记</a></p>
-<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/shu-xue.html">数学</a> <a href="/tag/tong-ji-xue.html">统计学</a> </p>
-</footer><!-- /.post-info -->                <p><a href="https://zh.wikipedia.org/zh-cn/%E6%96%B9%E5%B7%AE">方差</a>（Variance），应用数学里的专有名词。在概率论和统计学中，一个随机变量的方差描述的是它的离散程度，也就是该变量离其期望值的距离。一个实随机变量的方差也称为它的二阶矩或二阶中心动差，恰巧也是它的二阶累积量。这里把复杂说白了，就是将各个误差将之平方（而非取绝对值，使之肯定为正数），相加之后再除以总数，透过这样的方式来算出各个数据分布、零散（相对中心点）的程度。继续延伸的话，方差的算术平方根称为该随机变量的标准差（此为相对各个数据点间）。</p>
-<p><a href="https://zh.wikipedia.org/zh-cn/%E6%A8%99%E6%BA%96%E5%B7%AE">标准差</a>（Standard Deviation，<span class="caps">SD</span>），数学符号 <span class="math">\(\sigma\)</span>（sigma），在概率统计中最常使用作为测量一组数值的离散程度之用。标准差定义：为方差开算术平方根，反映组内个体间的离散程度；标准差与期望值之比为标准离差率。</p>
-<h3>1.定义</h3>
-<p>方差的定义如下公式：
-</p>
-<div class="math">$$Var(X)=\sigma^2=E[(X-\mu)^2]$$</div>
-<p>
-对上式化简后可得到如下公式：
-</p>
-<div class="math">$$\sigma^2=E[X^2]-(E …</div><script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width < 768) ? "left" : align;
-        indent = (screen.width < 768) ? "0em" : indent;
-        linebreak = (screen.width < 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-</script>
-                <a class="readmore" href="/using-python-descript-vaiance-std.html">查看全文</a>
-                <!--<p>There are <a href="/using-python-descript-vaiance-std.html#disqus_thread">comments</a>.</p>-->
-                </div><!-- /.entry-content -->
-            </article></li>
-                </ol><!-- /#posts-list -->
-                </section><!-- /#content -->
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>链接</h2>
-                        <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>社交网站</h2>
-                        <ul>
-
-                            <li><a href="https://github.com/princelai">Github</a></li>
-                            <li><a href="https://plus.google.com/100073068742779779797">G+</a></li>
-                            <li><a href="https://twitter.com/princelai">Twitter</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
+          <div class="col-md-2 text-muted">
+            <h5>Copyright notice</h5>
+            <p>© Copyright 2018 Kevin Chen.</p>
+          </div>
         <!--
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address>
+          <div class="col-md-2 text-muted">
+            <h5>Disclaimer</h5>
+              <p>All opinions expressed in this site are my own personal opinions and are not endorsed by, nor do they represent the opinions of my previous, current and future employers or any of its affiliates, partners or customers.</p>
+          </div>
+        -->
+          <div class="col-md-2">
+          </div>
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer>-->
+        </div>
+      </div>
+
+      <h5 class="text-right"><a href="#"><i class="fa fa-arrow-up"></i> Back to top</a></h5>
+
+      <div class="container">
+        <div class="row col-md-12 text-muted text-center">
+          Site generated by <a href="https://getpelican.com"> Pelican</a>.<br/>
+          <a href="https://github.com/kdeldycke/plumage"> Plumage</a> theme by <a href="https://kevin.deldycke.com">Kevin Deldycke</a>.
+        </div>
+      </div>
+
+    </footer>
+
     <script type="text/javascript">
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -384,14 +198,13 @@ In 15 times simulation,dirctly invest ETF exceed AIP&#39;s mean is 32.02%
     ga('create', 'UA-1337838-7', 'auto');
     ga('send', 'pageview');
     </script>
-<script type="text/javascript">
-    var disqus_shortname = 'solarck';
-    (function () {
-        var s = document.createElement('script'); s.async = true;
-        s.type = 'text/javascript';
-        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
-        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-    }());
-</script>
-</body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
+    <script src="/theme/js/jquery.mglass.js"></script>
+    <script src="/theme/js/application.js"></script>
+
+  </body>
 </html>

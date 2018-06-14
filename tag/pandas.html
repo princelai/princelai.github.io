@@ -1,337 +1,192 @@
 <!DOCTYPE html>
 <html lang="zh">
-<head>
-        <meta charset="utf-8" />
-        <title>Solarck - pandas</title>
-        <link rel="stylesheet" href="/theme/css/main.css" />
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
+    <title>  pandas
+ | Solarck</title>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
-                <nav><ul>
-                    <li><a href="/category/itbi-ji.html">IT笔记</a></li>
-                    <li><a href="/category/jin-rong-bi-ji.html">金融笔记</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
+    <meta name="author" content="Kevin Chen"/>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/pandas-timeseries.html">Pandas时间处理函数速度对比</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2018-06-08T10:36:00+08:00">
-                发布时间: 六月 08, 2018
-        </abbr>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css"/>
+    <link rel="stylesheet" href="/theme/css/jquery.mglass.css"/>
+    <link rel="stylesheet" href="/theme/css/pygment-solarized-dark.css"/>
+    <link rel="stylesheet" href="/theme/css/style.css"/>
 
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/pandas.html">pandas</a> </p>
-</footer><!-- /.post-info --><p>Pandas非常擅长处理时间序列，拥有多种处理时间序列的函数和方法，自己做了几个小测试，看看内置函数都能适配哪种格式、哪种情况，速度又有多快。</p>
-<p>我用到的时间处理主要是对细粒度的时间重采样至粗粒度，之后再对重采样后的时间进行分组再进行后续操作，如求和、求平均或取最后值。</p>
-<p>所以我就设计两个场景，第一个场景是对频率为秒的时间序列重采样至一分钟然后求平均；第二个场景就是对频率为秒的时间序列重采样至3分钟然后对新的时间序列取每个时间的最新值。</p>
-<p>所以首先是要生成一组数据</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-
-<span class="n">rng</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s1">&#39;2018-04-07&#39;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;2018-04-08&#39;</span><span class="p">,</span><span class="n">freq</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size</span><span class="p">),</span><span class="n">index</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
-<span class="n">ser</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size</span><span class="p">),</span><span class="n">index</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;random&#39;</span><span class="p">]</span>
-<span class="n">ser</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;random&#39;</span>
-</pre></div>
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Istok+Web' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
+      <link href='https://fonts.googleapis.com/css?family=Expletus+Sans' rel='stylesheet' type='text/css'>
 
 
-<p>df和ser分别对应DataFrame和Series，查看下数据格式</p>
-<p><code>df.head()</code></p>
-<div class="highlight"><pre><span></span>                       random
-2018-04-07 00:00:00  0.163995
-2018-04-07 00:00:01  0.756485
-2018-04-07 00:00:02 -0.179441
-2018-04-07 00:00:03  0.120944
-2018-04-07 00:00:04 -1.558763
-</pre></div>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+    <!-- Feeds -->
 
 
-<p><code>ser.tail()</code></p>
-<div class="highlight"><pre><span></span>2018-04-07 23:59:56    1.276893
-2018-04-07 23:59:57    0.275050
-2018-04-07 23:59:58    1.029358
-2018-04-07 23:59:59    0.461299
-2018-04-08 00:00:00    1.222731
-Freq: S, Name: random, dtype: float64
-</pre></div>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="page-header">
+          <a href="" class="avatar-container pull-left">
+            <div class="avatar ">
+              <div class="side"><img src="static/avatar.jpg" class="img-responsive"/></div>
+            </div>
+          </a>
+        <h1><a href="">Solarck</a> <small>金融民工与程序猿的结合体</small></h1>
+      </div>
+
+      <nav class="navbar navbar-default">
+
+        <!-- Hamburger menu for mobile -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#plumage-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="" title="金融民工与程序猿的结合体">Solarck</a>
+        </div>
+
+        <!-- Menus and search forms -->
+        <div class="collapse navbar-collapse" id="plumage-navbar-collapse-1">
+
+          <ul class="nav navbar-nav">
+<li >
+                <a href="">主页</a>
+              </li>
+<li >
+                <a href="about">关于</a>
+              </li>
+<li >
+                <a href="resume">简历</a>
+              </li>
+<li >
+                  <a href="/category/itbi-ji.html">IT笔记</a>
+                </li>
+<li >
+                  <a href="/category/jin-rong-bi-ji.html">金融笔记</a>
+                </li>
+          </ul>
 
 
-<p>接下来定义六个函数方法</p>
-<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">method1</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_period</span><span class="p">(</span><span class="s1">&#39;Min&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_timestamp</span><span class="p">()</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <form class="navbar-form navbar-right" role="search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fa
+                        fa-search fa-fw"></i></button>
+                  </span>
+                </div>
+              </div>
+            </form>
 
-<span class="k">def</span> <span class="nf">method2</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M&#39;</span><span class="p">))</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        </div>
 
-<span class="k">def</span> <span class="nf">method3</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">ser_idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">ser_idx</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;00&#39;</span><span class="p">))</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+      </nav>
 
-<span class="k">def</span> <span class="nf">method4</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;Min&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-
-<span class="k">def</span> <span class="nf">method5</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">&#39;3Min&#39;</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">method6</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;3Min&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
-</pre></div>
+    </div>
 
 
-<p>方法1-方法4适用于场景一，方法5-方法6适用于场景二，接下来具体说说这六个函数和为什么要这么设计场景。</p>
-<p>方法1使用的是内置to_period方法转换周期，to_timestamp方法是为了后续操作使用timestamp更方便。</p>
-<p>方法2对索引日期进行字符串格式化然后再用内置的to_datetime方法转换回日期格式达到重采样效果。</p>
-<p>方法3看似复杂，其实和方法二类似，我之所以加上方法三是因为我本以为这个办法处理会慢很多，但是最终结果还是有点出乎我的意料的。</p>
-<p>方法4是内置的resample方法</p>
-<p>方法5是内置的asfreq方法</p>
-<p>方法6还是内置的resample方法</p>
-<p>可以看到resample方法适用范围最广，既可以对时间采取多种细粒度的操作，也能对重采样后的数据进行后续操作；而asfreq方法只能对数据进行重采样，无法进行复杂的后续操作，只能用向前/向后填充数值；to_period方法和字符串操作只能对时间进行整数采样，像45分钟，1小时30分这种更细腻的操作是不支持的。</p>
-<h3>比较速度</h3>
-<p><strong>场景1</strong></p>
-<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method1</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method2</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method3</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method4</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-
-<span class="mf">16.4</span> <span class="n">ms</span> <span class="err">±</span> <span class="mi">391</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">10</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-<span class="mi">439</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">2.52</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
-<span class="mi">485</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">10.8</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
-<span class="mf">2.13</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">9.92</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-</pre></div>
+    <div class="container main">
 
 
-<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method1</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method2</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method3</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method4</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
+      <div class="row">
+        <div class=" col-md-12  ">
+  <h1>
+    <a  href="/tag/pandas.html" rel="bookmark" title="Permalink to pandas articles">pandas articles</a>
+  </h1>
+        </div>
+      </div>
 
-<span class="mf">23.8</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">72.2</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">10</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-<span class="mi">446</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">2.71</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
-<span class="mi">492</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">3.61</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
-<span class="mf">1.63</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">15.1</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-</pre></div>
-
-
-<p>从上面对比数据得出结论，resample方法最快，to_period方法其次，两种字符串方法最慢，最快和最慢差距巨大。</p>
-<p><strong>场景2</strong></p>
-<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method5</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method6</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-
-<span class="mi">746</span> <span class="err">µ</span><span class="n">s</span> <span class="err">±</span> <span class="mf">32.5</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-<span class="mf">2.42</span> <span class="n">ms</span> <span class="err">±</span> <span class="mi">24</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-</pre></div>
+      <div class="row">
 
 
-<div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method5</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
-<span class="nf">%timeit</span> <span class="n">method6</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
+        <div class=" col-md-12 " id="content" role="main">
+  <dl class="dl-horizontal">
+      <dt><abbr class="published" title="2018-06-08T10:36:00+08:00">六月 08, 2018</abbr></dt>
+      <dd><a href="/pandas-timeseries.html">Pandas时间处理函数速度对比</a></dd>
+  </dl>
+        </div>
 
-<span class="mi">772</span> <span class="err">µ</span><span class="n">s</span> <span class="err">±</span> <span class="mf">20.2</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-<span class="mf">1.87</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">50.5</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-</pre></div>
 
+      </div>
 
-<p>在场景二的测试中asfreq比resample快2倍多，如果不需要更多的后续操作，asfreq是很好的选择，否则resample方法更为全能。</p>
-<p>下方的表格总结了几种方法的优劣：</p>
-<table>
-<thead>
-<tr>
-<th>函数</th>
-<th>时间细粒度操作</th>
-<th>时间分组后续操作</th>
-<th>速度</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>asfreq</td>
-<td>X</td>
-<td>X</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>resample</td>
-<td>✓</td>
-<td>✓</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>to_period</td>
-<td>X</td>
-<td>✓</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>字符串</td>
-<td>X</td>
-<td>✓</td>
-<td>X</td>
-</tr>
-</tbody>
-</table>
-<h3>Pandas Offset&nbsp;Aliases</h3>
-<table>
-<thead>
-<tr>
-<th>Alias</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>B</td>
-<td>business day frequency</td>
-</tr>
-<tr>
-<td>C</td>
-<td>custom business day frequency</td>
-</tr>
-<tr>
-<td>D</td>
-<td>calendar day frequency</td>
-</tr>
-<tr>
-<td>W</td>
-<td>weekly frequency</td>
-</tr>
-<tr>
-<td>M</td>
-<td>month end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">SM</span></td>
-<td>semi-month end frequency (15th and end of month)</td>
-</tr>
-<tr>
-<td><span class="caps">BM</span></td>
-<td>business month end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">CBM</span></td>
-<td>custom business month end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">MS</span></td>
-<td>month start frequency</td>
-</tr>
-<tr>
-<td><span class="caps">SMS</span></td>
-<td>semi-month start frequency (1st and 15th)</td>
-</tr>
-<tr>
-<td><span class="caps">BMS</span></td>
-<td>business month start frequency</td>
-</tr>
-<tr>
-<td><span class="caps">CBMS</span></td>
-<td>custom business month start frequency</td>
-</tr>
-<tr>
-<td>Q</td>
-<td>quarter end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">BQ</span></td>
-<td>business quarter end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">QS</span></td>
-<td>quarter start frequency</td>
-</tr>
-<tr>
-<td><span class="caps">BQS</span></td>
-<td>business quarter start frequency</td>
-</tr>
-<tr>
-<td>A, Y</td>
-<td>year end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">BA</span>, <span class="caps">BY</span></td>
-<td>business year end frequency</td>
-</tr>
-<tr>
-<td><span class="caps">AS</span>, <span class="caps">YS</span></td>
-<td>year start frequency</td>
-</tr>
-<tr>
-<td><span class="caps">BAS</span>, <span class="caps">BYS</span></td>
-<td>business year start frequency</td>
-</tr>
-<tr>
-<td><span class="caps">BH</span></td>
-<td>business hour frequency</td>
-</tr>
-<tr>
-<td>H</td>
-<td>hourly frequency</td>
-</tr>
-<tr>
-<td>T, min</td>
-<td>minutely frequency</td>
-</tr>
-<tr>
-<td>S</td>
-<td>secondly frequency</td>
-</tr>
-<tr>
-<td>L, ms</td>
-<td>milliseconds</td>
-</tr>
-<tr>
-<td>U, us</td>
-<td>microseconds</td>
-</tr>
-<tr>
-<td>N</td>
-<td>nanoseconds</td>
-</tr>
-</tbody>
-</table>
-<h3>参考</h3>
-<p><a href="https://pandas.pydata.org/pandas-docs/stable/timeseries.html">官方文档</a> </p><!--<p>There are <a href="/pandas-timeseries.html#disqus_thread">comments</a>.</p>-->
-                </article>
-            </aside><!-- /#featured -->
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>链接</h2>
-                        <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>社交网站</h2>
-                        <ul>
+    </div>
 
-                            <li><a href="https://github.com/princelai">Github</a></li>
-                            <li><a href="https://plus.google.com/100073068742779779797">G+</a></li>
-                            <li><a href="https://twitter.com/princelai">Twitter</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
+    <!-- TODO: make footer sticky -->
+    <footer class="container-fluid">
+      <div class="container">
+        <div class="row">
+
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+                <h5>链接</h5>
+                <ul class="list-unstyled">
+                  <li>  <a href="http://getpelican.com/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
+    Pelican
+  </a></li>
+                  <li>  <a href="http://python.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
+    Python.org
+  </a></li>
+                  <li>  <a href="http://jinja.pocoo.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
+    Jinja2
+  </a></li>
+                </ul>
+            </div>
+
+          <div class="col-md-2">
+            <h5>归档</h5>
+            <ul class="list-unstyled">
+                <li><a href="/categories.html"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="/archives.html"><i class="fa fa-calendar"></i> Dates</a></li>
+                <li><a href="/tags.html"><i class="fa fa-tag"></i> Tags</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-2 text-muted">
+            <h5>Copyright notice</h5>
+            <p>© Copyright 2018 Kevin Chen.</p>
+          </div>
         <!--
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address>
+          <div class="col-md-2 text-muted">
+            <h5>Disclaimer</h5>
+              <p>All opinions expressed in this site are my own personal opinions and are not endorsed by, nor do they represent the opinions of my previous, current and future employers or any of its affiliates, partners or customers.</p>
+          </div>
+        -->
+          <div class="col-md-2">
+          </div>
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer>-->
+        </div>
+      </div>
+
+      <h5 class="text-right"><a href="#"><i class="fa fa-arrow-up"></i> Back to top</a></h5>
+
+      <div class="container">
+        <div class="row col-md-12 text-muted text-center">
+          Site generated by <a href="https://getpelican.com"> Pelican</a>.<br/>
+          <a href="https://github.com/kdeldycke/plumage"> Plumage</a> theme by <a href="https://kevin.deldycke.com">Kevin Deldycke</a>.
+        </div>
+      </div>
+
+    </footer>
+
     <script type="text/javascript">
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -341,14 +196,13 @@ Freq: S, Name: random, dtype: float64
     ga('create', 'UA-1337838-7', 'auto');
     ga('send', 'pageview');
     </script>
-<script type="text/javascript">
-    var disqus_shortname = 'solarck';
-    (function () {
-        var s = document.createElement('script'); s.async = true;
-        s.type = 'text/javascript';
-        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
-        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-    }());
-</script>
-</body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
+    <script src="/theme/js/jquery.mglass.js"></script>
+    <script src="/theme/js/application.js"></script>
+
+  </body>
 </html>

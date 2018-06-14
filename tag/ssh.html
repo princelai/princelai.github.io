@@ -1,209 +1,192 @@
 <!DOCTYPE html>
 <html lang="zh">
-<head>
-        <meta charset="utf-8" />
-        <title>Solarck - ssh</title>
-        <link rel="stylesheet" href="/theme/css/main.css" />
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
+    <title>  ssh
+ | Solarck</title>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
-                <nav><ul>
-                    <li><a href="/category/itbi-ji.html">IT笔记</a></li>
-                    <li><a href="/category/jin-rong-bi-ji.html">金融笔记</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
+    <meta name="author" content="Kevin Chen"/>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/centos6-datebase-server.html">CentOS6数据库服务器配置</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2018-06-11T16:52:00+08:00">
-                发布时间: 六月 11, 2018
-        </abbr>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css"/>
+    <link rel="stylesheet" href="/theme/css/jquery.mglass.css"/>
+    <link rel="stylesheet" href="/theme/css/pygment-solarized-dark.css"/>
+    <link rel="stylesheet" href="/theme/css/style.css"/>
 
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/centos.html">centos</a> <a href="/tag/ssh.html">ssh</a> <a href="/tag/linux.html">linux</a> </p>
-</footer><!-- /.post-info --><p>本文章仅用于记录在公司服务器上通过yum&nbsp;repo来安装官方提供的数据库程序，而非通过编译方式来安装。通过官方仓库来安装有很多好处，比如升级、打补丁都很方便，不用编译浪费时间，更不需要安装多个版本的gcc来满足各种不同软件的要求。</p>
-<h3>Mysql</h3>
-<p><strong>下载安装mysql&nbsp;repo</strong></p>
-<p><code>rpm -Uvh https://repo.mysql.com//mysql80-community-release-el6-1.noarch.rpm</code></p>
-<p><strong>升级至57版本</strong></p>
-<p><code>yum --disablerepo=mysql80-community --enablerepo=mysql57-community upgrade</code></p>
-<p>当前默认是80版本，如果未来需要升级，如果未来一直要维持在57版本，那么建议修改配置文件，以免每次都带上两个参数</p>
-<p><code>vim /etc/yum.repos.d/mysql-community.repo</code></p>
-<div class="highlight"><pre><span></span><span class="c1"># Enable to use MySQL 5.7</span>
-<span class="k">[mysql57-community]</span>
-<span class="na">name</span><span class="o">=</span><span class="s">MySQL 5.7 Community Server</span>
-<span class="na">baseurl</span><span class="o">=</span><span class="s">http://repo.mysql.com/yum/mysql-5.7-community/el/6/$basearch/</span>
-<span class="na">enabled</span><span class="o">=</span><span class="s">1</span>
-<span class="na">gpgcheck</span><span class="o">=</span><span class="s">1</span>
-<span class="na">gpgkey</span><span class="o">=</span><span class="s">file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span>
-
-<span class="k">[mysql80-community]</span>
-<span class="na">name</span><span class="o">=</span><span class="s">MySQL 8.0 Community Server</span>
-<span class="na">baseurl</span><span class="o">=</span><span class="s">http://repo.mysql.com/yum/mysql-8.0-community/el/6/$basearch/</span>
-<span class="na">enabled</span><span class="o">=</span><span class="s">0</span>
-<span class="na">gpgcheck</span><span class="o">=</span><span class="s">1</span>
-<span class="na">gpgkey</span><span class="o">=</span><span class="s">file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span>
-</pre></div>
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Istok+Web' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
+      <link href='https://fonts.googleapis.com/css?family=Expletus+Sans' rel='stylesheet' type='text/css'>
 
 
-<p><strong>安装mysql-server</strong></p>
-<p><code>yum install mysql-community-server</code></p>
-<p><strong>开启服务</strong></p>
-<p><code>service mysqld start</code></p>
-<p>当然这时候还未配置mysql，开启服务可能会失败。默认配置文件在<code>/etc/my.cnf</code>。</p>
-<p>更多安装细节可以参照<a href="https://dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/">mysql官方指南</a>。</p>
-<h3>Mongo</h3>
-<p><strong>创建repo文件</strong></p>
-<p><code>vim /etc/yum.repos.d/mongodb-org-3.6.repo</code></p>
-<div class="highlight"><pre><span></span><span class="k">[mongodb-org-3.6]</span>
-<span class="na">name</span><span class="o">=</span><span class="s">MongoDB Repository</span>
-<span class="na">baseurl</span><span class="o">=</span><span class="s">https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.6/x86_64/</span>
-<span class="na">gpgcheck</span><span class="o">=</span><span class="s">1</span>
-<span class="na">enabled</span><span class="o">=</span><span class="s">1</span>
-<span class="na">gpgkey</span><span class="o">=</span><span class="s">https://www.mongodb.org/static/pgp/server-3.6.asc</span>
-</pre></div>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+    <!-- Feeds -->
 
 
-<p><strong>安装mongo组件合集</strong></p>
-<p><code>yum install -y mongodb-org</code></p>
-<p>mongo-org是一个合集，如果想精简安装各个组件，请参照下表。</p>
-<table>
-<thead>
-<tr>
-<th>Package Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>mongodb-org</code></td>
-<td>A metapackage that will automatically install the four component packages listed below.</td>
-</tr>
-<tr>
-<td><code>mongodb-org-server</code></td>
-<td>Contains the mongod daemon and associated configuration and init scripts.</td>
-</tr>
-<tr>
-<td><code>mongodb-org-mongos</code></td>
-<td>Contains the mongos daemon.</td>
-</tr>
-<tr>
-<td><code>mongodb-org-shell</code></td>
-<td>Contains the mongo shell.</td>
-</tr>
-<tr>
-<td><code>mongodb-org-tools</code></td>
-<td>Contains the following MongoDB tools: mongoimport bsondump, mongodump, mongoexport, mongofiles, mongoperf, mongorestore, mongostat, and mongotop.</td>
-</tr>
-</tbody>
-</table>
-<p><strong>启动服务</strong></p>
-<p><code>mongod -f /etc/mongod.conf</code></p>
-<p>mongo默认不加载conf文件，所以用service方法是无法正常启动的，暂时使用自带方法开启服务。</p>
-<p>更多安装细节可以参照<a href="https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/">mongo官方指南</a>。</p>
-<h3>Nginx</h3>
-<p><strong>创建repo文件</strong></p>
-<p><code>vim /etc/yum.repos.d/nginx.repo</code></p>
-<div class="highlight"><pre><span></span><span class="k">[nginx]</span>
-<span class="na">name</span><span class="o">=</span><span class="s">nginx repo</span>
-<span class="na">baseurl</span><span class="o">=</span><span class="s">http://nginx.org/packages/centos/$releasever/$basearch/</span>
-<span class="na">gpgcheck</span><span class="o">=</span><span class="s">0</span>
-<span class="na">enabled</span><span class="o">=</span><span class="s">1</span>
-</pre></div>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="page-header">
+          <a href="" class="avatar-container pull-left">
+            <div class="avatar ">
+              <div class="side"><img src="static/avatar.jpg" class="img-responsive"/></div>
+            </div>
+          </a>
+        <h1><a href="">Solarck</a> <small>金融民工与程序猿的结合体</small></h1>
+      </div>
+
+      <nav class="navbar navbar-default">
+
+        <!-- Hamburger menu for mobile -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#plumage-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="" title="金融民工与程序猿的结合体">Solarck</a>
+        </div>
+
+        <!-- Menus and search forms -->
+        <div class="collapse navbar-collapse" id="plumage-navbar-collapse-1">
+
+          <ul class="nav navbar-nav">
+<li >
+                <a href="">主页</a>
+              </li>
+<li >
+                <a href="about">关于</a>
+              </li>
+<li >
+                <a href="resume">简历</a>
+              </li>
+<li >
+                  <a href="/category/itbi-ji.html">IT笔记</a>
+                </li>
+<li >
+                  <a href="/category/jin-rong-bi-ji.html">金融笔记</a>
+                </li>
+          </ul>
 
 
-<p><strong>安装和开启服务</strong></p>
-<div class="highlight"><pre><span></span>yum install -y nginx
-service nginx start
-</pre></div>
+            <form class="navbar-form navbar-right" role="search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fa
+                        fa-search fa-fw"></i></button>
+                  </span>
+                </div>
+              </div>
+            </form>
+
+        </div>
+
+      </nav>
+
+    </div>
 
 
-<p>service方法启动nginx默认会加载<code>/etc/nginx/nginx.conf</code>配置。</p>
-<h3>查看系统安装路径</h3>
-<p>使用仓库安装有一点不是很清晰，那就是安装目录并非自己指定，有时需要修改一些文件时找不到文件在哪里，我们可以通过如下方法找到软件的所有文件目录。</p>
-<p><code>rpm -qa |grep mongodb</code></p>
-<div class="highlight"><pre><span></span>mongodb-org-mongos-3.6.5-1.el6.x86_64
-mongodb-org-server-3.6.5-1.el6.x86_64
-mongodb-org-tools-3.6.5-1.el6.x86_64
-mongodb-org-3.6.5-1.el6.x86_64
-mongodb-org-shell-3.6.5-1.el6.x86_64
-</pre></div>
+    <div class="container main">
 
 
-<p>例如我们要查看server的所有文件目录，则执行</p>
-<p><code>rpm -ql mongodb-org-server-3.6.5-1.el6.x86_64</code></p>
-<div class="highlight"><pre><span></span>/etc/init.d/mongod
-/etc/mongod.conf
-/etc/sysconfig/mongod
-/usr/bin/mongod
-/usr/share/doc/mongodb-org-server-3.6.5
-/usr/share/doc/mongodb-org-server-3.6.5/GNU-AGPL-3.0
-/usr/share/doc/mongodb-org-server-3.6.5/MPL-2
-/usr/share/doc/mongodb-org-server-3.6.5/README
-/usr/share/doc/mongodb-org-server-3.6.5/THIRD-PARTY-NOTICES
-/usr/share/man/man1/mongod.1
-/var/lib/mongo
-/var/log/mongodb
-/var/log/mongodb/mongod.log
-/var/run/mongodb
-</pre></div>
+      <div class="row">
+        <div class=" col-md-12  ">
+  <h1>
+    <a  href="/tag/ssh.html" rel="bookmark" title="Permalink to ssh articles">ssh articles</a>
+  </h1>
+        </div>
+      </div>
+
+      <div class="row">
 
 
-<h3>SSH免密登录服务器</h3>
-<p>Linux上免密登录通常用RSA公钥和密钥实现，本地生成钥匙后，公钥上传至服务器，之后便可以免密登录了。</p>
-<p><strong>本地生成公钥密钥</strong></p>
-<p><code>ssh-keygen -t rsa -b 4096</code></p>
-<p>默认公钥会存储在<code>~/.ssh/id_rsa.pub</code>，备用。</p>
-<p><strong>修改服务器sshd配置</strong></p>
-<p><code>vim /etc/ssh/sshd_config</code></p>
-<div class="highlight"><pre><span></span>PubkeyAuthentication yes #解开注释
-AuthorizedKeysFile .ssh/authorized_keys #解开注释
-</pre></div>
+        <div class=" col-md-12 " id="content" role="main">
+  <dl class="dl-horizontal">
+      <dt><abbr class="published" title="2018-06-11T16:52:00+08:00">六月 11, 2018</abbr></dt>
+      <dd><a href="/centos6-datebase-server.html">CentOS6数据库服务器配置</a></dd>
+  </dl>
+        </div>
 
 
-<p><strong>上传本地公钥至服务器</strong></p>
-<p><code>ssh-copy-id -i .ssh/id_rsa.pub -p port user@ip</code></p>
-<p>修改上面的端口、用户名和ip，再在本地<code>.bashrc</code>或<code>.zshrc</code>新建一条alias就可以非常方便快捷的登录了。</p><!--<p>There are <a href="/centos6-datebase-server.html#disqus_thread">comments</a>.</p>-->
-                </article>
-            </aside><!-- /#featured -->
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>链接</h2>
-                        <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>社交网站</h2>
-                        <ul>
+      </div>
 
-                            <li><a href="https://github.com/princelai">Github</a></li>
-                            <li><a href="https://plus.google.com/100073068742779779797">G+</a></li>
-                            <li><a href="https://twitter.com/princelai">Twitter</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
+    </div>
+
+    <!-- TODO: make footer sticky -->
+    <footer class="container-fluid">
+      <div class="container">
+        <div class="row">
+
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+                <h5>链接</h5>
+                <ul class="list-unstyled">
+                  <li>  <a href="http://getpelican.com/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
+    Pelican
+  </a></li>
+                  <li>  <a href="http://python.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
+    Python.org
+  </a></li>
+                  <li>  <a href="http://jinja.pocoo.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
+    Jinja2
+  </a></li>
+                </ul>
+            </div>
+
+          <div class="col-md-2">
+            <h5>归档</h5>
+            <ul class="list-unstyled">
+                <li><a href="/categories.html"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="/archives.html"><i class="fa fa-calendar"></i> Dates</a></li>
+                <li><a href="/tags.html"><i class="fa fa-tag"></i> Tags</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-2 text-muted">
+            <h5>Copyright notice</h5>
+            <p>© Copyright 2018 Kevin Chen.</p>
+          </div>
         <!--
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address>
+          <div class="col-md-2 text-muted">
+            <h5>Disclaimer</h5>
+              <p>All opinions expressed in this site are my own personal opinions and are not endorsed by, nor do they represent the opinions of my previous, current and future employers or any of its affiliates, partners or customers.</p>
+          </div>
+        -->
+          <div class="col-md-2">
+          </div>
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer>-->
+        </div>
+      </div>
+
+      <h5 class="text-right"><a href="#"><i class="fa fa-arrow-up"></i> Back to top</a></h5>
+
+      <div class="container">
+        <div class="row col-md-12 text-muted text-center">
+          Site generated by <a href="https://getpelican.com"> Pelican</a>.<br/>
+          <a href="https://github.com/kdeldycke/plumage"> Plumage</a> theme by <a href="https://kevin.deldycke.com">Kevin Deldycke</a>.
+        </div>
+      </div>
+
+    </footer>
+
     <script type="text/javascript">
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -213,14 +196,13 @@ AuthorizedKeysFile .ssh/authorized_keys #解开注释
     ga('create', 'UA-1337838-7', 'auto');
     ga('send', 'pageview');
     </script>
-<script type="text/javascript">
-    var disqus_shortname = 'solarck';
-    (function () {
-        var s = document.createElement('script'); s.async = true;
-        s.type = 'text/javascript';
-        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
-        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-    }());
-</script>
-</body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
+    <script src="/theme/js/jquery.mglass.js"></script>
+    <script src="/theme/js/application.js"></script>
+
+  </body>
 </html>

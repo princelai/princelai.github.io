@@ -1,192 +1,192 @@
 <!DOCTYPE html>
 <html lang="zh">
-<head>
-        <meta charset="utf-8" />
-        <title>Solarck - argparse</title>
-        <link rel="stylesheet" href="/theme/css/main.css" />
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
+    <title>  argparse
+ | Solarck</title>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
-                <nav><ul>
-                    <li><a href="/category/itbi-ji.html">IT笔记</a></li>
-                    <li><a href="/category/jin-rong-bi-ji.html">金融笔记</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
+    <meta name="author" content="Kevin Chen"/>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/argparse-brief-usage.html">argparse模块简要用法</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2018-01-08T17:41:00+08:00">
-                发布时间: 一月 08, 2018
-        </abbr>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css"/>
+    <link rel="stylesheet" href="/theme/css/jquery.mglass.css"/>
+    <link rel="stylesheet" href="/theme/css/pygment-solarized-dark.css"/>
+    <link rel="stylesheet" href="/theme/css/style.css"/>
 
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/python.html">python</a> <a href="/tag/argparse.html">argparse</a> </p>
-</footer><!-- /.post-info --><p>argparse是Python用于解析命令行参数的模块，拥有更强大的功能、更友好的使用方法，用来替代原始的sys.argv。</p>
-<p>argparse的大致用法如下：</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span> <span class="c1">#导入模块</span>
-<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span> <span class="c1">#创建解析器</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">()</span> <span class="c1">#添加参数</span>
-<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span> <span class="c1">#解析参数</span>
-</pre></div>
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Istok+Web' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
+      <link href='https://fonts.googleapis.com/css?family=Expletus+Sans' rel='stylesheet' type='text/css'>
 
 
-<p>创建解析器时的可选参数很多，但没有特殊需求的情况下，默认参数就能很好的工作，所以这部分使用时临时查文档就能解决，不做过多记录。</p>
-<p>这里仅记录下添加参数时的各种选项搭配，使用方法和选项如下：</p>
-<div class="highlight"><pre><span></span><span class="n">ArgumentParser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="n">name</span> <span class="ow">or</span> <span class="n">flags</span><span class="o">...</span><span class="p">[,</span> <span class="n">action</span><span class="p">][,</span> <span class="n">nargs</span><span class="p">][,</span> <span class="n">const</span><span class="p">][,</span> <span class="n">default</span><span class="p">][,</span> <span class="nb">type</span><span class="p">][,</span> <span class="n">choices</span><span class="p">][,</span> <span class="n">required</span><span class="p">][,</span> <span class="n">help</span><span class="p">][,</span> <span class="n">metavar</span><span class="p">][,</span> <span class="n">dest</span><span class="p">])</span>
-</pre></div>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+    <!-- Feeds -->
 
 
-<p>每一个参数的含义：</p>
-<blockquote>
-<ul>
-<li>name or flags - 名称或选项字符串列表，例如。foo或-f,&nbsp;&#8212;foo。</li>
-<li>action -&nbsp;在命令行遇到此参数时要执行的操作的基本类型。</li>
-<li>nargs -&nbsp;应该使用的命令行参数数。</li>
-<li>const -&nbsp;某些动作和nargs选择所需的常量值。</li>
-<li>default -&nbsp;如果参数在命令行中不存在，则生成的值。</li>
-<li>type -&nbsp;应转换命令行参数的类型。</li>
-<li>choices -&nbsp;参数的允许值的容器。</li>
-<li>required -&nbsp;是否可以省略命令行选项（仅针对可选参数）。</li>
-<li>help -&nbsp;参数的简要说明。</li>
-<li>metavar -&nbsp;使用消息中参数的名称。</li>
-<li>dest -&nbsp;要添加到由parse_args()返回的对象的属性的名称。</li>
-</ul>
-</blockquote>
-<h3>1. name or&nbsp;flags</h3>
-<p>唯一的必填参数，可以创建位置参数（必填）和可选参数</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="s1">&#39;--save&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;db&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;mysql&#39;</span><span class="p">])</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s1">&#39;mysql&#39;</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
-</pre></div>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="page-header">
+          <a href="" class="avatar-container pull-left">
+            <div class="avatar ">
+              <div class="side"><img src="static/avatar.jpg" class="img-responsive"/></div>
+            </div>
+          </a>
+        <h1><a href="">Solarck</a> <small>金融民工与程序猿的结合体</small></h1>
+      </div>
+
+      <nav class="navbar navbar-default">
+
+        <!-- Hamburger menu for mobile -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#plumage-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="" title="金融民工与程序猿的结合体">Solarck</a>
+        </div>
+
+        <!-- Menus and search forms -->
+        <div class="collapse navbar-collapse" id="plumage-navbar-collapse-1">
+
+          <ul class="nav navbar-nav">
+<li >
+                <a href="">主页</a>
+              </li>
+<li >
+                <a href="about">关于</a>
+              </li>
+<li >
+                <a href="resume">简历</a>
+              </li>
+<li >
+                  <a href="/category/itbi-ji.html">IT笔记</a>
+                </li>
+<li >
+                  <a href="/category/jin-rong-bi-ji.html">金融笔记</a>
+                </li>
+          </ul>
 
 
-<p>可选参数以<code>-</code>或<code>--</code>开始，其余的均为位置参数
-大部分情况下，未填的可选参数默认都是<code>None</code>,如果有<code>--</code>开始的参数，则参数名以后面的字符串命名。</p>
-<h3>2.&nbsp;action</h3>
-<p>action用于将命令和动作关联起来，常用的动作有如下几种：</p>
-<ul>
-<li>store -&nbsp;仅保存参数后的值</li>
-<li>store_const -&nbsp;保存一个常量，由const参数给出</li>
-<li>store_true -&nbsp;给出参数则保存True值，不给出则为False</li>
-<li>store_false -&nbsp;与上面相反</li>
-<li>append -&nbsp;把多次调用的值保存为一个列表</li>
-<li>append_const -&nbsp;把多次调用的常量保存为一个列表</li>
-<li>count -&nbsp;计算参数出现的次数</li>
-<li>help -&nbsp;打印帮助信息，默认自动添加</li>
-<li>version -&nbsp;打印版本信息，配合version选项使用</li>
-</ul>
-<p>举几个例子</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-sh&#39;</span><span class="p">,</span><span class="s1">&#39;--show&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;-sh&#39;</span><span class="p">])</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</pre></div>
+            <form class="navbar-form navbar-right" role="search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fa
+                        fa-search fa-fw"></i></button>
+                  </span>
+                </div>
+              </div>
+            </form>
+
+        </div>
+
+      </nav>
+
+    </div>
 
 
-<p>给出<code>-sh</code>参数，则show值为True</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a1&#39;</span><span class="p">,</span><span class="s1">&#39;--arg1&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_const&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a2&#39;</span><span class="p">,</span><span class="s1">&#39;--arg2&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_const&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a3&#39;</span><span class="p">,</span><span class="s1">&#39;--arg3&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_const&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;-a1&#39;</span><span class="p">])</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">arg1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">arg3</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-</pre></div>
+    <div class="container main">
 
 
-<p>只给出a1参数，arg1的值为0。
-没有给出a2参数，则a2的const没有被调用，使用default的值，当然default默认就是None，不写也可以。
-a3参数其实就是store_true的实现。&nbsp;const和default的区别就是当命令给出但是后面未接值时，使用const值，如果命令那个都没有给出，则使用default的值。</p>
-<h3>3.&nbsp;nargs</h3>
-<p>nargs定义参数后面值的个数，可选值有几种：</p>
-<blockquote>
-<ul>
-<li>N&nbsp;(一个整数)</li>
-<li>?</li>
-<li>*</li>
-<li>+</li>
-</ul>
-</blockquote>
-<p>如果懂正则表达式，那nargs的参数就很好理解，这里就不做过多解释，不过要注意一点，当nargs=1的时候，他的行为和不给出nargs是不一样的，前者是一个列表，后者是一个值。直接看例子：</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a2&#39;</span><span class="p">,</span><span class="s1">&#39;--args2&#39;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a3&#39;</span><span class="p">,</span><span class="s1">&#39;--args3&#39;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;-a3&#39;</span><span class="p">,</span><span class="s1">&#39;aa&#39;</span><span class="p">,</span><span class="s1">&#39;bb&#39;</span><span class="p">])</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">args2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args3</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;aa&#39;</span><span class="p">,</span> <span class="s1">&#39;bb&#39;</span><span class="p">])</span>
-</pre></div>
+      <div class="row">
+        <div class=" col-md-12  ">
+  <h1>
+    <a  href="/tag/argparse.html" rel="bookmark" title="Permalink to argparse articles">argparse articles</a>
+  </h1>
+        </div>
+      </div>
+
+      <div class="row">
 
 
-<p>结果很好理解，?可以配合const使用，其他的可以配合default使用，调用了就是一个列表，使用const或default就是一个值。</p>
-<h3>4.&nbsp;type和metavar</h3>
-<p>这两个参数偶尔能用到，</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a2&#39;</span><span class="p">,</span><span class="s1">&#39;--args2&#39;</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;STR&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">SUPPRESS</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;3&#39;</span><span class="p">])</span>
-</pre></div>
+        <div class=" col-md-12 " id="content" role="main">
+  <dl class="dl-horizontal">
+      <dt><abbr class="published" title="2018-01-08T17:41:00+08:00">一月 08, 2018</abbr></dt>
+      <dd><a href="/argparse-brief-usage.html">argparse模块简要用法</a></dd>
+  </dl>
+        </div>
 
 
-<p><code>default=argparse.SUPPRESS</code>指出不给参数不存储变量，否则默认是None，&nbsp;打印help说明看看</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
-<span class="n">usage</span><span class="p">:</span> <span class="n">PROG</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a2</span> <span class="n">STR</span><span class="p">]</span> <span class="n">a1</span>
+      </div>
 
-<span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
-  <span class="n">a1</span>
+    </div>
 
-<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
-  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span>
-  <span class="o">-</span><span class="n">a2</span> <span class="n">STR</span><span class="p">,</span> <span class="o">--</span><span class="n">args2</span> <span class="n">STR</span>
-</pre></div>
+    <!-- TODO: make footer sticky -->
+    <footer class="container-fluid">
+      <div class="container">
+        <div class="row">
 
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+                <h5>链接</h5>
+                <ul class="list-unstyled">
+                  <li>  <a href="http://getpelican.com/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
+    Pelican
+  </a></li>
+                  <li>  <a href="http://python.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
+    Python.org
+  </a></li>
+                  <li>  <a href="http://jinja.pocoo.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
+    Jinja2
+  </a></li>
+                </ul>
+            </div>
 
-<p>metavar仅改变了help说明里的变量名。</p>
-<h3>参考文档</h3>
-<ol>
-<li><a href="https://docs.python.org/3/library/argparse.html">官方文档</a></li>
-<li><a href="http://python.usyiyi.cn/translate/python_352/library/argparse.html">中文文档</a></li>
-</ol><!--<p>There are <a href="/argparse-brief-usage.html#disqus_thread">comments</a>.</p>-->
-                </article>
-            </aside><!-- /#featured -->
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>链接</h2>
-                        <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>社交网站</h2>
-                        <ul>
+          <div class="col-md-2">
+            <h5>归档</h5>
+            <ul class="list-unstyled">
+                <li><a href="/categories.html"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="/archives.html"><i class="fa fa-calendar"></i> Dates</a></li>
+                <li><a href="/tags.html"><i class="fa fa-tag"></i> Tags</a></li>
+            </ul>
+          </div>
 
-                            <li><a href="https://github.com/princelai">Github</a></li>
-                            <li><a href="https://plus.google.com/100073068742779779797">G+</a></li>
-                            <li><a href="https://twitter.com/princelai">Twitter</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
+          <div class="col-md-2 text-muted">
+            <h5>Copyright notice</h5>
+            <p>© Copyright 2018 Kevin Chen.</p>
+          </div>
         <!--
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address>
+          <div class="col-md-2 text-muted">
+            <h5>Disclaimer</h5>
+              <p>All opinions expressed in this site are my own personal opinions and are not endorsed by, nor do they represent the opinions of my previous, current and future employers or any of its affiliates, partners or customers.</p>
+          </div>
+        -->
+          <div class="col-md-2">
+          </div>
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer>-->
+        </div>
+      </div>
+
+      <h5 class="text-right"><a href="#"><i class="fa fa-arrow-up"></i> Back to top</a></h5>
+
+      <div class="container">
+        <div class="row col-md-12 text-muted text-center">
+          Site generated by <a href="https://getpelican.com"> Pelican</a>.<br/>
+          <a href="https://github.com/kdeldycke/plumage"> Plumage</a> theme by <a href="https://kevin.deldycke.com">Kevin Deldycke</a>.
+        </div>
+      </div>
+
+    </footer>
+
     <script type="text/javascript">
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -196,14 +196,13 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
     ga('create', 'UA-1337838-7', 'auto');
     ga('send', 'pageview');
     </script>
-<script type="text/javascript">
-    var disqus_shortname = 'solarck';
-    (function () {
-        var s = document.createElement('script'); s.async = true;
-        s.type = 'text/javascript';
-        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
-        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-    }());
-</script>
-</body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
+    <script src="/theme/js/jquery.mglass.js"></script>
+    <script src="/theme/js/application.js"></script>
+
+  </body>
 </html>

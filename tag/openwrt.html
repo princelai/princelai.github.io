@@ -1,287 +1,196 @@
 <!DOCTYPE html>
 <html lang="zh">
-<head>
-        <meta charset="utf-8" />
-        <title>Solarck - openwrt</title>
-        <link rel="stylesheet" href="/theme/css/main.css" />
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
+    <title>  openwrt
+ | Solarck</title>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">Solarck  <strong>金融民工与程序猿的结合体</strong></a></h1>
-                <nav><ul>
-                    <li><a href="/category/itbi-ji.html">IT笔记</a></li>
-                    <li><a href="/category/jin-rong-bi-ji.html">金融笔记</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
+    <meta name="author" content="Kevin Chen"/>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/openwrt-samba.html">openwrt开启Samba作为共享中心</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2014-01-05T01:29:00+08:00">
-                发布时间: 一月 05, 2014
-        </abbr>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css"/>
+    <link rel="stylesheet" href="/theme/css/jquery.mglass.css"/>
+    <link rel="stylesheet" href="/theme/css/pygment-solarized-dark.css"/>
+    <link rel="stylesheet" href="/theme/css/style.css"/>
 
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/openwrt.html">openwrt</a> </p>
-</footer><!-- /.post-info --><p>为Openwrt接入一个大U盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机BT下载提供一个基础。</p>
-<h3>安装</h3>
-<div class="highlight"><pre><span></span>opkg update
-opkg install samba36-server luci-app-samba
-</pre></div>
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Istok+Web' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
+      <link href='https://fonts.googleapis.com/css?family=Expletus+Sans' rel='stylesheet' type='text/css'>
 
 
-<!--more-->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
-<h4>配置文件</h4>
-<p>samba的配置文件只有两个，而且默认配置稍作修改就可以使用</p>
-<div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/samba/smb.conf.template
-<span class="o">[</span>global<span class="o">]</span>
-    netbios <span class="nv">name</span> <span class="o">=</span> OpenWrt
-    display <span class="nv">charset</span> <span class="o">=</span> UTF-8
-    <span class="nv">interfaces</span> <span class="o">=</span> <span class="m">127</span>.0.0.1/8 lo <span class="m">192</span>.168.3.1/24 fd73:3a9a:156::1/60 br-lan <span class="c1">#内网IP</span>
-    server <span class="nv">string</span> <span class="o">=</span> OpenWrt
-    unix <span class="nv">charset</span> <span class="o">=</span> UTF-8
-    <span class="nv">workgroup</span> <span class="o">=</span> WORKGROUP
-    <span class="nv">browseable</span> <span class="o">=</span> yes
-    <span class="nv">deadtime</span> <span class="o">=</span> <span class="m">30</span>
-    domain <span class="nv">master</span> <span class="o">=</span> yes
-    encrypt <span class="nv">passwords</span> <span class="o">=</span> <span class="nb">true</span>
-    <span class="nb">enable</span> core <span class="nv">files</span> <span class="o">=</span> no
-    guest <span class="nv">account</span> <span class="o">=</span> nobody <span class="c1">#匿名用户</span>
-    guest <span class="nv">ok</span> <span class="o">=</span> yes <span class="c1">#匿名用户</span>
-    invalid <span class="nv">users</span> <span class="o">=</span> root
-    <span class="nb">local</span> <span class="nv">master</span> <span class="o">=</span> yes
-    load <span class="nv">printers</span> <span class="o">=</span> no
-    map to <span class="nv">guest</span> <span class="o">=</span> Bad User
-    max <span class="nv">protocol</span> <span class="o">=</span> SMB2
-    min receivefile <span class="nv">size</span> <span class="o">=</span> <span class="m">16384</span>
-    null <span class="nv">passwords</span> <span class="o">=</span> yes <span class="c1">#无需密码</span>
-    obey pam <span class="nv">restrictions</span> <span class="o">=</span> yes
-    os <span class="nv">level</span> <span class="o">=</span> <span class="m">20</span>
-    passdb <span class="nv">backend</span> <span class="o">=</span> smbpasswd
-    preferred <span class="nv">master</span> <span class="o">=</span> yes
-    <span class="nv">printable</span> <span class="o">=</span> no
-    <span class="nv">security</span> <span class="o">=</span> user
-    smb <span class="nv">encrypt</span> <span class="o">=</span> disabled
-    smb passwd <span class="nv">file</span> <span class="o">=</span> /etc/samba/smbpasswd
-    socket <span class="nv">options</span> <span class="o">=</span> TCP_NODELAY IPTOS_LOWDELAY
-    <span class="nv">syslog</span> <span class="o">=</span> <span class="m">2</span>
-    use <span class="nv">sendfile</span> <span class="o">=</span> yes
-    <span class="nv">writeable</span> <span class="o">=</span> yes <span class="c1">#可写</span>
-</pre></div>
+    <!-- Feeds -->
 
 
-<div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/config/samba
-config samba
-    option <span class="s1">&#39;name&#39;</span>           <span class="s1">&#39;OpenWrt&#39;</span>
-    option <span class="s1">&#39;workgroup&#39;</span>      <span class="s1">&#39;WORKGROUP&#39;</span>
-    option <span class="s1">&#39;description&#39;</span>        <span class="s1">&#39;OpenWrt&#39;</span>
-    option <span class="s1">&#39;homes&#39;</span>          <span class="s1">&#39;1&#39;</span>
+  </head>
 
-config <span class="s1">&#39;sambashare&#39;</span>
-    option <span class="s1">&#39;name&#39;</span> <span class="s1">&#39;Shares&#39;</span>
-    option <span class="s1">&#39;path&#39;</span> <span class="s1">&#39;/share&#39;</span> <span class="c1">#samba所在目录</span>
-<span class="c1">#   option &#39;users&#39; &#39;sandra&#39;</span>
-    option <span class="s1">&#39;guest_ok&#39;</span> <span class="s1">&#39;yes&#39;</span>
-    option <span class="s1">&#39;create_mask&#39;</span> <span class="s1">&#39;0777&#39;</span> <span class="c1">#所有用户可写</span>
-    option <span class="s1">&#39;dir_mask&#39;</span> <span class="s1">&#39;0777&#39;</span> <span class="c1">#所有用户可写</span>
-    option <span class="s1">&#39;read_only&#39;</span> <span class="s1">&#39;no&#39;</span>
-</pre></div>
+  <body>
 
+    <div class="container">
 
-<p>我的配置是无需密码所有用户都可以访问，可上传可下载。</p>
-<p>配置完还需要对目录进行权限提升</p>
-<div class="highlight"><pre><span></span>chmod a+w /share
-</pre></div>
+      <div class="page-header">
+          <a href="" class="avatar-container pull-left">
+            <div class="avatar ">
+              <div class="side"><img src="static/avatar.jpg" class="img-responsive"/></div>
+            </div>
+          </a>
+        <h1><a href="">Solarck</a> <small>金融民工与程序猿的结合体</small></h1>
+      </div>
 
+      <nav class="navbar navbar-default">
 
-<p>或者更改文件夹用户</p>
-<div class="highlight"><pre><span></span>chown nobody:nobody /share
-</pre></div>
+        <!-- Hamburger menu for mobile -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#plumage-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="" title="金融民工与程序猿的结合体">Solarck</a>
+        </div>
 
+        <!-- Menus and search forms -->
+        <div class="collapse navbar-collapse" id="plumage-navbar-collapse-1">
 
-<p>最后重启samba服务并开机启动</p>
-<div class="highlight"><pre><span></span>/etc/init.d/samba restart
-/etc/init.d/samba <span class="nb">enable</span>
-</pre></div>
-
-
-<h3>访问</h3>
-<p>Windows用户很容易访问，在网络邻居（网络）里就可以看到WORKGROUP&#8212;&gt;<span class="caps">OPENWRT</span>&#8212;&gt;Share文件夹了，但是linux用户需要一些其他命令。  <br>
-<strong>1.&nbsp;安装g2sc</strong>    </p>
-<div class="highlight"><pre><span></span>yaourt -S g2sc
-</pre></div>
-
-
-<p>安装完就可以像Windows一样看到工作组和文件夹，但是只能下载，没有上传功能。    </p>
-<p><strong>2. sambclient</strong>&nbsp;安装工具</p>
-<div class="highlight"><pre><span></span>yaourt -S sambaclient
-</pre></div>
-
-
-<p>连接主机    </p>
-<div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: smbclient -L OPENWRT
-Enter kevins password:  <span class="c1">#没设密码直接回车</span>
-
-    Sharename       Type      Comment
-    ---------       ----      -------
-    Shares          Disk      
-    IPC$            IPC       IPC Service <span class="o">(</span>OpenWrt<span class="o">)</span>
-
-    Server               Comment
-    ---------            -------
-    CHEN-PC              
-    OPENWRT              OpenWrt
-
-    Workgroup            Master
-    ---------            -------
-    WORKGROUP            OPENWRT
-</pre></div>
+          <ul class="nav navbar-nav">
+<li >
+                <a href="">主页</a>
+              </li>
+<li >
+                <a href="about">关于</a>
+              </li>
+<li >
+                <a href="resume">简历</a>
+              </li>
+<li >
+                  <a href="/category/itbi-ji.html">IT笔记</a>
+                </li>
+<li >
+                  <a href="/category/jin-rong-bi-ji.html">金融笔记</a>
+                </li>
+          </ul>
 
 
-<div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: smbclient //OPENWRT/Shares <span class="c1">#格式为//Servername/Sharename</span>
-smb: <span class="se">\&gt;</span>
-</pre></div>
+            <form class="navbar-form navbar-right" role="search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fa
+                        fa-search fa-fw"></i></button>
+                  </span>
+                </div>
+              </div>
+            </form>
+
+        </div>
+
+      </nav>
+
+    </div>
 
 
-<p>出现了smb的命令行</p>
-<div class="highlight"><pre><span></span>get ****    <span class="c1">#下载某个文件    </span>
-put ****    <span class="c1">#上传某个文件</span>
-</pre></div>
+    <div class="container main">
 
 
-<p>更多命令输入?查看</p>
-<p><strong>3.&nbsp;mount挂载</strong></p>
-<div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: mkdir /mnt/samba
-kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
-</pre></div>
+      <div class="row">
+        <div class=" col-md-12  ">
+  <h1>
+    <a  href="/tag/openwrt.html" rel="bookmark" title="Permalink to openwrt articles">openwrt articles</a>
+  </h1>
+        </div>
+      </div>
+
+      <div class="row">
 
 
-<h3>完成</h3>
-<p>由于安装了Luci，所以开启了uhttp服务，把共享目录链接到/www目录同样可以通过浏览器直接下载，相当于把Samba目录同样做成了FTP目录。</p>
-<div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: ln -s /share /www/share
-</pre></div>
+        <div class=" col-md-12 " id="content" role="main">
+  <dl class="dl-horizontal">
+      <dt><abbr class="published" title="2014-01-05T01:29:00+08:00">一月 05, 2014</abbr></dt>
+      <dd><a href="/openwrt-samba.html">openwrt开启Samba作为共享中心</a></dd>
+      <dt><abbr class="published" title="2014-01-03T01:48:00+08:00">一月 03, 2014</abbr></dt>
+      <dd><a href="/openwrt-extroot.html">用extroot为openwrt扩充存储空间</a></dd>
+      <dt><abbr class="published" title="2014-01-02T01:08:00+08:00">一月 02, 2014</abbr></dt>
+      <dd><a href="/install-openwrt-on-mw4530r.html">水星（Mercury）MW4530r刷Openwrt</a></dd>
+  </dl>
+        </div>
 
 
-<p>Samba共享就全部完成，之后再继续研究BT下载，配合Samba的共享就等于免费拥有了一个简版NAS。</p><!--<p>There are <a href="/openwrt-samba.html#disqus_thread">comments</a>.</p>-->
-                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>过往文章</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
+      </div>
 
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/openwrt-extroot.html" rel="bookmark"
-                           title="Permalink to 用extroot为openwrt扩充存储空间">用extroot为openwrt扩充存储空间</a></h1>
-                </header>
+    </div>
 
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2014-01-03T01:48:00+08:00">
-                发布时间: 一月 03, 2014
-        </abbr>
+    <!-- TODO: make footer sticky -->
+    <footer class="container-fluid">
+      <div class="container">
+        <div class="row">
 
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/openwrt.html">openwrt</a> </p>
-</footer><!-- /.post-info -->                <p>水星这款MW4350r内存为128M，运行很多程序都不在话下。但是却只提供了8M&nbsp;Flash存储空间，而路由器系统还占了1.9M，剩下的5M空间不足以支持安装很多软件，比如我在安装python的时候就报错提示存储空间不足，这确实很郁闷，但幸好Openwrt还提供了extroot方式来扩展存储，来发挥路由器和Openwrt系统的真正实力。</p>
-<p><strong>pivot-overlay还是pivot-root？</strong></p>
-<blockquote>
-<p>我把两种方式都试过，pivot-overlay方式不能够把安装程序的位置移到USB存储装置上，但是pivot-root方式可以，所以我选择了后者。pivot-root方式使/覆盖掉了/overlay成为rootfs，我认为这种方式更接近原生的Linux系统。  <br>
-而从官方的文档来看，目前pivot-root已经没有以前的缺点和不足，选择哪个已经是个人需求而不是技术问题了。  <br>
-网上大部分文章帖子都是2009-2010年间的，所以大部分可能都是pivot-overlay的。如果对这部分不太理解，请仔细阅读官方Wiki：<a href="http://wiki.openwrt.org/doc/howto/extroot/extroot.theory">ExtRoot: How it works</a>,<a href="http://wiki.openwrt.org/doc/techref/flash.layout">The OpenWrt Flash&nbsp;Layout</a></p>
-</blockquote>
-<!--more-->
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+                <h5>链接</h5>
+                <ul class="list-unstyled">
+                  <li>  <a href="http://getpelican.com/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
+    Pelican
+  </a></li>
+                  <li>  <a href="http://python.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
+    Python.org
+  </a></li>
+                  <li>  <a href="http://jinja.pocoo.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
+    Jinja2
+  </a></li>
+                </ul>
+            </div>
 
-<h3>安装必要的包</h3>
-<div class="highlight"><pre><span></span>opkg update
-opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs-ext4 block-mount
-</pre></div>
+          <div class="col-md-2">
+            <h5>归档</h5>
+            <ul class="list-unstyled">
+                <li><a href="/categories.html"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="/archives.html"><i class="fa fa-calendar"></i> Dates</a></li>
+                <li><a href="/tags.html"><i class="fa fa-tag"></i> Tags</a></li>
+            </ul>
+          </div>
 
-
-<p>e2fsprogs包提供了mkfs（mkfs.ext3 …</p>
-                <a class="readmore" href="/openwrt-extroot.html">查看全文</a>
-                <!--<p>There are <a href="/openwrt-extroot.html#disqus_thread">comments</a>.</p>-->
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/install-openwrt-on-mw4530r.html" rel="bookmark"
-                           title="Permalink to 水星（Mercury）MW4530r刷Openwrt">水星（Mercury）MW4530r刷Openwrt</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2014-01-02T01:08:00+08:00">
-                发布时间: 一月 02, 2014
-        </abbr>
-
-        <address class="vcard author">
-                作者:                         <a class="url fn" href="/author/kevin-chen.html">Kevin Chen</a>
-        </address>
-<p>分类: <a href="/category/itbi-ji.html">IT笔记</a></p>
-<p>标签: <a href="/tag/openwrt.html">openwrt</a> </p>
-</footer><!-- /.post-info -->                <p>经过两天的不屑折腾，终于为我的Mw4530r安装上了Openwrt。从最后安装成功往回看，其实整个过程非常简单，但是由于是第一次接触，走了不少弯路，本应该一个小时就完成的工作，却整整花了我两天时间。再次发篇文章庆祝下，也给其他朋友一些参考。</p>
-<h3>下载文件</h3>
-<p>水星这款路由器是ar71xx芯片的，因为较新，所以还没有官方的稳定版。在Openwrt的<a href="http://downloads.openwrt.org/snapshots/trunk/ar71xx/">snapshots/trunk</a>目录搜索下载我们需要的刷机文件，一般情况一个型号有两个文件，一个名字里带factory，从其他固件系统刷Openwrt下载这个文件；一个名字带sysupgrade，已经是Openwrt系统的用此文件升级。</p>
-<h3>刷机</h3>
-<p>组装好路由器，接通电源，电脑网卡口连接路由器任意Lan口，打开浏览器访问http://192.168.1.1&nbsp;就可以看见水星的原厂界面。利用原厂固件的升级功能，提交下载好的Openwrt刷机文件即可直接刷机，非常的方便。稍等片刻等待路由器自动重启，此时刷机完成。</p>
-<!--more-->
-
-<h3>初始化</h3>
-<p>Openwrt的固件是不带UI界面的，在安装用户界面之前，用户需要先进行简单的初始化工作。  <br>&nbsp;使用telnet登陆路由器</p>
-<div class="highlight"><pre><span></span>telnet <span class="m">192</span>.168.1.1
-</pre></div>
-
-
-<p>Linux系统自带命令，Windows用户需要在控制面板 …</p>
-                <a class="readmore" href="/install-openwrt-on-mw4530r.html">查看全文</a>
-                <!--<p>There are <a href="/install-openwrt-on-mw4530r.html#disqus_thread">comments</a>.</p>-->
-                </div><!-- /.entry-content -->
-            </article></li>
-                </ol><!-- /#posts-list -->
-                </section><!-- /#content -->
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>链接</h2>
-                        <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>社交网站</h2>
-                        <ul>
-
-                            <li><a href="https://github.com/princelai">Github</a></li>
-                            <li><a href="https://plus.google.com/100073068742779779797">G+</a></li>
-                            <li><a href="https://twitter.com/princelai">Twitter</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
+          <div class="col-md-2 text-muted">
+            <h5>Copyright notice</h5>
+            <p>© Copyright 2014 Kevin Chen.</p>
+          </div>
         <!--
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address>
+          <div class="col-md-2 text-muted">
+            <h5>Disclaimer</h5>
+              <p>All opinions expressed in this site are my own personal opinions and are not endorsed by, nor do they represent the opinions of my previous, current and future employers or any of its affiliates, partners or customers.</p>
+          </div>
+        -->
+          <div class="col-md-2">
+          </div>
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer>-->
+        </div>
+      </div>
+
+      <h5 class="text-right"><a href="#"><i class="fa fa-arrow-up"></i> Back to top</a></h5>
+
+      <div class="container">
+        <div class="row col-md-12 text-muted text-center">
+          Site generated by <a href="https://getpelican.com"> Pelican</a>.<br/>
+          <a href="https://github.com/kdeldycke/plumage"> Plumage</a> theme by <a href="https://kevin.deldycke.com">Kevin Deldycke</a>.
+        </div>
+      </div>
+
+    </footer>
+
     <script type="text/javascript">
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -291,14 +200,13 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
     ga('create', 'UA-1337838-7', 'auto');
     ga('send', 'pageview');
     </script>
-<script type="text/javascript">
-    var disqus_shortname = 'solarck';
-    (function () {
-        var s = document.createElement('script'); s.async = true;
-        s.type = 'text/javascript';
-        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
-        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-    }());
-</script>
-</body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
+    <script src="/theme/js/jquery.mglass.js"></script>
+    <script src="/theme/js/application.js"></script>
+
+  </body>
 </html>
