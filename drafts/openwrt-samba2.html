@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>  openwrt-samba2
+ | Solarck</title>
+
+    <meta name="author" content="Kevin Chen"/>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css"/>
+    <link rel="stylesheet" href="https://solarck.com/theme/css/jquery.mglass.css"/>
+    <link rel="stylesheet" href="https://solarck.com/theme/css/pygment-solarized-dark.css"/>
+    <link rel="stylesheet" href="https://solarck.com/theme/css/style.css"/>
+
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Istok+Web' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
+      <link href='https://fonts.googleapis.com/css?family=Expletus+Sans' rel='stylesheet' type='text/css'>
+
+
+    <link rel="icon" href="https://solarck.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://solarck.com/favicon.ico" type="image/x-icon">
+
+    <!-- Feeds -->
+      <link href="https://solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Solarck - All posts - Atom Feed"/>
+
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="page-header">
+          <a href="https://solarck.com" class="avatar-container pull-left">
+            <div class="avatar ">
+              <div class="side"><img src="https://solarck.com/static/avatar.jpg" class="img-responsive"/></div>
+            </div>
+          </a>
+        <h1><a href="https://solarck.com">Solarck</a> <small>金融民工与程序猿的结合体</small></h1>
+      </div>
+
+      <nav class="navbar navbar-default">
+
+        <!-- Hamburger menu for mobile -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#plumage-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://solarck.com" title="金融民工与程序猿的结合体">Solarck</a>
+        </div>
+
+        <!-- Menus and search forms -->
+        <div class="collapse navbar-collapse" id="plumage-navbar-collapse-1">
+
+          <ul class="nav navbar-nav">
+<li >
+                  <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a>
+                </li>
+<li >
+                  <a href="https://solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
+                </li>
+<li >
+                  <a href="https://solarck.com/pages/aboutme.html">关于我</a>
+                </li>
+<li >
+                  <a href="https://solarck.com/pages/resume.html">简历</a>
+                </li>
+
+          </ul>
+
+
+            <form class="navbar-form navbar-right" role="search" action="https://solarck.com/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fa
+                        fa-search fa-fw"></i></button>
+                  </span>
+                </div>
+              </div>
+            </form>
+
+        </div>
+
+      </nav>
+
+    </div>
+
+
+    <div class="container main">
+
+
+      <div class="row">
+        <div class=" col-md-9  ">
+  <h1>
+    <a href="https://solarck.com/drafts/openwrt-samba2.html" rel="bookmark" title="Permalink to openwrt-samba2">openwrt-samba2</a>
+  </h1>
+        </div>
+      </div>
+
+      <div class="row">
+
+
+        <div class=" col-md-9 " id="content" role="main">
+  
+
+  <div>
+    <h3>USB驱动</h3>
+<p><strong>查看已安装的驱动</strong></p>
+<div class="highlight"><pre><span></span>opkg update
+opkg list-installed | grep usb
+</pre></div>
+
+
+<p><strong>安装驱动和工具</strong></p>
+<p>如果下列驱动未出现在上一步的结果中，请务必首先安装缺失的驱动</p>
+<div class="highlight"><pre><span></span>opkg install kmod-usb-core kmod-usb-storage kmod-usb3 kmod-usb2
+insmod usbcore
+insmod xhci-hcd #USB2.0驱动
+insmod ehci-hcd #USB3.0驱动
+</pre></div>
+
+
+<p><strong>安装相关工具</strong></p>
+<div class="highlight"><pre><span></span>opkg install usbutils <span class="c1">#提供lsusb</span>
+opkg install block-mount <span class="c1">#查看挂载点信息</span>
+opkg install e2fsprogs <span class="c1">#格式化工具mkfs</span>
+opkg install kmod-fs-ext4
+opkg install kmod-fs-ntfs
+opkg install gdisk <span class="c1">#分区工具</span>
+opkg install fdisk <span class="c1">#分区工具</span>
+</pre></div>
+
+
+<p>查看已连接的USB设备</p>
+<div class="highlight"><pre><span></span>lsusb -t
+ls -l /dev/sd*
+block info <span class="p">|</span> grep <span class="s2">&quot;/dev/sd&quot;</span>
+</pre></div>
+
+
+<h3>硬盘相关操作</h3>
+<p><strong>硬盘分区</strong></p>
+<p>根据软件提示进行操作</p>
+<div class="highlight"><pre><span></span>gdisk /dev/sda
+</pre></div>
+
+
+<p><strong>格式化硬盘</strong></p>
+<div class="highlight"><pre><span></span>mkfs.ext4 /dev/sda1
+</pre></div>
+
+
+<p>如果是SSD硬盘，则可以按照如下方式安装操作</p>
+<div class="highlight"><pre><span></span>opkg install f2fs-tools
+opkg install kmod-fs-f2fs
+mkfs.f2fs /dev/sda1
+</pre></div>
+
+
+<p><strong>自动挂载分区</strong></p>
+<div class="highlight"><pre><span></span>block detect &gt; /etc/config/fstab
+uci <span class="nb">set</span> fstab.@mount<span class="o">[</span><span class="m">0</span><span class="o">]</span>.enabled<span class="o">=</span><span class="s1">&#39;1&#39;</span>
+uci <span class="nb">set</span> fstab.@global<span class="o">[</span><span class="m">0</span><span class="o">]</span>.check_fs<span class="o">=</span><span class="s1">&#39;1&#39;</span>
+uci commit
+</pre></div>
+
+
+<p>查看当前挂载点设置</p>
+<div class="highlight"><pre><span></span>uci show fstab
+</pre></div>
+
+
+<p><strong>[可选]硬盘休眠</strong></p>
+<div class="highlight"><pre><span></span>opkg update
+opkg install hdparm uci-app-hd-idle
+</pre></div>
+
+
+<p>执行下面的命令启动休眠</p>
+<div class="highlight"><pre><span></span>hdparm -S <span class="m">240</span> /dev/sda2
+</pre></div>
+
+
+<p>-S后的参数含义为：
+1. 0:关闭休眠
+2. 1-240：数字乘以5秒是时间，在设定时间内未使用则休眠
+3.&nbsp;241-251：以30分钟为步进，时间为30分钟-5.5小时</p>
+<p>如果不想按照上面一步一步来，那么官方也提供了快速操作</p>
+<div class="highlight"><pre><span></span><span class="c1"># Copy/paste each line below, then press Return</span>
+opkg update <span class="o">&amp;&amp;</span> opkg install block-mount e2fsprogs kmod-fs-ext4 kmod-usb3 kmod-usb2 kmod-usb-storage
+mkfs.ext4 /dev/sda1
+block detect &gt; /etc/config/fstab 
+uci <span class="nb">set</span> fstab.@mount<span class="o">[</span><span class="m">0</span><span class="o">]</span>.enabled<span class="o">=</span><span class="s1">&#39;1&#39;</span> <span class="o">&amp;&amp;</span> uci <span class="nb">set</span> fstab.@global<span class="o">[</span><span class="m">0</span><span class="o">]</span>.check_fs<span class="o">=</span><span class="s1">&#39;1&#39;</span> <span class="o">&amp;&amp;</span> uci commit 
+/sbin/block mount <span class="o">&amp;&amp;</span> service fstab <span class="nb">enable</span>
+</pre></div>
+
+
+<h3>配置Samba</h3>
+<p><strong>安装Samba</strong></p>
+<p>查看可安装的版本</p>
+<div class="highlight"><pre><span></span>opkg update
+opkg list <span class="p">|</span> grep samba
+</pre></div>
+
+
+<p>根据结果，安装适当的版本</p>
+<div class="highlight"><pre><span></span>opkg install samba36-server luci-app-samba
+</pre></div>
+
+
+<p><strong>配置防火墙</strong></p>
+<p><code>vi /etc/config/firewall</code></p>
+<div class="highlight"><pre><span></span><span class="na">config &#39;rule&#39;</span>
+        <span class="na">option &#39;src&#39; &#39;lan&#39;</span>
+        <span class="na">option &#39;proto&#39; &#39;udp&#39;</span>
+        <span class="na">option &#39;dest_port&#39; &#39;137-138&#39;</span>
+        <span class="na">option &#39;target&#39; &#39;ACCEPT&#39;</span>
+
+<span class="na">config &#39;rule&#39;</span>
+        <span class="na">option &#39;src&#39; &#39;lan&#39;</span>
+        <span class="na">option &#39;proto&#39; &#39;tcp&#39;</span>
+        <span class="na">option &#39;dest_port&#39; &#39;139&#39;</span>
+        <span class="na">option &#39;target&#39; &#39;ACCEPT&#39;</span>
+
+<span class="na">config &#39;rule&#39;</span>
+        <span class="na">option &#39;src&#39; &#39;lan&#39;</span>
+        <span class="na">option &#39;proto&#39; &#39;tcp&#39;</span>
+        <span class="na">option &#39;dest_port&#39; &#39;445&#39;</span>
+        <span class="na">option &#39;target&#39; &#39;ACCEPT&#39;</span>
+</pre></div>
+
+
+<p><strong>Samba配置文件</strong></p>
+<p><em>官方<strong>强烈建议</strong>使用luci来配置Samba，然后通过修改临时文件来完成配置。</em></p>
+<p><em>路由器每次重启，<code>/etc/samba/smb.conf</code>文件都将从/etc/samba/smb.conf.template文件从新创建，所以修改配置时请修改后者。</em></p>
+<p><code>vi /etc/samba/smb.conf.template</code></p>
+<div class="highlight"><pre><span></span><span class="o">[</span>global<span class="o">]</span>
+    netbios <span class="nv">name</span> <span class="o">=</span> <span class="p">|</span>NAME<span class="p">|</span> 
+    <span class="nv">workgroup</span> <span class="o">=</span> <span class="p">|</span>WORKGROUP<span class="p">|</span>
+    server <span class="nv">string</span> <span class="o">=</span> <span class="p">|</span>DESCRIPTION<span class="p">|</span>
+    <span class="nv">syslog</span> <span class="o">=</span> <span class="m">10</span>
+    encrypt <span class="nv">passwords</span> <span class="o">=</span> <span class="nb">true</span>
+    passdb <span class="nv">backend</span> <span class="o">=</span> smbpasswd
+    obey pam <span class="nv">restrictions</span> <span class="o">=</span> yes
+    socket <span class="nv">options</span> <span class="o">=</span> TCP_NODELAY
+    unix <span class="nv">charset</span> <span class="o">=</span> UTF-8
+    <span class="nb">local</span> <span class="nv">master</span> <span class="o">=</span> yes
+    preferred <span class="nv">master</span> <span class="o">=</span> yes
+    os <span class="nv">level</span> <span class="o">=</span> <span class="m">20</span>
+    <span class="nv">security</span> <span class="o">=</span> share
+    guest <span class="nv">account</span> <span class="o">=</span> nobody
+    invalid <span class="nv">users</span> <span class="o">=</span> root
+    smb passwd <span class="nv">file</span> <span class="o">=</span> /etc/samba/smbpasswd
+</pre></div>
+
+
+<p><code>vi /etc/config/samba</code></p>
+<div class="highlight"><pre><span></span>config <span class="s1">&#39;samba&#39;</span>
+        option <span class="s1">&#39;name&#39;</span> <span class="s1">&#39;OpenWrt&#39;</span>
+        option <span class="s1">&#39;workgroup&#39;</span> <span class="s1">&#39;OpenWrt&#39;</span>
+        option <span class="s1">&#39;description&#39;</span> <span class="s1">&#39;Samba on OpenWrt&#39;</span>
+        option <span class="s1">&#39;charset&#39;</span> <span class="s1">&#39;UTF-8&#39;</span>
+        option <span class="s1">&#39;homes&#39;</span> <span class="s1">&#39;0&#39;</span>
+        option <span class="s1">&#39;interface&#39;</span> <span class="s1">&#39;loopback lan&#39;</span>
+
+config <span class="s1">&#39;sambashare&#39;</span>
+        option <span class="s1">&#39;name&#39;</span> <span class="s1">&#39;Shares&#39;</span>
+        option <span class="s1">&#39;path&#39;</span> <span class="s1">&#39;/mnt/sda1&#39;</span>
+        option <span class="s1">&#39;guest_ok&#39;</span> <span class="s1">&#39;yes&#39;</span>
+        option <span class="s1">&#39;create_mask&#39;</span> <span class="s1">&#39;0777&#39;</span>
+        option <span class="s1">&#39;dir_mask&#39;</span> <span class="s1">&#39;0777&#39;</span>
+        option <span class="s1">&#39;read_only&#39;</span> <span class="s1">&#39;no&#39;</span>
+</pre></div>
+
+
+<h3>参考链接</h3>
+<p><a href="https://openwrt.org/docs/guide-user/storage/usb-installing">Installing <span class="caps">USB</span>&nbsp;Drivers</a></p>
+<p><a href="https://openwrt.org/docs/guide-user/storage/usb-drives">Using storage devices</a>
+<a href="https://openwrt.org/docs/guide-user/services/nas/usb-storage-samba-webinterface">Share <span class="caps">USB</span> Hard-drive with Samba using the Luci web-interface</a>
+<a href="https://openwrt.org/docs/guide-user/services/nas/samba_configuration"><span class="caps">SMB</span> Samba share&nbsp;overview</a></p>
+<p><a href="https://openwrt.org/docs/guide-user/services/nas/cifs.server">cifs.server</a></p>
+<p><a href="https://openwrt.org/docs/guide-user/services/nas/samba">Samba</a></p>
+<p><hr />
+<a href="https://www.cnblogs.com/wizju/p/6923625.html">智能路由器-OpenWRT 系列五 （<span class="caps">NAS</span>-SMB家庭共享）</a></p>
+<p><a href="https://www.jianshu.com/p/a122a036e8d9">OpenWrt搭建文件共享服务（<span class="caps">NAS</span>）</a></p>
+<p><a href="https://blog.csdn.net/yicao821/article/details/49929207">Openwrt&nbsp;网络存储NAS之Samba服务</a></p>
+<p><a href="https://luolei.org/openwrt-router-wifi-android-sync-iclould/">【智能路由】用路由器低成本打造NAS+迅雷离线下载+同步android文件</a></p>
+<p><a href="https://blog.zlf.me/%E5%9F%BA%E4%BA%8EOpenWrt%E6%89%93%E9%80%A0NAS%E4%BB%A5%E5%8F%8A%E8%84%B1%E6%9C%BA%E4%B8%8B%E8%BD%BD%E4%B8%AD%E5%BF%83.html">基于OpenWrt打造NAS以及脱机下载中心</a></p>
+  </div>
+
+    <hr />
+    <h3>相关文章</h3>
+    <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
+    <ul>
+        <li><a href="https://solarck.com/openwrt-samba.html">openwrt开启Samba作为共享中心</a></li>
+        <li><a href="https://solarck.com/openwrt-extroot.html">用extroot为openwrt扩充存储空间</a></li>
+        <li><a href="https://solarck.com/install-openwrt-on-mw4530r.html">水星（Mercury）MW4530r刷Openwrt</a></li>
+      </ul>
+
+    <div class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'solarck';
+        var disqus_identifier = "drafts/openwrt-samba2.html";
+        var disqus_title = "openwrt-samba2";
+        var disqus_url = "https://solarck.com/drafts/openwrt-samba2.html";
+        (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.</noscript>
+    </div>
+
+        </div>
+
+          <div class="col-md-3">
+  <div class="well">
+
+    <p><abbr title="2018-06-15T13:07:00+08:00"><i class="fa fa-calendar"></i> 六月 15, 2018</abbr></p>
+
+      <p><address>
+        <i class="fa fa-user"></i> 作者:
+          <a href="https://solarck.com/author/kevin-chen.html" rel="author">Kevin Chen</a>
+      </address></p>
+
+    <hr/>
+
+      <p>
+            <a href="/tag/openwrt.html" data-toggle="tooltip"
+      class="label label-default"
+      title="3 articles with this tag">openwrt</a>
+      </p>
+      <hr/>
+
+
+
+  </div>
+            
+          </div>
+
+      </div>
+
+    </div>
+
+    <!-- TODO: make footer sticky -->
+    <footer class="container-fluid">
+      <div class="container">
+        <div class="row">
+
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+                <h5>链接</h5>
+                <ul class="list-unstyled">
+                  <li>  <a href="http://getpelican.com/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
+    Pelican
+  </a></li>
+                  <li>  <a href="http://python.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
+    Python.org
+  </a></li>
+                  <li>  <a href="http://jinja.pocoo.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
+    Jinja2
+  </a></li>
+                </ul>
+            </div>
+
+          <div class="col-md-2">
+            <h5>归档</h5>
+            <ul class="list-unstyled">
+                <li><a href="https://solarck.com/categories.html"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="https://solarck.com/archives.html"><i class="fa fa-calendar"></i> Dates</a></li>
+                <li><a href="https://solarck.com/tags.html"><i class="fa fa-tag"></i> Tags</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-2 text-muted">
+            <h5>Copyright</h5>
+            <p>© Copyright 2013-2018 Kevin Chen.</p>
+          </div>
+        <!--
+          <div class="col-md-2 text-muted">
+            <h5>Disclaimer</h5>
+              <p>All opinions expressed in this site are my own personal opinions and are not endorsed by, nor do they represent the opinions of my previous, current and future employers or any of its affiliates, partners or customers.</p>
+          </div>
+        -->
+          <div class="col-md-2">
+              <h5>Feeds</h5>
+              <ul class="list-unstyled">
+                  <li><small><a href="https://solarck.com/feeds/all.atom.xml"><i class="fa fa-rss"></i> All posts (Atom)</a></small></li>
+              </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <h5 class="text-right"><a href="#"><i class="fa fa-arrow-up"></i> Back to top</a></h5>
+
+      <div class="container">
+        <div class="row col-md-12 text-muted text-center">
+          Site generated by <a href="https://getpelican.com"> Pelican</a>.<br/>
+          <a href="https://github.com/kdeldycke/plumage"> Plumage</a> theme by <a href="https://kevin.deldycke.com">Kevin Deldycke</a>.
+        </div>
+      </div>
+
+    </footer>
+
+    <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-1337838-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
+    <script src="https://solarck.com/theme/js/jquery.mglass.js"></script>
+    <script src="https://solarck.com/theme/js/application.js"></script>
+
+  </body>
+</html>
