@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  自定义Linux桌面启动程序
+    <title>  Seach Home
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -24,6 +24,7 @@
     <link href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
       <link href='https://fonts.googleapis.com/css?family=Expletus+Sans' rel='stylesheet' type='text/css'>
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Tipue-Search/5.0.0/tipuesearch.css"/>
 
     <link rel="icon" href="https://solarck.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://solarck.com/favicon.ico" type="image/x-icon">
@@ -64,8 +65,8 @@
         <div class="collapse navbar-collapse" id="plumage-navbar-collapse-1">
 
           <ul class="nav navbar-nav">
-<li  class="active" >
-                  <a href="https://solarck.com/category/itbi-ji.html">IT笔记 <span class="sr-only">(current)</span></a>
+<li >
+                  <a href="https://solarck.com/category/itbi-ji.html">IT笔记</a>
                 </li>
 <li >
                   <a href="https://solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
@@ -103,9 +104,9 @@
 
 
       <div class="row">
-        <div class=" col-md-9  ">
+        <div class=" col-md-12  ">
   <h1>
-    <a href="https://solarck.com/linux-desktop-entries.html" rel="bookmark" title="Permalink to 自定义Linux桌面启动程序">自定义Linux桌面启动程序</a>
+    Search Results
   </h1>
         </div>
       </div>
@@ -113,102 +114,12 @@
       <div class="row">
 
 
-        <div class=" col-md-9 " id="content" role="main">
-  
-
+        <div class=" col-md-12 " id="content" role="main">
   <div>
-    <p>Anaconda自带的Spyder是一个我最喜欢使用的IDE，对于科学计算有很好的支持，但是在Linux上它并没有自带.desktop文件，所以并不能在程序列表里找到，每次都要手动在命令行执行才能开启，非常不方便，所以决定自己搜索下方法，自己给它添加一个桌面快捷方式。</p>
-<p>Linux的主流DE的桌面文件都遵循<a href="https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#recognized-keys">桌面配置项规范</a>，按照这个规范配置一个相应的.desktop文件，放在指定的目录即可，当然你也可以放在<code>~/.local/share/applications/</code>目录里，这样这个快捷方式只针对当前用户。</p>
-<!--more-->
-
-<div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">vim</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">applications</span><span class="o">/</span><span class="n">spyder</span><span class="p">.</span><span class="n">desktop</span>
-
-<span class="p">[</span><span class="n">Desktop</span> <span class="n">Entry</span><span class="p">]</span>
-<span class="n">Version</span><span class="o">=</span><span class="mf">1.0</span>
-<span class="n">Type</span><span class="o">=</span><span class="n">Application</span>
-<span class="n">Name</span><span class="o">=</span><span class="n">Spyder</span>
-<span class="n">GenericName</span><span class="o">=</span><span class="n">Spyder</span>
-<span class="n">Comment</span><span class="o">=</span><span class="n">Scientific</span> <span class="n">Python</span> <span class="n">Development</span> <span class="n">EnviRonment</span>
-<span class="n">TryExec</span><span class="o">=/</span><span class="n">opt</span><span class="o">/</span><span class="n">anaconda</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">spyder</span>
-<span class="n">Exec</span><span class="o">=/</span><span class="n">opt</span><span class="o">/</span><span class="n">anaconda</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">spyder</span>
-<span class="n">Categories</span><span class="o">=</span><span class="n">Development</span><span class="p">;</span><span class="n">Science</span><span class="p">;</span><span class="n">IDE</span><span class="p">;</span><span class="n">Qt</span><span class="p">;</span>
-<span class="n">Icon</span><span class="o">=/</span><span class="n">opt</span><span class="o">/</span><span class="n">anaconda</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.6</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">spyder</span><span class="o">/</span><span class="n">images</span><span class="o">/</span><span class="n">spyder</span><span class="p">.</span><span class="n">png</span>
-<span class="n">Terminal</span><span class="o">=</span><span class="nb">false</span>
-<span class="n">StartupNotify</span><span class="o">=</span><span class="nb">false</span>
-</pre></div>
-
-
-<p>TryExec和Exec后面是可执行文件的地址，可以只写后者
-Icon是快捷方式的图标，没有的话可以去网上下载一个或者根据自己喜好随便放一个。
-更多内容可以参考这篇<a href="https://wiki.archlinux.org/index.php/Desktop_entries_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">Wiki</a></p>
+    <div id="tipue_search_content"></div>
   </div>
-
-    <hr />
-    <h3>相关文章</h3>
-    <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
-    <ul>
-        <li><a href="https://solarck.com/centos6-datebase-server.html">CentOS6数据库服务器配置</a></li>
-      </ul>
-
-    <div class="comments">
-      <div id="disqus_thread"></div>
-      <script type="text/javascript">
-        var disqus_shortname = 'solarck';
-        var disqus_identifier = "linux-desktop-entries.html";
-        var disqus_title = "自定义Linux桌面启动程序";
-        var disqus_url = "https://solarck.com/linux-desktop-entries.html";
-        (function() {
-          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-          dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-      </script>
-      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.</noscript>
-    </div>
-
         </div>
 
-          <div class="col-md-3">
-  <div class="well">
-
-    <p><abbr title="2017-11-17T15:58:00+08:00"><i class="fa fa-calendar"></i> 十一月 17, 2017</abbr></p>
-
-      <p><address>
-        <i class="fa fa-user"></i> 作者:
-          <a href="https://solarck.com/author/kevin-chen.html" rel="author">Kevin Chen</a>
-      </address></p>
-
-    <hr/>
-
-      <p>
-              <a href="https://solarck.com/category/itbi-ji.html" rel="tag"
-                  data-toggle="tooltip" class="label label-info"
-                  title="13 articles in this category">IT笔记</a>
-            <a href="/tag/linux.html" data-toggle="tooltip"
-      class="label label-default"
-      title="2 articles with this tag">linux</a>
-      </p>
-      <hr/>
-
-
-      <nav>
-        <ul class="pager">
-          <li class="previous ">
-            <a  href="https://solarck.com/shadowsocks-libev.html" title="VPS搭梯子指南——shadowsocks+BBR+obfs"  rel="prev">
-              <span aria-hidden="true">←</span> 旧文章
-            </a>
-          </li>
-          <li class="next ">
-            <a  href="https://solarck.com/matplotlib-chinese-fonts.html" title="matplotlib中文字体配置"  rel="next">
-              新文章 <span aria-hidden="true">→</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-
-  </div>
-            
-          </div>
 
       </div>
 
@@ -295,6 +206,20 @@ Icon是快捷方式的图标，没有的话可以去网上下载一个或者根�
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
     <script src="https://solarck.com/theme/js/jquery.mglass.js"></script>
     <script src="https://solarck.com/theme/js/application.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Tipue-Search/5.0.0/tipuesearch_content.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Tipue-Search/5.0.0/tipuesearch_set.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Tipue-Search/5.0.0/tipuesearch.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      $('#tipue_search_input').tipuesearch({
+          'mode' : 'json',
+          'show': 10,
+          'newWindow': false,
+          'contentLocation': 'https://solarck.com/tipuesearch_content.json'
+      });
+    });
+  </script>
 
   </body>
 </html>
