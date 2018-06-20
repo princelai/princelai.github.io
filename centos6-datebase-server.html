@@ -118,10 +118,10 @@
 
   <div>
     <p>本文章仅用于记录在公司服务器上通过yum&nbsp;repo来安装官方提供的数据库程序，而非通过编译方式来安装。通过官方仓库来安装有很多好处，比如升级、打补丁都很方便，不用编译浪费时间，更不需要安装多个版本的gcc来满足各种不同软件的要求。</p>
-<h3>Mysql</h3>
-<p><strong>下载安装mysql&nbsp;repo</strong></p>
+<h3 id="mysql">Mysql</h3>
+<h4 id="xia-zai-an-zhuang-mysql-repo"><strong>下载安装mysql&nbsp;repo</strong></h4>
 <p><code>rpm -Uvh https://repo.mysql.com//mysql80-community-release-el6-1.noarch.rpm</code></p>
-<p><strong>升级至57版本</strong></p>
+<h4 id="sheng-ji-zhi-57ban-ben"><strong>升级至57版本</strong></h4>
 <p><code>yum --disablerepo=mysql80-community --enablerepo=mysql57-community upgrade</code></p>
 <p>当前默认是80版本，如果未来需要升级，如果未来一直要维持在57版本，那么建议修改配置文件，以免每次都带上两个参数</p>
 <p><code>vim /etc/yum.repos.d/mysql-community.repo</code></p>
@@ -140,16 +140,14 @@
 <span class="na">gpgcheck</span><span class="o">=</span><span class="s">1</span>
 <span class="na">gpgkey</span><span class="o">=</span><span class="s">file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span>
 </pre></div>
-
-
-<p><strong>安装mysql-server</strong></p>
+<h4 id="an-zhuang-mysql-server"><strong>安装mysql-server</strong></h4>
 <p><code>yum install mysql-community-server</code></p>
-<p><strong>开启服务</strong></p>
+<h4 id="kai-qi-fu-wu"><strong>开启服务</strong></h4>
 <p><code>service mysqld start</code></p>
 <p>当然这时候还未配置mysql，开启服务可能会失败。默认配置文件在<code>/etc/my.cnf</code>。</p>
 <p>更多安装细节可以参照<a href="https://dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/">mysql官方指南</a>。</p>
-<h3>Mongo</h3>
-<p><strong>创建repo文件</strong></p>
+<h3 id="mongo_1">Mongo</h3>
+<h4 id="chuang-jian-repowen-jian"><strong>创建repo文件</strong></h4>
 <p><code>vim /etc/yum.repos.d/mongodb-org-3.6.repo</code></p>
 <div class="highlight"><pre><span></span><span class="k">[mongodb-org-3.6]</span>
 <span class="na">name</span><span class="o">=</span><span class="s">MongoDB Repository</span>
@@ -158,9 +156,7 @@
 <span class="na">enabled</span><span class="o">=</span><span class="s">1</span>
 <span class="na">gpgkey</span><span class="o">=</span><span class="s">https://www.mongodb.org/static/pgp/server-3.6.asc</span>
 </pre></div>
-
-
-<p><strong>安装mongo组件合集</strong></p>
+<h4 id="an-zhuang-mongozu-jian-he-ji"><strong>安装mongo组件合集</strong></h4>
 <p><code>yum install -y mongodb-org</code></p>
 <p>mongo-org是一个合集，如果想精简安装各个组件，请参照下表。</p>
 <table>
@@ -193,12 +189,12 @@
 </tr>
 </tbody>
 </table>
-<p><strong>启动服务</strong></p>
+<h4 id="qi-dong-fu-wu"><strong>启动服务</strong></h4>
 <p><code>mongod -f /etc/mongod.conf</code></p>
 <p>mongo默认不加载conf文件，所以用service方法是无法正常启动的，暂时使用自带方法开启服务。</p>
 <p>更多安装细节可以参照<a href="https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/">mongo官方指南</a>。</p>
-<h3>Nginx</h3>
-<p><strong>创建repo文件</strong></p>
+<h3 id="nginx_1">Nginx</h3>
+<h4 id="chuang-jian-repowen-jian_1"><strong>创建repo文件</strong></h4>
 <p><code>vim /etc/yum.repos.d/nginx.repo</code></p>
 <div class="highlight"><pre><span></span><span class="k">[nginx]</span>
 <span class="na">name</span><span class="o">=</span><span class="s">nginx repo</span>
@@ -206,16 +202,12 @@
 <span class="na">gpgcheck</span><span class="o">=</span><span class="s">0</span>
 <span class="na">enabled</span><span class="o">=</span><span class="s">1</span>
 </pre></div>
-
-
-<p><strong>安装和开启服务</strong></p>
+<h4 id="an-zhuang-he-kai-qi-fu-wu"><strong>安装和开启服务</strong></h4>
 <div class="highlight"><pre><span></span>yum install -y nginx
 service nginx start
 </pre></div>
-
-
 <p>service方法启动nginx默认会加载<code>/etc/nginx/nginx.conf</code>配置。</p>
-<h3>查看系统安装路径</h3>
+<h3 id="cha-kan-xi-tong-an-zhuang-lu-jing_1">查看系统安装路径</h3>
 <p>使用仓库安装有一点不是很清晰，那就是安装目录并非自己指定，有时需要修改一些文件时找不到文件在哪里，我们可以通过如下方法找到软件的所有文件目录。</p>
 <p><code>rpm -qa |grep mongodb</code></p>
 <div class="highlight"><pre><span></span>mongodb-org-mongos-3.6.5-1.el6.x86_64
@@ -224,8 +216,6 @@ mongodb-org-tools-3.6.5-1.el6.x86_64
 mongodb-org-3.6.5-1.el6.x86_64
 mongodb-org-shell-3.6.5-1.el6.x86_64
 </pre></div>
-
-
 <p>例如我们要查看server的所有文件目录，则执行</p>
 <p><code>rpm -ql mongodb-org-server-3.6.5-1.el6.x86_64</code></p>
 <div class="highlight"><pre><span></span>/etc/init.d/mongod
@@ -243,21 +233,17 @@ mongodb-org-shell-3.6.5-1.el6.x86_64
 /var/log/mongodb/mongod.log
 /var/run/mongodb
 </pre></div>
-
-
-<h3>SSH免密登录服务器</h3>
+<h3 id="sshmian-mi-deng-lu-fu-wu-qi">SSH免密登录服务器</h3>
 <p>Linux上免密登录通常用RSA公钥和密钥实现，本地生成钥匙后，公钥上传至服务器，之后便可以免密登录了。</p>
-<p><strong>本地生成公钥密钥</strong></p>
+<h4 id="ben-di-sheng-cheng-gong-yao-mi-yao"><strong>本地生成公钥密钥</strong></h4>
 <p><code>ssh-keygen -t rsa -b 4096</code></p>
 <p>默认公钥会存储在<code>~/.ssh/id_rsa.pub</code>，备用。</p>
-<p><strong>修改服务器sshd配置</strong></p>
+<h4 id="xiu-gai-fu-wu-qi-sshdpei-zhi"><strong>修改服务器sshd配置</strong></h4>
 <p><code>vim /etc/ssh/sshd_config</code></p>
 <div class="highlight"><pre><span></span>PubkeyAuthentication yes #解开注释
 AuthorizedKeysFile .ssh/authorized_keys #解开注释
 </pre></div>
-
-
-<p><strong>上传本地公钥至服务器</strong></p>
+<h4 id="shang-chuan-ben-di-gong-yao-zhi-fu-wu-qi"><strong>上传本地公钥至服务器</strong></h4>
 <p><code>ssh-copy-id -i .ssh/id_rsa.pub -p port user@ip</code></p>
 <p>修改上面的端口、用户名和ip，再在本地<code>.bashrc</code>或<code>.zshrc</code>新建一条alias就可以非常方便快捷的登录了。</p>
   </div>
@@ -330,6 +316,11 @@ AuthorizedKeysFile .ssh/authorized_keys #解开注释
           </li>
         </ul>
       </nav>
+    
+        <center><h4><b>目录</b></h4></center>
+        <nav class="toc">
+            <div id="toc"><ul><li><a class="toc-href" href="#mysql" title="Mysql">Mysql</a><ul><li><a class="toc-href" href="#xia-zai-an-zhuang-mysql-repo" title="下载安装mysql&nbsp;repo">下载安装mysql&nbsp;repo</a></li><li><a class="toc-href" href="#sheng-ji-zhi-57ban-ben" title="升级至57版本">升级至57版本</a></li><li><a class="toc-href" href="#an-zhuang-mysql-server" title="安装mysql-server">安装mysql-server</a></li><li><a class="toc-href" href="#kai-qi-fu-wu" title="开启服务">开启服务</a></li></ul></li><li><a class="toc-href" href="#mongo_1" title="Mongo">Mongo</a><ul><li><a class="toc-href" href="#chuang-jian-repowen-jian" title="创建repo文件">创建repo文件</a></li><li><a class="toc-href" href="#an-zhuang-mongozu-jian-he-ji" title="安装mongo组件合集">安装mongo组件合集</a></li><li><a class="toc-href" href="#qi-dong-fu-wu" title="启动服务">启动服务</a></li></ul></li><li><a class="toc-href" href="#nginx_1" title="Nginx">Nginx</a><ul><li><a class="toc-href" href="#chuang-jian-repowen-jian_1" title="创建repo文件">创建repo文件</a></li><li><a class="toc-href" href="#an-zhuang-he-kai-qi-fu-wu" title="安装和开启服务">安装和开启服务</a></li></ul></li><li><a class="toc-href" href="#cha-kan-xi-tong-an-zhuang-lu-jing_1" title="查看系统安装路径">查看系统安装路径</a></li><li><a class="toc-href" href="#sshmian-mi-deng-lu-fu-wu-qi" title="SSH免密登录服务器">SSH免密登录服务器</a><ul><li><a class="toc-href" href="#ben-di-sheng-cheng-gong-yao-mi-yao" title="本地生成公钥密钥">本地生成公钥密钥</a></li><li><a class="toc-href" href="#xiu-gai-fu-wu-qi-sshdpei-zhi" title="修改服务器sshd配置">修改服务器sshd配置</a></li><li><a class="toc-href" href="#shang-chuan-ben-di-gong-yao-zhi-fu-wu-qi" title="上传本地公钥至服务器">上传本地公钥至服务器</a></li></ul></li></ul></div>
+        </nav>
 
   </div>
             

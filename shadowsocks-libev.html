@@ -119,54 +119,42 @@
   <div>
     <p>近期开会导致墙越来越高，迫不得已升级自建的ss服务，由于shadowsocks原版已经停更，shadowsocksR也已经删库，所以就锁定libev版本。
 <strong><em>注：以下服务器端内容请切换到root操作</em></strong></p>
-<h3>1.&nbsp;升级Debian</h3>
+<h3 id="1-sheng-ji-debian">1.&nbsp;升级Debian</h3>
 <p>在升级之前，我需要先把服务器从Debian 8升级到Debian&nbsp;9，如果不是Debian用户，或者不想升级的可以跳过，这一步不影响后续操作，但是部分代码可能需要修改。</p>
 <p>首先要把Debian&nbsp;8升级到最新版本</p>
 <div class="highlight"><pre><span></span>apt update
 apt upgrade
 </pre></div>
-
-
 <p>备份源列表</p>
 <div class="highlight"><pre><span></span>cp /etc/apt/sources.list /etc/apt/sources.list-jessie
 </pre></div>
-
-
 <p>修改源列表，把jessie 替换为&nbsp;stretch</p>
 <div class="highlight"><pre><span></span>vim /etc/apt/sources.list
 :s/jessie/stretch/g
 </pre></div>
-
-
 <p>再次更新升级</p>
 <div class="highlight"><pre><span></span> apt update
  apt upgrade
  apt dist-upgrade
  apt autoremove
 </pre></div>
-
-
-<h3>2.&nbsp;开启BBR</h3>
+<h3 id="2-kai-qi-bbr">2.&nbsp;开启BBR</h3>
 <p>使用一键脚本安装并开启bbr，此步除OpenVZ以外的服务器都可以开启，跳过不影响后续内容。</p>
 <div class="highlight"><pre><span></span>wget --no-check-certificate https://raw.githubusercontent.com/princelai/across/master/bbr.sh
 chmod +x bbr.sh
 ./bbr.sh
-echo &quot;net.core.default_qdisc=fq&quot; &gt;&gt; /etc/sysctl.conf
-echo &quot;net.ipv4.tcp_congestion_control=bbr&quot; &gt;&gt; /etc/sysctl.conf
+echo "net.core.default_qdisc=fq" &gt;&gt; /etc/sysctl.conf
+echo "net.ipv4.tcp_congestion_control=bbr" &gt;&gt; /etc/sysctl.conf
 sysctl -p
 lsmod | grep bbr
 </pre></div>
-
-
-<h3>3.&nbsp;安装shadowsocks-libev和simple-obfs混淆</h3>
+<h3 id="3-an-zhuang-shadowsocks-libevhe-simple-obfshun-yao">3.&nbsp;安装shadowsocks-libev和simple-obfs混淆</h3>
 <p>需要从stretch-backports库中安装，非Debian 9用户请参考<a href="https://github.com/shadowsocks/shadowsocks-libev#pre-build-configure-guide">文档</a></p>
-<div class="highlight"><pre><span></span>sh -c <span class="s1">&#39;printf &quot;deb http://deb.debian.org/debian stretch-backports main&quot; &gt; /etc/apt/sources.list.d/stretch-backports.list&#39;</span>
+<div class="highlight"><pre><span></span>sh -c <span class="s1">'printf "deb http://deb.debian.org/debian stretch-backports main" &gt; /etc/apt/sources.list.d/stretch-backports.list'</span>
 apt update
 apt -t stretch-backports install shadowsocks-libev simple-obfs
 </pre></div>
-
-
-<h3>4.&nbsp;优化TCP网络</h3>
+<h3 id="4-you-hua-tcpwang-luo">4.&nbsp;优化TCP网络</h3>
 <p>编辑sysctl文件，把下面的内容复制过去，&nbsp;如果第二步中没有开启bbr，那么请删除前两行。</p>
 <p><code>vim /etc/sysctl.conf</code></p>
 <div class="highlight"><pre><span></span><span class="na">net.core.default_qdisc</span> <span class="o">=</span> <span class="s">fq</span>
@@ -192,58 +180,46 @@ apt -t stretch-backports install shadowsocks-libev simple-obfs
 <span class="na">net.ipv4.tcp_mtu_probing</span> <span class="o">=</span> <span class="s">1</span>
 <span class="na">net.ipv4.ip_forward</span> <span class="o">=</span> <span class="s">1</span>
 </pre></div>
-
-
 <p>更改保存后执行</p>
 <div class="highlight"><pre><span></span>sysctl -p
 </pre></div>
-
-
-<h3>5.&nbsp;配置服务端</h3>
+<h3 id="5-pei-zhi-fu-wu-duan">5.&nbsp;配置服务端</h3>
 <p><strong>修改配置</strong></p>
 <p>编辑配置文件，填上自己的密码，端口建议使用443，别的端口封杀的太严重。
 关于加密方式，现在新版都支持AEAD加密方式，详细内容请点<a href="https://shadowsocks.org/en/spec/AEAD-Ciphers.html">这里</a>。</p>
 <p><code>vim /etc/shadowsocks-libev/config.json</code></p>
 <div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;server&quot;</span><span class="p">:</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;server_port&quot;</span><span class="p">:</span><span class="mi">443</span><span class="p">,</span>
-    <span class="nt">&quot;local_port&quot;</span><span class="p">:</span><span class="mi">1080</span><span class="p">,</span>
-    <span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;timeout&quot;</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span>
-    <span class="nt">&quot;method&quot;</span><span class="p">:</span><span class="s2">&quot;chacha20-ietf-poly1305&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;mode&quot;</span><span class="p">:</span><span class="s2">&quot;tcp_and_udp&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;fast_open&quot;</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
-    <span class="nt">&quot;plugin&quot;</span><span class="p">:</span><span class="s2">&quot;obfs-server&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;plugin_opts&quot;</span><span class="p">:</span><span class="s2">&quot;obfs=tls&quot;</span>
+    <span class="nt">"server"</span><span class="p">:</span><span class="s2">"0.0.0.0"</span><span class="p">,</span>
+    <span class="nt">"server_port"</span><span class="p">:</span><span class="mi">443</span><span class="p">,</span>
+    <span class="nt">"local_port"</span><span class="p">:</span><span class="mi">1080</span><span class="p">,</span>
+    <span class="nt">"password"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span>
+    <span class="nt">"timeout"</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span>
+    <span class="nt">"method"</span><span class="p">:</span><span class="s2">"chacha20-ietf-poly1305"</span><span class="p">,</span>
+    <span class="nt">"mode"</span><span class="p">:</span><span class="s2">"tcp_and_udp"</span><span class="p">,</span>
+    <span class="nt">"fast_open"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="nt">"plugin"</span><span class="p">:</span><span class="s2">"obfs-server"</span><span class="p">,</span>
+    <span class="nt">"plugin_opts"</span><span class="p">:</span><span class="s2">"obfs=tls"</span>
 <span class="p">}</span>
 </pre></div>
-
-
 <p><strong>启动服务器端服务</strong></p>
 <p>如果已经按照上面编辑好配置文件，那么就可以直接用文件模式启动服务。</p>
 <div class="highlight"><pre><span></span>ss-server -c config.json <span class="c1">#测试模式</span>
 systemctl start shadowsocks-libev <span class="c1">#后台启动</span>
 systemctl <span class="nb">enable</span> shadowsocks-libev <span class="c1">#开机启动</span>
 </pre></div>
-
-
-<h3>6.&nbsp;配置客户端</h3>
+<h3 id="6-pei-zhi-ke-hu-duan">6.&nbsp;配置客户端</h3>
 <p><strong>Windows</strong></p>
 <p>下载<a href="https://github.com/shadowsocks/shadowsocks-windows/releases">shadowsocks-windows</a>解压缩，
 下载<a href="https://github.com/imgk/simple-obfs-Cygwin/releases">simple-obfs</a>中的obfs-local.exe和msys-2.0.dll放到shadowsocks-windows目录中,obfs-host随意写一个中国可以访问的网站。
-<img alt="shadowsocks-windows" src="http://kevinstuchuang.qiniudn.com/blog-pic/shadowsocks-windows.png"></p>
+<img alt="shadowsocks-windows" src="http://kevinstuchuang.qiniudn.com/blog-pic/shadowsocks-windows.png"/></p>
 <p><strong>Linux</strong></p>
 <p>安装客户端和obfs</p>
 <div class="highlight"><pre><span></span>sudo pacman -Syu
 sudo pacman -S shadowsocks-libev simple-obfs
 </pre></div>
-
-
 <p>开启本地服务</p>
-<div class="highlight"><pre><span></span>nohup ss-local -c config.json --plugin obfs-local --plugin-opts &quot;obfs=tls;obfs-host=cn.bing.com&quot;
+<div class="highlight"><pre><span></span>nohup ss-local -c config.json --plugin obfs-local --plugin-opts "obfs=tls;obfs-host=cn.bing.com"
 </pre></div>
-
-
 <p>开机启动，编辑启动文件&nbsp;，添加obfs混淆</p>
 <p><code>vim /usr/lib/systemd/system/shadowsocks-libev@.service</code></p>
 <div class="highlight"><pre><span></span><span class="k">[Unit]</span>
@@ -254,70 +230,56 @@ sudo pacman -S shadowsocks-libev simple-obfs
 <span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
 <span class="na">User</span><span class="o">=</span><span class="s">nobody</span>
 <span class="na">CapabilityBoundingSet</span><span class="o">=</span><span class="s">CAP_NET_BIND_SERVICE</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/ss-local -c /etc/shadowsocks/%i.json --plugin obfs-local --plugin-opts &quot;obfs=tls;obfs-host=cn.bing.com&quot;</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/ss-local -c /etc/shadowsocks/%i.json --plugin obfs-local --plugin-opts "obfs=tls;obfs-host=cn.bing.com"</span>
 
 <span class="k">[Install]</span>
 <span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
 </pre></div>
-
-
 <p>编辑配置文件
 <code>vim /etc/shadowsocks/libev.json</code></p>
 <div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;server&quot;</span><span class="p">:</span><span class="s2">&quot;你的服务器IP&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;server_port&quot;</span><span class="p">:</span><span class="mi">443</span><span class="p">,</span>
-    <span class="nt">&quot;local_address&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;local_port&quot;</span><span class="p">:</span><span class="mi">65509</span><span class="p">,</span>
-    <span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="s2">&quot;你的密码&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;timeout&quot;</span><span class="p">:</span><span class="mi">300</span><span class="p">,</span>
-    <span class="nt">&quot;method&quot;</span><span class="p">:</span><span class="s2">&quot;chacha20-ietf-poly1305&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;fast_open&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nt">&quot;workers&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="nt">&quot;prefer_ipv6&quot;</span><span class="p">:</span> <span class="kc">false</span>
+    <span class="nt">"server"</span><span class="p">:</span><span class="s2">"你的服务器IP"</span><span class="p">,</span>
+    <span class="nt">"server_port"</span><span class="p">:</span><span class="mi">443</span><span class="p">,</span>
+    <span class="nt">"local_address"</span><span class="p">:</span> <span class="s2">"127.0.0.1"</span><span class="p">,</span>
+    <span class="nt">"local_port"</span><span class="p">:</span><span class="mi">65509</span><span class="p">,</span>
+    <span class="nt">"password"</span><span class="p">:</span><span class="s2">"你的密码"</span><span class="p">,</span>
+    <span class="nt">"timeout"</span><span class="p">:</span><span class="mi">300</span><span class="p">,</span>
+    <span class="nt">"method"</span><span class="p">:</span><span class="s2">"chacha20-ietf-poly1305"</span><span class="p">,</span>
+    <span class="nt">"fast_open"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">"workers"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">"prefer_ipv6"</span><span class="p">:</span> <span class="kc">false</span>
 <span class="p">}</span>
 </pre></div>
-
-
 <p>开启服务，@后面要和json文件同名</p>
 <div class="highlight"><pre><span></span>sudo systemctl start shadowsocks-libev@libev
 sudo systemctl <span class="nb">enable</span>  shadowsocks-libev@libev
 </pre></div>
-
-
 <p>其他内容请参考<a href="https://wiki.archlinux.org/index.php/Shadowsocks_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E5.91.BD.E4.BB.A4.E8.A1.8C">Archlinux Wiki</a>&nbsp;shadowsocks-qt5目前功能严重缺失，不建议使用，Linux平台最好是命令行模式</p>
 <p><a href="https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif?hl=zh-CN">SwitchyOmega</a>是目前Chome最好的代理插件，可以在<a href="https://www.switchyomega.com/download.html">官网</a>下载最新版本安装。</p>
-<h3>7.Android客户端配置</h3>
+<h3 id="7androidke-hu-duan-pei-zhi">7.Android客户端配置</h3>
 <p>如果Android手机可以访问Google&nbsp;Play，则可以直接在上面搜shadowsocks和obfs分别安装后再配置即可。</p>
 <p>如果当前手机不能访问Play，可以在github releases上分别下载<a href="https://github.com/shadowsocks/shadowsocks-android/releases">shadowsocks-android</a>和<a href="https://github.com/shadowsocks/simple-obfs-android/releases">simple-obfs-android</a>，安装后再配置自己的服务端信息。</p>
-<h3>8.socks5转http/https</h3>
+<h3 id="8socks5zhuan-httphttps">8.socks5转http/https</h3>
 <p>实际使用中，经常会遇到命令行终端或本地程序需要代理，但是他们只支持http或https协议，所以就需要把socks5协议的代理转换协议，以Archlinux为例，方法也很简单。</p>
 <p>安装privoxy</p>
 <div class="highlight"><pre><span></span>sudo pacman -S privoxy
 </pre></div>
-
-
-<p>修改配置，找到如下两行打开注释，注意listen后的端口是未来我们要使用的端口，默认为8118，forward后的端口是shadowsocks使用的本地端口，这个依据自己的配置修改，不要忘了最后的&#8221;.&#8221;。
+<p>修改配置，找到如下两行打开注释，注意listen后的端口是未来我们要使用的端口，默认为8118，forward后的端口是shadowsocks使用的本地端口，这个依据自己的配置修改，不要忘了最后的&rdquo;.&rdquo;。
 <code>sudo vim /etc/privoxy/config</code></p>
 <div class="highlight"><pre><span></span>listen-address  <span class="m">127</span>.0.0.1:8118
 forward-socks5t   /   <span class="m">127</span>.0.0.1:65509 .
 </pre></div>
-
-
 <p>保存配置后，启动或重启服务</p>
 <div class="highlight"><pre><span></span>sudo systemctl start privoxy
 sudo systemctl restart privoxy
 </pre></div>
-
-
 <p>以后需要使用时，修改两个本地变量即可</p>
 <div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">https_proxy</span><span class="o">=</span><span class="m">127</span>.0.0.1:8118
 <span class="nb">echo</span> <span class="nv">http_proxy</span><span class="o">=</span><span class="m">127</span>.0.0.1:8118
 </pre></div>
-
-
-<h3>9.&nbsp;服务器端常用的命令</h3>
+<h3 id="9-fu-wu-qi-duan-chang-yong-de-ming-ling">9.&nbsp;服务器端常用的命令</h3>
 <div class="highlight"><pre><span></span><span class="c1">#测试ss+obfs是否正常启动</span>
-ss-server -c config.json --plugin obfs-server --plugin-opts <span class="s2">&quot;obfs=http&quot;</span>
+ss-server -c config.json --plugin obfs-server --plugin-opts <span class="s2">"obfs=http"</span>
 <span class="c1">#查看obfs的进程编号</span>
 ps ax<span class="p">|</span>grep obfs
 <span class="c1">#查看ss的进程编号</span>
@@ -383,6 +345,11 @@ netstat -nlp <span class="p">|</span>grep ss-server
           </li>
         </ul>
       </nav>
+    
+        <center><h4><b>目录</b></h4></center>
+        <nav class="toc">
+            <div id="toc"><ul><li><a class="toc-href" href="#1-sheng-ji-debian" title="1.&nbsp;升级Debian">1.&nbsp;升级Debian</a></li><li><a class="toc-href" href="#2-kai-qi-bbr" title="2.&nbsp;开启BBR">2.&nbsp;开启BBR</a></li><li><a class="toc-href" href="#3-an-zhuang-shadowsocks-libevhe-simple-obfshun-yao" title="3.&nbsp;安装shadowsocks-libev和simple-obfs混淆">3.&nbsp;安装shadowsocks-libev和simple-obfs混淆</a></li><li><a class="toc-href" href="#4-you-hua-tcpwang-luo" title="4.&nbsp;优化TCP网络">4.&nbsp;优化TCP网络</a></li><li><a class="toc-href" href="#5-pei-zhi-fu-wu-duan" title="5.&nbsp;配置服务端">5.&nbsp;配置服务端</a></li><li><a class="toc-href" href="#6-pei-zhi-ke-hu-duan" title="6.&nbsp;配置客户端">6.&nbsp;配置客户端</a></li><li><a class="toc-href" href="#7androidke-hu-duan-pei-zhi" title="7.Android客户端配置">7.Android客户端配置</a></li><li><a class="toc-href" href="#8socks5zhuan-httphttps" title="8.socks5转http/https">8.socks5转http/https</a></li><li><a class="toc-href" href="#9-fu-wu-qi-duan-chang-yong-de-ming-ling" title="9.&nbsp;服务器端常用的命令">9.&nbsp;服务器端常用的命令</a></li></ul></div>
+        </nav>
 
   </div>
             

@@ -120,66 +120,49 @@
     <p>水星这款MW4350r内存为128M，运行很多程序都不在话下。但是却只提供了8M&nbsp;Flash存储空间，而路由器系统还占了1.9M，剩下的5M空间不足以支持安装很多软件，比如我在安装python的时候就报错提示存储空间不足，这确实很郁闷，但幸好Openwrt还提供了extroot方式来扩展存储，来发挥路由器和Openwrt系统的真正实力。</p>
 <p><strong>pivot-overlay还是pivot-root？</strong></p>
 <blockquote>
-<p>我把两种方式都试过，pivot-overlay方式不能够把安装程序的位置移到USB存储装置上，但是pivot-root方式可以，所以我选择了后者。pivot-root方式使/覆盖掉了/overlay成为rootfs，我认为这种方式更接近原生的Linux系统。  <br>
-而从官方的文档来看，目前pivot-root已经没有以前的缺点和不足，选择哪个已经是个人需求而不是技术问题了。  <br>
+<p>我把两种方式都试过，pivot-overlay方式不能够把安装程序的位置移到USB存储装置上，但是pivot-root方式可以，所以我选择了后者。pivot-root方式使/覆盖掉了/overlay成为rootfs，我认为这种方式更接近原生的Linux系统。  <br/>
+而从官方的文档来看，目前pivot-root已经没有以前的缺点和不足，选择哪个已经是个人需求而不是技术问题了。  <br/>
 网上大部分文章帖子都是2009-2010年间的，所以大部分可能都是pivot-overlay的。如果对这部分不太理解，请仔细阅读官方Wiki：<a href="http://wiki.openwrt.org/doc/howto/extroot/extroot.theory">ExtRoot: How it works</a>,<a href="http://wiki.openwrt.org/doc/techref/flash.layout">The OpenWrt Flash&nbsp;Layout</a></p>
 </blockquote>
 <!--more-->
-
-<h3>安装必要的包</h3>
+<h3 id="an-zhuang-bi-yao-de-bao">安装必要的包</h3>
 <div class="highlight"><pre><span></span>opkg update
 opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs-ext4 block-mount
 </pre></div>
-
-
-<p>e2fsprogs包提供了mkfs（mkfs.ext3,mkfs.ext4）、fsck等工具。  <br>
-kmod-usb2只提供了USb2.0的驱动，如果你的是USB1.0（1.1）的，还需要单独安装驱动。  <br>
-kmod-fs-ext4是用来挂载ext4文件系统的，如果你想使用ext3文件格式就安装相应的包。  <br>&nbsp;usbutils不是必装，仅提供了lsusb命令。</p>
-<h3>格式化U盘</h3>
+<p>e2fsprogs包提供了mkfs（mkfs.ext3,mkfs.ext4）、fsck等工具。  <br/>
+kmod-usb2只提供了USb2.0的驱动，如果你的是USB1.0（1.1）的，还需要单独安装驱动。  <br/>
+kmod-fs-ext4是用来挂载ext4文件系统的，如果你想使用ext3文件格式就安装相应的包。  <br/>&nbsp;usbutils不是必装，仅提供了lsusb命令。</p>
+<h3 id="ge-shi-hua-upan">格式化U盘</h3>
 <p>插好U盘后，先查看下是否被系统识别出来</p>
 <div class="highlight"><pre><span></span>root@openwrt: ~# lsusb
 Bus <span class="m">001</span> Device <span class="m">002</span>: ID <span class="m">0781</span>:5571 SanDisk Corp. Cruzer Fit
 Bus <span class="m">001</span> Device <span class="m">001</span>: ID 1d6b:0002 Linux Foundation <span class="m">2</span>.0 root hub
 </pre></div>
-
-
 <div class="highlight"><pre><span></span>root@openwrt: ~# ls /dev/sd*
 /dev/sda    /dev/sda1
 </pre></div>
-
-
 <p>已经正确识别出来了，格式化系统为ext4</p>
 <div class="highlight"><pre><span></span>mkfs.ext4 /dev/sda1
 </pre></div>
-
-
 <p>挂载到当前系统</p>
 <div class="highlight"><pre><span></span>mount /dev/sda1 /mnt
 </pre></div>
-
-
 <p>创建一个128M的swap文件</p>
 <div class="highlight"><pre><span></span>dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>/mnt/swap <span class="nv">bs</span><span class="o">=</span><span class="m">2048</span> <span class="nv">count</span><span class="o">=</span><span class="m">65536</span>
 mkswap /mnt/swap
 swapon /mnt/swap
 </pre></div>
-
-
-<h3>extroot</h3>
+<h3 id="extroot">extroot</h3>
 <p>把/目录下的文件迁移到U盘,pivot-root方式，适用于Barrier&nbsp;Breaker（trunk）版本</p>
 <div class="highlight"><pre><span></span>mkdir -p /tmp/cproot
 mount --bind / /tmp/cproot
 tar -C /tmp/cproot -cvf - . <span class="p">|</span> tar -C /mnt/ -xf -
 umount /tmp/cproot
 </pre></div>
-
-
-<h3>编辑fstab</h3>
+<h3 id="bian-ji-fstab">编辑fstab</h3>
 <p>我的系统默认没有/etc/config/fstab文件，可以用命令生成一个</p>
 <div class="highlight"><pre><span></span>block detect &gt; /etc/config/fstab
 </pre></div>
-
-
 <p>编辑这个文件，添加下面这段配置</p>
 <div class="highlight"><pre><span></span>config mount
         option target        /
@@ -189,8 +172,6 @@ umount /tmp/cproot
         option enabled       <span class="m">1</span>
         option enabled_fsck  <span class="m">0</span>
 </pre></div>
-
-
 <p>重启后，查看下空间，如果类似我这样就是成功了</p>
 <div class="highlight"><pre><span></span>root@openwrt: ~# df -h
 Filesystem                Size      Used Available Use% Mounted on
@@ -200,8 +181,6 @@ tmpfs                    <span class="m">61</span>.7M      <span class="m">1</sp
 /dev/sda1                 <span class="m">7</span>.2G    <span class="m">169</span>.9M      <span class="m">6</span>.7G   <span class="m">2</span>% /
 tmpfs                   <span class="m">512</span>.0K         <span class="m">0</span>    <span class="m">512</span>.0K   <span class="m">0</span>% /dev
 </pre></div>
-
-
 <p>大功告成，现在系统空间足够大了，任你怎么安装怎么下载。</p>
   </div>
 
@@ -268,6 +247,11 @@ tmpfs                   <span class="m">512</span>.0K         <span class="m">0<
           </li>
         </ul>
       </nav>
+    
+        <center><h4><b>目录</b></h4></center>
+        <nav class="toc">
+            <div id="toc"><ul><li><a class="toc-href" href="#an-zhuang-bi-yao-de-bao" title="安装必要的包">安装必要的包</a></li><li><a class="toc-href" href="#ge-shi-hua-upan" title="格式化U盘">格式化U盘</a></li><li><a class="toc-href" href="#extroot" title="extroot">extroot</a></li><li><a class="toc-href" href="#bian-ji-fstab" title="编辑fstab">编辑fstab</a></li></ul></div>
+        </nav>
 
   </div>
             

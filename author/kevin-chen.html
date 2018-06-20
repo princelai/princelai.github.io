@@ -120,10 +120,10 @@
         <h2><a href="https://solarck.com/centos6-datebase-server.html" rel="bookmark" title="Permalink to CentOS6数据库服务器配置">CentOS6数据库服务器配置</a></h2>
       </header>
       <div><p>本文章仅用于记录在公司服务器上通过yum&nbsp;repo来安装官方提供的数据库程序，而非通过编译方式来安装。通过官方仓库来安装有很多好处，比如升级、打补丁都很方便，不用编译浪费时间，更不需要安装多个版本的gcc来满足各种不同软件的要求。</p>
-<h3>Mysql</h3>
-<p><strong>下载安装mysql&nbsp;repo</strong></p>
+<h3 id="mysql">Mysql</h3>
+<h4 id="xia-zai-an-zhuang-mysql-repo"><strong>下载安装mysql&nbsp;repo</strong></h4>
 <p><code>rpm -Uvh https://repo.mysql.com//mysql80-community-release-el6-1.noarch.rpm</code></p>
-<p><strong>升级至57版本</strong></p>
+<h4 id="sheng-ji-zhi-57ban-ben"><strong>升级至57版本</strong></h4>
 <p><code>yum --disablerepo=mysql80-community --enablerepo=mysql57-community upgrade</code></p>
 <p>当前默认是80版本，如果未来需要升级，如果未来一直要维持在57版本，那么建议修改配置文件，以免每次都带上两个参数</p>
 <p><code>vim /etc/yum.repos.d/mysql-community.repo</code></p>
@@ -138,13 +138,13 @@
         <h2><a href="https://solarck.com/python-send-gmail.html" rel="bookmark" title="Permalink to 使用Python发送Gmail">使用Python发送Gmail</a></h2>
       </header>
       <div><p>本文基于一个真实的项目，使用python3.6和最新官方smtplib接口。项目的目的是爬取网站，然后通过邮件给自己发送邮件提醒新文章。最后使用linux系统的crond服务定时执行。</p>
-<h3>发邮件方法</h3>
+<h3 id="fa-you-jian-fang-fa">发邮件方法</h3>
 <p>在定义发邮件方法之前，我们还定义了一个类和类中的爬虫，单拿出来发邮件来说，代码如下：</p>
 <div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">sent_email</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">fromaddr</span> <span class="o">=</span> <span class="s1">&#39;princelailai@gmail.com&#39;</span>
-        <span class="n">toaddrs</span>  <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;princelailai@gmail.com&#39;</span><span class="p">]</span>
-        <span class="n">subject</span> <span class="o">=</span> <span class="s2">&quot;{}{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y年%m月</span><span class="si">%d</span><span class="s1">日&#39;</span><span class="p">),</span><span class="s1">&#39;共有产权房信息&#39;</span><span class="p">)</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;日期:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">标题:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">地址:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">k …</span></pre></div></div>
+        <span class="n">fromaddr</span> <span class="o">=</span> <span class="s1">'princelailai@gmail.com'</span>
+        <span class="n">toaddrs</span>  <span class="o">=</span> <span class="p">[</span><span class="s1">'princelailai@gmail.com'</span><span class="p">]</span>
+        <span class="n">subject</span> <span class="o">=</span> <span class="s2">"{}{}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y年%m月</span><span class="si">%d</span><span class="s1">日'</span><span class="p">),</span><span class="s1">'共有产权房信息'</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">'日期:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">标题:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">地址:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n\n</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">k …</span></pre></div></div>
       <div><a class="btn btn-primary" href="https://solarck.com/python-send-gmail.html"><strong>➟ 查看全文</strong></a></div>
     </article>
     <hr/>
@@ -158,7 +158,7 @@
 <p>所以首先是要生成一组数据</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
-<span class="n">rng</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s1">&#39;2018-04-07&#39;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;2018-04-08&#39;</span><span class="p">,</span><span class="n">freq</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s1">'2018-04-07'</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">'2018-04-08'</span><span class="p">,</span><span class="n">freq</span><span class="o">=</span><span class="s1">'s'</span><span class="p">)</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size</span><span class="p">),</span><span class="n">index</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
 <span class="n">ser</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size</span><span class="p">),</span><span class="n">index</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
 <span class="n">df …</span></pre></div></div>
@@ -170,17 +170,17 @@
         <h2><a href="https://solarck.com/Is-AIP-better-than-ETF.html" rel="bookmark" title="Permalink to 用数据验证定投是否优于直接投资">用数据验证定投是否优于直接投资</a></h2>
       </header>
       <div><p>一直以来，定投的营销话术都是分批建仓，上涨时投资少降低成本，下跌时投资多赚取低估价值，但定投是否真的如宣传的那么美好？今天就用数据来模拟两种投资方式，看看孰优孰劣。</p>
-<h3>数据说明</h3>
+<h3 id="shu-ju-shuo-ming">数据说明</h3>
 <p>本次实验使用三只ETF基金作为投资和定投标的，分别为华夏上证50ETF（510050），华泰柏瑞沪深300ETF（510300），广发中证500ETF（510510），时间区间为2013年5月27日至2018年6月7日。</p>
 <p>先上图了解下这段时间ETF基金大致走势。</p>
 <p><em>50ETF月线</em></p>
-<p><img alt="上证50ETF" src="http://kevinstuchuang.qiniudn.com/blog-pic/ETF50close.png"></p>
+<p><img alt="上证50ETF" src="http://kevinstuchuang.qiniudn.com/blog-pic/ETF50close.png"/></p>
 <p><em>500ETF周线</em></p>
-<p><img alt="500ETF" src="http://kevinstuchuang.qiniudn.com/blog-pic/ETF500close.png"></p>
+<p><img alt="500ETF" src="http://kevinstuchuang.qiniudn.com/blog-pic/ETF500close.png"/></p>
 <p>这段区间整体来看是上涨的，大盘股涨的多，小盘股涨得少。分段来看2013年中至2014年中，属于震荡行情，2014年中至2015年中是暴涨行情，2015年中至2016年初是暴跌行情，2016年初至2018年中行情分化，大盘股再次进入牛市，中盘股属于慢牛，小盘股是横盘震荡走势。</p>
 <p>选择这个区间的行情，是因为这五年属于一个完整的周期，活跃时波动率大，行情过后的低迷时期波动率又小，是典型的中国股市。另外从长期来看，股票波动向上才应该是上市公司内在价值增长的表现。</p>
 <p>当然，用这个区间的数据做分析是有一个缺点的，就是这三只ETF基金整体涨幅都在40%-50%之间，如果在一开始就持有至当前日期，那么一定是一次性直接投资要优于定投，不过放心，后面编程不会让这种事情发生，我会加入时间随机项，尽量减小整体上涨带来的影响。</p>
-<h3>开始实验</h3>
+<h3 id="kai-shi-shi-yan">开始实验</h3>
 <p>首先要导入用到的包 …</p></div>
       <div><a class="btn btn-primary" href="https://solarck.com/Is-AIP-better-than-ETF.html"><strong>➟ 查看全文</strong></a></div>
     </article>
@@ -189,16 +189,16 @@
       <header>
         <h2><a href="https://solarck.com/git-and-github.html" rel="bookmark" title="Permalink to git和github主要使用方法">git和github主要使用方法</a></h2>
       </header>
-      <div><h3>ssh和密钥</h3>
+      <div><h3 id="sshhe-mi-yao">ssh和密钥</h3>
 <p><code>ssh-keygen -t rsa -b 4096 -C "princelailai@gmail.com"</code>：生成密钥</p>
 <p><code>cat ~/.ssh/id_rsa.pub</code>：查看密钥</p>
 <p><code>ssh -T git@github.com</code>：测试密钥是否可以正常登录</p>
-<h3>设置</h3>
+<h3 id="she-zhi">设置</h3>
 <p><code>git config --list</code>：列出当前repo所有设置</p>
 <p><code>git config --global user.name "princelai"</code>：设置用户名</p>
 <p><code>git config --global user.email "princelailai@gmail.com"</code>：设置E-mail</p>
 <p><code>echo "# mydotfiles" &gt; README.md</code>：</p>
-<h3>基本操作</h3>
+<h3 id="ji-ben-cao-zuo">基本操作</h3>
 <p><code>git init …</code></p></div>
       <div><a class="btn btn-primary" href="https://solarck.com/git-and-github.html"><strong>➟ 查看全文</strong></a></div>
     </article>

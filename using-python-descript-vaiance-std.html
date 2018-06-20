@@ -119,7 +119,7 @@
   <div>
     <p><a href="https://zh.wikipedia.org/zh-cn/%E6%96%B9%E5%B7%AE">方差</a>（Variance），应用数学里的专有名词。在概率论和统计学中，一个随机变量的方差描述的是它的离散程度，也就是该变量离其期望值的距离。一个实随机变量的方差也称为它的二阶矩或二阶中心动差，恰巧也是它的二阶累积量。这里把复杂说白了，就是将各个误差将之平方（而非取绝对值，使之肯定为正数），相加之后再除以总数，透过这样的方式来算出各个数据分布、零散（相对中心点）的程度。继续延伸的话，方差的算术平方根称为该随机变量的标准差（此为相对各个数据点间）。</p>
 <p><a href="https://zh.wikipedia.org/zh-cn/%E6%A8%99%E6%BA%96%E5%B7%AE">标准差</a>（Standard Deviation，<span class="caps">SD</span>），数学符号 <span class="math">\(\sigma\)</span>（sigma），在概率统计中最常使用作为测量一组数值的离散程度之用。标准差定义：为方差开算术平方根，反映组内个体间的离散程度；标准差与期望值之比为标准离差率。</p>
-<h3>1.定义</h3>
+<h3 id="1ding-yi">1.定义</h3>
 <p>方差的定义如下公式：
 </p>
 <div class="math">$$Var(X)=\sigma^2=E[(X-\mu)^2]$$</div>
@@ -135,25 +135,21 @@
 <div class="math">$$SD(X) = \sigma = \sqrt{E(X-E(X))^2}$$</div>
 <div class="math">$$\sigma = \sqrt{\frac{\sum_{i=1}^NX_i^2}{N}-\mu^2}$$</div>
 <div class="math">$$\sigma = \sqrt{\frac{(\sum_{i=1}^{N}x_i^2-\mu^2)}{N}}$$</div>
-<h3>2.准备数据</h3>
+<h3 id="2zhun-bei-shu-ju">2.准备数据</h3>
 <p>这里使用一个开源免费的股票数据模块tushare，获取贵州茅台的数据，并截取数据的前600天，把数据平分为2部分。获取后的数据格式为DataFrame。</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tushare</span> <span class="kn">as</span> <span class="nn">ts</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-<span class="n">stock</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_k_data</span><span class="p">(</span><span class="s1">&#39;600519&#39;</span><span class="p">)</span>
-<span class="n">stock</span> <span class="o">=</span> <span class="n">stock</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">600</span><span class="p">,</span><span class="n">stock</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="s1">&#39;close&#39;</span><span class="p">)]</span>
+<span class="n">stock</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">get_k_data</span><span class="p">(</span><span class="s1">'600519'</span><span class="p">)</span>
+<span class="n">stock</span> <span class="o">=</span> <span class="n">stock</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">600</span><span class="p">,</span><span class="n">stock</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="s1">'close'</span><span class="p">)]</span>
 <span class="n">stock_part1</span> <span class="o">=</span> <span class="n">stock</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">stock</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
 <span class="n">stock_part2</span> <span class="o">=</span> <span class="n">stock</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">stock</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span><span class="o">//</span><span class="mi">2</span><span class="p">:]</span>
 <span class="n">stock_part2</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
 </pre></div>
-
-
-<h3>3.特性验证</h3>
+<h3 id="3te-xing-yan-zheng">3.特性验证</h3>
 <p>对于方差的计算，我们可以把数据带入公式直接计算，python代码可以这样写，这里使用的是无偏估计，所以分母是N-1。</p>
 <div class="highlight"><pre><span></span><span class="p">((</span><span class="n">stock</span> <span class="o">-</span> <span class="n">stock</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">stock</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
-
-
 <p>不过幸好Numpy和Pandas都提供了快速计算方差和标准差的方法，我们可以调用<code>var()</code>方法和<code>std()</code>方法使用。</p>
 <p><strong>性质1，一个常数被加至变量数列中，此数列方差不变。</strong>
 </p>
@@ -164,8 +160,6 @@
 <span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">((</span><span class="n">stock</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span><span class="n">stock</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span><span class="bp">True</span> <span class="c1">#标准差</span>
 </pre></div>
-
-
 <p><strong>性质2，数列被放大一个常数倍，此数列的方差变大常数的平方倍</strong>
 </p>
 <div class="math">$$Var(cX) = c^2 \times Var(X)$$</div>
@@ -175,8 +169,6 @@
 <span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">((</span><span class="n">stock</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span><span class="mi">4</span><span class="o">*</span><span class="n">stock</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="bp">True</span> <span class="c1">#标准差</span>
 </pre></div>
-
-
 <p><strong>性质3，两个数列和（差）的方差</strong></p>
 <div class="math">$$Var(aX+bY)=a^2Var(X)+b^2Var(Y)+2 \times ab \times Cov(X,Y)$$</div>
 <div class="math">$$Var(X-Y)=Var(X)+Var(Y)-2 \times Cov(X,Y)$$</div>
@@ -187,8 +179,6 @@
 <span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">((</span><span class="n">stock_part1</span> <span class="o">+</span> <span class="n">stock_part2</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">stock_part1</span><span class="o">.</span><span class="n">var</span><span class="p">()</span> <span class="o">+</span> <span class="n">stock_part2</span><span class="o">.</span><span class="n">var</span><span class="p">()</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">stock_part1</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">stock_part2</span><span class="p">)))</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span><span class="bp">True</span> <span class="c1">#标准差</span>
 </pre></div>
-
-
 <script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
     var align = "center",
         indent = "0em",
@@ -318,6 +308,11 @@
           </li>
         </ul>
       </nav>
+    
+        <center><h4><b>目录</b></h4></center>
+        <nav class="toc">
+            <div id="toc"><ul><li><a class="toc-href" href="#1ding-yi" title="1.定义">1.定义</a></li><li><a class="toc-href" href="#2zhun-bei-shu-ju" title="2.准备数据">2.准备数据</a></li><li><a class="toc-href" href="#3te-xing-yan-zheng" title="3.特性验证">3.特性验证</a></li></ul></div>
+        </nav>
 
   </div>
             

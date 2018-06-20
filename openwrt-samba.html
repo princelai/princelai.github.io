@@ -118,15 +118,12 @@
 
   <div>
     <p>为Openwrt接入一个大U盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机BT下载提供一个基础。</p>
-<h3>安装</h3>
+<h3 id="an-zhuang">安装</h3>
 <div class="highlight"><pre><span></span>opkg update
 opkg install samba36-server luci-app-samba
 </pre></div>
-
-
 <!--more-->
-
-<h4>配置文件</h4>
+<h4 id="pei-zhi-wen-jian">配置文件</h4>
 <p>samba的配置文件只有两个，而且默认配置稍作修改就可以使用</p>
 <div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/samba/smb.conf.template
 <span class="o">[</span>global<span class="o">]</span>
@@ -163,56 +160,42 @@ opkg install samba36-server luci-app-samba
     use <span class="nv">sendfile</span> <span class="o">=</span> yes
     <span class="nv">writeable</span> <span class="o">=</span> yes <span class="c1">#可写</span>
 </pre></div>
-
-
 <div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/config/samba
 config samba
-    option <span class="s1">&#39;name&#39;</span>           <span class="s1">&#39;OpenWrt&#39;</span>
-    option <span class="s1">&#39;workgroup&#39;</span>      <span class="s1">&#39;WORKGROUP&#39;</span>
-    option <span class="s1">&#39;description&#39;</span>        <span class="s1">&#39;OpenWrt&#39;</span>
-    option <span class="s1">&#39;homes&#39;</span>          <span class="s1">&#39;1&#39;</span>
+    option <span class="s1">'name'</span>           <span class="s1">'OpenWrt'</span>
+    option <span class="s1">'workgroup'</span>      <span class="s1">'WORKGROUP'</span>
+    option <span class="s1">'description'</span>        <span class="s1">'OpenWrt'</span>
+    option <span class="s1">'homes'</span>          <span class="s1">'1'</span>
 
-config <span class="s1">&#39;sambashare&#39;</span>
-    option <span class="s1">&#39;name&#39;</span> <span class="s1">&#39;Shares&#39;</span>
-    option <span class="s1">&#39;path&#39;</span> <span class="s1">&#39;/share&#39;</span> <span class="c1">#samba所在目录</span>
-<span class="c1">#   option &#39;users&#39; &#39;sandra&#39;</span>
-    option <span class="s1">&#39;guest_ok&#39;</span> <span class="s1">&#39;yes&#39;</span>
-    option <span class="s1">&#39;create_mask&#39;</span> <span class="s1">&#39;0777&#39;</span> <span class="c1">#所有用户可写</span>
-    option <span class="s1">&#39;dir_mask&#39;</span> <span class="s1">&#39;0777&#39;</span> <span class="c1">#所有用户可写</span>
-    option <span class="s1">&#39;read_only&#39;</span> <span class="s1">&#39;no&#39;</span>
+config <span class="s1">'sambashare'</span>
+    option <span class="s1">'name'</span> <span class="s1">'Shares'</span>
+    option <span class="s1">'path'</span> <span class="s1">'/share'</span> <span class="c1">#samba所在目录</span>
+<span class="c1">#   option 'users' 'sandra'</span>
+    option <span class="s1">'guest_ok'</span> <span class="s1">'yes'</span>
+    option <span class="s1">'create_mask'</span> <span class="s1">'0777'</span> <span class="c1">#所有用户可写</span>
+    option <span class="s1">'dir_mask'</span> <span class="s1">'0777'</span> <span class="c1">#所有用户可写</span>
+    option <span class="s1">'read_only'</span> <span class="s1">'no'</span>
 </pre></div>
-
-
 <p>我的配置是无需密码所有用户都可以访问，可上传可下载。</p>
 <p>配置完还需要对目录进行权限提升</p>
 <div class="highlight"><pre><span></span>chmod a+w /share
 </pre></div>
-
-
 <p>或者更改文件夹用户</p>
 <div class="highlight"><pre><span></span>chown nobody:nobody /share
 </pre></div>
-
-
 <p>最后重启samba服务并开机启动</p>
 <div class="highlight"><pre><span></span>/etc/init.d/samba restart
 /etc/init.d/samba <span class="nb">enable</span>
 </pre></div>
-
-
-<h3>访问</h3>
-<p>Windows用户很容易访问，在网络邻居（网络）里就可以看到WORKGROUP&#8212;&gt;<span class="caps">OPENWRT</span>&#8212;&gt;Share文件夹了，但是linux用户需要一些其他命令。  <br>
-<strong>1.&nbsp;安装g2sc</strong>    </p>
+<h3 id="fang-wen_1">访问</h3>
+<p>Windows用户很容易访问，在网络邻居（网络）里就可以看到WORKGROUP&mdash;&gt;<span class="caps">OPENWRT</span>&mdash;&gt;Share文件夹了，但是linux用户需要一些其他命令。  <br/>
+<strong>1.&nbsp;安装g2sc</strong> </p>
 <div class="highlight"><pre><span></span>yaourt -S g2sc
 </pre></div>
-
-
 <p>安装完就可以像Windows一样看到工作组和文件夹，但是只能下载，没有上传功能。    </p>
 <p><strong>2. sambclient</strong>&nbsp;安装工具</p>
 <div class="highlight"><pre><span></span>yaourt -S sambaclient
 </pre></div>
-
-
 <p>连接主机    </p>
 <div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: smbclient -L OPENWRT
 Enter kevins password:  <span class="c1">#没设密码直接回车</span>
@@ -231,32 +214,22 @@ Enter kevins password:  <span class="c1">#没设密码直接回车</span>
     ---------            -------
     WORKGROUP            OPENWRT
 </pre></div>
-
-
 <div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: smbclient //OPENWRT/Shares <span class="c1">#格式为//Servername/Sharename</span>
 smb: <span class="se">\&gt;</span>
 </pre></div>
-
-
 <p>出现了smb的命令行</p>
 <div class="highlight"><pre><span></span>get ****    <span class="c1">#下载某个文件    </span>
 put ****    <span class="c1">#上传某个文件</span>
 </pre></div>
-
-
 <p>更多命令输入?查看</p>
 <p><strong>3.&nbsp;mount挂载</strong></p>
 <div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: mkdir /mnt/samba
 kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
 </pre></div>
-
-
-<h3>完成</h3>
+<h3 id="wan-cheng">完成</h3>
 <p>由于安装了Luci，所以开启了uhttp服务，把共享目录链接到/www目录同样可以通过浏览器直接下载，相当于把Samba目录同样做成了FTP目录。</p>
 <div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: ln -s /share /www/share
 </pre></div>
-
-
 <p>Samba共享就全部完成，之后再继续研究BT下载，配合Samba的共享就等于免费拥有了一个简版NAS。</p>
   </div>
 
@@ -323,6 +296,11 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
           </li>
         </ul>
       </nav>
+    
+        <center><h4><b>目录</b></h4></center>
+        <nav class="toc">
+            <div id="toc"><ul><li><a class="toc-href" href="#an-zhuang" title="安装">安装</a><ul><li><a class="toc-href" href="#pei-zhi-wen-jian" title="配置文件">配置文件</a></li></ul></li><li><a class="toc-href" href="#fang-wen_1" title="访问">访问</a></li><li><a class="toc-href" href="#wan-cheng" title="完成">完成</a></li></ul></div>
+        </nav>
 
   </div>
             

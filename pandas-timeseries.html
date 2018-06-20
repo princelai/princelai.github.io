@@ -123,14 +123,12 @@
 <p>所以首先是要生成一组数据</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
-<span class="n">rng</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s1">&#39;2018-04-07&#39;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;2018-04-08&#39;</span><span class="p">,</span><span class="n">freq</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s1">'2018-04-07'</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">'2018-04-08'</span><span class="p">,</span><span class="n">freq</span><span class="o">=</span><span class="s1">'s'</span><span class="p">)</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size</span><span class="p">),</span><span class="n">index</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
 <span class="n">ser</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size</span><span class="p">),</span><span class="n">index</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;random&#39;</span><span class="p">]</span>
-<span class="n">ser</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;random&#39;</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'random'</span><span class="p">]</span>
+<span class="n">ser</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'random'</span>
 </pre></div>
-
-
 <p>df和ser分别对应DataFrame和Series，查看下数据格式</p>
 <p><code>df.head()</code></p>
 <div class="highlight"><pre><span></span>                       random
@@ -140,8 +138,6 @@
 2018-04-07 00:00:03  0.120944
 2018-04-07 00:00:04 -1.558763
 </pre></div>
-
-
 <p><code>ser.tail()</code></p>
 <div class="highlight"><pre><span></span>2018-04-07 23:59:56    1.276893
 2018-04-07 23:59:57    0.275050
@@ -150,33 +146,29 @@
 2018-04-08 00:00:00    1.222731
 Freq: S, Name: random, dtype: float64
 </pre></div>
-
-
 <p>接下来定义六个函数方法</p>
 <div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">method1</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_period</span><span class="p">(</span><span class="s1">&#39;Min&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_timestamp</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_period</span><span class="p">(</span><span class="s1">'Min'</span><span class="p">)</span><span class="o">.</span><span class="n">to_timestamp</span><span class="p">()</span>
     <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">method2</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M&#39;</span><span class="p">))</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M'</span><span class="p">))</span>
     <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">method3</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="n">ser_idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">ser_idx</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;00&#39;</span><span class="p">))</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">ser_idx</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="s1">'00'</span><span class="p">))</span>
     <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">method4</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;Min&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">'Min'</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">method5</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">&#39;3Min&#39;</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">asfreq</span><span class="p">(</span><span class="s1">'3Min'</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">'ffill'</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">method6</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;3Min&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">'3Min'</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
 </pre></div>
-
-
 <p>方法1-方法4适用于场景一，方法5-方法6适用于场景二，接下来具体说说这六个函数和为什么要这么设计场景。</p>
 <p>方法1使用的是内置to_period方法转换周期，to_timestamp方法是为了后续操作使用timestamp更方便。</p>
 <p>方法2对索引日期进行字符串格式化然后再用内置的to_datetime方法转换回日期格式达到重采样效果。</p>
@@ -185,50 +177,42 @@ Freq: S, Name: random, dtype: float64
 <p>方法5是内置的asfreq方法</p>
 <p>方法6还是内置的resample方法</p>
 <p>可以看到resample方法适用范围最广，既可以对时间采取多种细粒度的操作，也能对重采样后的数据进行后续操作；而asfreq方法只能对数据进行重采样，无法进行复杂的后续操作，只能用向前/向后填充数值；to_period方法和字符串操作只能对时间进行整数采样，像45分钟，1小时30分这种更细腻的操作是不支持的。</p>
-<h3>比较速度</h3>
+<h3 id="bi-jiao-su-du">比较速度</h3>
 <p><strong>场景1</strong></p>
 <div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method1</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 <span class="nf">%timeit</span> <span class="n">method2</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 <span class="nf">%timeit</span> <span class="n">method3</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 <span class="nf">%timeit</span> <span class="n">method4</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
-<span class="mf">16.4</span> <span class="n">ms</span> <span class="err">±</span> <span class="mi">391</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">10</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-<span class="mi">439</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">2.52</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
-<span class="mi">485</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">10.8</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
-<span class="mf">2.13</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">9.92</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+<span class="mf">16.4</span> <span class="n">ms</span> <span class="err">&plusmn;</span> <span class="mi">391</span> <span class="err">&micro;</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">&plusmn;</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">10</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+<span class="mi">439</span> <span class="n">ms</span> <span class="err">&plusmn;</span> <span class="mf">2.52</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">&plusmn;</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
+<span class="mi">485</span> <span class="n">ms</span> <span class="err">&plusmn;</span> <span class="mf">10.8</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">&plusmn;</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
+<span class="mf">2.13</span> <span class="n">ms</span> <span class="err">&plusmn;</span> <span class="mf">9.92</span> <span class="err">&micro;</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">&plusmn;</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
 </pre></div>
-
-
 <div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method1</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
 <span class="nf">%timeit</span> <span class="n">method2</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
 <span class="nf">%timeit</span> <span class="n">method3</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
 <span class="nf">%timeit</span> <span class="n">method4</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
 
-<span class="mf">23.8</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">72.2</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">10</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-<span class="mi">446</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">2.71</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
-<span class="mi">492</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">3.61</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
-<span class="mf">1.63</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">15.1</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+<span class="mf">23.8</span> <span class="n">ms</span> <span class="err">&plusmn;</span> <span class="mf">72.2</span> <span class="err">&micro;</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">&plusmn;</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">10</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+<span class="mi">446</span> <span class="n">ms</span> <span class="err">&plusmn;</span> <span class="mf">2.71</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">&plusmn;</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
+<span class="mi">492</span> <span class="n">ms</span> <span class="err">&plusmn;</span> <span class="mf">3.61</span> <span class="n">ms</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">&plusmn;</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1</span> <span class="n">loop</span> <span class="n">each</span><span class="p">)</span>
+<span class="mf">1.63</span> <span class="n">ms</span> <span class="err">&plusmn;</span> <span class="mf">15.1</span> <span class="err">&micro;</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">&plusmn;</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
 </pre></div>
-
-
 <p>从上面对比数据得出结论，resample方法最快，to_period方法其次，两种字符串方法最慢，最快和最慢差距巨大。</p>
 <p><strong>场景2</strong></p>
 <div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method5</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 <span class="nf">%timeit</span> <span class="n">method6</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
-<span class="mi">746</span> <span class="err">µ</span><span class="n">s</span> <span class="err">±</span> <span class="mf">32.5</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-<span class="mf">2.42</span> <span class="n">ms</span> <span class="err">±</span> <span class="mi">24</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+<span class="mi">746</span> <span class="err">&micro;</span><span class="n">s</span> <span class="err">&plusmn;</span> <span class="mf">32.5</span> <span class="err">&micro;</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">&plusmn;</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+<span class="mf">2.42</span> <span class="n">ms</span> <span class="err">&plusmn;</span> <span class="mi">24</span> <span class="err">&micro;</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">&plusmn;</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
 </pre></div>
-
-
 <div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method5</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
 <span class="nf">%timeit</span> <span class="n">method6</span><span class="p">(</span><span class="n">ser</span><span class="p">)</span>
 
-<span class="mi">772</span> <span class="err">µ</span><span class="n">s</span> <span class="err">±</span> <span class="mf">20.2</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
-<span class="mf">1.87</span> <span class="n">ms</span> <span class="err">±</span> <span class="mf">50.5</span> <span class="err">µ</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">±</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+<span class="mi">772</span> <span class="err">&micro;</span><span class="n">s</span> <span class="err">&plusmn;</span> <span class="mf">20.2</span> <span class="err">&micro;</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">&plusmn;</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">1000</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
+<span class="mf">1.87</span> <span class="n">ms</span> <span class="err">&plusmn;</span> <span class="mf">50.5</span> <span class="err">&micro;</span><span class="n">s</span> <span class="n">per</span> <span class="n">loop</span> <span class="p">(</span><span class="n">mean</span> <span class="err">&plusmn;</span> <span class="n">std</span><span class="p">.</span> <span class="n">dev</span><span class="p">.</span> <span class="n">of</span> <span class="mi">7</span> <span class="n">runs</span><span class="p">,</span> <span class="mi">100</span> <span class="n">loops</span> <span class="n">each</span><span class="p">)</span>
 </pre></div>
-
-
 <p>在场景二的测试中asfreq比resample快2倍多，如果不需要更多的后续操作，asfreq是很好的选择，否则resample方法更为全能。</p>
 <p>下方的表格总结了几种方法的优劣：</p>
 <table>
@@ -267,7 +251,7 @@ Freq: S, Name: random, dtype: float64
 </tr>
 </tbody>
 </table>
-<h3>Pandas Offset&nbsp;Aliases</h3>
+<h3 id="pandas-offset-aliases">Pandas Offset&nbsp;Aliases</h3>
 <table>
 <thead>
 <tr>
@@ -386,7 +370,7 @@ Freq: S, Name: random, dtype: float64
 </tr>
 </tbody>
 </table>
-<h3>参考</h3>
+<h3 id="can-kao">参考</h3>
 <p><a href="https://pandas.pydata.org/pandas-docs/stable/timeseries.html">官方文档</a> </p>
   </div>
 
@@ -459,6 +443,11 @@ Freq: S, Name: random, dtype: float64
           </li>
         </ul>
       </nav>
+    
+        <center><h4><b>目录</b></h4></center>
+        <nav class="toc">
+            <div id="toc"><ul><li><a class="toc-href" href="#bi-jiao-su-du" title="比较速度">比较速度</a></li><li><a class="toc-href" href="#pandas-offset-aliases" title="Pandas Offset&nbsp;Aliases">Pandas Offset&nbsp;Aliases</a></li><li><a class="toc-href" href="#can-kao" title="参考">参考</a></li></ul></div>
+        </nav>
 
   </div>
             

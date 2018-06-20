@@ -124,18 +124,14 @@
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">()</span> <span class="c1">#添加参数</span>
 <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span> <span class="c1">#解析参数</span>
 </pre></div>
-
-
 <p>创建解析器时的可选参数很多，但没有特殊需求的情况下，默认参数就能很好的工作，所以这部分使用时临时查文档就能解决，不做过多记录。</p>
 <p>这里仅记录下添加参数时的各种选项搭配，使用方法和选项如下：</p>
 <div class="highlight"><pre><span></span><span class="n">ArgumentParser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="n">name</span> <span class="ow">or</span> <span class="n">flags</span><span class="o">...</span><span class="p">[,</span> <span class="n">action</span><span class="p">][,</span> <span class="n">nargs</span><span class="p">][,</span> <span class="n">const</span><span class="p">][,</span> <span class="n">default</span><span class="p">][,</span> <span class="nb">type</span><span class="p">][,</span> <span class="n">choices</span><span class="p">][,</span> <span class="n">required</span><span class="p">][,</span> <span class="n">help</span><span class="p">][,</span> <span class="n">metavar</span><span class="p">][,</span> <span class="n">dest</span><span class="p">])</span>
 </pre></div>
-
-
 <p>每一个参数的含义：</p>
 <blockquote>
 <ul>
-<li>name or flags - 名称或选项字符串列表，例如。foo或-f,&nbsp;&#8212;foo。</li>
+<li>name or flags - 名称或选项字符串列表，例如。foo或-f,&nbsp;&mdash;foo。</li>
 <li>action -&nbsp;在命令行遇到此参数时要执行的操作的基本类型。</li>
 <li>nargs -&nbsp;应该使用的命令行参数数。</li>
 <li>const -&nbsp;某些动作和nargs选择所需的常量值。</li>
@@ -148,19 +144,17 @@
 <li>dest -&nbsp;要添加到由parse_args()返回的对象的属性的名称。</li>
 </ul>
 </blockquote>
-<h3>1. name or&nbsp;flags</h3>
+<h3 id="1-name-or-flags">1. name or&nbsp;flags</h3>
 <p>唯一的必填参数，可以创建位置参数（必填）和可选参数</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span><span class="s1">&#39;--save&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;db&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;mysql&#39;</span><span class="p">])</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s1">&#39;mysql&#39;</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'PROG'</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'-s'</span><span class="p">,</span><span class="s1">'--save'</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'db'</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">'mysql'</span><span class="p">])</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="s1">'mysql'</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 </pre></div>
-
-
 <p>可选参数以<code>-</code>或<code>--</code>开始，其余的均为位置参数
 大部分情况下，未填的可选参数默认都是<code>None</code>,如果有<code>--</code>开始的参数，则参数名以后面的字符串命名。</p>
-<h3>2.&nbsp;action</h3>
+<h3 id="2-action">2.&nbsp;action</h3>
 <p>action用于将命令和动作关联起来，常用的动作有如下几种：</p>
 <ul>
 <li>store -&nbsp;仅保存参数后的值</li>
@@ -174,27 +168,23 @@
 <li>version -&nbsp;打印版本信息，配合version选项使用</li>
 </ul>
 <p>举几个例子</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-sh&#39;</span><span class="p">,</span><span class="s1">&#39;--show&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;-sh&#39;</span><span class="p">])</span>
+<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'PROG'</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'-sh'</span><span class="p">,</span><span class="s1">'--show'</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">'store_true'</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">'-sh'</span><span class="p">])</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
-
-
 <p>给出<code>-sh</code>参数，则show值为True</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a1&#39;</span><span class="p">,</span><span class="s1">&#39;--arg1&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_const&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a2&#39;</span><span class="p">,</span><span class="s1">&#39;--arg2&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_const&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a3&#39;</span><span class="p">,</span><span class="s1">&#39;--arg3&#39;</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_const&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;-a1&#39;</span><span class="p">])</span>
+<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'PROG'</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'-a1'</span><span class="p">,</span><span class="s1">'--arg1'</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">'store_const'</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'-a2'</span><span class="p">,</span><span class="s1">'--arg2'</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">'store_const'</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'-a3'</span><span class="p">,</span><span class="s1">'--arg3'</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">'store_const'</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">'-a1'</span><span class="p">])</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">arg1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">arg2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">arg3</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
-
-
 <p>只给出a1参数，arg1的值为0。
 没有给出a2参数，则a2的const没有被调用，使用default的值，当然default默认就是None，不写也可以。
 a3参数其实就是store_true的实现。&nbsp;const和default的区别就是当命令给出但是后面未接值时，使用const值，如果命令那个都没有给出，则使用default的值。</p>
-<h3>3.&nbsp;nargs</h3>
+<h3 id="3-nargs">3.&nbsp;nargs</h3>
 <p>nargs定义参数后面值的个数，可选值有几种：</p>
 <blockquote>
 <ul>
@@ -205,25 +195,21 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
 </ul>
 </blockquote>
 <p>如果懂正则表达式，那nargs的参数就很好理解，这里就不做过多解释，不过要注意一点，当nargs=1的时候，他的行为和不给出nargs是不一样的，前者是一个列表，后者是一个值。直接看例子：</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a2&#39;</span><span class="p">,</span><span class="s1">&#39;--args2&#39;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a3&#39;</span><span class="p">,</span><span class="s1">&#39;--args3&#39;</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;-a3&#39;</span><span class="p">,</span><span class="s1">&#39;aa&#39;</span><span class="p">,</span><span class="s1">&#39;bb&#39;</span><span class="p">])</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">args2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args3</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;aa&#39;</span><span class="p">,</span> <span class="s1">&#39;bb&#39;</span><span class="p">])</span>
+<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'PROG'</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'a1'</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'-a2'</span><span class="p">,</span><span class="s1">'--args2'</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="s1">'?'</span><span class="p">,</span><span class="n">const</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'-a3'</span><span class="p">,</span><span class="s1">'--args3'</span><span class="p">,</span><span class="n">nargs</span><span class="o">=</span><span class="s1">'+'</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">'a'</span><span class="p">,</span><span class="s1">'b'</span><span class="p">,</span><span class="s1">'-a3'</span><span class="p">,</span><span class="s1">'aa'</span><span class="p">,</span><span class="s1">'bb'</span><span class="p">])</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">],</span> <span class="n">args2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args3</span><span class="o">=</span><span class="p">[</span><span class="s1">'aa'</span><span class="p">,</span> <span class="s1">'bb'</span><span class="p">])</span>
 </pre></div>
-
-
 <p>结果很好理解，?可以配合const使用，其他的可以配合default使用，调用了就是一个列表，使用const或default就是一个值。</p>
-<h3>4.&nbsp;type和metavar</h3>
+<h3 id="4-typehe-metavar">4.&nbsp;type和metavar</h3>
 <p>这两个参数偶尔能用到，</p>
-<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;PROG&#39;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-a2&#39;</span><span class="p">,</span><span class="s1">&#39;--args2&#39;</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;STR&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">SUPPRESS</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">&#39;3&#39;</span><span class="p">])</span>
+<div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'PROG'</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'a1'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'-a2'</span><span class="p">,</span><span class="s1">'--args2'</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s1">'STR'</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">SUPPRESS</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([</span><span class="s1">'3'</span><span class="p">])</span>
 </pre></div>
-
-
 <p><code>default=argparse.SUPPRESS</code>指出不给参数不存储变量，否则默认是None，&nbsp;打印help说明看看</p>
 <div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
 <span class="n">usage</span><span class="p">:</span> <span class="n">PROG</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a2</span> <span class="n">STR</span><span class="p">]</span> <span class="n">a1</span>
@@ -235,10 +221,8 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
   <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="nb">exit</span>
   <span class="o">-</span><span class="n">a2</span> <span class="n">STR</span><span class="p">,</span> <span class="o">--</span><span class="n">args2</span> <span class="n">STR</span>
 </pre></div>
-
-
 <p>metavar仅改变了help说明里的变量名。</p>
-<h3>参考文档</h3>
+<h3 id="can-kao-wen-dang">参考文档</h3>
 <ol>
 <li><a href="https://docs.python.org/3/library/argparse.html">官方文档</a></li>
 <li><a href="http://python.usyiyi.cn/translate/python_352/library/argparse.html">中文文档</a></li>
@@ -314,6 +298,11 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
           </li>
         </ul>
       </nav>
+    
+        <center><h4><b>目录</b></h4></center>
+        <nav class="toc">
+            <div id="toc"><ul><li><a class="toc-href" href="#1-name-or-flags" title="1. name or&nbsp;flags">1. name or&nbsp;flags</a></li><li><a class="toc-href" href="#2-action" title="2.&nbsp;action">2.&nbsp;action</a></li><li><a class="toc-href" href="#3-nargs" title="3.&nbsp;nargs">3.&nbsp;nargs</a></li><li><a class="toc-href" href="#4-typehe-metavar" title="4.&nbsp;type和metavar">4.&nbsp;type和metavar</a></li><li><a class="toc-href" href="#can-kao-wen-dang" title="参考文档">参考文档</a></li></ul></div>
+        </nav>
 
   </div>
             

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  LEDE路由器打造家庭媒体影音中心（一）
+    <title>  LEDE路由器打造家庭媒体影音中心（三）
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -105,7 +105,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://solarck.com/drafts/lede-media-center1.html" rel="bookmark" title="Permalink to LEDE路由器打造家庭媒体影音中心（一）">LEDE路由器打造家庭媒体影音中心（一）</a>
+    <a href="https://solarck.com/drafts/lede-media-center3.html" rel="bookmark" title="Permalink to LEDE路由器打造家庭媒体影音中心（三）">LEDE路由器打造家庭媒体影音中心（三）</a>
   </h1>
         </div>
       </div>
@@ -117,99 +117,33 @@
   
 
   <div>
-    <h1 id="qian-yan">前言</h1>
-<h3 id="ruan-ying-jian">软/硬件</h3>
-<p>软件：本文系统都是基于LEDE&nbsp;17.01.4</p>
-<p>硬件：Linksys <span class="caps">WRT1900ACS</span>&nbsp;V2</p>
-<p>其他：一台电脑，最好是Linux带SSH，Windows的话可以下个putty安装上</p>
-<p>前提：我不会从头写起，而是从路由器已刷好LEDE&nbsp;17.01.4，WAN口已联网，且已经可以SSH登录之后开始，其他外设，如硬盘、硬盘盒、用于EXROOT的U盘都已准备好。</p>
-<h3 id="shi-xian-mu-de">实现目的</h3>
-<p>基于Linksys&nbsp;WRT1900ACS强悍的性能和扩展功能丰富的LEDE，打造一个有权限控制的NAS，支持DLNA，可以离线下载和远程访问的DDNS系统的多媒体中心。</p>
-<h1 id="geng-huan-yuan_1">更换源</h1>
-<h3 id="tian-jia-dui-httpsde-zhi-chi">添加对https的支持</h3>
-<p>如果你在替换源后执行更新，那么会收到一条错误消息：</p>
-<blockquote>
-<p><span class="caps">SSL</span> support not available, please install one of the libustream-ssl-* libraries as well as the ca-bundle and ca-certificates&nbsp;packages.</p>
-</blockquote>
-<p>很明显，系统还不支持SSL，因为官方的源都是http的，而我们添加的源都是https的。不过也很简单，按照错误信息的提示安装相应的包就可以了。<strong>这一步一定要在替换源之前执行</strong></p>
+    <h1 id="aria2xia-zai">aria2下载</h1>
 <div class="highlight"><pre><span></span>opkg update
-opkg install ca-certificates libustream-openssl luci-ssl-openssl
+opkg install aria2 luci-app-aria2 luci-i18n-aria2-zh-cn
 </pre></div>
-<h3 id="geng-huan-yuan_2">更换源</h3>
-<p>国内访问LEDE官方源比较不稳定，速度也很慢，幸好<a href="https://mirrors.ustc.edu.cn/lede/">中科大</a>和<a href="https://mirrors.tuna.tsinghua.edu.cn/lede/">清华</a>都提供了LEDE的软件镜像源，为了后边操作能够顺利进行，首先需要更换源。</p>
-<p><span class="caps">LEDE</span>&nbsp;OPKG的软件源配置文件有两个：</p>
-<p><code>/etc/opkg/distfeeds.conf</code>：发行版本自带的官方源，需要把里面的内容全部注释掉或者清空。</p>
-<p><code>/etc/opkg/customfeeds.conf</code>：自定义源，把我们需要的内容粘贴到这里，内容如下：</p>
-<div class="highlight"><pre><span></span><span class="na">src/gz reboot_core https://mirrors.ustc.edu.cn/lede/releases/17.01.4/targets/mvebu/generic/packages</span>
-<span class="na">src/gz reboot_base https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/base</span>
-<span class="na">src/gz reboot_luci https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/luci</span>
-<span class="na">src/gz reboot_packages https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/packages</span>
-<span class="na">src/gz reboot_routing https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/routing</span>
-<span class="na">src/gz reboot_telephony https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/telephony</span>
+<h1 id="ddns"><span class="caps">DDNS</span></h1>
+<div class="highlight"><pre><span></span>opkg install wget curl bind-host knot-host drill
+ddns-scripts
+luci-app-ddns
+luci-i18n-ddns-zh-cn
+https://www.dnsdynamic.org
+http://www.pubyun.com/
+https://www.changeip.com/
+https://www.noip.com/
+</pre></div>
+<h1 id="dlna"><span class="caps">DLNA</span></h1>
+<div class="highlight"><pre><span></span>opkg install minidlna luci-app-minidlna luci-i18n-minidlna-zh-cn
+</pre></div>
+<h1 id="other">Other</h1>
+<div class="highlight"><pre><span></span>opkg install transmission-daemon-openssl transmission-web luci-app-transmission luci-i18n-transmission-zh-cn
 
-<span class="c1">#只启用上面中科大的源，下面的作为备份</span>
-<span class="c1">#src/gz reboot_core http://downloads.lede-project.org/releases/17.01.4/targets/mvebu/generic/packages</span>
-<span class="c1">#src/gz reboot_base http://downloads.lede-project.org/releases/17.01.4/packages/arm_cortex-a9_vfpv3/base</span>
-<span class="c1">#src/gz reboot_luci http://downloads.lede-project.org/releases/17.01.4/packages/arm_cortex-a9_vfpv3/luci</span>
-<span class="c1">#src/gz reboot_packages http://downloads.lede-project.org/releases/17.01.4/packages/arm_cortex-a9_vfpv3/packages</span>
-<span class="c1">#src/gz reboot_routing http://downloads.lede-project.org/releases/17.01.4/packages/arm_cortex-a9_vfpv3/routing</span>
-<span class="c1">#src/gz reboot_telephony http://downloads.lede-project.org/releases/17.01.4/proot@ChenWrt:~# cat /etc/opkg/distfeeds.conf</span>
-<span class="c1">#src/gz reboot_core https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/targets/mvebu/generic/packages</span>
-<span class="c1">#src/gz reboot_base https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/base</span>
-<span class="c1">#src/gz reboot_luci https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/luci</span>
-<span class="c1">#src/gz reboot_packages https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/packages</span>
-<span class="c1">#src/gz reboot_routing https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/routing</span>
-<span class="c1">#src/gz reboot_telephony https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/telephony</span>
+opkg install miniupnpd luci-app-upnp luci-i18n-upnp-zh-cn
+
+opkg install qos-scripts luci-app-qos luci-i18n-qos-zh-cn
+
+opkg remove --autoremove *
 </pre></div>
-<h3 id="geng-xin-xi-tong">更新系统</h3>
-<p>镜像源替换完成后，把所有已安装程序全部更新到最新</p>
-<div class="highlight"><pre><span></span>opkg update
-opkg list-upgradable <span class="p">|</span> cut -f <span class="m">1</span> -d <span class="s1">' '</span> <span class="p">|</span> xargs opkg upgrade 
-</pre></div>
-<h1 id="you-hua-luci_1">优化LuCi</h1>
-<h3 id="sslzhi-chi">SSL支持</h3>
-<h4 id="an-zhuang-openssl"><strong>安装openssl</strong></h4>
-<div class="highlight"><pre><span></span>opkg update
-opkg install libopenssl
-opkg install openssl-util
-opkg install luci-app-uhttpd
-</pre></div>
-<h4 id="chuang-jian-pei-zhi-wen-jian"><strong>创建配置文件</strong></h4>
-<p><code>vim /etc/ssl/myconfig.conf</code></p>
-<div class="highlight"><pre><span></span><span class="k">[req]</span>
-<span class="na">distinguished_name</span>  <span class="o">=</span> <span class="s">req_distinguished_name</span>
-<span class="na">x509_extensions</span>     <span class="o">=</span> <span class="s">v3_req</span>
-<span class="na">prompt</span>              <span class="o">=</span> <span class="s">no</span>
-<span class="k">[req_distinguished_name]</span>
-<span class="na">C</span>           <span class="o">=</span> <span class="s">US</span>
-<span class="na">ST</span>          <span class="o">=</span> <span class="s">CA</span>
-<span class="na">L</span>           <span class="o">=</span> <span class="s">WRT1900ACS</span>
-<span class="na">O</span>           <span class="o">=</span> <span class="s">Home</span>
-<span class="na">OU</span>          <span class="o">=</span> <span class="s">Router</span>
-<span class="na">CN</span>          <span class="o">=</span> <span class="s">192.168.1.1</span>
-<span class="na">[v3_req] </span>
-<span class="na">keyUsage</span>           <span class="o">=</span> <span class="s">keyEncipherment, dataEncipherment</span>
-<span class="na">extendedKeyUsage</span>   <span class="o">=</span> <span class="s">serverAuth</span>
-<span class="na">subjectAltName</span> <span class="o">=</span> <span class="s">@alt_names</span>
-<span class="k">[alt_names]</span>
-<span class="na">DNS.1</span> <span class="o">=</span> <span class="s">192.168.1.1</span>
-<span class="na">IP.1</span> <span class="o">=</span> <span class="s">192.168.1.1</span>
-</pre></div>
-<p>这里需要把<strong><span class="caps">CN</span></strong>、<strong><span class="caps">DNS</span>.1</strong>、<strong><span class="caps">IP</span>.1</strong>填写正确，其余的保持或任意填。</p>
-<h4 id="sheng-cheng-mi-yao"><strong>生成密钥</strong></h4>
-<div class="highlight"><pre><span></span>cd /etc/ssl
-openssl req -x509 -nodes -days 730 -newkey rsa:2048 -keyout mycert.key -out mycert.crt -config myconfig.conf
-</pre></div>
-<p>执行上面命令后，会在当前文件夹生成私钥和公钥，<code>mycert.key</code>&nbsp;和&nbsp;<code>mycert.crt</code></p>
-<h4 id="uhttpdtian-jia-zheng-shu"><strong>uHTTPd添加证书</strong></h4>
-<h4 id="bei-fen"><strong>备份</strong></h4>
-<h4 id="guan-li-liu-lan-qi-zheng-shu"><strong>管理浏览器证书</strong></h4>
-<h3 id="yi-hua_1">汉化</h3>
-<div class="highlight"><pre><span></span>opkg update
-opkg install luci-i18n-base-zh-cn
-</pre></div>
-<h1 id="can-kao-lian-jie_1">参考链接</h1>
-<p><a href="https://openwrt.org/docs/guide-user/luci/getting-rid-of-luci-https-certificate-warnings">How to get rid of LuCI https certificate&nbsp;warnings</a></p>
+<h1 id="can-kao-lian-jie">参考链接</h1>
   </div>
 
     <hr />
@@ -225,9 +159,9 @@ opkg install luci-i18n-base-zh-cn
       <div id="disqus_thread"></div>
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
-        var disqus_identifier = "drafts/lede-media-center1.html";
-        var disqus_title = "LEDE路由器打造家庭媒体影音中心（一）";
-        var disqus_url = "https://solarck.com/drafts/lede-media-center1.html";
+        var disqus_identifier = "drafts/lede-media-center3.html";
+        var disqus_title = "LEDE路由器打造家庭媒体影音中心（三）";
+        var disqus_url = "https://solarck.com/drafts/lede-media-center3.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
           dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
@@ -265,7 +199,7 @@ opkg install luci-i18n-base-zh-cn
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#qian-yan" title="前言">前言</a><ul><li><a class="toc-href" href="#ruan-ying-jian" title="软/硬件">软/硬件</a></li><li><a class="toc-href" href="#shi-xian-mu-de" title="实现目的">实现目的</a></li></ul></li><li><a class="toc-href" href="#geng-huan-yuan_1" title="更换源">更换源</a><ul><li><a class="toc-href" href="#tian-jia-dui-httpsde-zhi-chi" title="添加对https的支持">添加对https的支持</a></li><li><a class="toc-href" href="#geng-huan-yuan_2" title="更换源">更换源</a></li><li><a class="toc-href" href="#geng-xin-xi-tong" title="更新系统">更新系统</a></li></ul></li><li><a class="toc-href" href="#you-hua-luci_1" title="优化LuCi">优化LuCi</a><ul><li><a class="toc-href" href="#sslzhi-chi" title="SSL支持">SSL支持</a><ul><li><a class="toc-href" href="#an-zhuang-openssl" title="安装openssl">安装openssl</a></li><li><a class="toc-href" href="#chuang-jian-pei-zhi-wen-jian" title="创建配置文件">创建配置文件</a></li><li><a class="toc-href" href="#sheng-cheng-mi-yao" title="生成密钥">生成密钥</a></li><li><a class="toc-href" href="#uhttpdtian-jia-zheng-shu" title="uHTTPd添加证书">uHTTPd添加证书</a></li><li><a class="toc-href" href="#bei-fen" title="备份">备份</a></li><li><a class="toc-href" href="#guan-li-liu-lan-qi-zheng-shu" title="管理浏览器证书">管理浏览器证书</a></li></ul></li><li><a class="toc-href" href="#yi-hua_1" title="汉化">汉化</a></li></ul></li><li><a class="toc-href" href="#can-kao-lian-jie_1" title="参考链接">参考链接</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#aria2xia-zai" title="aria2下载">aria2下载</a></li><li><a class="toc-href" href="#ddns" title="DDNS">DDNS</a></li><li><a class="toc-href" href="#dlna" title="DLNA">DLNA</a></li><li><a class="toc-href" href="#other" title="Other">Other</a></li><li><a class="toc-href" href="#can-kao-lian-jie" title="参考链接">参考链接</a></li></ul></div>
         </nav>
 
   </div>

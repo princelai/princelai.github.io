@@ -119,37 +119,26 @@
   <div>
     <p>matplotlib是Python的优秀绘图包，但是不论是在Windows还是Linux中默认都是不支持中文的，尤其是在Linux中设置更加复杂一点，设置方法如下：</p>
 <p>首先我们需要获取到matplotlib配置文件的文件夹</p>
-<div class="highlight"><pre><span></span>python -c <span class="s2">&quot;import matplotlib as mpl;print(mpl.get_configdir())&quot;</span>
+<div class="highlight"><pre><span></span>python -c <span class="s2">"import matplotlib as mpl;print(mpl.get_configdir())"</span>
 /home/kevin/.config/matplotlib
 </pre></div>
-
-
 <!--more-->
-
 <p>然后需要一个默认的matplotlibrc文件用于修改</p>
-<div class="highlight"><pre><span></span>python -c <span class="s2">&quot;import matplotlib as mpl;print(mpl.matplotlib_fname())&quot;</span>
+<div class="highlight"><pre><span></span>python -c <span class="s2">"import matplotlib as mpl;print(mpl.matplotlib_fname())"</span>
 /opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc
 </pre></div>
-
-
 <p>这个位置会根据每个人安装位置不同而改变</p>
 <p>然后把默认的rc文件拷贝到用户的配置文件夹</p>
 <div class="highlight"><pre><span></span>cp /opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc ~/.config/matplotlib
 </pre></div>
-
-
 <p>之后的工作都是围绕这个rc文件，一般情况下只需要修改如下两个字段，把注释打开。</p>
 <div class="highlight"><pre><span></span>font.sans-serif     : DejaVu Sans, Bitstream Vera Sans, Lucida Grande, Verdana, Geneva
 axes.unicode_minus  : False
 </pre></div>
-
-
 <p>第一个字段负责中文字体显示，但是目前还没有，第二个负责正负号的显示。</p>
 <p>由于matplotlib不使用系统字体，所以需要找到一个matplotlib支持的字体且已在系统中</p>
 <div class="highlight"><pre><span></span>fc-list :lang=zh |grep -i ttf
 </pre></div>
-
-
 <p>在shell中执行这个命令，就能找到几个字体，选择一个填到上面第一行第一个即可，通常建议选择<code>Droid Sans Fallback</code></p>
 <p>修改好后重启整个python或ipython之后应该就可以看到中文，不过还是不可以的话可以使用下面方案二查找，这个方法出自<a href="https://segmentfault.com/a/1190000000621721">segmentfault</a>。</p>
 <div class="highlight"><pre><span></span><span class="ch">#! /usr/bin/env python</span>
@@ -161,22 +150,20 @@ axes.unicode_minus  : False
 <span class="n">mat_fonts</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fm</span><span class="o">.</span><span class="n">ttflist</span><span class="p">)</span>
 
 <span class="n">output</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span>
-    <span class="s1">&#39;fc-list :lang=zh -f &quot;%{family}</span><span class="se">\n</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+    <span class="s1">'fc-list :lang=zh -f "%{family}</span><span class="se">\n</span><span class="s1">"'</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf8'</span><span class="p">)</span>
 
-<span class="n">zh_fonts</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
+<span class="n">zh_fonts</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">','</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">))</span>
 <span class="n">available</span> <span class="o">=</span> <span class="n">mat_fonts</span> <span class="o">&amp;</span> <span class="n">zh_fonts</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;*&#39;</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;可用的字体&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">'*'</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">'可用的字体'</span><span class="p">,</span> <span class="s1">'*'</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">available</span><span class="p">:</span>
     <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
-
-
 <p>如果不想使用rc文件来配置，那么可以在每次使用的时候在python中执行以下命令即可。</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Droid Sans Fallback&#39;</span><span class="p">]</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.unicode_minus&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.sans-serif'</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s1">'Droid Sans Fallback'</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'axes.unicode_minus'</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 </pre></div>
   </div>
 
@@ -249,6 +236,7 @@ axes.unicode_minus  : False
           </li>
         </ul>
       </nav>
+    
 
   </div>
             
