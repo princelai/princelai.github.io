@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  LEDE路由器打造家庭媒体影音中心（二）
+    <title>  LEDE/OpenWRT路由器打造家庭媒体影音中心（二）
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -105,7 +105,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://solarck.com/drafts/lede-media-center2.html" rel="bookmark" title="Permalink to LEDE路由器打造家庭媒体影音中心（二）">LEDE路由器打造家庭媒体影音中心（二）</a>
+    <a href="https://solarck.com/drafts/lede-media-center2.html" rel="bookmark" title="Permalink to LEDE/OpenWRT路由器打造家庭媒体影音中心（二）"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（二）</a>
   </h1>
         </div>
       </div>
@@ -124,7 +124,7 @@ opkg list-installed | grep usb
 </pre></div>
 <h3 id="an-zhuang-qu-dong-he-gong-ju">安装驱动和工具</h3>
 <p>如果下列驱动未出现在上一步的结果中，请务必首先安装缺失的驱动</p>
-<div class="highlight"><pre><span></span>opkg install kmod-usb-core kmod-usb-storage kmod-usb2 kmod-ata-marvell-sata
+<div class="highlight"><pre><span></span>opkg install kmod-usb-core kmod-usb-storage
 </pre></div>
 <p><code>kmod-usb-core</code>:USB核心驱动</p>
 <p><code>kmod-usb-storage</code>:大容量存储设备驱动</p>
@@ -132,7 +132,7 @@ opkg list-installed | grep usb
 <p><code>kmod-ata-marvell-sata</code>:Marvell&nbsp;SATA接口驱动</p>
 <p>网上搜到的教程和官方指南里还让安装一些其他的应用，但这些都是不必要或已被编译至内核中，包括：<code>kmod-usb-ohci</code>、<code>kmod-usb-uhci</code>、<code>kmod-usb3</code>、<code>kmod-usb-storage-uas</code></p>
 <h3 id="an-zhuang-xiang-guan-gong-ju">安装相关工具</h3>
-<div class="highlight"><pre><span></span>opkg install mount-utils usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk 
+<div class="highlight"><pre><span></span>opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk 
 </pre></div>
 <p><code>mount-utils</code>:提供unmount,findmnt</p>
 <p><code>usbutils</code>:提供lsusb</p>
@@ -172,10 +172,10 @@ mkfs.f2fs /dev/sda1
 </pre></div>
 <h3 id="zi-dong-gua-zai-fen-qu">自动挂载分区</h3>
 <div class="highlight"><pre><span></span>block detect &gt; /etc/config/fstab
-uci <span class="nb">set</span> fstab.@mount<span class="o">[</span><span class="m">0</span><span class="o">]</span>.enabled<span class="o">=</span><span class="s1">'1'</span>
 uci <span class="nb">set</span> fstab.@mount<span class="o">[</span><span class="m">1</span><span class="o">]</span>.enabled<span class="o">=</span><span class="s1">'1'</span>
-uci <span class="nb">set</span> fstab.@mount<span class="o">[</span><span class="m">0</span><span class="o">]</span>.options<span class="o">=</span><span class="s1">'rw'</span>
+uci <span class="nb">set</span> fstab.@mount<span class="o">[</span><span class="m">2</span><span class="o">]</span>.enabled<span class="o">=</span><span class="s1">'1'</span>
 uci <span class="nb">set</span> fstab.@mount<span class="o">[</span><span class="m">1</span><span class="o">]</span>.options<span class="o">=</span><span class="s1">'rw'</span>
+uci <span class="nb">set</span> fstab.@mount<span class="o">[</span><span class="m">2</span><span class="o">]</span>.options<span class="o">=</span><span class="s1">'rw'</span>
 uci <span class="nb">set</span> fstab.@global<span class="o">[</span><span class="m">0</span><span class="o">]</span>.check_fs<span class="o">=</span><span class="s1">'1'</span>
 uci commit
 </pre></div>
@@ -217,7 +217,7 @@ opkg list <span class="p">|</span> grep samba
 <div class="highlight"><pre><span></span>opkg install samba36-server luci-app-samba luci-i18n-samba-zh-cn
 </pre></div>
 <h3 id="pei-zhi-fang-huo-qiang">配置防火墙</h3>
-<p><code>vi /etc/config/firewall</code></p>
+<p><code>vim /etc/config/firewall</code></p>
 <div class="highlight"><pre><span></span><span class="na">config 'rule'</span>
         <span class="na">option 'src' 'lan'</span>
         <span class="na">option 'proto' 'udp'</span>
@@ -246,7 +246,7 @@ opkg list <span class="p">|</span> grep samba
 <li>访问<code>/mnt/sda2</code>，即Document文件夹必须登录，用户只能访问到自己创建的文件夹和文件</li>
 </ul>
 <h4 id="quan-ju-pei-zhi"><strong>全局配置</strong></h4>
-<p><code>vi /etc/samba/smb.conf.template</code></p>
+<p><code>vim /etc/samba/smb.conf.template</code></p>
 <div class="highlight"><pre><span></span><span class="o">[</span>global<span class="o">]</span>
     <span class="c1">#netbios name = LEDE  #不设置默认是路由器host名</span>
     <span class="c1">#workgroup = LEDE #不设置默认是WORKGROUP</span>
@@ -267,7 +267,7 @@ opkg list <span class="p">|</span> grep samba
     map to <span class="nv">guest</span> <span class="o">=</span> Bad User
 </pre></div>
 <h4 id="gong-xiang-wen-jian-jia-she-zhi"><strong>共享文件夹设置</strong></h4>
-<p><code>vi /etc/config/samba</code></p>
+<p><code>vim /etc/config/samba</code></p>
 <div class="highlight"><pre><span></span>config samba
         option charset <span class="s1">'UTF-8'</span>
         option homes <span class="s1">'0'</span>
@@ -312,6 +312,10 @@ opkg install shadow-useradd
 passwd newuser
 smbpasswd -a newuser
 </pre></div>
+<p>最后启动/重启服务</p>
+<div class="highlight"><pre><span></span>/etc/init.d/samba restart
+/etc/init.d/samba <span class="nb">enable</span>
+</pre></div>
 <p>至此，Samba设置完成，也达到了我的目的，有可以匿名随意访问的共享文件夹，也有实现了权限控制的私有文件夹。而且是全平台都可以访问，Windows、Linux和手机（需要有支持SMB协议的软件）。</p>
 <h1 id="can-kao-lian-jie_2">参考链接</h1>
 <p><a href="https://openwrt.org/docs/guide-user/storage/usb-installing">Installing <span class="caps">USB</span>&nbsp;Drivers</a></p>
@@ -342,7 +346,7 @@ smbpasswd -a newuser
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
         var disqus_identifier = "drafts/lede-media-center2.html";
-        var disqus_title = "LEDE路由器打造家庭媒体影音中心（二）";
+        var disqus_title = "LEDE/OpenWRT路由器打造家庭媒体影音中心（二）";
         var disqus_url = "https://solarck.com/drafts/lede-media-center2.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

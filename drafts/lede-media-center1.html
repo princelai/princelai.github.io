@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  LEDE路由器打造家庭媒体影音中心（一）
+    <title>  LEDE/OpenWRT路由器打造家庭媒体影音中心（一）
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -105,7 +105,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://solarck.com/drafts/lede-media-center1.html" rel="bookmark" title="Permalink to LEDE路由器打造家庭媒体影音中心（一）">LEDE路由器打造家庭媒体影音中心（一）</a>
+    <a href="https://solarck.com/drafts/lede-media-center1.html" rel="bookmark" title="Permalink to LEDE/OpenWRT路由器打造家庭媒体影音中心（一）"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（一）</a>
   </h1>
         </div>
       </div>
@@ -122,9 +122,52 @@
 <p>软件：本文系统都是基于LEDE&nbsp;17.01.4</p>
 <p>硬件：Linksys <span class="caps">WRT1900ACS</span>&nbsp;V2</p>
 <p>其他：一台电脑，最好是Linux带SSH，Windows的话可以下个putty安装上</p>
-<p>前提：我不会从头写起，而是从路由器已刷好LEDE&nbsp;17.01.4，WAN口已联网，且已经可以SSH登录之后开始，其他外设，如硬盘、硬盘盒、用于EXROOT的U盘都已准备好。</p>
+<p>前提：我不会从头写起，而是从路由器已刷好LEDE&nbsp;17.01.4，WAN口已联网，且已经可以SSH登录之后开始，其他外设，如硬盘、硬盘盒、用于Extroot的U盘都已准备好。</p>
 <h3 id="shi-xian-mu-de">实现目的</h3>
 <p>基于Linksys&nbsp;WRT1900ACS强悍的性能和扩展功能丰富的LEDE，打造一个有权限控制的NAS，支持DLNA，可以离线下载和远程访问的DDNS系统的多媒体中心。</p>
+<h1 id="extroot_1">Extroot</h1>
+<p>extroot的作用就是扩充存储空间，这样就可以安装更多的软件。详细介绍可以查看很早之前我写过的一篇文章&mdash;&mdash;<a href="https://solarck.com/openwrt-extroot.html">用extroot为openwrt扩充存储空间</a>，这里就不赘述了。由于那篇文章比较老，LEDE也早已经升级了好几个含本，所以实际的操作还是以下面的内容为主。</p>
+<h3 id="an-zhuang-gong-ju">安装工具</h3>
+<p>这里我准备把U盘格式化为f2fs格式，关于各种存储格式和下面需要安装的工具的作用，我会放在下一篇文章一起讲，这一步照着做就可以了。</p>
+<div class="highlight"><pre><span></span>opkg update
+opkg install block-mount kmod-fs-ext4 kmod-usb-storage e2fsprogs kmod-fs-f2fs f2fs-tools
+</pre></div>
+<h3 id="ge-shi-hua-upan">格式化U盘</h3>
+<div class="highlight"><pre><span></span>mkfs.f2fs /dev/sda1
+</pre></div>
+<h3 id="qian-yi-xi-tong">迁移系统</h3>
+<div class="highlight"><pre><span></span>mount /dev/sda1 /mnt <span class="p">;</span> tar -C /overlay -cvf - . <span class="p">|</span> tar -C /mnt -xf - <span class="p">;</span> umount /mnt
+</pre></div>
+<h3 id="sheng-cheng-fen-qu-biao">生成分区表</h3>
+<div class="highlight"><pre><span></span>block detect &gt; /etc/config/fstab
+uci set fstab.@mount[0].target='/overlay'
+uci set fstab.@mount[0].enabled='1'
+uci set fstab.@mount[0].options='rw'
+uci set fstab.@mount[0].fstype='f2fs'
+uci commit
+</pre></div>
+<p><code>vim /etc/config/fstab</code></p>
+<h3 id="yan-zheng">验证</h3>
+<p>重启系统后执行命令</p>
+<p><code>df -h</code></p>
+<div class="highlight"><pre><span></span>Filesystem                Size      Used Available Use% Mounted on
+/dev/root                 2.8M      2.8M         0 100% /rom
+tmpfs                   250.8M    556.0K    250.2M   0% /tmp
+/dev/sdb1                14.3G    496.6M     13.7G   3% /overlay
+overlayfs:/overlay       14.3G    496.6M     13.7G   3% /
+ubi1:syscfg              29.6M    268.0K     27.8M   1% /tmp/syscfg
+tmpfs                   512.0K         0    512.0K   0% /dev
+</pre></div>
+<p>如果<code>/overlay</code>分区已经变为U盘容量大小，那就是成功了。</p>
+<div class="highlight"><pre><span></span>root@LEDE:~# block info
+/dev/mtdblock7: TYPE="jffs2"
+/dev/ubiblock0_0: UUID="9f419b56-31564c19-0a0c1b12-a2f9b77b" VERSION="4.0" MOUNT="/rom" TYPE="squashfs"
+/dev/ubi0_1: UUID="1361ff26-cc87-40f1-8b99-00caf223093c" VERSION="w4r0" MOUNT="/overlay" TYPE="ubifs"
+/dev/ubi1_0: UUID="413d13a9-0f0a-4811-a0cb-3e3786ce26d7" VERSION="w4r0" TYPE="ubifs"
+/dev/sda1: UUID="AC94-4A20" VERSION="FAT32" TYPE="vfat"
+/dev/sdb1: UUID="616dc059-2437-4f3c-89fd-7b66fe269e43" VERSION="1.0" TYPE="ext4"
+/dev/sdb2: UUID="eff38518-d182-47a2-81bd-3e72a89c9e8c" VERSION="1.0" TYPE="ext4"
+</pre></div>
 <h1 id="geng-huan-yuan_1">更换源</h1>
 <h3 id="tian-jia-dui-httpsde-zhi-chi">添加对https的支持</h3>
 <p>如果你在替换源后执行更新，那么会收到一条错误消息：</p>
@@ -133,7 +176,7 @@
 </blockquote>
 <p>很明显，系统还不支持SSL，因为官方的源都是http的，而我们添加的源都是https的。不过也很简单，按照错误信息的提示安装相应的包就可以了。<strong>这一步一定要在替换源之前执行</strong></p>
 <div class="highlight"><pre><span></span>opkg update
-opkg install ca-certificates libustream-openssl luci-ssl-openssl
+opkg install ca-certificates luci-ssl-openssl
 </pre></div>
 <h3 id="geng-huan-yuan_2">更换源</h3>
 <p>国内访问LEDE官方源比较不稳定，速度也很慢，幸好<a href="https://mirrors.ustc.edu.cn/lede/">中科大</a>和<a href="https://mirrors.tuna.tsinghua.edu.cn/lede/">清华</a>都提供了LEDE的软件镜像源，为了后边操作能够顺利进行，首先需要更换源。</p>
@@ -169,13 +212,12 @@ opkg list-upgradable <span class="p">|</span> cut -f <span class="m">1</span> -d
 <h1 id="you-hua-luci_1">优化LuCi</h1>
 <h3 id="sslzhi-chi">SSL支持</h3>
 <h4 id="an-zhuang-openssl"><strong>安装openssl</strong></h4>
+<p>如果已经换过镜像源，那么前两个包已经装好了，只需要装最后一个即可</p>
 <div class="highlight"><pre><span></span>opkg update
-opkg install libopenssl
-opkg install openssl-util
-opkg install luci-app-uhttpd
+opkg install libopenssl openssl-util luci-app-uhttpd
 </pre></div>
 <h4 id="chuang-jian-pei-zhi-wen-jian"><strong>创建配置文件</strong></h4>
-<p><code>vim /etc/ssl/myconfig.conf</code></p>
+<p><code>vim /etc/ssl/myconfig.cnf</code></p>
 <div class="highlight"><pre><span></span><span class="k">[req]</span>
 <span class="na">distinguished_name</span>  <span class="o">=</span> <span class="s">req_distinguished_name</span>
 <span class="na">x509_extensions</span>     <span class="o">=</span> <span class="s">v3_req</span>
@@ -198,10 +240,12 @@ opkg install luci-app-uhttpd
 <p>这里需要把<strong><span class="caps">CN</span></strong>、<strong><span class="caps">DNS</span>.1</strong>、<strong><span class="caps">IP</span>.1</strong>填写正确，其余的保持或任意填。</p>
 <h4 id="sheng-cheng-mi-yao"><strong>生成密钥</strong></h4>
 <div class="highlight"><pre><span></span>cd /etc/ssl
-openssl req -x509 -nodes -days 730 -newkey rsa:2048 -keyout mycert.key -out mycert.crt -config myconfig.conf
+openssl req -x509 -nodes -days 730 -newkey rsa:2048 -keyout mycert.key -out mycert.crt -config myconfig.cnf
 </pre></div>
 <p>执行上面命令后，会在当前文件夹生成私钥和公钥，<code>mycert.key</code>&nbsp;和&nbsp;<code>mycert.crt</code></p>
 <h4 id="uhttpdtian-jia-zheng-shu"><strong>uHTTPd添加证书</strong></h4>
+<p><code>HTTPS Certificate (DER Encoded)</code>:mycert.crt </p>
+<p><code>HTTPS Private Key (DER Encoded)</code>:mycert.key </p>
 <h4 id="bei-fen"><strong>备份</strong></h4>
 <h4 id="guan-li-liu-lan-qi-zheng-shu"><strong>管理浏览器证书</strong></h4>
 <h3 id="yi-hua_1">汉化</h3>
@@ -210,6 +254,7 @@ opkg install luci-i18n-base-zh-cn
 </pre></div>
 <h1 id="can-kao-lian-jie_1">参考链接</h1>
 <p><a href="https://openwrt.org/docs/guide-user/luci/getting-rid-of-luci-https-certificate-warnings">How to get rid of LuCI https certificate&nbsp;warnings</a></p>
+<p><a href="https://openwrt.org/docs/guide-user/additional-software/extroot_configuration">Extroot&nbsp;configuration</a></p>
   </div>
 
     <hr />
@@ -226,7 +271,7 @@ opkg install luci-i18n-base-zh-cn
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
         var disqus_identifier = "drafts/lede-media-center1.html";
-        var disqus_title = "LEDE路由器打造家庭媒体影音中心（一）";
+        var disqus_title = "LEDE/OpenWRT路由器打造家庭媒体影音中心（一）";
         var disqus_url = "https://solarck.com/drafts/lede-media-center1.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -265,7 +310,7 @@ opkg install luci-i18n-base-zh-cn
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#qian-yan" title="前言">前言</a><ul><li><a class="toc-href" href="#ruan-ying-jian" title="软/硬件">软/硬件</a></li><li><a class="toc-href" href="#shi-xian-mu-de" title="实现目的">实现目的</a></li></ul></li><li><a class="toc-href" href="#geng-huan-yuan_1" title="更换源">更换源</a><ul><li><a class="toc-href" href="#tian-jia-dui-httpsde-zhi-chi" title="添加对https的支持">添加对https的支持</a></li><li><a class="toc-href" href="#geng-huan-yuan_2" title="更换源">更换源</a></li><li><a class="toc-href" href="#geng-xin-xi-tong" title="更新系统">更新系统</a></li></ul></li><li><a class="toc-href" href="#you-hua-luci_1" title="优化LuCi">优化LuCi</a><ul><li><a class="toc-href" href="#sslzhi-chi" title="SSL支持">SSL支持</a><ul><li><a class="toc-href" href="#an-zhuang-openssl" title="安装openssl">安装openssl</a></li><li><a class="toc-href" href="#chuang-jian-pei-zhi-wen-jian" title="创建配置文件">创建配置文件</a></li><li><a class="toc-href" href="#sheng-cheng-mi-yao" title="生成密钥">生成密钥</a></li><li><a class="toc-href" href="#uhttpdtian-jia-zheng-shu" title="uHTTPd添加证书">uHTTPd添加证书</a></li><li><a class="toc-href" href="#bei-fen" title="备份">备份</a></li><li><a class="toc-href" href="#guan-li-liu-lan-qi-zheng-shu" title="管理浏览器证书">管理浏览器证书</a></li></ul></li><li><a class="toc-href" href="#yi-hua_1" title="汉化">汉化</a></li></ul></li><li><a class="toc-href" href="#can-kao-lian-jie_1" title="参考链接">参考链接</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#qian-yan" title="前言">前言</a><ul><li><a class="toc-href" href="#ruan-ying-jian" title="软/硬件">软/硬件</a></li><li><a class="toc-href" href="#shi-xian-mu-de" title="实现目的">实现目的</a></li></ul></li><li><a class="toc-href" href="#extroot_1" title="Extroot">Extroot</a><ul><li><a class="toc-href" href="#an-zhuang-gong-ju" title="安装工具">安装工具</a></li><li><a class="toc-href" href="#ge-shi-hua-upan" title="格式化U盘">格式化U盘</a></li><li><a class="toc-href" href="#qian-yi-xi-tong" title="迁移系统">迁移系统</a></li><li><a class="toc-href" href="#sheng-cheng-fen-qu-biao" title="生成分区表">生成分区表</a></li><li><a class="toc-href" href="#yan-zheng" title="验证">验证</a></li></ul></li><li><a class="toc-href" href="#geng-huan-yuan_1" title="更换源">更换源</a><ul><li><a class="toc-href" href="#tian-jia-dui-httpsde-zhi-chi" title="添加对https的支持">添加对https的支持</a></li><li><a class="toc-href" href="#geng-huan-yuan_2" title="更换源">更换源</a></li><li><a class="toc-href" href="#geng-xin-xi-tong" title="更新系统">更新系统</a></li></ul></li><li><a class="toc-href" href="#you-hua-luci_1" title="优化LuCi">优化LuCi</a><ul><li><a class="toc-href" href="#sslzhi-chi" title="SSL支持">SSL支持</a><ul><li><a class="toc-href" href="#an-zhuang-openssl" title="安装openssl">安装openssl</a></li><li><a class="toc-href" href="#chuang-jian-pei-zhi-wen-jian" title="创建配置文件">创建配置文件</a></li><li><a class="toc-href" href="#sheng-cheng-mi-yao" title="生成密钥">生成密钥</a></li><li><a class="toc-href" href="#uhttpdtian-jia-zheng-shu" title="uHTTPd添加证书">uHTTPd添加证书</a></li><li><a class="toc-href" href="#bei-fen" title="备份">备份</a></li><li><a class="toc-href" href="#guan-li-liu-lan-qi-zheng-shu" title="管理浏览器证书">管理浏览器证书</a></li></ul></li><li><a class="toc-href" href="#yi-hua_1" title="汉化">汉化</a></li></ul></li><li><a class="toc-href" href="#can-kao-lian-jie_1" title="参考链接">参考链接</a></li></ul></div>
         </nav>
 
   </div>

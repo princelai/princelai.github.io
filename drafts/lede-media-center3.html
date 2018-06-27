@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  LEDE路由器打造家庭媒体影音中心（三）
+    <title>  LEDE/OpenWRT路由器打造家庭媒体影音中心（三）
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -105,7 +105,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://solarck.com/drafts/lede-media-center3.html" rel="bookmark" title="Permalink to LEDE路由器打造家庭媒体影音中心（三）">LEDE路由器打造家庭媒体影音中心（三）</a>
+    <a href="https://solarck.com/drafts/lede-media-center3.html" rel="bookmark" title="Permalink to LEDE/OpenWRT路由器打造家庭媒体影音中心（三）"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（三）</a>
   </h1>
         </div>
       </div>
@@ -122,28 +122,44 @@
 opkg install aria2 luci-app-aria2 luci-i18n-aria2-zh-cn
 </pre></div>
 <h1 id="ddns"><span class="caps">DDNS</span></h1>
-<div class="highlight"><pre><span></span>opkg install wget curl bind-host knot-host drill
-ddns-scripts
-luci-app-ddns
-luci-i18n-ddns-zh-cn
-https://www.dnsdynamic.org
+<p>几个比较著名的DDNS服务商</p>
+<blockquote>
+<p>https://www.dnsdynamic.org
 http://www.pubyun.com/
-https://www.changeip.com/
-https://www.noip.com/
+https://www.changeip.com/&nbsp;https://www.noip.com/</p>
+</blockquote>
+<p>安装工具和脚本</p>
+<div class="highlight"><pre><span></span>opkg update
+opkg install wget curl bind-host knot-host drill ddns-scripts luci-app-ddns luci-i18n-ddns-zh-cn ddns-scripts_cloudflare.com-v4 ddns-scripts_no-ip_com
 </pre></div>
+<p>uhttpd设置</p>
+<p>修改http监听端口</p>
+<p>即使是公网IP，国内ISP基本也都封了80端口，如果能破解光纤猫，那确实有办法打开80端口，但是惹不起躲得起，把http监听端口改一下就可以绕过这个限制。</p>
+<p>uhttpd在保存应用后，不会自动重启，需要手动执行</p>
+<div class="highlight"><pre><span></span>/etc/init.d/uhttpd restart   
+</pre></div>
+<p>防火墙设置</p>
+<p>流量规则</p>
+<p>firewall-&gt;Traffic&nbsp;Rules</p>
+<p>开启666端口</p>
+<p>端口转发</p>
+<p>firewall-&gt;Port&nbsp;Forwards</p>
+<p>把所有666端口的请求转发到</p>
 <h1 id="dlna"><span class="caps">DLNA</span></h1>
 <div class="highlight"><pre><span></span>opkg install minidlna luci-app-minidlna luci-i18n-minidlna-zh-cn
 </pre></div>
+<h1 id="adblock">Adblock</h1>
+<div class="highlight"><pre><span></span>opkg update
+opkg install adblock luci-app-adblock luci-i18n-adblock-zh-cn
+</pre></div>
 <h1 id="other">Other</h1>
-<div class="highlight"><pre><span></span>opkg install transmission-daemon-openssl transmission-web luci-app-transmission luci-i18n-transmission-zh-cn
-
-opkg install miniupnpd luci-app-upnp luci-i18n-upnp-zh-cn
+<div class="highlight"><pre><span></span>opkg install miniupnpd luci-app-upnp luci-i18n-upnp-zh-cn
 
 opkg install qos-scripts luci-app-qos luci-i18n-qos-zh-cn
-
-opkg remove --autoremove *
 </pre></div>
 <h1 id="can-kao-lian-jie">参考链接</h1>
+<p><a href="https://openwrt.org/docs/guide-user/services/ddns/client"><span class="caps">DDNS</span>&nbsp;Client</a></p>
+<p><a href="https://openwrt.org/docs/guide-user/services/media_server/dlna"><span class="caps">DLNA</span> Media&nbsp;Server</a></p>
   </div>
 
     <hr />
@@ -160,7 +176,7 @@ opkg remove --autoremove *
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
         var disqus_identifier = "drafts/lede-media-center3.html";
-        var disqus_title = "LEDE路由器打造家庭媒体影音中心（三）";
+        var disqus_title = "LEDE/OpenWRT路由器打造家庭媒体影音中心（三）";
         var disqus_url = "https://solarck.com/drafts/lede-media-center3.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -199,7 +215,7 @@ opkg remove --autoremove *
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#aria2xia-zai" title="aria2下载">aria2下载</a></li><li><a class="toc-href" href="#ddns" title="DDNS">DDNS</a></li><li><a class="toc-href" href="#dlna" title="DLNA">DLNA</a></li><li><a class="toc-href" href="#other" title="Other">Other</a></li><li><a class="toc-href" href="#can-kao-lian-jie" title="参考链接">参考链接</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#aria2xia-zai" title="aria2下载">aria2下载</a></li><li><a class="toc-href" href="#ddns" title="DDNS">DDNS</a></li><li><a class="toc-href" href="#dlna" title="DLNA">DLNA</a></li><li><a class="toc-href" href="#adblock" title="Adblock">Adblock</a></li><li><a class="toc-href" href="#other" title="Other">Other</a></li><li><a class="toc-href" href="#can-kao-lian-jie" title="参考链接">参考链接</a></li></ul></div>
         </nav>
 
   </div>
