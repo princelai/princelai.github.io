@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  Seach 主页
+    <title>  
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -24,7 +24,6 @@
     <link href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
       <link href='https://fonts.googleapis.com/css?family=Expletus+Sans' rel='stylesheet' type='text/css'>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Tipue-Search/5.0.0/tipuesearch.css"/>
 
     <link rel="icon" href="https://www.solarck.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://www.solarck.com/favicon.ico" type="image/x-icon">
@@ -104,9 +103,9 @@
 
 
       <div class="row">
-        <div class=" col-md-12  ">
+        <div class=" col-md-9  ">
   <h1>
-    Search Results
+    <a href="https://www.solarck.com/drafts/.html" rel="bookmark" title="Permalink to "></a>
   </h1>
         </div>
       </div>
@@ -114,12 +113,103 @@
       <div class="row">
 
 
-        <div class=" col-md-12 " id="content" role="main">
+        <div class=" col-md-9 " id="content" role="main">
+  
+
   <div>
-    <div id="tipue_search_content"></div>
+    <table>
+<thead>
+<tr>
+<th align="center">名称</th>
+<th align="center">主</th>
+<th align="center">辅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">阿里</td>
+<td align="center">223.5.5.5</td>
+<td align="center">223.6.6.6</td>
+</tr>
+<tr>
+<td align="center">PdoMo</td>
+<td align="center">101.132.183.99</td>
+<td align="center">193.112.15.186</td>
+</tr>
+<tr>
+<td align="center"><span class="caps">TUNA</span></td>
+<td align="center">101.6.6.6</td>
+<td align="center">2001:da8::666</td>
+</tr>
+<tr>
+<td align="center">google</td>
+<td align="center">8.8.8.8</td>
+<td align="center">8.8.4.4</td>
+</tr>
+<tr>
+<td align="center">OpenDns</td>
+<td align="center">208.67.222.222</td>
+<td align="center">208.67.220.220</td>
+</tr>
+<tr>
+<td align="center">Cloudflare</td>
+<td align="center">1.1.1.1</td>
+<td align="center">1.0.0.1</td>
+</tr>
+</tbody>
+</table>
+<h1 id="can-kao">参考</h1>
+<p><a href="https://blog.liyuans.com/archives/pure-dns-collection.html">收集控: 纯净 <span class="caps">DNS</span>&nbsp;收集</a></p>
+<p><a href="https://www.diggui.com/"><span class="caps">DIG</span> <span class="caps">GUI</span></a></p>
+<p><a href="http://roclinux.cn/?p=2449">《dig挖出DNS的秘密》</a></p>
+<p><a href="https://public-dns.info/">[Public <span class="caps">DNS</span> Server&nbsp;List](https://public-dns.info/)</a></p>
   </div>
+
+
+    <div class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'solarck';
+        var disqus_identifier = "drafts/.html";
+        var disqus_title = "";
+        var disqus_url = "https://www.solarck.com/drafts/.html";
+        (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.</noscript>
+    </div>
+
         </div>
 
+          <div class="col-md-3">
+  <div class="well">
+
+    <p><abbr title="2018-07-03T10:51:00+08:00"><i class="fa fa-calendar"></i> July 03, 2018</abbr></p>
+
+      <p><address>
+        <i class="fa fa-user"></i> 作者:
+          <a href="https://www.solarck.com/author/kevin-chen.html" rel="author">Kevin Chen</a>
+      </address></p>
+
+    <hr/>
+
+      <p>
+      </p>
+      <hr/>
+
+
+    
+        <center><h4><b>目录</b></h4></center>
+        <nav class="toc">
+            <div id="toc"><ul><li><a class="toc-href" href="#can-kao" title="参考">参考</a></li></ul></div>
+        </nav>
+
+  </div>
+            
+          </div>
 
       </div>
 
@@ -206,20 +296,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
     <script src="https://www.solarck.com/theme/js/jquery.mglass.js"></script>
     <script src="https://www.solarck.com/theme/js/application.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Tipue-Search/5.0.0/tipuesearch_content.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Tipue-Search/5.0.0/tipuesearch_set.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Tipue-Search/5.0.0/tipuesearch.min.js"></script>
-
-  <script>
-    $(document).ready(function() {
-      $('#tipue_search_input').tipuesearch({
-          'mode' : 'json',
-          'show': 10,
-          'newWindow': false,
-          'contentLocation': 'https://www.solarck.com/tipuesearch_content.json'
-      });
-    });
-  </script>
 
   </body>
 </html>
