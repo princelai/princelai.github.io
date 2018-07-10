@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  openwrt开启Samba作为共享中心
+    <title>  LEDE/OpenWRT路由器打造家庭媒体影音中心（一）
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -105,7 +105,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://www.solarck.com/openwrt-samba.html" rel="bookmark" title="Permalink to openwrt开启Samba作为共享中心">openwrt开启Samba作为共享中心</a>
+    <a href="https://www.solarck.com/lede-media-center1.html" rel="bookmark" title="Permalink to LEDE/OpenWRT路由器打造家庭媒体影音中心（一）"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（一）</a>
   </h1>
         </div>
       </div>
@@ -117,127 +117,121 @@
   
 
   <div>
-    <p>为Openwrt接入一个大U盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机BT下载提供一个基础。</p>
-<h3 id="an-zhuang">安装</h3>
+    <h1 id="qian-yan">前言</h1>
+<h3 id="ruan-ying-jian">软/硬件</h3>
+<p>软件：本文系统都是基于LEDE&nbsp;17.01.4</p>
+<p>硬件：Linksys <span class="caps">WRT1900ACS</span>&nbsp;V2</p>
+<p>其他：一台电脑，最好是Linux带SSH，Windows的话可以下个putty安装上</p>
+<p>前提：我不会从头写起，而是从路由器已刷好LEDE&nbsp;17.01.4，WAN口已联网，且已经可以SSH登录之后开始，其他外设，如硬盘、硬盘盒、用于Extroot的U盘都已准备好。</p>
+<h3 id="shi-xian-mu-de">实现目的</h3>
+<p>基于Linksys&nbsp;WRT1900ACS强悍的性能和扩展功能丰富的LEDE，打造一个有权限控制的NAS，支持DLNA，可以离线下载和远程访问的DDNS系统的多媒体中心。</p>
+<h1 id="extroot_1">Extroot</h1>
+<p>extroot的作用就是扩充存储空间，这样就可以安装更多的软件。详细介绍可以查看很早之前我写过的一篇文章&mdash;&mdash;<a href="https://solarck.com/openwrt-extroot.html">用extroot为openwrt扩充存储空间</a>，这里就不赘述了。由于那篇文章比较老，LEDE也早已经升级了好几个含本，所以实际的操作还是以下面的内容为主。</p>
+<h3 id="an-zhuang-gong-ju">安装工具</h3>
+<p>这里我准备把U盘格式化为f2fs格式，关于各种存储格式和下面需要安装的工具的作用，我会放在下一篇文章一起讲，这一步照着做就可以了。</p>
 <div class="highlight"><pre><span></span>opkg update
-opkg install samba36-server luci-app-samba
+opkg install block-mount kmod-fs-ext4 kmod-usb-storage e2fsprogs kmod-fs-f2fs f2fs-tools
 </pre></div>
-<!--more-->
-<h4 id="pei-zhi-wen-jian">配置文件</h4>
-<p>samba的配置文件只有两个，而且默认配置稍作修改就可以使用</p>
-<div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/samba/smb.conf.template
-<span class="o">[</span>global<span class="o">]</span>
-    netbios <span class="nv">name</span> <span class="o">=</span> OpenWrt
-    display <span class="nv">charset</span> <span class="o">=</span> UTF-8
-    <span class="nv">interfaces</span> <span class="o">=</span> <span class="m">127</span>.0.0.1/8 lo <span class="m">192</span>.168.3.1/24 fd73:3a9a:156::1/60 br-lan <span class="c1">#内网IP</span>
-    server <span class="nv">string</span> <span class="o">=</span> OpenWrt
-    unix <span class="nv">charset</span> <span class="o">=</span> UTF-8
-    <span class="nv">workgroup</span> <span class="o">=</span> WORKGROUP
-    <span class="nv">browseable</span> <span class="o">=</span> yes
-    <span class="nv">deadtime</span> <span class="o">=</span> <span class="m">30</span>
-    domain <span class="nv">master</span> <span class="o">=</span> yes
-    encrypt <span class="nv">passwords</span> <span class="o">=</span> <span class="nb">true</span>
-    <span class="nb">enable</span> core <span class="nv">files</span> <span class="o">=</span> no
-    guest <span class="nv">account</span> <span class="o">=</span> nobody <span class="c1">#匿名用户</span>
-    guest <span class="nv">ok</span> <span class="o">=</span> yes <span class="c1">#匿名用户</span>
-    invalid <span class="nv">users</span> <span class="o">=</span> root
-    <span class="nb">local</span> <span class="nv">master</span> <span class="o">=</span> yes
-    load <span class="nv">printers</span> <span class="o">=</span> no
-    map to <span class="nv">guest</span> <span class="o">=</span> Bad User
-    max <span class="nv">protocol</span> <span class="o">=</span> SMB2
-    min receivefile <span class="nv">size</span> <span class="o">=</span> <span class="m">16384</span>
-    null <span class="nv">passwords</span> <span class="o">=</span> yes <span class="c1">#无需密码</span>
-    obey pam <span class="nv">restrictions</span> <span class="o">=</span> yes
-    os <span class="nv">level</span> <span class="o">=</span> <span class="m">20</span>
-    passdb <span class="nv">backend</span> <span class="o">=</span> smbpasswd
-    preferred <span class="nv">master</span> <span class="o">=</span> yes
-    <span class="nv">printable</span> <span class="o">=</span> no
-    <span class="nv">security</span> <span class="o">=</span> user
-    smb <span class="nv">encrypt</span> <span class="o">=</span> disabled
-    smb passwd <span class="nv">file</span> <span class="o">=</span> /etc/samba/smbpasswd
-    socket <span class="nv">options</span> <span class="o">=</span> TCP_NODELAY IPTOS_LOWDELAY
-    <span class="nv">syslog</span> <span class="o">=</span> <span class="m">2</span>
-    use <span class="nv">sendfile</span> <span class="o">=</span> yes
-    <span class="nv">writeable</span> <span class="o">=</span> yes <span class="c1">#可写</span>
+<h3 id="ge-shi-hua-upan">格式化U盘</h3>
+<div class="highlight"><pre><span></span>mkfs.f2fs /dev/sda1
 </pre></div>
-<div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/config/samba
-config samba
-    option <span class="s1">'name'</span>           <span class="s1">'OpenWrt'</span>
-    option <span class="s1">'workgroup'</span>      <span class="s1">'WORKGROUP'</span>
-    option <span class="s1">'description'</span>        <span class="s1">'OpenWrt'</span>
-    option <span class="s1">'homes'</span>          <span class="s1">'1'</span>
+<h3 id="qian-yi-xi-tong">迁移系统</h3>
+<div class="highlight"><pre><span></span>mount /dev/sda1 /mnt <span class="p">;</span> tar -C /overlay -cvf - . <span class="p">|</span> tar -C /mnt -xf - <span class="p">;</span> umount /mnt
+</pre></div>
+<h3 id="sheng-cheng-fen-qu-biao">生成分区表</h3>
+<div class="highlight"><pre><span></span>block detect &gt; /etc/config/fstab
+uci set fstab.@mount[0].target='/overlay'
+uci set fstab.@mount[0].enabled='1'
+uci set fstab.@mount[0].options='rw'
+uci set fstab.@mount[0].fstype='f2fs'
+uci commit
+</pre></div>
+<p>最后<code>fstab</code>应该如下</p>
+<p><code>cat /etc/config/fstab</code></p>
+<div class="highlight"><pre><span></span>config global
+        option anon_swap '0'
+        option anon_mount '0'
+        option auto_swap '1'
+        option auto_mount '1'
+        option delay_root '5'
+        option check_fs '1'
 
-config <span class="s1">'sambashare'</span>
-    option <span class="s1">'name'</span> <span class="s1">'Shares'</span>
-    option <span class="s1">'path'</span> <span class="s1">'/share'</span> <span class="c1">#samba所在目录</span>
-<span class="c1">#   option 'users' 'sandra'</span>
-    option <span class="s1">'guest_ok'</span> <span class="s1">'yes'</span>
-    option <span class="s1">'create_mask'</span> <span class="s1">'0777'</span> <span class="c1">#所有用户可写</span>
-    option <span class="s1">'dir_mask'</span> <span class="s1">'0777'</span> <span class="c1">#所有用户可写</span>
-    option <span class="s1">'read_only'</span> <span class="s1">'no'</span>
-</pre></div>
-<p>我的配置是无需密码所有用户都可以访问，可上传可下载。</p>
-<p>配置完还需要对目录进行权限提升</p>
-<div class="highlight"><pre><span></span>chmod a+w /share
-</pre></div>
-<p>或者更改文件夹用户</p>
-<div class="highlight"><pre><span></span>chown nobody:nobody /share
-</pre></div>
-<p>最后重启samba服务并开机启动</p>
-<div class="highlight"><pre><span></span>/etc/init.d/samba restart
-/etc/init.d/samba <span class="nb">enable</span>
-</pre></div>
-<h3 id="fang-wen_1">访问</h3>
-<p>Windows用户很容易访问，在网络邻居（网络）里就可以看到WORKGROUP&mdash;&gt;<span class="caps">OPENWRT</span>&mdash;&gt;Share文件夹了，但是linux用户需要一些其他命令。  <br/>
-<strong>1.&nbsp;安装g2sc</strong> </p>
-<div class="highlight"><pre><span></span>yaourt -S g2sc
-</pre></div>
-<p>安装完就可以像Windows一样看到工作组和文件夹，但是只能下载，没有上传功能。    </p>
-<p><strong>2. sambclient</strong>&nbsp;安装工具</p>
-<div class="highlight"><pre><span></span>yaourt -S sambaclient
-</pre></div>
-<p>连接主机    </p>
-<div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: smbclient -L OPENWRT
-Enter kevins password:  <span class="c1">#没设密码直接回车</span>
 
-    Sharename       Type      Comment
-    ---------       ----      -------
-    Shares          Disk      
-    IPC$            IPC       IPC Service <span class="o">(</span>OpenWrt<span class="o">)</span>
+config mount
+        option enabled '1'
+        option uuid 'd9aa4451-780a-4fe5-b08d-d7f0a7ae0ba4'
+        option target '/overlay'
+        option fstype 'f2fs'
+        option options 'rw'
+</pre></div>
+<h3 id="yan-zheng">验证</h3>
+<p>重启系统后执行命令</p>
+<p><code>df -h</code></p>
+<div class="highlight"><pre><span></span>Filesystem                Size      Used Available Use% Mounted on
+/dev/root                 2.8M      2.8M         0 100% /rom
+tmpfs                   250.8M    556.0K    250.2M   0% /tmp
+/dev/sdb1                14.3G    496.6M     13.7G   3% /overlay
+overlayfs:/overlay       14.3G    496.6M     13.7G   3% /
+ubi1:syscfg              29.6M    268.0K     27.8M   1% /tmp/syscfg
+tmpfs                   512.0K         0    512.0K   0% /dev
+</pre></div>
+<p>如果<code>/overlay</code>分区已经变为U盘容量大小，那就是成功了。</p>
+<p><code>block info</code>信息也已经显示正确</p>
+<div class="highlight"><pre><span></span>/dev/mtdblock7: TYPE="jffs2"
+/dev/ubiblock0_0: UUID="9f419b56-31564c19-0a0c1b12-a2f9b77b" VERSION="4.0" MOUNT="/rom" TYPE="squashfs"
+/dev/ubi0_1: UUID="1361ff26-cc87-40f1-8b99-00caf223093c" VERSION="w4r0" TYPE="ubifs"
+/dev/ubi1_0: UUID="413d13a9-0f0a-4811-a0cb-3e3786ce26d7" VERSION="w4r0" TYPE="ubifs"
+/dev/sda1: UUID="d9aa4451-780a-4fe5-b08d-d7f0a7ae0ba4" VERSION="1.8" MOUNT="/overlay" TYPE="f2fs"
+</pre></div>
+<h1 id="geng-huan-yuan_1">更换源</h1>
+<h3 id="tian-jia-dui-httpsde-zhi-chi">添加对https的支持</h3>
+<p>如果你在替换源后执行更新，那么会收到一条错误消息：</p>
+<blockquote>
+<p><span class="caps">SSL</span> support not available, please install one of the libustream-ssl-* libraries as well as the ca-bundle and ca-certificates&nbsp;packages.</p>
+</blockquote>
+<p>很明显，系统还不支持SSL，因为官方的源都是http的，而我们添加的源都是https的。不过也很简单，按照错误信息的提示安装相应的包就可以了。<strong>这一步一定要在替换源之前执行</strong></p>
+<div class="highlight"><pre><span></span>opkg update
+opkg install ca-certificates luci-ssl-openssl
+</pre></div>
+<h3 id="geng-huan-yuan_2">更换源</h3>
+<p>国内访问LEDE官方源比较不稳定，速度也很慢，幸好<a href="https://mirrors.ustc.edu.cn/lede/">中科大</a>和<a href="https://mirrors.tuna.tsinghua.edu.cn/lede/">清华</a>都提供了LEDE的软件镜像源，为了后边操作能够顺利进行，首先需要更换源。</p>
+<p><span class="caps">LEDE</span>&nbsp;OPKG的软件源配置文件有两个：</p>
+<p><code>/etc/opkg/distfeeds.conf</code>：发行版本自带的官方源，需要把里面的内容全部注释掉或者清空。</p>
+<p><code>/etc/opkg/customfeeds.conf</code>：自定义源，把我们需要的内容粘贴到这里，内容如下：</p>
+<div class="highlight"><pre><span></span><span class="na">src/gz reboot_core https://mirrors.ustc.edu.cn/lede/releases/17.01.4/targets/mvebu/generic/packages</span>
+<span class="na">src/gz reboot_base https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/base</span>
+<span class="na">src/gz reboot_luci https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/luci</span>
+<span class="na">src/gz reboot_packages https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/packages</span>
+<span class="na">src/gz reboot_routing https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/routing</span>
+<span class="na">src/gz reboot_telephony https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/telephony</span>
 
-    Server               Comment
-    ---------            -------
-    CHEN-PC              
-    OPENWRT              OpenWrt
-
-    Workgroup            Master
-    ---------            -------
-    WORKGROUP            OPENWRT
+<span class="c1">#src/gz reboot_core https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/targets/mvebu/generic/packages</span>
+<span class="c1">#src/gz reboot_base https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/base</span>
+<span class="c1">#src/gz reboot_luci https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/luci</span>
+<span class="c1">#src/gz reboot_packages https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/packages</span>
+<span class="c1">#src/gz reboot_routing https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/routing</span>
+<span class="c1">#src/gz reboot_telephony https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/telephony</span>
 </pre></div>
-<div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: smbclient //OPENWRT/Shares <span class="c1">#格式为//Servername/Sharename</span>
-smb: <span class="se">\&gt;</span>
+<h3 id="geng-xin-xi-tong">更新系统</h3>
+<p>镜像源替换完成后，把所有已安装程序全部更新到最新</p>
+<div class="highlight"><pre><span></span>opkg update
+opkg list-upgradable <span class="p">|</span> cut -f <span class="m">1</span> -d <span class="s1">' '</span> <span class="p">|</span> xargs opkg upgrade 
 </pre></div>
-<p>出现了smb的命令行</p>
-<div class="highlight"><pre><span></span>get ****    <span class="c1">#下载某个文件    </span>
-put ****    <span class="c1">#上传某个文件</span>
+<h1 id="qi-ta_1">其他</h1>
+<h3 id="yi-hua">汉化</h3>
+<div class="highlight"><pre><span></span>opkg update
+opkg install luci-i18n-base-zh-cn
 </pre></div>
-<p>更多命令输入?查看</p>
-<p><strong>3.&nbsp;mount挂载</strong></p>
-<div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: mkdir /mnt/samba
-kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
-</pre></div>
-<h3 id="wan-cheng">完成</h3>
-<p>由于安装了Luci，所以开启了uhttp服务，把共享目录链接到/www目录同样可以通过浏览器直接下载，相当于把Samba目录同样做成了FTP目录。</p>
-<div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: ln -s /share /www/share
-</pre></div>
-<p>Samba共享就全部完成，之后再继续研究BT下载，配合Samba的共享就等于免费拥有了一个简版NAS。</p>
+<h1 id="can-kao-lian-jie_1">参考链接</h1>
+<p><a href="https://openwrt.org/docs/guide-user/luci/getting-rid-of-luci-https-certificate-warnings">How to get rid of LuCI https certificate&nbsp;warnings</a></p>
+<p><a href="https://openwrt.org/docs/guide-user/additional-software/extroot_configuration">Extroot&nbsp;configuration</a></p>
   </div>
 
     <hr />
     <h3>相关文章</h3>
     <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
     <ul>
-        <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（一）</a></li>
+        <li><a href="https://www.solarck.com/openwrt-samba.html">openwrt开启Samba作为共享中心</a></li>
         <li><a href="https://www.solarck.com/openwrt-extroot.html">用extroot为openwrt扩充存储空间</a></li>
         <li><a href="https://www.solarck.com/install-openwrt-on-mw4530r.html">水星（Mercury）MW4530r刷Openwrt</a></li>
       </ul>
@@ -246,9 +240,9 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
       <div id="disqus_thread"></div>
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
-        var disqus_identifier = "openwrt-samba.html";
-        var disqus_title = "openwrt开启Samba作为共享中心";
-        var disqus_url = "https://www.solarck.com/openwrt-samba.html";
+        var disqus_identifier = "lede-media-center1.html";
+        var disqus_title = "LEDE/OpenWRT路由器打造家庭媒体影音中心（一）";
+        var disqus_url = "https://www.solarck.com/lede-media-center1.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
           dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
@@ -263,7 +257,7 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
           <div class="col-md-3">
   <div class="well">
 
-    <p><abbr title="2014-01-05T01:29:00+08:00"><i class="fa fa-calendar"></i> January 05, 2014</abbr></p>
+    <p><abbr title="2018-07-10T13:07:00+08:00"><i class="fa fa-calendar"></i> July 10, 2018</abbr></p>
 
       <p><address>
         <i class="fa fa-user"></i> 作者:
@@ -279,6 +273,12 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
             <a href="/tag/openwrt.html" data-toggle="tooltip"
       class="label label-default"
       title="4 articles with this tag">openwrt</a>
+            <a href="/tag/lede.html" data-toggle="tooltip"
+      class="label label-default"
+      title="1 article with this tag">lede</a>
+            <a href="/tag/wrt1900acs.html" data-toggle="tooltip"
+      class="label label-default"
+      title="1 article with this tag">wrt1900acs</a>
       </p>
       <hr/>
 
@@ -286,12 +286,12 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
       <nav>
         <ul class="pager">
           <li class="previous ">
-            <a  href="https://www.solarck.com/openwrt-extroot.html" title="用extroot为openwrt扩充存储空间"  rel="prev">
+            <a  href="https://www.solarck.com/centos6-datebase-server.html" title="CentOS6数据库服务器配置"  rel="prev">
               <span aria-hidden="true">←</span> 旧文章
             </a>
           </li>
-          <li class="next ">
-            <a  href="https://www.solarck.com/config-pip-conda.html" title="配置pip和conda"  rel="next">
+          <li class="next  disabled ">
+            <a  rel="next">
               新文章 <span aria-hidden="true">→</span>
             </a>
           </li>
@@ -300,7 +300,7 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#an-zhuang" title="安装">安装</a><ul><li><a class="toc-href" href="#pei-zhi-wen-jian" title="配置文件">配置文件</a></li></ul></li><li><a class="toc-href" href="#fang-wen_1" title="访问">访问</a></li><li><a class="toc-href" href="#wan-cheng" title="完成">完成</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#qian-yan" title="前言">前言</a><ul><li><a class="toc-href" href="#ruan-ying-jian" title="软/硬件">软/硬件</a></li><li><a class="toc-href" href="#shi-xian-mu-de" title="实现目的">实现目的</a></li></ul></li><li><a class="toc-href" href="#extroot_1" title="Extroot">Extroot</a><ul><li><a class="toc-href" href="#an-zhuang-gong-ju" title="安装工具">安装工具</a></li><li><a class="toc-href" href="#ge-shi-hua-upan" title="格式化U盘">格式化U盘</a></li><li><a class="toc-href" href="#qian-yi-xi-tong" title="迁移系统">迁移系统</a></li><li><a class="toc-href" href="#sheng-cheng-fen-qu-biao" title="生成分区表">生成分区表</a></li><li><a class="toc-href" href="#yan-zheng" title="验证">验证</a></li></ul></li><li><a class="toc-href" href="#geng-huan-yuan_1" title="更换源">更换源</a><ul><li><a class="toc-href" href="#tian-jia-dui-httpsde-zhi-chi" title="添加对https的支持">添加对https的支持</a></li><li><a class="toc-href" href="#geng-huan-yuan_2" title="更换源">更换源</a></li><li><a class="toc-href" href="#geng-xin-xi-tong" title="更新系统">更新系统</a></li></ul></li><li><a class="toc-href" href="#qi-ta_1" title="其他">其他</a><ul><li><a class="toc-href" href="#yi-hua" title="汉化">汉化</a></li></ul></li><li><a class="toc-href" href="#can-kao-lian-jie_1" title="参考链接">参考链接</a></li></ul></div>
         </nav>
 
   </div>

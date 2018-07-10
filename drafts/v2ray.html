@@ -117,385 +117,38 @@
   
 
   <div>
-    <h1 id="you-hua-wang-luo">优化网络</h1>
-<p><a href="https://www.solarck.com/shadowsocks-libev.html">参照之前的文章</a></p>
+    <h1 id="fu-wu-qi-duan-pei-zhi">服务器端配置</h1>
+<h3 id="you-hua-wang-luo">优化网络</h3>
+<p>主要涉及bbr的安装配置，需要VPS是KVM架构可以参照<a href="https://www.solarck.com/shadowsocks-libev.html">之前的文章</a>。</p>
+<h3 id="an-zhuang-v2ray">安装V2ray</h3>
 <div class="highlight"><pre><span></span>wget https://install.direct/go.sh
 bash go.sh
 </pre></div>
 <p><code>/etc/systemd/system/v2ray.service</code>,<code>/etc/v2ray/config.json</code></p>
+<h3 id="tlsyu-ming-zheng-shu">TLS域名证书</h3>
+<p>在这部之前，你需要一个域名，免费的也无所谓。</p>
+<h4 id="an-zhuang-acme"><em>安装acme</em></h4>
+<p><code>apt-get install -y socat netcat</code></p>
 <div class="highlight"><pre><span></span>curl  https://get.acme.sh <span class="p">|</span> sh
 </pre></div>
-<p>for&nbsp;standalone</p>
-<p><code>apt-get install -y socat netcat</code></p>
-<p><code>~/.acme.sh/acme.sh --issue -d solarck.top --standalone -k ec-256</code></p>
-<p>renew</p>
-<p><code>~/.acme.sh/acme.sh --renew -d solarck.top --force --ecc</code></p>
-<div class="highlight"><pre><span></span>~/.acme.sh/acme.sh --installcert -d solarck.top --fullchainpath /etc/v2ray/v2ray.crt --keypath /etc/v2ray/v2ray.key --ecc
+<h4 id="qian-fa-zheng-shu"><em>签发证书</em></h4>
+<p>我使用的是ecc证书，需要把domain换成自己的域名</p>
+<div class="highlight"><pre><span></span>~/.acme.sh/acme.sh --issue -d domain --standalone -k ec-256
 </pre></div>
+<h4 id="an-zhuang-zheng-shu"><em>安装证书</em></h4>
+<p>证书会被安装到<code>/etc/v2ray</code>下</p>
+<div class="highlight"><pre><span></span>~/.acme.sh/acme.sh --installcert -d domain --fullchainpath /etc/v2ray/v2ray.crt --keypath /etc/v2ray/v2ray.key --ecc
+</pre></div>
+<h4 id="zheng-shu-xu-qi"><em>证书续期</em></h4>
+<p><code>~/.acme.sh/acme.sh --renew -d domain --force --ecc</code></p>
+<h1 id="ben-di-pei-zhi_2">本地配置</h1>
 <h1 id="pei-zhi-wen-jian">配置文件</h1>
-<h3 id="sui-ji-duan-kou">随机端口</h3>
+<h3 id="http2-tls">http2-<span class="caps">TLS</span></h3>
 <h4 id="fu-wu-duan"><strong>服务端</strong></h4>
-<div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nt">"log"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"loglevel"</span><span class="p">:</span> <span class="s2">"warning"</span><span class="p">,</span>
-    <span class="nt">"access"</span><span class="p">:</span> <span class="s2">"/var/log/v2ray/access.log"</span><span class="p">,</span>
-    <span class="nt">"error"</span><span class="p">:</span> <span class="s2">"/var/log/v2ray/error.log"</span>
-  <span class="p">},</span>
-  <span class="nt">"inbound"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"port"</span><span class="p">:</span> <span class="mi">4433</span><span class="p">,</span>
-    <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"vmess"</span><span class="p">,</span>
-    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"clients"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-          <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"998c1fa3-962a-4682-a56d-ad262f7f184e"</span><span class="p">,</span>
-          <span class="nt">"alterId"</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span>
-          <span class="nt">"security"</span><span class="p">:</span> <span class="s2">"chacha20-poly1305"</span>
-        <span class="p">}</span>
-      <span class="p">],</span>
-      <span class="nt">"detour"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"to"</span><span class="p">:</span> <span class="s2">"dynamicPort"</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">},</span>
-  <span class="nt">"inboundDetour"</span><span class="p">:</span> <span class="p">[</span>
-    <span class="p">{</span>
-      <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"vmess"</span><span class="p">,</span>
-      <span class="nt">"port"</span><span class="p">:</span> <span class="s2">"10000-20000"</span><span class="p">,</span>
-      <span class="nt">"tag"</span><span class="p">:</span> <span class="s2">"dynamicPort"</span><span class="p">,</span>
-      <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"default"</span><span class="p">:</span> <span class="p">{</span>
-          <span class="nt">"level"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-          <span class="nt">"alterId"</span><span class="p">:</span> <span class="mi">32</span>
-        <span class="p">}</span>
-      <span class="p">},</span>
-      <span class="nt">"allocate"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"strategy"</span><span class="p">:</span> <span class="s2">"random"</span><span class="p">,</span>
-        <span class="nt">"concurrency"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-        <span class="nt">"refresh"</span><span class="p">:</span> <span class="mi">5</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">],</span>
-  <span class="nt">"outbound"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"freedom"</span><span class="p">,</span>
-    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{}</span>
-  <span class="p">},</span>
-  <span class="nt">"outboundDetour"</span><span class="p">:</span> <span class="p">[</span>
-    <span class="p">{</span>
-      <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"blackhole"</span><span class="p">,</span>
-      <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{},</span>
-      <span class="nt">"tag"</span><span class="p">:</span> <span class="s2">"blocked"</span>
-    <span class="p">}</span>
-  <span class="p">],</span>
-  <span class="nt">"routing"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"strategy"</span><span class="p">:</span> <span class="s2">"rules"</span><span class="p">,</span>
-    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"rules"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-          <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"field"</span><span class="p">,</span>
-          <span class="nt">"ip"</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">"0.0.0.0/8"</span><span class="p">,</span>
-            <span class="s2">"10.0.0.0/8"</span><span class="p">,</span>
-            <span class="s2">"100.64.0.0/10"</span><span class="p">,</span>
-            <span class="s2">"127.0.0.0/8"</span><span class="p">,</span>
-            <span class="s2">"169.254.0.0/16"</span><span class="p">,</span>
-            <span class="s2">"172.16.0.0/12"</span><span class="p">,</span>
-            <span class="s2">"172.168.0.0/16"</span><span class="p">,</span>
-            <span class="s2">"192.0.0.0/24"</span><span class="p">,</span>
-            <span class="s2">"192.0.2.0/24"</span><span class="p">,</span>
-            <span class="s2">"192.168.0.0/16"</span><span class="p">,</span>
-            <span class="s2">"198.18.0.0/15"</span><span class="p">,</span>
-            <span class="s2">"198.51.100.0/24"</span><span class="p">,</span>
-            <span class="s2">"203.0.113.0/24"</span><span class="p">,</span>
-            <span class="s2">"::1/128"</span><span class="p">,</span>
-            <span class="s2">"fc00::/7"</span><span class="p">,</span>
-            <span class="s2">"fe80::/10"</span>
-          <span class="p">],</span>
-          <span class="nt">"outboundTag"</span><span class="p">:</span> <span class="s2">"blocked"</span>
-        <span class="p">}</span>
-      <span class="p">]</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span>
 </pre></div>
 <h4 id="ke-hu-duan"><strong>客户端</strong></h4>
-<div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nt">"log"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"loglevel"</span><span class="p">:</span> <span class="s2">"warning"</span><span class="p">,</span>
-    <span class="nt">"access"</span><span class="p">:</span> <span class="s2">"/var/log/v2ray/access.log"</span><span class="p">,</span>
-    <span class="nt">"error"</span><span class="p">:</span> <span class="s2">"/var/log/v2ray/error.log"</span>
-  <span class="p">},</span>
-  <span class="nt">"inbound"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"port"</span><span class="p">:</span> <span class="mi">1080</span><span class="p">,</span>
-    <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"socks"</span><span class="p">,</span>
-    <span class="nt">"domainOverride"</span><span class="p">:</span> <span class="p">[</span>
-      <span class="s2">"tls"</span><span class="p">,</span>
-      <span class="s2">"http"</span>
-    <span class="p">],</span>
-    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"auth"</span><span class="p">:</span> <span class="s2">"noauth"</span><span class="p">,</span>
-      <span class="nt">"udp"</span><span class="p">:</span> <span class="kc">true</span>
-    <span class="p">}</span>
-  <span class="p">},</span>
-  <span class="nt">"outbound"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"vmess"</span><span class="p">,</span>
-    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"vnext"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-          <span class="nt">"address"</span><span class="p">:</span> <span class="s2">"solarck.top"</span><span class="p">,</span>
-          <span class="nt">"port"</span><span class="p">:</span> <span class="mi">4433</span><span class="p">,</span>
-          <span class="nt">"users"</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-              <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"998c1fa3-962a-4682-a56d-ad262f7f184e"</span><span class="p">,</span>
-              <span class="nt">"alterId"</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span>
-              <span class="nt">"security"</span><span class="p">:</span> <span class="s2">"chacha20-poly1305"</span>
-            <span class="p">}</span>
-          <span class="p">]</span>
-        <span class="p">}</span>
-      <span class="p">]</span>
-    <span class="p">},</span>
-    <span class="nt">"mux"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"enabled"</span><span class="p">:</span> <span class="kc">true</span>
-    <span class="p">}</span>
-  <span class="p">},</span>
-  <span class="nt">"outboundDetour"</span><span class="p">:</span> <span class="p">[</span>
-    <span class="p">{</span>
-      <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"freedom"</span><span class="p">,</span>
-      <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{},</span>
-      <span class="nt">"mux"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"enabled"</span><span class="p">:</span> <span class="kc">true</span>
-      <span class="p">},</span>
-      <span class="nt">"tag"</span><span class="p">:</span> <span class="s2">"direct"</span>
-    <span class="p">}</span>
-  <span class="p">],</span>
-  <span class="nt">"dns"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"servers"</span><span class="p">:</span> <span class="p">[</span>
-      <span class="s2">"8.8.8.8"</span><span class="p">,</span>
-      <span class="s2">"8.8.4.4"</span><span class="p">,</span>
-      <span class="s2">"localhost"</span>
-    <span class="p">]</span>
-  <span class="p">},</span>
-  <span class="nt">"routing"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"strategy"</span><span class="p">:</span> <span class="s2">"rules"</span><span class="p">,</span>
-    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"domainStrategy"</span><span class="p">:</span> <span class="s2">"IPIfNonMatch"</span><span class="p">,</span>
-      <span class="nt">"rules"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-          <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"field"</span><span class="p">,</span>
-          <span class="nt">"ip"</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">"0.0.0.0/8"</span><span class="p">,</span>
-            <span class="s2">"10.0.0.0/8"</span><span class="p">,</span>
-            <span class="s2">"100.64.0.0/10"</span><span class="p">,</span>
-            <span class="s2">"127.0.0.0/8"</span><span class="p">,</span>
-            <span class="s2">"169.254.0.0/16"</span><span class="p">,</span>
-            <span class="s2">"172.16.0.0/12"</span><span class="p">,</span>
-            <span class="s2">"172.168.0.0/16"</span><span class="p">,</span>
-            <span class="s2">"192.0.0.0/24"</span><span class="p">,</span>
-            <span class="s2">"192.0.2.0/24"</span><span class="p">,</span>
-            <span class="s2">"192.168.0.0/16"</span><span class="p">,</span>
-            <span class="s2">"198.18.0.0/15"</span><span class="p">,</span>
-            <span class="s2">"198.51.100.0/24"</span><span class="p">,</span>
-            <span class="s2">"203.0.113.0/24"</span><span class="p">,</span>
-            <span class="s2">"::1/128"</span><span class="p">,</span>
-            <span class="s2">"fc00::/7"</span><span class="p">,</span>
-            <span class="s2">"fe80::/10"</span>
-          <span class="p">],</span>
-          <span class="nt">"outboundTag"</span><span class="p">:</span> <span class="s2">"direct"</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-          <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"chinasites"</span><span class="p">,</span>
-          <span class="nt">"outboundTag"</span><span class="p">:</span> <span class="s2">"direct"</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-          <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"chinaip"</span><span class="p">,</span>
-          <span class="nt">"outboundTag"</span><span class="p">:</span> <span class="s2">"direct"</span>
-        <span class="p">}</span>
-      <span class="p">]</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-<h3 id="http2-tls_1">http2-<span class="caps">TLS</span></h3>
-<h4 id="fu-wu-duan_1"><strong>服务端</strong></h4>
-<div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nt">"log"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"loglevel"</span><span class="p">:</span> <span class="s2">"warning"</span><span class="p">,</span>
-    <span class="nt">"access"</span><span class="p">:</span> <span class="s2">"/var/log/v2ray/access.log"</span><span class="p">,</span>
-    <span class="nt">"error"</span><span class="p">:</span> <span class="s2">"/var/log/v2ray/error.log"</span>
-  <span class="p">},</span>
-  <span class="nt">"inbound"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"port"</span><span class="p">:</span> <span class="mi">443</span><span class="p">,</span>
-    <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"vmess"</span><span class="p">,</span>
-    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"clients"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-          <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"998c1fa3-962a-4682-a56d-ad262f7f184e"</span><span class="p">,</span>
-          <span class="nt">"alterId"</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
-          <span class="nt">"security"</span><span class="p">:</span> <span class="s2">"chacha20-poly1305"</span>
-        <span class="p">}</span>
-      <span class="p">]</span>
-    <span class="p">},</span>
-    <span class="nt">"streamSettings"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"network"</span><span class="p">:</span> <span class="s2">"h2"</span><span class="p">,</span>
-      <span class="nt">"security"</span><span class="p">:</span> <span class="s2">"tls"</span><span class="p">,</span>
-      <span class="nt">"httpSettings"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"path"</span><span class="p">:</span> <span class="s2">"/ray"</span>
-      <span class="p">},</span>
-      <span class="nt">"tlsSettings"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"certificates"</span><span class="p">:</span> <span class="p">[</span>
-          <span class="p">{</span>
-            <span class="nt">"certificateFile"</span><span class="p">:</span> <span class="s2">"/etc/v2ray/v2ray.crt"</span><span class="p">,</span>
-            <span class="nt">"keyFile"</span><span class="p">:</span> <span class="s2">"/etc/v2ray/v2ray.key"</span>
-          <span class="p">}</span>
-        <span class="p">]</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">},</span>
-  <span class="nt">"outbound"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"freedom"</span><span class="p">,</span>
-    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{}</span>
-  <span class="p">},</span>
-  <span class="nt">"outboundDetour"</span><span class="p">:</span> <span class="p">[</span>
-    <span class="p">{</span>
-      <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"blackhole"</span><span class="p">,</span>
-      <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{},</span>
-      <span class="nt">"tag"</span><span class="p">:</span> <span class="s2">"blocked"</span>
-    <span class="p">}</span>
-  <span class="p">],</span>
-  <span class="nt">"routing"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"strategy"</span><span class="p">:</span> <span class="s2">"rules"</span><span class="p">,</span>
-    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"rules"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-          <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"field"</span><span class="p">,</span>
-          <span class="nt">"ip"</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">"0.0.0.0/8"</span><span class="p">,</span>
-            <span class="s2">"10.0.0.0/8"</span><span class="p">,</span>
-            <span class="s2">"100.64.0.0/10"</span><span class="p">,</span>
-            <span class="s2">"127.0.0.0/8"</span><span class="p">,</span>
-            <span class="s2">"169.254.0.0/16"</span><span class="p">,</span>
-            <span class="s2">"172.16.0.0/12"</span><span class="p">,</span>
-            <span class="s2">"172.168.0.0/16"</span><span class="p">,</span>
-            <span class="s2">"192.0.0.0/24"</span><span class="p">,</span>
-            <span class="s2">"192.0.2.0/24"</span><span class="p">,</span>
-            <span class="s2">"192.168.0.0/16"</span><span class="p">,</span>
-            <span class="s2">"198.18.0.0/15"</span><span class="p">,</span>
-            <span class="s2">"198.51.100.0/24"</span><span class="p">,</span>
-            <span class="s2">"203.0.113.0/24"</span><span class="p">,</span>
-            <span class="s2">"::1/128"</span><span class="p">,</span>
-            <span class="s2">"fc00::/7"</span><span class="p">,</span>
-            <span class="s2">"fe80::/10"</span>
-          <span class="p">],</span>
-          <span class="nt">"outboundTag"</span><span class="p">:</span> <span class="s2">"blocked"</span>
-        <span class="p">}</span>
-      <span class="p">]</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-<h4 id="ke-hu-duan_1"><strong>客户端</strong></h4>
-<div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nt">"log"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"loglevel"</span><span class="p">:</span> <span class="s2">"warning"</span><span class="p">,</span>
-    <span class="nt">"access"</span><span class="p">:</span> <span class="s2">"/var/log/v2ray/access.log"</span><span class="p">,</span>
-    <span class="nt">"error"</span><span class="p">:</span> <span class="s2">"/var/log/v2ray/error.log"</span>
-  <span class="p">},</span>
-  <span class="nt">"inbound"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"listen"</span><span class="p">:</span> <span class="s2">"127.0.0.1"</span><span class="p">,</span>
-    <span class="nt">"port"</span><span class="p">:</span> <span class="mi">1080</span><span class="p">,</span>
-    <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"socks"</span><span class="p">,</span>
-    <span class="nt">"domainOverride"</span><span class="p">:</span> <span class="p">[</span>
-      <span class="s2">"tls"</span><span class="p">,</span>
-      <span class="s2">"http"</span>
-    <span class="p">],</span>
-    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"auth"</span><span class="p">:</span> <span class="s2">"noauth"</span><span class="p">,</span>
-      <span class="nt">"udp"</span><span class="p">:</span> <span class="kc">false</span>
-    <span class="p">}</span>
-  <span class="p">},</span>
-  <span class="nt">"outbound"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"vmess"</span><span class="p">,</span>
-    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"vnext"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-          <span class="nt">"address"</span><span class="p">:</span> <span class="s2">"solarck.top"</span><span class="p">,</span>
-          <span class="nt">"port"</span><span class="p">:</span> <span class="mi">443</span><span class="p">,</span>
-          <span class="nt">"users"</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-              <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"998c1fa3-962a-4682-a56d-ad262f7f184e"</span><span class="p">,</span>
-              <span class="nt">"alterId"</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
-              <span class="nt">"security"</span><span class="p">:</span> <span class="s2">"chacha20-poly1305"</span>
-            <span class="p">}</span>
-          <span class="p">]</span>
-        <span class="p">}</span>
-      <span class="p">]</span>
-    <span class="p">},</span>
-    <span class="nt">"streamSettings"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"network"</span><span class="p">:</span> <span class="s2">"h2"</span><span class="p">,</span>
-      <span class="nt">"security"</span><span class="p">:</span> <span class="s2">"tls"</span><span class="p">,</span>
-      <span class="nt">"httpSettings"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"path"</span><span class="p">:</span> <span class="s2">"/ray"</span>
-      <span class="p">}</span>
-    <span class="p">},</span>
-    <span class="nt">"mux"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"enabled"</span><span class="p">:</span> <span class="kc">true</span>
-    <span class="p">}</span>
-  <span class="p">},</span>
-  <span class="nt">"outboundDetour"</span><span class="p">:</span> <span class="p">[</span>
-    <span class="p">{</span>
-      <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"freedom"</span><span class="p">,</span>
-      <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{},</span>
-      <span class="nt">"mux"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">"enabled"</span><span class="p">:</span> <span class="kc">true</span>
-      <span class="p">},</span>
-      <span class="nt">"tag"</span><span class="p">:</span> <span class="s2">"direct"</span>
-    <span class="p">}</span>
-  <span class="p">],</span>
-  <span class="nt">"dns"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"servers"</span><span class="p">:</span> <span class="p">[</span>
-      <span class="s2">"8.8.8.8"</span><span class="p">,</span>
-      <span class="s2">"8.8.4.4"</span><span class="p">,</span>
-      <span class="s2">"localhost"</span>
-    <span class="p">]</span>
-  <span class="p">},</span>
-  <span class="nt">"routing"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">"strategy"</span><span class="p">:</span> <span class="s2">"rules"</span><span class="p">,</span>
-    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nt">"domainStrategy"</span><span class="p">:</span> <span class="s2">"IPIfNonMatch"</span><span class="p">,</span>
-      <span class="nt">"rules"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-          <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"field"</span><span class="p">,</span>
-          <span class="nt">"ip"</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">"0.0.0.0/8"</span><span class="p">,</span>
-            <span class="s2">"10.0.0.0/8"</span><span class="p">,</span>
-            <span class="s2">"100.64.0.0/10"</span><span class="p">,</span>
-            <span class="s2">"127.0.0.0/8"</span><span class="p">,</span>
-            <span class="s2">"169.254.0.0/16"</span><span class="p">,</span>
-            <span class="s2">"172.16.0.0/12"</span><span class="p">,</span>
-            <span class="s2">"172.168.0.0/16"</span><span class="p">,</span>
-            <span class="s2">"192.0.0.0/24"</span><span class="p">,</span>
-            <span class="s2">"192.0.2.0/24"</span><span class="p">,</span>
-            <span class="s2">"192.168.0.0/16"</span><span class="p">,</span>
-            <span class="s2">"198.18.0.0/15"</span><span class="p">,</span>
-            <span class="s2">"198.51.100.0/24"</span><span class="p">,</span>
-            <span class="s2">"203.0.113.0/24"</span><span class="p">,</span>
-            <span class="s2">"::1/128"</span><span class="p">,</span>
-            <span class="s2">"fc00::/7"</span><span class="p">,</span>
-            <span class="s2">"fe80::/10"</span>
-          <span class="p">],</span>
-          <span class="nt">"outboundTag"</span><span class="p">:</span> <span class="s2">"direct"</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-          <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"chinasites"</span><span class="p">,</span>
-          <span class="nt">"outboundTag"</span><span class="p">:</span> <span class="s2">"direct"</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-          <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"chinaip"</span><span class="p">,</span>
-          <span class="nt">"outboundTag"</span><span class="p">:</span> <span class="s2">"direct"</span>
-        <span class="p">}</span>
-      <span class="p">]</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span>
 </pre></div>
 <p>参考</p>
 <p><a href="https://toutyrater.github.io/advanced/tls.html">v2ray</a></p>
@@ -535,7 +188,7 @@ bash go.sh
       <p>
               <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
                   data-toggle="tooltip" class="label label-info"
-                  title="13 articles in this category">IT笔记</a>
+                  title="14 articles in this category">IT笔记</a>
       </p>
       <hr/>
 
@@ -543,7 +196,7 @@ bash go.sh
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#you-hua-wang-luo" title="优化网络">优化网络</a></li><li><a class="toc-href" href="#pei-zhi-wen-jian" title="配置文件">配置文件</a><ul><li><a class="toc-href" href="#sui-ji-duan-kou" title="随机端口">随机端口</a><ul><li><a class="toc-href" href="#fu-wu-duan" title="服务端">服务端</a></li><li><a class="toc-href" href="#ke-hu-duan" title="客户端">客户端</a></li></ul></li><li><a class="toc-href" href="#http2-tls_1" title="http2-TLS">http2-TLS</a><ul><li><a class="toc-href" href="#fu-wu-duan_1" title="服务端">服务端</a></li><li><a class="toc-href" href="#ke-hu-duan_1" title="客户端">客户端</a></li></ul></li></ul></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#fu-wu-qi-duan-pei-zhi" title="服务器端配置">服务器端配置</a><ul><li><a class="toc-href" href="#you-hua-wang-luo" title="优化网络">优化网络</a></li><li><a class="toc-href" href="#an-zhuang-v2ray" title="安装V2ray">安装V2ray</a></li><li><a class="toc-href" href="#tlsyu-ming-zheng-shu" title="TLS域名证书">TLS域名证书</a><ul><li><a class="toc-href" href="#an-zhuang-acme" title="安装acme">安装acme</a></li><li><a class="toc-href" href="#qian-fa-zheng-shu" title="签发证书">签发证书</a></li><li><a class="toc-href" href="#an-zhuang-zheng-shu" title="安装证书">安装证书</a></li><li><a class="toc-href" href="#zheng-shu-xu-qi" title="证书续期">证书续期</a></li></ul></li></ul></li><li><a class="toc-href" href="#ben-di-pei-zhi_2" title="本地配置">本地配置</a></li><li><a class="toc-href" href="#pei-zhi-wen-jian" title="配置文件">配置文件</a><ul><li><a class="toc-href" href="#http2-tls" title="http2-TLS">http2-TLS</a><ul><li><a class="toc-href" href="#fu-wu-duan" title="服务端">服务端</a></li><li><a class="toc-href" href="#ke-hu-duan" title="客户端">客户端</a></li></ul></li></ul></li></ul></div>
         </nav>
 
   </div>

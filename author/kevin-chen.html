@@ -117,6 +117,26 @@
 
     <article>
       <header>
+        <h2><a href="https://www.solarck.com/lede-media-center1.html" rel="bookmark" title="Permalink to LEDE/OpenWRT路由器打造家庭媒体影音中心（一）"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（一）</a></h2>
+      </header>
+      <div><h1 id="qian-yan">前言</h1>
+<h3 id="ruan-ying-jian">软/硬件</h3>
+<p>软件：本文系统都是基于LEDE&nbsp;17.01.4</p>
+<p>硬件：Linksys <span class="caps">WRT1900ACS</span>&nbsp;V2</p>
+<p>其他：一台电脑，最好是Linux带SSH，Windows的话可以下个putty安装上</p>
+<p>前提：我不会从头写起，而是从路由器已刷好LEDE&nbsp;17.01.4，WAN口已联网，且已经可以SSH登录之后开始，其他外设，如硬盘、硬盘盒、用于Extroot的U盘都已准备好。</p>
+<h3 id="shi-xian-mu-de">实现目的</h3>
+<p>基于Linksys&nbsp;WRT1900ACS强悍的性能和扩展功能丰富的LEDE，打造一个有权限控制的NAS，支持DLNA，可以离线下载和远程访问的DDNS系统的多媒体中心。</p>
+<h1 id="extroot_1">Extroot</h1>
+<p>extroot的作用就是扩充存储空间，这样就可以安装更多的软件。详细介绍可以查看很早之前我写过的一篇文章&mdash;&mdash;<a href="https://solarck.com/openwrt-extroot.html">用extroot为openwrt扩充存储空间</a>，这里就不赘述了。由于那篇文章比较老，LEDE也早已经升级了好几个含本，所以实际的操作还是以下面的内容为主。</p>
+<h3 id="an-zhuang-gong-ju">安装工具</h3>
+<p>这里我准备把U盘格式化为f2fs格式，关于各种存储格式和下面需要安装的工具的作用，我会放在下一篇文章一起讲，这一步照着做就可以了。</p>
+<div class="highlight"><pre><span></span>opkg update …</pre></div></div>
+      <div><a class="btn btn-primary" href="https://www.solarck.com/lede-media-center1.html"><strong>➟ 查看全文</strong></a></div>
+    </article>
+    <hr/>
+    <article>
+      <header>
         <h2><a href="https://www.solarck.com/centos6-datebase-server.html" rel="bookmark" title="Permalink to CentOS6数据库服务器配置">CentOS6数据库服务器配置</a></h2>
       </header>
       <div><p>本文章仅用于记录在公司服务器上通过yum&nbsp;repo来安装官方提供的数据库程序，而非通过编译方式来安装。通过官方仓库来安装有很多好处，比如升级、打补丁都很方便，不用编译浪费时间，更不需要安装多个版本的gcc来满足各种不同软件的要求。</p>
@@ -185,24 +205,6 @@
       <div><a class="btn btn-primary" href="https://www.solarck.com/Is-AIP-better-than-ETF.html"><strong>➟ 查看全文</strong></a></div>
     </article>
     <hr/>
-    <article>
-      <header>
-        <h2><a href="https://www.solarck.com/git-and-github.html" rel="bookmark" title="Permalink to git和github主要使用方法">git和github主要使用方法</a></h2>
-      </header>
-      <div><h3 id="sshhe-mi-yao">ssh和密钥</h3>
-<p><code>ssh-keygen -t rsa -b 4096 -C "princelailai@gmail.com"</code>：生成密钥</p>
-<p><code>cat ~/.ssh/id_rsa.pub</code>：查看密钥</p>
-<p><code>ssh -T git@github.com</code>：测试密钥是否可以正常登录</p>
-<h3 id="she-zhi">设置</h3>
-<p><code>git config --list</code>：列出当前repo所有设置</p>
-<p><code>git config --global user.name "princelai"</code>：设置用户名</p>
-<p><code>git config --global user.email "princelailai@gmail.com"</code>：设置E-mail</p>
-<p><code>echo "# mydotfiles" &gt; README.md</code>：</p>
-<h3 id="ji-ben-cao-zuo">基本操作</h3>
-<p><code>git init …</code></p></div>
-      <div><a class="btn btn-primary" href="https://www.solarck.com/git-and-github.html"><strong>➟ 查看全文</strong></a></div>
-    </article>
-    <hr/>
 
   <nav>
     <ul class="pagination">
@@ -230,8 +232,15 @@
 <li class="">
             <a href="https://www.solarck.com/author/kevin-chen3.html"
               rel="
- last ">
+">
               3
+            </a>
+          </li>
+<li class="">
+            <a href="https://www.solarck.com/author/kevin-chen4.html"
+              rel="
+ last ">
+              4
             </a>
           </li>
 

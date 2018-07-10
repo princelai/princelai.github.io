@@ -117,6 +117,24 @@
 
     <article>
       <header>
+        <h2><a href="https://www.solarck.com/git-and-github.html" rel="bookmark" title="Permalink to git和github主要使用方法">git和github主要使用方法</a></h2>
+      </header>
+      <div><h3 id="sshhe-mi-yao">ssh和密钥</h3>
+<p><code>ssh-keygen -t rsa -b 4096 -C "princelailai@gmail.com"</code>：生成密钥</p>
+<p><code>cat ~/.ssh/id_rsa.pub</code>：查看密钥</p>
+<p><code>ssh -T git@github.com</code>：测试密钥是否可以正常登录</p>
+<h3 id="she-zhi">设置</h3>
+<p><code>git config --list</code>：列出当前repo所有设置</p>
+<p><code>git config --global user.name "princelai"</code>：设置用户名</p>
+<p><code>git config --global user.email "princelailai@gmail.com"</code>：设置E-mail</p>
+<p><code>echo "# mydotfiles" &gt; README.md</code>：</p>
+<h3 id="ji-ben-cao-zuo">基本操作</h3>
+<p><code>git init …</code></p></div>
+      <div><a class="btn btn-primary" href="https://www.solarck.com/git-and-github.html"><strong>➟ 查看全文</strong></a></div>
+    </article>
+    <hr/>
+    <article>
+      <header>
         <h2><a href="https://www.solarck.com/using-python-descript-vaiance-std.html" rel="bookmark" title="Permalink to 用股票数据说明方差和标准差的特性">用股票数据说明方差和标准差的特性</a></h2>
       </header>
       <div><p><a href="https://zh.wikipedia.org/zh-cn/%E6%96%B9%E5%B7%AE">方差</a>（Variance），应用数学里的专有名词。在概率论和统计学中，一个随机变量的方差描述的是它的离散程度，也就是该变量离其期望值的距离。一个实随机变量的方差也称为它的二阶矩或二阶中心动差，恰巧也是它的二阶累积量。这里把复杂说白了，就是将各个误差将之平方（而非取绝对值，使之肯定为正数），相加之后再除以总数，透过这样的方式来算出各个数据分布、零散（相对中心点）的程度。继续延伸的话，方差的算术平方根称为该随机变量的标准差（此为相对各个数据点间）。</p>
@@ -248,31 +266,6 @@
       <div><a class="btn btn-primary" href="https://www.solarck.com/linux-desktop-entries.html"><strong>➟ 查看全文</strong></a></div>
     </article>
     <hr/>
-    <article>
-      <header>
-        <h2><a href="https://www.solarck.com/shadowsocks-libev.html" rel="bookmark" title="Permalink to VPS搭梯子指南——shadowsocks+BBR+obfs">VPS搭梯子指南——shadowsocks+<span class="caps">BBR</span>+obfs</a></h2>
-      </header>
-      <div><p>近期开会导致墙越来越高，迫不得已升级自建的ss服务，由于shadowsocks原版已经停更，shadowsocksR也已经删库，所以就锁定libev版本。
-<strong><em>注：以下服务器端内容请切换到root操作</em></strong></p>
-<h3 id="1-sheng-ji-debian">1.&nbsp;升级Debian</h3>
-<p>在升级之前，我需要先把服务器从Debian 8升级到Debian&nbsp;9，如果不是Debian用户，或者不想升级的可以跳过，这一步不影响后续操作，但是部分代码可能需要修改。</p>
-<p>首先要把Debian&nbsp;8升级到最新版本</p>
-<div class="highlight"><pre><span></span>apt update
-apt upgrade
-</pre></div>
-<p>备份源列表</p>
-<div class="highlight"><pre><span></span>cp /etc/apt/sources.list /etc/apt/sources.list-jessie
-</pre></div>
-<p>修改源列表，把jessie 替换为&nbsp;stretch</p>
-<div class="highlight"><pre><span></span>vim /etc/apt/sources.list
-:s/jessie/stretch/g
-</pre></div>
-<p>再次更新升级</p>
-<div class="highlight"><pre><span></span> apt update
- apt …</pre></div></div>
-      <div><a class="btn btn-primary" href="https://www.solarck.com/shadowsocks-libev.html"><strong>➟ 查看全文</strong></a></div>
-    </article>
-    <hr/>
 
   <nav>
     <ul class="pagination">
@@ -301,8 +294,15 @@ apt upgrade
 <li class="">
             <a href="https://www.solarck.com/author/kevin-chen3.html"
               rel="
- last  next ">
+ next ">
               3
+            </a>
+          </li>
+<li class="">
+            <a href="https://www.solarck.com/author/kevin-chen4.html"
+              rel="
+ last ">
+              4
             </a>
           </li>
 

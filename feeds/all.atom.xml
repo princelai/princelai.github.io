@@ -1,5 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Solarck</title><link href="https://www.solarck.com/" rel="alternate"></link><link href="https://www.solarck.com/feeds/all.atom.xml" rel="self"></link><id>https://www.solarck.com/</id><updated>2018-06-11T16:52:00+08:00</updated><entry><title>CentOS6数据库服务器配置</title><link href="https://www.solarck.com/centos6-datebase-server.html" rel="alternate"></link><published>2018-06-11T16:52:00+08:00</published><updated>2018-06-11T16:52:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-06-11:/centos6-datebase-server.html</id><summary type="html">&lt;p&gt;本文章仅用于记录在公司服务器上通过yum&amp;nbsp;repo来安装官方提供的数据库程序，而非通过编译方式来安装。通过官方仓库来安装有很多好处，比如升级、打补丁都很方便，不用编译浪费时间，更不需要安装多个版本的gcc来满足各种不同软件的要求。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Solarck</title><link href="https://www.solarck.com/" rel="alternate"></link><link href="https://www.solarck.com/feeds/all.atom.xml" rel="self"></link><id>https://www.solarck.com/</id><updated>2018-07-10T13:07:00+08:00</updated><entry><title>LEDE/OpenWRT路由器打造家庭媒体影音中心（一）</title><link href="https://www.solarck.com/lede-media-center1.html" rel="alternate"></link><published>2018-07-10T13:07:00+08:00</published><updated>2018-07-10T13:07:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-10:/lede-media-center1.html</id><summary type="html">&lt;h1 id="qian-yan"&gt;前言&lt;/h1&gt;
+&lt;h3 id="ruan-ying-jian"&gt;软/硬件&lt;/h3&gt;
+&lt;p&gt;软件：本文系统都是基于LEDE&amp;nbsp;17.01.4&lt;/p&gt;
+&lt;p&gt;硬件：Linksys &lt;span class="caps"&gt;WRT1900ACS&lt;/span&gt;&amp;nbsp;V2&lt;/p&gt;
+&lt;p&gt;其他：一台电脑，最好是Linux带SSH，Windows的话可以下个putty安装上&lt;/p&gt;
+&lt;p&gt;前提：我不会从头写起，而是从路由器已刷好LEDE&amp;nbsp;17.01.4，WAN口已联网，且已经可以SSH登录之后开始，其他外设，如硬盘、硬盘盒、用于Extroot的U盘都已准备好。&lt;/p&gt;
+&lt;h3 id="shi-xian-mu-de"&gt;实现目的&lt;/h3&gt;
+&lt;p&gt;基于Linksys&amp;nbsp;WRT1900ACS强悍的性能和扩展功能丰富的LEDE，打造一个有权限控制的NAS，支持DLNA，可以离线下载和远程访问的DDNS系统的多媒体中心。&lt;/p&gt;
+&lt;h1 id="extroot_1"&gt;Extroot&lt;/h1&gt;
+&lt;p&gt;extroot的作用就是扩充存储空间，这样就可以安装更多的软件。详细介绍可以查看很早之前我写过的一篇文章&amp;mdash;&amp;mdash;&lt;a href="https://solarck.com/openwrt-extroot.html"&gt;用extroot为openwrt扩充存储空间&lt;/a&gt;，这里就不赘述了。由于那篇文章比较老，LEDE也早已经升级了好几个含本，所以实际的操作还是以下面的内容为主。&lt;/p&gt;
+&lt;h3 id="an-zhuang-gong-ju"&gt;安装工具&lt;/h3&gt;
+&lt;p&gt;这里我准备把U盘格式化为f2fs格式，关于各种存储格式和下面需要安装的工具的作用，我会放在下一篇文章一起讲，这一步照着做就可以了。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;h1 id="qian-yan"&gt;前言&lt;/h1&gt;
+&lt;h3 id="ruan-ying-jian"&gt;软/硬件&lt;/h3&gt;
+&lt;p&gt;软件：本文系统都是基于LEDE&amp;nbsp;17.01.4&lt;/p&gt;
+&lt;p&gt;硬件：Linksys &lt;span class="caps"&gt;WRT1900ACS&lt;/span&gt;&amp;nbsp;V2&lt;/p&gt;
+&lt;p&gt;其他：一台电脑，最好是Linux带SSH，Windows的话可以下个putty安装上&lt;/p&gt;
+&lt;p&gt;前提：我不会从头写起，而是从路由器已刷好LEDE&amp;nbsp;17.01.4，WAN口已联网，且已经可以SSH登录之后开始，其他外设，如硬盘、硬盘盒、用于Extroot的U盘都已准备好。&lt;/p&gt;
+&lt;h3 id="shi-xian-mu-de"&gt;实现目的&lt;/h3&gt;
+&lt;p&gt;基于Linksys&amp;nbsp;WRT1900ACS强悍的性能和扩展功能丰富的LEDE，打造一个有权限控制的NAS，支持DLNA，可以离线下载和远程访问的DDNS系统的多媒体中心。&lt;/p&gt;
+&lt;h1 id="extroot_1"&gt;Extroot&lt;/h1&gt;
+&lt;p&gt;extroot的作用就是扩充存储空间，这样就可以安装更多的软件。详细介绍可以查看很早之前我写过的一篇文章&amp;mdash;&amp;mdash;&lt;a href="https://solarck.com/openwrt-extroot.html"&gt;用extroot为openwrt扩充存储空间&lt;/a&gt;，这里就不赘述了。由于那篇文章比较老，LEDE也早已经升级了好几个含本，所以实际的操作还是以下面的内容为主。&lt;/p&gt;
+&lt;h3 id="an-zhuang-gong-ju"&gt;安装工具&lt;/h3&gt;
+&lt;p&gt;这里我准备把U盘格式化为f2fs格式，关于各种存储格式和下面需要安装的工具的作用，我会放在下一篇文章一起讲，这一步照着做就可以了。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg install block-mount kmod-fs-ext4 kmod-usb-storage e2fsprogs kmod-fs-f2fs f2fs-tools
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="ge-shi-hua-upan"&gt;格式化U盘&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mkfs.f2fs /dev/sda1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="qian-yi-xi-tong"&gt;迁移系统&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mount /dev/sda1 /mnt &lt;span class="p"&gt;;&lt;/span&gt; tar -C /overlay -cvf - . &lt;span class="p"&gt;|&lt;/span&gt; tar -C /mnt -xf - &lt;span class="p"&gt;;&lt;/span&gt; umount /mnt
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="sheng-cheng-fen-qu-biao"&gt;生成分区表&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;block detect &amp;gt; /etc/config/fstab
+uci set fstab.@mount[0].target='/overlay'
+uci set fstab.@mount[0].enabled='1'
+uci set fstab.@mount[0].options='rw'
+uci set fstab.@mount[0].fstype='f2fs'
+uci commit
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;最后&lt;code&gt;fstab&lt;/code&gt;应该如下&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;cat /etc/config/fstab&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;config global
+        option anon_swap '0'
+        option anon_mount '0'
+        option auto_swap '1'
+        option auto_mount '1'
+        option delay_root '5'
+        option check_fs '1'
+
+
+config mount
+        option enabled '1'
+        option uuid 'd9aa4451-780a-4fe5-b08d-d7f0a7ae0ba4'
+        option target '/overlay'
+        option fstype 'f2fs'
+        option options 'rw'
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="yan-zheng"&gt;验证&lt;/h3&gt;
+&lt;p&gt;重启系统后执行命令&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;df -h&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Filesystem                Size      Used Available Use% Mounted on
+/dev/root                 2.8M      2.8M         0 100% /rom
+tmpfs                   250.8M    556.0K    250.2M   0% /tmp
+/dev/sdb1                14.3G    496.6M     13.7G   3% /overlay
+overlayfs:/overlay       14.3G    496.6M     13.7G   3% /
+ubi1:syscfg              29.6M    268.0K     27.8M   1% /tmp/syscfg
+tmpfs                   512.0K         0    512.0K   0% /dev
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;如果&lt;code&gt;/overlay&lt;/code&gt;分区已经变为U盘容量大小，那就是成功了。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;block info&lt;/code&gt;信息也已经显示正确&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/dev/mtdblock7: TYPE="jffs2"
+/dev/ubiblock0_0: UUID="9f419b56-31564c19-0a0c1b12-a2f9b77b" VERSION="4.0" MOUNT="/rom" TYPE="squashfs"
+/dev/ubi0_1: UUID="1361ff26-cc87-40f1-8b99-00caf223093c" VERSION="w4r0" TYPE="ubifs"
+/dev/ubi1_0: UUID="413d13a9-0f0a-4811-a0cb-3e3786ce26d7" VERSION="w4r0" TYPE="ubifs"
+/dev/sda1: UUID="d9aa4451-780a-4fe5-b08d-d7f0a7ae0ba4" VERSION="1.8" MOUNT="/overlay" TYPE="f2fs"
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h1 id="geng-huan-yuan_1"&gt;更换源&lt;/h1&gt;
+&lt;h3 id="tian-jia-dui-httpsde-zhi-chi"&gt;添加对https的支持&lt;/h3&gt;
+&lt;p&gt;如果你在替换源后执行更新，那么会收到一条错误消息：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;span class="caps"&gt;SSL&lt;/span&gt; support not available, please install one of the libustream-ssl-* libraries as well as the ca-bundle and ca-certificates&amp;nbsp;packages.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;很明显，系统还不支持SSL，因为官方的源都是http的，而我们添加的源都是https的。不过也很简单，按照错误信息的提示安装相应的包就可以了。&lt;strong&gt;这一步一定要在替换源之前执行&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg install ca-certificates luci-ssl-openssl
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="geng-huan-yuan_2"&gt;更换源&lt;/h3&gt;
+&lt;p&gt;国内访问LEDE官方源比较不稳定，速度也很慢，幸好&lt;a href="https://mirrors.ustc.edu.cn/lede/"&gt;中科大&lt;/a&gt;和&lt;a href="https://mirrors.tuna.tsinghua.edu.cn/lede/"&gt;清华&lt;/a&gt;都提供了LEDE的软件镜像源，为了后边操作能够顺利进行，首先需要更换源。&lt;/p&gt;
+&lt;p&gt;&lt;span class="caps"&gt;LEDE&lt;/span&gt;&amp;nbsp;OPKG的软件源配置文件有两个：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/etc/opkg/distfeeds.conf&lt;/code&gt;：发行版本自带的官方源，需要把里面的内容全部注释掉或者清空。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/etc/opkg/customfeeds.conf&lt;/code&gt;：自定义源，把我们需要的内容粘贴到这里，内容如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="na"&gt;src/gz reboot_core https://mirrors.ustc.edu.cn/lede/releases/17.01.4/targets/mvebu/generic/packages&lt;/span&gt;
+&lt;span class="na"&gt;src/gz reboot_base https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/base&lt;/span&gt;
+&lt;span class="na"&gt;src/gz reboot_luci https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/luci&lt;/span&gt;
+&lt;span class="na"&gt;src/gz reboot_packages https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/packages&lt;/span&gt;
+&lt;span class="na"&gt;src/gz reboot_routing https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/routing&lt;/span&gt;
+&lt;span class="na"&gt;src/gz reboot_telephony https://mirrors.ustc.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/telephony&lt;/span&gt;
+
+&lt;span class="c1"&gt;#src/gz reboot_core https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/targets/mvebu/generic/packages&lt;/span&gt;
+&lt;span class="c1"&gt;#src/gz reboot_base https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/base&lt;/span&gt;
+&lt;span class="c1"&gt;#src/gz reboot_luci https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/luci&lt;/span&gt;
+&lt;span class="c1"&gt;#src/gz reboot_packages https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/packages&lt;/span&gt;
+&lt;span class="c1"&gt;#src/gz reboot_routing https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/routing&lt;/span&gt;
+&lt;span class="c1"&gt;#src/gz reboot_telephony https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/telephony&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="geng-xin-xi-tong"&gt;更新系统&lt;/h3&gt;
+&lt;p&gt;镜像源替换完成后，把所有已安装程序全部更新到最新&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg list-upgradable &lt;span class="p"&gt;|&lt;/span&gt; cut -f &lt;span class="m"&gt;1&lt;/span&gt; -d &lt;span class="s1"&gt;' '&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; xargs opkg upgrade 
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h1 id="qi-ta_1"&gt;其他&lt;/h1&gt;
+&lt;h3 id="yi-hua"&gt;汉化&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg install luci-i18n-base-zh-cn
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h1 id="can-kao-lian-jie_1"&gt;参考链接&lt;/h1&gt;
+&lt;p&gt;&lt;a href="https://openwrt.org/docs/guide-user/luci/getting-rid-of-luci-https-certificate-warnings"&gt;How to get rid of LuCI https certificate&amp;nbsp;warnings&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://openwrt.org/docs/guide-user/additional-software/extroot_configuration"&gt;Extroot&amp;nbsp;configuration&lt;/a&gt;&lt;/p&gt;</content><category term="openwrt"></category><category term="lede"></category><category term="wrt1900acs"></category></entry><entry><title>CentOS6数据库服务器配置</title><link href="https://www.solarck.com/centos6-datebase-server.html" rel="alternate"></link><published>2018-06-11T16:52:00+08:00</published><updated>2018-06-11T16:52:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-06-11:/centos6-datebase-server.html</id><summary type="html">&lt;p&gt;本文章仅用于记录在公司服务器上通过yum&amp;nbsp;repo来安装官方提供的数据库程序，而非通过编译方式来安装。通过官方仓库来安装有很多好处，比如升级、打补丁都很方便，不用编译浪费时间，更不需要安装多个版本的gcc来满足各种不同软件的要求。&lt;/p&gt;
 &lt;h3 id="mysql"&gt;Mysql&lt;/h3&gt;
 &lt;h4 id="xia-zai-an-zhuang-mysql-repo"&gt;&lt;strong&gt;下载安装mysql&amp;nbsp;repo&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;rpm -Uvh https://repo.mysql.com//mysql80-community-release-el6-1.noarch.rpm&lt;/code&gt;&lt;/p&gt;

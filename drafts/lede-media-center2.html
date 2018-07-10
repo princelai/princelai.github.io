@@ -128,8 +128,8 @@ opkg list-installed | grep usb
 </pre></div>
 <p><code>kmod-usb-core</code>:USB核心驱动</p>
 <p><code>kmod-usb-storage</code>:大容量存储设备驱动</p>
-<p><code>kmod-usb2</code>:WRT1900ACS有一个USB2.0/eSATA口</p>
-<p><code>kmod-ata-marvell-sata</code>:Marvell&nbsp;SATA接口驱动</p>
+<p><code>kmod-usb2</code>:WRT1900ACS有一个USB2.0/eSATA口，可以不安装</p>
+<p><code>kmod-ata-marvell-sata</code>:Marvell&nbsp;SATA接口驱动，可以不安装</p>
 <p>网上搜到的教程和官方指南里还让安装一些其他的应用，但这些都是不必要或已被编译至内核中，包括：<code>kmod-usb-ohci</code>、<code>kmod-usb-uhci</code>、<code>kmod-usb3</code>、<code>kmod-usb-storage-uas</code></p>
 <h3 id="an-zhuang-xiang-guan-gong-ju">安装相关工具</h3>
 <div class="highlight"><pre><span></span>opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk 
@@ -171,6 +171,7 @@ opkg install kmod-fs-f2fs
 mkfs.f2fs /dev/sda1
 </pre></div>
 <h3 id="zi-dong-gua-zai-fen-qu">自动挂载分区</h3>
+<p>这一部分请根据自己<code>fstab</code>实际内容修改使用</p>
 <div class="highlight"><pre><span></span>block detect &gt; /etc/config/fstab
 uci <span class="nb">set</span> fstab.@mount<span class="o">[</span><span class="m">1</span><span class="o">]</span>.enabled<span class="o">=</span><span class="s1">'1'</span>
 uci <span class="nb">set</span> fstab.@mount<span class="o">[</span><span class="m">2</span><span class="o">]</span>.enabled<span class="o">=</span><span class="s1">'1'</span>
@@ -186,6 +187,7 @@ uci commit
 <div class="highlight"><pre><span></span>block umount &amp;&amp; block mount
 </pre></div>
 <h3 id="ying-pan-xiu-mian">硬盘休眠</h3>
+<h4 id="hdparm"><em>hdparm</em></h4>
 <div class="highlight"><pre><span></span>opkg update
 opkg install hdparm luci-app-hd-idle
 </pre></div>
@@ -199,15 +201,13 @@ hdparm -S <span class="m">120</span> /dev/sda2
 <li>1-240：数字乘以5秒是时间，在设定时间内未使用则休眠</li>
 <li>241-251：以30分钟为步进，时间为30分钟-5.5小时</li>
 </ol>
-<p>如果不想按照上面一步一步来，那么官方也提供了快速操作，请根据自己的实际情况修改后执行。</p>
-<div class="highlight"><pre><span></span><span class="c1"># Copy/paste each line below, then press Return</span>
-opkg update <span class="o">&amp;&amp;</span> opkg install block-mount e2fsprogs kmod-fs-ext4 kmod-usb3 kmod-usb2 kmod-usb-storage
-mkfs.ext4 /dev/sda1
-block detect &gt; /etc/config/fstab 
-uci <span class="nb">set</span> fstab.@mount<span class="o">[</span><span class="m">0</span><span class="o">]</span>.enabled<span class="o">=</span><span class="s1">'1'</span> <span class="o">&amp;&amp;</span> uci <span class="nb">set</span> fstab.@global<span class="o">[</span><span class="m">0</span><span class="o">]</span>.check_fs<span class="o">=</span><span class="s1">'1'</span> <span class="o">&amp;&amp;</span> uci commit 
-/sbin/block mount <span class="o">&amp;&amp;</span> service fstab <span class="nb">enable</span>
+<h4 id="hd-idle"><em>hd-idle</em></h4>
+<p>更简单的方法就是安装Luci管理工具</p>
+<div class="highlight"><pre><span></span>opkg update
+opkg install hd-idle luci-app-hd-idle
 </pre></div>
-<h1 id="samba_1">Samba</h1>
+<p><img alt="hd-idle" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-idle.png"/></p>
+<h1 id="samba_2">Samba</h1>
 <h3 id="an-zhuang-samba">安装Samba</h3>
 <p>查看可安装的版本</p>
 <div class="highlight"><pre><span></span>opkg update
@@ -317,6 +317,7 @@ smbpasswd -a newuser
 /etc/init.d/samba <span class="nb">enable</span>
 </pre></div>
 <p>至此，Samba设置完成，也达到了我的目的，有可以匿名随意访问的共享文件夹，也有实现了权限控制的私有文件夹。而且是全平台都可以访问，Windows、Linux和手机（需要有支持SMB协议的软件）。</p>
+<p><img alt="samba" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-samba.png"/></p>
 <h1 id="can-kao-lian-jie_2">参考链接</h1>
 <p><a href="https://openwrt.org/docs/guide-user/storage/usb-installing">Installing <span class="caps">USB</span>&nbsp;Drivers</a></p>
 <p><a href="https://openwrt.org/docs/guide-user/storage/usb-drives">Using storage devices</a>
@@ -324,18 +325,13 @@ smbpasswd -a newuser
 <a href="https://openwrt.org/docs/guide-user/services/nas/samba_configuration"><span class="caps">SMB</span> Samba share&nbsp;overview</a></p>
 <p><a href="https://openwrt.org/docs/guide-user/services/nas/cifs.server">cifs.server</a></p>
 <p><a href="https://openwrt.org/docs/guide-user/services/nas/samba">Samba</a></p>
-<p><hr/>
-<a href="https://www.cnblogs.com/wizju/p/6923625.html">智能路由器-OpenWRT 系列五 （<span class="caps">NAS</span>-SMB家庭共享）</a></p>
-<p><a href="https://www.jianshu.com/p/a122a036e8d9">OpenWrt搭建文件共享服务（<span class="caps">NAS</span>）</a></p>
-<p><a href="https://blog.csdn.net/yicao821/article/details/49929207">Openwrt&nbsp;网络存储NAS之Samba服务</a></p>
-<p><a href="https://luolei.org/openwrt-router-wifi-android-sync-iclould/">【智能路由】用路由器低成本打造NAS+迅雷离线下载+同步android文件</a></p>
-<p><a href="https://blog.zlf.me/%E5%9F%BA%E4%BA%8EOpenWrt%E6%89%93%E9%80%A0NAS%E4%BB%A5%E5%8F%8A%E8%84%B1%E6%9C%BA%E4%B8%8B%E8%BD%BD%E4%B8%AD%E5%BF%83.html">基于OpenWrt打造NAS以及脱机下载中心</a></p>
   </div>
 
     <hr />
     <h3>相关文章</h3>
     <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
     <ul>
+        <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（一）</a></li>
         <li><a href="https://www.solarck.com/openwrt-samba.html">openwrt开启Samba作为共享中心</a></li>
         <li><a href="https://www.solarck.com/openwrt-extroot.html">用extroot为openwrt扩充存储空间</a></li>
         <li><a href="https://www.solarck.com/install-openwrt-on-mw4530r.html">水星（Mercury）MW4530r刷Openwrt</a></li>
@@ -374,10 +370,16 @@ smbpasswd -a newuser
       <p>
               <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
                   data-toggle="tooltip" class="label label-info"
-                  title="13 articles in this category">IT笔记</a>
+                  title="14 articles in this category">IT笔记</a>
             <a href="/tag/openwrt.html" data-toggle="tooltip"
       class="label label-default"
-      title="3 articles with this tag">openwrt</a>
+      title="4 articles with this tag">openwrt</a>
+            <a href="/tag/lede.html" data-toggle="tooltip"
+      class="label label-default"
+      title="1 article with this tag">lede</a>
+            <a href="/tag/wrt1900acs.html" data-toggle="tooltip"
+      class="label label-default"
+      title="1 article with this tag">wrt1900acs</a>
       </p>
       <hr/>
 
@@ -385,7 +387,7 @@ smbpasswd -a newuser
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#usbqu-dong" title="USB驱动">USB驱动</a><ul><li><a class="toc-href" href="#cha-kan-yi-an-zhuang-de-qu-dong" title="查看已安装的驱动">查看已安装的驱动</a></li><li><a class="toc-href" href="#an-zhuang-qu-dong-he-gong-ju" title="安装驱动和工具">安装驱动和工具</a></li><li><a class="toc-href" href="#an-zhuang-xiang-guan-gong-ju" title="安装相关工具">安装相关工具</a></li></ul></li><li><a class="toc-href" href="#ying-pan-xiang-guan-cao-zuo_1" title="硬盘相关操作">硬盘相关操作</a><ul><li><a class="toc-href" href="#ying-pan-fen-qu" title="硬盘分区">硬盘分区</a></li><li><a class="toc-href" href="#ge-shi-hua-ying-pan" title="格式化硬盘">格式化硬盘</a></li><li><a class="toc-href" href="#zi-dong-gua-zai-fen-qu" title="自动挂载分区">自动挂载分区</a></li><li><a class="toc-href" href="#ying-pan-xiu-mian" title="硬盘休眠">硬盘休眠</a></li></ul></li><li><a class="toc-href" href="#samba_1" title="Samba">Samba</a><ul><li><a class="toc-href" href="#an-zhuang-samba" title="安装Samba">安装Samba</a></li><li><a class="toc-href" href="#pei-zhi-fang-huo-qiang" title="配置防火墙">配置防火墙</a></li><li><a class="toc-href" href="#sambapei-zhi" title="Samba配置">Samba配置</a><ul><li><a class="toc-href" href="#quan-ju-pei-zhi" title="全局配置">全局配置</a></li><li><a class="toc-href" href="#gong-xiang-wen-jian-jia-she-zhi" title="共享文件夹设置">共享文件夹设置</a></li><li><a class="toc-href" href="#wen-jian-jia-chu-shi-quan-xian-she-zhi" title="文件夹初始权限设置">文件夹初始权限设置</a></li><li><a class="toc-href" href="#tian-jia-yong-hu" title="添加用户">添加用户</a></li></ul></li></ul></li><li><a class="toc-href" href="#can-kao-lian-jie_2" title="参考链接">参考链接</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#usbqu-dong" title="USB驱动">USB驱动</a><ul><li><a class="toc-href" href="#cha-kan-yi-an-zhuang-de-qu-dong" title="查看已安装的驱动">查看已安装的驱动</a></li><li><a class="toc-href" href="#an-zhuang-qu-dong-he-gong-ju" title="安装驱动和工具">安装驱动和工具</a></li><li><a class="toc-href" href="#an-zhuang-xiang-guan-gong-ju" title="安装相关工具">安装相关工具</a></li></ul></li><li><a class="toc-href" href="#ying-pan-xiang-guan-cao-zuo_1" title="硬盘相关操作">硬盘相关操作</a><ul><li><a class="toc-href" href="#ying-pan-fen-qu" title="硬盘分区">硬盘分区</a></li><li><a class="toc-href" href="#ge-shi-hua-ying-pan" title="格式化硬盘">格式化硬盘</a></li><li><a class="toc-href" href="#zi-dong-gua-zai-fen-qu" title="自动挂载分区">自动挂载分区</a></li><li><a class="toc-href" href="#ying-pan-xiu-mian" title="硬盘休眠">硬盘休眠</a><ul><li><a class="toc-href" href="#hdparm" title="hdparm">hdparm</a></li><li><a class="toc-href" href="#hd-idle" title="hd-idle">hd-idle</a></li></ul></li></ul></li><li><a class="toc-href" href="#samba_2" title="Samba">Samba</a><ul><li><a class="toc-href" href="#an-zhuang-samba" title="安装Samba">安装Samba</a></li><li><a class="toc-href" href="#pei-zhi-fang-huo-qiang" title="配置防火墙">配置防火墙</a></li><li><a class="toc-href" href="#sambapei-zhi" title="Samba配置">Samba配置</a><ul><li><a class="toc-href" href="#quan-ju-pei-zhi" title="全局配置">全局配置</a></li><li><a class="toc-href" href="#gong-xiang-wen-jian-jia-she-zhi" title="共享文件夹设置">共享文件夹设置</a></li><li><a class="toc-href" href="#wen-jian-jia-chu-shi-quan-xian-she-zhi" title="文件夹初始权限设置">文件夹初始权限设置</a></li><li><a class="toc-href" href="#tian-jia-yong-hu" title="添加用户">添加用户</a></li></ul></li></ul></li><li><a class="toc-href" href="#can-kao-lian-jie_2" title="参考链接">参考链接</a></li></ul></div>
         </nav>
 
   </div>
