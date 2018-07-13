@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>  解决Haproxy用Systemd启动失败的问题
+ | Solarck</title>
+
+    <meta name="author" content="Kevin Chen"/>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css"/>
+    <link rel="stylesheet" href="https://www.solarck.com/theme/css/jquery.mglass.css"/>
+    <link rel="stylesheet" href="https://www.solarck.com/theme/css/pygment-solarized-dark.css"/>
+    <link rel="stylesheet" href="https://www.solarck.com/theme/css/style.css"/>
+
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Istok+Web' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
+      <link href='https://fonts.googleapis.com/css?family=Expletus+Sans' rel='stylesheet' type='text/css'>
+
+
+    <link rel="icon" href="https://www.solarck.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://www.solarck.com/favicon.ico" type="image/x-icon">
+
+    <!-- Feeds -->
+      <link href="https://www.solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Solarck - All posts - Atom Feed"/>
+
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="page-header">
+          <a href="https://www.solarck.com" class="avatar-container pull-left">
+            <div class="avatar ">
+              <div class="side"><img src="https://www.solarck.com/static/avatar.jpg" class="img-responsive"/></div>
+            </div>
+          </a>
+        <h1><a href="https://www.solarck.com">Solarck</a> <small>金融民工与程序猿的结合体</small></h1>
+      </div>
+
+      <nav class="navbar navbar-default">
+
+        <!-- Hamburger menu for mobile -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#plumage-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://www.solarck.com" title="金融民工与程序猿的结合体">Solarck</a>
+        </div>
+
+        <!-- Menus and search forms -->
+        <div class="collapse navbar-collapse" id="plumage-navbar-collapse-1">
+
+          <ul class="nav navbar-nav">
+<li  class="active" >
+                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记 <span class="sr-only">(current)</span></a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/pages/aboutme.html">关于我</a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/pages/resume.html">简历</a>
+                </li>
+
+          </ul>
+
+
+            <form class="navbar-form navbar-right" role="search" action="https://www.solarck.com/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fa
+                        fa-search fa-fw"></i></button>
+                  </span>
+                </div>
+              </div>
+            </form>
+
+        </div>
+
+      </nav>
+
+    </div>
+
+
+    <div class="container main">
+
+
+      <div class="row">
+        <div class=" col-md-9  ">
+  <h1>
+    <a href="https://www.solarck.com/systemd-wait-network-online.html" rel="bookmark" title="Permalink to 解决Haproxy用Systemd启动失败的问题">解决Haproxy用Systemd启动失败的问题</a>
+  </h1>
+        </div>
+      </div>
+
+      <div class="row">
+
+
+        <div class=" col-md-9 " id="content" role="main">
+  
+
+  <div>
+    <h1 id="wen-ti-miao-shu">问题描述</h1>
+<p>配置好Haproxy的配置文件，手动可以无错误开启，但是<code>Systemctl enable haproxy.service</code>开机启动每次都报错，系统启动后，手动开启还是没有问题。</p>
+<h1 id="fen-xi-yuan-yin">分析原因</h1>
+<h3 id="haproxypei-zhi-wen-ti">haproxy配置问题</h3>
+<p><code>/etc/haproxy.cfg</code>是配置文件，因为手动指定配合文件可以启动，而且测试配置文件也没有报错或警报，所以首先排除是配置的问题。</p>
+<h3 id="systemdfu-wu-pei-zhi-wen-ti">systemd服务配置问题</h3>
+<p><code>haproxy.service</code>是systemd用来启动服务的配置文件，第一眼看配置后，以为是创建PID没有权限，增加<code>User=root</code>字段，但是重启后依然报错。原版配置只有<code>After=network.target</code>，手动添加<code>Wants=network.target</code>重启后，依然报错。</p>
+<h3 id="cha-kan-ri-zhi">查看日志</h3>
+<p>正要灰心的时候，决定最后一搏，查看systemd启动日志，看看能不能找到点线索。</p>
+<p>查看最近一次启动中haproxy的日志</p>
+<p><code>journalctl -b -0 -u haproxy</code></p>
+<div class="highlight"><pre><span></span>Jul <span class="m">13</span> <span class="m">10</span>:32:20 kevin-pc systemd<span class="o">[</span><span class="m">1</span><span class="o">]</span>: haproxy.service: Main process exited, <span class="nv">code</span><span class="o">=</span>exited, <span class="nv">status</span><span class="o">=</span><span class="m">1</span>/FAILURE
+Jul <span class="m">13</span> <span class="m">10</span>:32:20 kevin-pc systemd<span class="o">[</span><span class="m">1</span><span class="o">]</span>: haproxy.service: Failed with result <span class="s1">'exit-code'</span>.
+Jul <span class="m">13</span> <span class="m">10</span>:32:20 kevin-pc systemd<span class="o">[</span><span class="m">1</span><span class="o">]</span>: Failed to start HAProxy Load Balancer.
+Jul <span class="m">13</span> <span class="m">10</span>:32:20 kevin-pc systemd<span class="o">[</span><span class="m">1</span><span class="o">]</span>: haproxy.service: Service <span class="nv">RestartSec</span><span class="o">=</span>100ms expired, scheduling restart.
+Jul <span class="m">13</span> <span class="m">10</span>:32:20 kevin-pc systemd<span class="o">[</span><span class="m">1</span><span class="o">]</span>: haproxy.service: Scheduled restart job, restart counter is at <span class="m">1</span>.
+Jul <span class="m">13</span> <span class="m">10</span>:32:20 kevin-pc systemd<span class="o">[</span><span class="m">1</span><span class="o">]</span>: Stopped HAProxy Load Balancer.
+Jul <span class="m">13</span> <span class="m">10</span>:32:20 kevin-pc systemd<span class="o">[</span><span class="m">1</span><span class="o">]</span>: Starting HAProxy Load Balancer...
+Jul <span class="m">13</span> <span class="m">10</span>:32:20 kevin-pc haproxy<span class="o">[</span><span class="m">554</span><span class="o">]</span>: <span class="o">[</span>ALERT<span class="o">]</span> <span class="m">193</span>/103220 <span class="o">(</span><span class="m">554</span><span class="o">)</span> : parsing <span class="o">[</span>/etc/haproxy/haproxy.cfg:36<span class="o">]</span> : <span class="s1">'server server1'</span> : could not resolve address <span class="s1">'xxxx.com'</span>.
+Jul <span class="m">13</span> <span class="m">10</span>:32:20 kevin-pc haproxy<span class="o">[</span><span class="m">554</span><span class="o">]</span>: <span class="o">[</span>ALERT<span class="o">]</span> <span class="m">193</span>/103220 <span class="o">(</span><span class="m">554</span><span class="o">)</span> : parsing <span class="o">[</span>/etc/haproxy/haproxy.cfg:37<span class="o">]</span> : <span class="s1">'server server2'</span> : could not resolve address <span class="s1">'xxxx.com'</span>.
+Jul <span class="m">13</span> <span class="m">10</span>:32:20 kevin-pc haproxy<span class="o">[</span><span class="m">554</span><span class="o">]</span>: <span class="o">[</span>ALERT<span class="o">]</span> <span class="m">193</span>/103220 <span class="o">(</span><span class="m">554</span><span class="o">)</span> : parsing <span class="o">[</span>/etc/haproxy/haproxy.cfg:38<span class="o">]</span> : <span class="s1">'server server3'</span> : could not resolve address <span class="s1">'xxxx.com'</span>.
+</pre></div>
+<p>原因找到了，原来是我在haproxy配置文件的backend段中，使用了域名而不是IP，导致解析失败。但是明明我已经指定了haproxy的启动在network之后了，为什么还是会这个样子呢？</p>
+<p>答案只能从network的服务中找</p>
+<p><code>journalctl -b -0 -u NetworkManager</code></p>
+<div class="highlight"><pre><span></span>Jul <span class="m">13</span> <span class="m">10</span>:32:22 kevin-pc NetworkManager<span class="o">[</span><span class="m">493</span><span class="o">]</span>: &lt;info&gt;  <span class="o">[</span><span class="m">1531449142</span>.2279<span class="o">]</span> dhcp4 <span class="o">(</span>enp0s25<span class="o">)</span>: activation: beginning transaction <span class="o">(</span>timeout in <span class="m">45</span> seconds<span class="o">)</span>
+Jul <span class="m">13</span> <span class="m">10</span>:32:22 kevin-pc NetworkManager<span class="o">[</span><span class="m">493</span><span class="o">]</span>: &lt;info&gt;  <span class="o">[</span><span class="m">1531449142</span>.2566<span class="o">]</span> dhcp4 <span class="o">(</span>enp0s25<span class="o">)</span>:   address <span class="m">172</span>.168.201.33
+Jul <span class="m">13</span> <span class="m">10</span>:32:22 kevin-pc NetworkManager<span class="o">[</span><span class="m">493</span><span class="o">]</span>: &lt;info&gt;  <span class="o">[</span><span class="m">1531449142</span>.2566<span class="o">]</span> dhcp4 <span class="o">(</span>enp0s25<span class="o">)</span>:   plen <span class="m">24</span>
+Jul <span class="m">13</span> <span class="m">10</span>:32:22 kevin-pc NetworkManager<span class="o">[</span><span class="m">493</span><span class="o">]</span>: &lt;info&gt;  <span class="o">[</span><span class="m">1531449142</span>.2566<span class="o">]</span> dhcp4 <span class="o">(</span>enp0s25<span class="o">)</span>:   expires in <span class="m">86400</span> seconds
+Jul <span class="m">13</span> <span class="m">10</span>:32:22 kevin-pc NetworkManager<span class="o">[</span><span class="m">493</span><span class="o">]</span>: &lt;info&gt;  <span class="o">[</span><span class="m">1531449142</span>.2567<span class="o">]</span> dhcp4 <span class="o">(</span>enp0s25<span class="o">)</span>:   nameserver <span class="s1">'172.168.13.100'</span>
+Jul <span class="m">13</span> <span class="m">10</span>:32:22 kevin-pc NetworkManager<span class="o">[</span><span class="m">493</span><span class="o">]</span>: &lt;info&gt;  <span class="o">[</span><span class="m">1531449142</span>.2567<span class="o">]</span> dhcp4 <span class="o">(</span>enp0s25<span class="o">)</span>:   nameserver <span class="s1">'202.106.0.20'</span>
+Jul <span class="m">13</span> <span class="m">10</span>:32:22 kevin-pc NetworkManager<span class="o">[</span><span class="m">493</span><span class="o">]</span>: &lt;info&gt;  <span class="o">[</span><span class="m">1531449142</span>.2567<span class="o">]</span> dhcp4 <span class="o">(</span>enp0s25<span class="o">)</span>:   gateway <span class="m">172</span>.168.201.1
+</pre></div>
+<p>对比两段日志的时间，原来虽然haproxy启动在network之后，但是network刚刚启动haproxy就开始启动，而network的启动内容比较多，还有很多网络通信，可能完全启动完需要一点时间。haproxy的启动时间比dhcp启动要早了2秒，这时无法进行DNS解析，所以就会造成启动失败，之前的所有问题也都说的通了。</p>
+<h1 id="jie-jue-fang-fa_1">解决方法</h1>
+<p>知道了问题的原因，那么就要解决它。只要让haproxy在network完全启动后再启动，就应该可以正常启动了。那么如何做呢？</p>
+<p>首先要替换<code>haproxy.service</code>中的<code>After</code>和<code>Wants</code>字段，用<code>network-online.target</code>替换<code>network.target</code></p>
+<div class="highlight"><pre><span></span><span class="na">After</span><span class="o">=</span><span class="s">network-online.target</span>
+<span class="na">Wants</span><span class="o">=</span><span class="s">network-online.target</span>
+</pre></div>
+<p>然后启动一个自带的网络等待服务</p>
+<div class="highlight"><pre><span></span>sudo systemctl <span class="nb">enable</span> NetworkManager-wait-online.service
+</pre></div>
+<p>如果你是使用<code>systemd-network</code>来管理网络服务，那么需要启动另外一个服务</p>
+<div class="highlight"><pre><span></span>sudo systemctl <span class="nb">enable</span> systemd-networkd-wait-online.service
+</pre></div>
+<p>重启后，一切问题都解决了。</p>
+<h1 id="can-kao">参考</h1>
+<p><a href="https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/">Running Services After the Network is&nbsp;up</a></p>
+  </div>
+
+
+    <div class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'solarck';
+        var disqus_identifier = "systemd-wait-network-online.html";
+        var disqus_title = "解决Haproxy用Systemd启动失败的问题";
+        var disqus_url = "https://www.solarck.com/systemd-wait-network-online.html";
+        (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.</noscript>
+    </div>
+
+        </div>
+
+          <div class="col-md-3">
+  <div class="well">
+
+    <p><abbr title="2018-07-13T12:35:00+08:00"><i class="fa fa-calendar"></i> July 13, 2018</abbr></p>
+
+      <p><address>
+        <i class="fa fa-user"></i> 作者:
+          <a href="https://www.solarck.com/author/kevin-chen.html" rel="author">Kevin Chen</a>
+      </address></p>
+
+    <hr/>
+
+      <p>
+              <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
+                  data-toggle="tooltip" class="label label-info"
+                  title="17 articles in this category">IT笔记</a>
+            <a href="/tag/haproxy.html" data-toggle="tooltip"
+      class="label label-default"
+      title="1 article with this tag">haproxy</a>
+            <a href="/tag/systemd.html" data-toggle="tooltip"
+      class="label label-default"
+      title="1 article with this tag">systemd</a>
+      </p>
+      <hr/>
+
+
+      <nav>
+        <ul class="pager">
+          <li class="previous ">
+            <a  href="https://www.solarck.com/v2ray-quick-config.html" title="快速配置V2ray"  rel="prev">
+              <span aria-hidden="true">←</span> 旧文章
+            </a>
+          </li>
+          <li class="next  disabled ">
+            <a  rel="next">
+              新文章 <span aria-hidden="true">→</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    
+        <center><h4><b>目录</b></h4></center>
+        <nav class="toc">
+            <div id="toc"><ul><li><a class="toc-href" href="#wen-ti-miao-shu" title="问题描述">问题描述</a></li><li><a class="toc-href" href="#fen-xi-yuan-yin" title="分析原因">分析原因</a><ul><li><a class="toc-href" href="#haproxypei-zhi-wen-ti" title="haproxy配置问题">haproxy配置问题</a></li><li><a class="toc-href" href="#systemdfu-wu-pei-zhi-wen-ti" title="systemd服务配置问题">systemd服务配置问题</a></li><li><a class="toc-href" href="#cha-kan-ri-zhi" title="查看日志">查看日志</a></li></ul></li><li><a class="toc-href" href="#jie-jue-fang-fa_1" title="解决方法">解决方法</a></li><li><a class="toc-href" href="#can-kao" title="参考">参考</a></li></ul></div>
+        </nav>
+
+  </div>
+            
+          </div>
+
+      </div>
+
+    </div>
+
+    <!-- TODO: make footer sticky -->
+    <footer class="container-fluid">
+      <div class="container">
+        <div class="row">
+
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+                <h5>链接</h5>
+                <ul class="list-unstyled">
+                  <li>  <a href="http://getpelican.com/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
+    Pelican
+  </a></li>
+                  <li>  <a href="http://python.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
+    Python.org
+  </a></li>
+                  <li>  <a href="http://jinja.pocoo.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
+    Jinja2
+  </a></li>
+                </ul>
+            </div>
+
+          <div class="col-md-2">
+            <h5>归档</h5>
+            <ul class="list-unstyled">
+                <li><a href="https://www.solarck.com/categories.html"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="https://www.solarck.com/archives.html"><i class="fa fa-calendar"></i> Dates</a></li>
+                <li><a href="https://www.solarck.com/tags.html"><i class="fa fa-tag"></i> Tags</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-2 text-muted">
+            <h5>Copyright</h5>
+            <p>© Copyright 2013-2018 Kevin Chen.</p>
+          </div>
+        <!--
+          <div class="col-md-2 text-muted">
+            <h5>Disclaimer</h5>
+              <p>All opinions expressed in this site are my own personal opinions and are not endorsed by, nor do they represent the opinions of my previous, current and future employers or any of its affiliates, partners or customers.</p>
+          </div>
+        -->
+          <div class="col-md-2">
+              <h5>Feeds</h5>
+              <ul class="list-unstyled">
+                  <li><small><a href="https://www.solarck.com/feeds/all.atom.xml"><i class="fa fa-rss"></i> All posts (Atom)</a></small></li>
+              </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <h5 class="text-right"><a href="#"><i class="fa fa-arrow-up"></i> Back to top</a></h5>
+
+      <div class="container">
+        <div class="row col-md-12 text-muted text-center">
+          Site generated by <a href="https://getpelican.com"> Pelican</a>.<br/>
+          <a href="https://github.com/kdeldycke/plumage"> Plumage</a> theme by <a href="https://kevin.deldycke.com">Kevin Deldycke</a>.
+        </div>
+      </div>
+
+    </footer>
+
+    <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-1337838-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
+    <script src="https://www.solarck.com/theme/js/jquery.mglass.js"></script>
+    <script src="https://www.solarck.com/theme/js/application.js"></script>
+
+  </body>
+</html>

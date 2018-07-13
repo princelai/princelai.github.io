@@ -114,55 +114,132 @@
 
 
         <div class=" col-md-9 " id="content" role="main">
-  
+      Translations:
+      <a href="https://www.solarck.com/drafts/.html">zh</a>
+
 
   <div>
-    <table>
-<thead>
-<tr>
-<th align="center">名称</th>
-<th align="center">主</th>
-<th align="center">辅</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">阿里</td>
-<td align="center">223.5.5.5</td>
-<td align="center">223.6.6.6</td>
-</tr>
-<tr>
-<td align="center">PdoMo</td>
-<td align="center">101.132.183.99</td>
-<td align="center">193.112.15.186</td>
-</tr>
-<tr>
-<td align="center"><span class="caps">TUNA</span></td>
-<td align="center">101.6.6.6</td>
-<td align="center">2001:da8::666</td>
-</tr>
-<tr>
-<td align="center">google</td>
-<td align="center">8.8.8.8</td>
-<td align="center">8.8.4.4</td>
-</tr>
-<tr>
-<td align="center">OpenDns</td>
-<td align="center">208.67.222.222</td>
-<td align="center">208.67.220.220</td>
-</tr>
-<tr>
-<td align="center">Cloudflare</td>
-<td align="center">1.1.1.1</td>
-<td align="center">1.0.0.1</td>
-</tr>
-</tbody>
-</table>
+    <p><code>/etc/init.d/v2ray</code></p>
+<div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#</span>
+<span class="c1"># v2ray        Startup script for v2ray</span>
+<span class="c1">#</span>
+<span class="c1"># chkconfig: - 24 76</span>
+<span class="c1"># processname: v2ray</span>
+<span class="c1"># pidfile: /var/run/v2ray.pid</span>
+<span class="c1"># description: V2Ray proxy services</span>
+<span class="c1">#</span>
+
+<span class="c1">### BEGIN INIT INFO</span>
+<span class="c1"># Provides:          v2ray</span>
+<span class="c1"># Required-Start:    $network $local_fs $remote_fs</span>
+<span class="c1"># Required-Stop:     $remote_fs</span>
+<span class="c1"># Default-Start:     2 3 4 5</span>
+<span class="c1"># Default-Stop:      0 1 6</span>
+<span class="c1"># Short-Description: V2Ray proxy services</span>
+<span class="c1"># Description:       V2Ray proxy services</span>
+<span class="c1">### END INIT INFO</span>
+
+<span class="nv">DESC</span><span class="o">=</span>v2ray
+<span class="nv">NAME</span><span class="o">=</span>v2ray
+<span class="nv">DAEMON</span><span class="o">=</span>/usr/bin/v2ray/v2ray
+<span class="nv">PIDFILE</span><span class="o">=</span>/var/run/<span class="nv">$NAME</span>.pid
+<span class="nv">LOCKFILE</span><span class="o">=</span>/var/lock/subsys/<span class="nv">$NAME</span>
+<span class="nv">SCRIPTNAME</span><span class="o">=</span>/etc/init.d/<span class="nv">$NAME</span>
+<span class="nv">RETVAL</span><span class="o">=</span><span class="m">0</span>
+
+<span class="nv">DAEMON_OPTS</span><span class="o">=</span><span class="s2">"-config /etc/v2ray/config.json"</span>
+
+<span class="c1"># Exit if the package is not installed</span>
+<span class="o">[</span> -x <span class="nv">$DAEMON</span> <span class="o">]</span> <span class="o">||</span> <span class="nb">exit</span> <span class="m">0</span>
+
+<span class="c1"># Read configuration variable file if it is present</span>
+<span class="o">[</span> -r /etc/default/<span class="nv">$NAME</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> . /etc/default/<span class="nv">$NAME</span>
+
+<span class="c1"># Source function library.</span>
+. /etc/rc.d/init.d/functions
+
+start<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">pids</span><span class="o">=</span><span class="k">$(</span>pgrep -f <span class="nv">$DAEMON</span><span class="k">)</span>
+  <span class="k">if</span> <span class="o">[</span> -n <span class="s2">"</span><span class="nv">$pids</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$NAME</span><span class="s2"> (pid </span><span class="nv">$pids</span><span class="s2">) is already running"</span>
+    <span class="nv">RETVAL</span><span class="o">=</span><span class="m">0</span>
+    <span class="k">return</span> <span class="m">0</span>
+  <span class="k">fi</span>
+
+  <span class="nb">echo</span> -n $<span class="s2">"Starting </span><span class="nv">$NAME</span><span class="s2">: "</span>
+
+  mkdir -p /var/log/v2ray
+  <span class="nv">$DAEMON</span> <span class="nv">$DAEMON_OPTS</span> <span class="m">1</span>&gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
+  <span class="nb">echo</span> <span class="nv">$!</span> &gt; <span class="nv">$PIDFILE</span>
+
+  sleep <span class="m">2</span>
+  pgrep -f <span class="nv">$DAEMON</span> &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+  <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
+  <span class="k">if</span> <span class="o">[</span> <span class="nv">$RETVAL</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    success<span class="p">;</span> <span class="nb">echo</span>
+    touch <span class="nv">$LOCKFILE</span>
+  <span class="k">else</span>
+    failure<span class="p">;</span> <span class="nb">echo</span>
+  <span class="k">fi</span>
+  <span class="k">return</span> <span class="nv">$RETVAL</span>
+<span class="o">}</span>
+
+stop<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">pids</span><span class="o">=</span><span class="k">$(</span>pgrep -f <span class="nv">$DAEMON</span><span class="k">)</span>
+  <span class="k">if</span> <span class="o">[</span> -z <span class="s2">"</span><span class="nv">$pids</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$NAME</span><span class="s2"> is not running"</span>
+    <span class="nv">RETVAL</span><span class="o">=</span><span class="m">0</span>
+    <span class="k">return</span> <span class="m">0</span>
+  <span class="k">fi</span>
+
+  <span class="nb">echo</span> -n $<span class="s2">"Stopping </span><span class="nv">$NAME</span><span class="s2">: "</span>
+  killproc -p <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">NAME</span><span class="si">}</span>
+  <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
+  <span class="nb">echo</span>
+  <span class="o">[</span> <span class="nv">$RETVAL</span> <span class="o">=</span> <span class="m">0</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -f <span class="si">${</span><span class="nv">LOCKFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span>
+<span class="o">}</span>
+
+reload<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">echo</span> -n $<span class="s2">"Reloading </span><span class="nv">$NAME</span><span class="s2">: "</span>
+  killproc -p <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">NAME</span><span class="si">}</span> -HUP
+  <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
+  <span class="nb">echo</span>
+<span class="o">}</span>
+
+rh_status<span class="o">()</span> <span class="o">{</span>
+  status -p <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">DAEMON</span><span class="si">}</span>
+<span class="o">}</span>
+
+<span class="c1"># See how we were called.</span>
+<span class="k">case</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> in
+  start<span class="o">)</span>
+    rh_status &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> <span class="m">0</span>
+    start
+    <span class="p">;;</span>
+  stop<span class="o">)</span>
+    stop
+    <span class="p">;;</span>
+  status<span class="o">)</span>
+    rh_status
+    <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
+    <span class="p">;;</span>
+  restart<span class="o">)</span>
+    stop
+    start
+    <span class="p">;;</span>
+  reload<span class="o">)</span>
+    reload
+  <span class="p">;;</span>
+  *<span class="o">)</span>
+    <span class="nb">echo</span> <span class="s2">"Usage: </span><span class="nv">$SCRIPTNAME</span><span class="s2"> {start|stop|status|reload|restart}"</span> &gt;<span class="p">&amp;</span><span class="m">2</span>
+    <span class="nv">RETVAL</span><span class="o">=</span><span class="m">2</span>
+  <span class="p">;;</span>
+<span class="k">esac</span>
+<span class="nb">exit</span> <span class="nv">$RETVAL</span>
+</pre></div>
 <h1 id="can-kao">参考</h1>
-<p><a href="https://blog.liyuans.com/archives/pure-dns-collection.html">收集控: 纯净 <span class="caps">DNS</span>&nbsp;收集</a></p>
-<p><a href="https://www.diggui.com/"><span class="caps">DIG</span> <span class="caps">GUI</span></a></p>
-<p><a href="http://roclinux.cn/?p=2449">《dig挖出DNS的秘密》</a></p>
-<p><a href="https://public-dns.info/">[Public <span class="caps">DNS</span> Server&nbsp;List](https://public-dns.info/)</a></p>
+<p><a href="https://github.com/v2ray/v2ray-core/issues/101">init.d</a></p>
   </div>
 
 
@@ -187,7 +264,7 @@
           <div class="col-md-3">
   <div class="well">
 
-    <p><abbr title="2018-07-03T10:51:00+08:00"><i class="fa fa-calendar"></i> July 03, 2018</abbr></p>
+    <p><abbr title="2018-07-12T11:16:00+08:00"><i class="fa fa-calendar"></i> July 12, 2018</abbr></p>
 
       <p><address>
         <i class="fa fa-user"></i> 作者:

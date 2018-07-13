@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>  快速配置V2ray
+ | Solarck</title>
+
+    <meta name="author" content="Kevin Chen"/>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css"/>
+    <link rel="stylesheet" href="https://www.solarck.com/theme/css/jquery.mglass.css"/>
+    <link rel="stylesheet" href="https://www.solarck.com/theme/css/pygment-solarized-dark.css"/>
+    <link rel="stylesheet" href="https://www.solarck.com/theme/css/style.css"/>
+
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Istok+Web' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
+      <link href='https://fonts.googleapis.com/css?family=Expletus+Sans' rel='stylesheet' type='text/css'>
+
+
+    <link rel="icon" href="https://www.solarck.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://www.solarck.com/favicon.ico" type="image/x-icon">
+
+    <!-- Feeds -->
+      <link href="https://www.solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Solarck - All posts - Atom Feed"/>
+
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="page-header">
+          <a href="https://www.solarck.com" class="avatar-container pull-left">
+            <div class="avatar ">
+              <div class="side"><img src="https://www.solarck.com/static/avatar.jpg" class="img-responsive"/></div>
+            </div>
+          </a>
+        <h1><a href="https://www.solarck.com">Solarck</a> <small>金融民工与程序猿的结合体</small></h1>
+      </div>
+
+      <nav class="navbar navbar-default">
+
+        <!-- Hamburger menu for mobile -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#plumage-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://www.solarck.com" title="金融民工与程序猿的结合体">Solarck</a>
+        </div>
+
+        <!-- Menus and search forms -->
+        <div class="collapse navbar-collapse" id="plumage-navbar-collapse-1">
+
+          <ul class="nav navbar-nav">
+<li  class="active" >
+                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记 <span class="sr-only">(current)</span></a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/pages/aboutme.html">关于我</a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/pages/resume.html">简历</a>
+                </li>
+
+          </ul>
+
+
+            <form class="navbar-form navbar-right" role="search" action="https://www.solarck.com/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fa
+                        fa-search fa-fw"></i></button>
+                  </span>
+                </div>
+              </div>
+            </form>
+
+        </div>
+
+      </nav>
+
+    </div>
+
+
+    <div class="container main">
+
+
+      <div class="row">
+        <div class=" col-md-9  ">
+  <h1>
+    <a href="https://www.solarck.com/v2ray-quick-config.html" rel="bookmark" title="Permalink to 快速配置V2ray">快速配置V2ray</a>
+  </h1>
+        </div>
+      </div>
+
+      <div class="row">
+
+
+        <div class=" col-md-9 " id="content" role="main">
+  
+
+  <div>
+    <h1 id="fu-wu-qi-duan-pei-zhi">服务器端配置</h1>
+<p>服务器系统使用的是Debian 9&nbsp;x86_64，Ubuntu大部分操作都通用。如果是CentOS的话，该文章仅作为参考。</p>
+<h3 id="you-hua-wang-luo">优化网络</h3>
+<p>主要涉及bbr的安装配置，需要VPS是KVM架构，具体可以参照<a href="https://www.solarck.com/shadowsocks-libev.html">之前的文章</a>。</p>
+<h3 id="an-zhuang-v2ray">安装V2ray</h3>
+<p>官方提供了安装脚本，需要系统使用systemd管理系统</p>
+<div class="highlight"><pre><span></span>wget https://install.direct/go.sh
+bash go.sh
+</pre></div>
+<p>安装好后，主要文件如下：</p>
+<blockquote>
+<p><code>/etc/systemd/system/v2ray.service</code>：启动服务
+<code>/etc/v2ray/config.json</code>：配置文件
+<code>/usr/bin/v2ray/v2ray</code>：主程序</p>
+</blockquote>
+<h3 id="tlsyu-ming-zheng-shu">TLS域名证书</h3>
+<p>因为最终配置要用到TLS链接，在这步之前，你需要一个域名，免费的也无所谓。</p>
+<p>工具使用<a href="https://github.com/Neilpang/acme.sh/wiki">acme.sh</a>，这是用来签发<a href="https://letsencrypt.org/">Let&rsquo;s Encrypt</a>免费证书的脚本，非常好用。</p>
+<h4 id="an-zhuang-acme"><em>安装acme</em></h4>
+<p>安装依赖工具</p>
+<p><code>apt-get install -y socat netcat</code></p>
+<p>安装acme.sh脚本</p>
+<div class="highlight"><pre><span></span>curl  https://get.acme.sh <span class="p">|</span> sh
+</pre></div>
+<p>默认是安装在<code>～/.acme.sh/</code></p>
+<h4 id="qian-fa-zheng-shu"><em>签发证书</em></h4>
+<p>我使用的是ecc证书，需要把domain换成自己的域名</p>
+<div class="highlight"><pre><span></span>~/.acme.sh/acme.sh --issue -d domain --standalone -k ec-256
+</pre></div>
+<h4 id="an-zhuang-zheng-shu"><em>安装证书</em></h4>
+<p>证书会被安装到<code>/etc/v2ray</code>目录下</p>
+<div class="highlight"><pre><span></span>~/.acme.sh/acme.sh --installcert -d domain --fullchainpath /etc/v2ray/v2ray.crt --keypath /etc/v2ray/v2ray.key --ecc
+</pre></div>
+<h4 id="zheng-shu-xu-qi"><em>证书续期</em></h4>
+<p>执行完签发命令后，系统已经加上了crond自动签发，如果你想手动签发，可以执行下面的命令。</p>
+<p><code>~/.acme.sh/acme.sh --renew -d domain --force --ecc</code></p>
+<h1 id="ben-di-pei-zhi_2">本地配置</h1>
+<h3 id="an-zhuang">安装</h3>
+<p>因为我使用的是Manjaro，一个基于Archlinux的Linux版本，所有安装只要一条命令</p>
+<div class="highlight"><pre><span></span>yaourt -Sy v2ray
+</pre></div>
+<p>如果你用的是其他系统，可以参考服务器的安装脚本。</p>
+<h1 id="pei-zhi-wen-jian_1">配置文件</h1>
+<h3 id="pei-zhi-shuo-ming">配置说明</h3>
+<p>我当前使用的连接方式是TCP+TLS这种，根据官方和网上收集的信息，据说当前最好的配置是WebSocket+<span class="caps">WEB</span>+<span class="caps">TLS</span>+<span class="caps">CDN</span>，我没有选择这种连接方式有以下几点原因：</p>
+<ol>
+<li>Websocket效率低于TCP</li>
+<li>多层转发导致速度可能会变慢</li>
+<li>配置较麻烦</li>
+</ol>
+<p>如果你的ISP没有QOS，没有TCP阻断，你连接服务器的流量没有很大的话，是没有必要折腾这种连接方式的。当然我在写这篇文章之前还使用过H2+TLS的连接方式，但是不知是服务器没有加Caddy转发还是H2方式不稳定，断流严重，换成TCP+TLS后，连接稳定，速度尚可，未出现断流。</p>
+<p>每个人每个地区的ISP情况不尽相同，所以多试才能找到最适合你的配置，更多配置可以参考<a href="https://github.com/KiriKira/vTemplate">配置模板</a>。</p>
+<h3 id="tcptlspei-zhi"><span class="caps">TCP</span>+TLS配置</h3>
+<h4 id="pei-zhi-shuo-ming_1"><strong>配置说明</strong></h4>
+<p>我有三台性能较弱的VPS，所以三台分别安装并部署了服务端的配置，而在本地客户端的outbound中连接三个服务器，v2ray可以进行简单的轮寻进行负载均衡。</p>
+<p>为了简化操作，UUID设置为相同，当然不嫌麻烦的话可以设置为不同，但要和每台服务器的UUID相对应。</p>
+<p>因为我认为vmess协议加密已经足够强壮，所以每台就没有再设置内容加密，如果不放心，可以使用auto或者AEAD方式加密。另外根据官方的测试，貌似<code>aes-256-gcm</code> 和<code>chacha20-ietf-poly1305</code>两种加密方式传输效率比不加密的效率还要高，可能与硬件加密有关系吧。</p>
+<p>所有配置的详细内容都可以在官方文档或白话文教程里找到，其实配置v2ray并没有那么复杂。</p>
+<p>最后贴上我的自用配置，生成UUID可以使用<a href="https://www.uuidgenerator.net/"><span class="caps">UUID</span> Generator</a>这个网站，或者Linux用户可以使用下面命令<code>cat /proc/sys/kernel/random/uuid</code>生成。</p>
+<h4 id="fu-wu-duan"><strong>服务端</strong></h4>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">"log"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"loglevel"</span><span class="p">:</span> <span class="s2">"warning"</span><span class="p">,</span>
+    <span class="nt">"access"</span><span class="p">:</span> <span class="s2">"/var/log/v2ray/access.log"</span><span class="p">,</span>
+    <span class="nt">"error"</span><span class="p">:</span> <span class="s2">"/var/log/v2ray/error.log"</span>
+  <span class="p">},</span>
+  <span class="nt">"inbound"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"port"</span><span class="p">:</span> <span class="mi">443</span><span class="p">,</span>
+    <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"vmess"</span><span class="p">,</span>
+    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">"clients"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"xxxxxxxxx-xxxxxxxxxxx-xxxxxx"</span><span class="p">,</span>
+          <span class="nt">"alterId"</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+          <span class="nt">"security"</span><span class="p">:</span> <span class="s2">"none"</span><span class="p">,</span>
+          <span class="nt">"udp"</span><span class="p">:</span> <span class="kc">true</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">"streamSettings"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">"network"</span><span class="p">:</span> <span class="s2">"tcp"</span><span class="p">,</span>
+      <span class="nt">"security"</span><span class="p">:</span> <span class="s2">"tls"</span><span class="p">,</span>
+      <span class="nt">"tlsSettings"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"certificates"</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="nt">"certificateFile"</span><span class="p">:</span> <span class="s2">"/etc/v2ray/v2ray.crt"</span><span class="p">,</span>
+            <span class="nt">"keyFile"</span><span class="p">:</span> <span class="s2">"/etc/v2ray/v2ray.key"</span>
+          <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nt">"outbound"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"freedom"</span><span class="p">,</span>
+    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{}</span>
+  <span class="p">},</span>
+  <span class="nt">"outboundDetour"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"blackhole"</span><span class="p">,</span>
+      <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{},</span>
+      <span class="nt">"tag"</span><span class="p">:</span> <span class="s2">"blocked"</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nt">"routing"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"strategy"</span><span class="p">:</span> <span class="s2">"rules"</span><span class="p">,</span>
+    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">"rules"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"field"</span><span class="p">,</span>
+          <span class="nt">"ip"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"geoip:private"</span>
+          <span class="p">],</span>
+          <span class="nt">"outboundTag"</span><span class="p">:</span> <span class="s2">"blocked"</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<h4 id="ke-hu-duan"><strong>客户端</strong></h4>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">"log"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"loglevel"</span><span class="p">:</span> <span class="s2">"warning"</span><span class="p">,</span>
+    <span class="nt">"access"</span><span class="p">:</span> <span class="s2">"/var/log/v2ray/access.log"</span><span class="p">,</span>
+    <span class="nt">"error"</span><span class="p">:</span> <span class="s2">"/var/log/v2ray/error.log"</span>
+  <span class="p">},</span>
+  <span class="nt">"inbound"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"port"</span><span class="p">:</span> <span class="mi">1080</span><span class="p">,</span>
+    <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"socks"</span><span class="p">,</span>
+    <span class="nt">"domainOverride"</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s2">"tls"</span><span class="p">,</span>
+      <span class="s2">"http"</span>
+    <span class="p">],</span>
+    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">"auth"</span><span class="p">:</span> <span class="s2">"noauth"</span><span class="p">,</span>
+      <span class="nt">"udp"</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nt">"outbound"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"vmess"</span><span class="p">,</span>
+    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">"vnext"</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+          <span class="nt">"address"</span><span class="p">:</span> <span class="s2">"domain.com"</span><span class="p">,</span>
+          <span class="nt">"port"</span><span class="p">:</span> <span class="mi">443</span><span class="p">,</span>
+          <span class="nt">"users"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"xxxxxxxxx-xxxxxxxxxxx-xxxxxx"</span><span class="p">,</span>
+              <span class="nt">"alterId"</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+              <span class="nt">"security"</span><span class="p">:</span> <span class="s2">"none"</span>
+            <span class="p">}</span>
+          <span class="p">]</span>
+        <span class="p">},</span>
+      <span class="p">{</span>
+          <span class="nt">"address"</span><span class="p">:</span> <span class="s2">"domain.com"</span><span class="p">,</span>
+          <span class="nt">"port"</span><span class="p">:</span> <span class="mi">443</span><span class="p">,</span>
+          <span class="nt">"users"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"xxxxxxxxx-xxxxxxxxxxx-xxxxxx"</span><span class="p">,</span>
+              <span class="nt">"alterId"</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+              <span class="nt">"security"</span><span class="p">:</span> <span class="s2">"none"</span>
+            <span class="p">}</span>
+          <span class="p">]</span>
+        <span class="p">},</span>
+      <span class="p">{</span>
+          <span class="nt">"address"</span><span class="p">:</span> <span class="s2">"domain.com"</span><span class="p">,</span>
+          <span class="nt">"port"</span><span class="p">:</span> <span class="mi">443</span><span class="p">,</span>
+          <span class="nt">"users"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"xxxxxxxxx-xxxxxxxxxxx-xxxxxx"</span><span class="p">,</span>
+              <span class="nt">"alterId"</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+              <span class="nt">"security"</span><span class="p">:</span> <span class="s2">"none"</span>
+            <span class="p">}</span>
+          <span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">"streamSettings"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">"network"</span><span class="p">:</span> <span class="s2">"tcp"</span><span class="p">,</span>
+      <span class="nt">"security"</span><span class="p">:</span> <span class="s2">"tls"</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nt">"outboundDetour"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">"protocol"</span><span class="p">:</span> <span class="s2">"freedom"</span><span class="p">,</span>
+      <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{},</span>
+      <span class="nt">"tag"</span><span class="p">:</span> <span class="s2">"direct"</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nt">"dns"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"servers"</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s2">"101.6.6.6"</span><span class="p">,</span>
+      <span class="s2">"101.132.183.99"</span><span class="p">,</span>
+      <span class="s2">"193.112.15.186"</span><span class="p">,</span>
+      <span class="s2">"8.8.8.8"</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="nt">"routing"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"strategy"</span><span class="p">:</span> <span class="s2">"rules"</span><span class="p">,</span>
+    <span class="nt">"settings"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">"domainStrategy"</span><span class="p">:</span> <span class="s2">"IPIfNonMatch"</span><span class="p">,</span>
+      <span class="nt">"rules"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+         <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"field"</span><span class="p">,</span>
+         <span class="nt">"port"</span><span class="p">:</span> <span class="mi">53</span><span class="p">,</span>
+         <span class="nt">"network"</span><span class="p">:</span> <span class="s2">"udp"</span><span class="p">,</span>
+         <span class="nt">"outboundTag"</span><span class="p">:</span> <span class="s2">"direct"</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"field"</span><span class="p">,</span>
+          <span class="nt">"ip"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"geoip:cn"</span><span class="p">,</span>
+            <span class="s2">"geoip:private"</span><span class="p">,</span>
+            <span class="s2">"172.168.0.0/16"</span>
+          <span class="p">],</span>
+          <span class="nt">"port"</span><span class="p">:</span> <span class="s2">"0-10000"</span><span class="p">,</span>
+          <span class="nt">"network"</span><span class="p">:</span> <span class="s2">"tcp,udp"</span><span class="p">,</span>
+          <span class="nt">"outboundTag"</span><span class="p">:</span> <span class="s2">"direct"</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"field"</span><span class="p">,</span>
+          <span class="nt">"domain"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"geosite:cn"</span>
+          <span class="p">],</span>
+          <span class="nt">"port"</span><span class="p">:</span> <span class="s2">"0-10000"</span><span class="p">,</span>
+          <span class="nt">"network"</span><span class="p">:</span> <span class="s2">"tcp,udp"</span><span class="p">,</span>
+          <span class="nt">"outboundTag"</span><span class="p">:</span> <span class="s2">"direct"</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<h1 id="can-kao_2">参考</h1>
+<p><a href="https://www.v2ray.com/">v2ray官方文档</a></p>
+<p><a href="https://toutyrater.github.io">v2ray白话文教程</a></p>
+<p><a href="https://github.com/Neilpang/acme.sh/wiki">acme.sh&nbsp;wiki</a></p>
+  </div>
+
+
+    <div class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'solarck';
+        var disqus_identifier = "v2ray-quick-config.html";
+        var disqus_title = "快速配置V2ray";
+        var disqus_url = "https://www.solarck.com/v2ray-quick-config.html";
+        (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.</noscript>
+    </div>
+
+        </div>
+
+          <div class="col-md-3">
+  <div class="well">
+
+    <p><abbr title="2018-07-13T10:08:00+08:00"><i class="fa fa-calendar"></i> July 13, 2018</abbr></p>
+
+      <p><address>
+        <i class="fa fa-user"></i> 作者:
+          <a href="https://www.solarck.com/author/kevin-chen.html" rel="author">Kevin Chen</a>
+      </address></p>
+
+    <hr/>
+
+      <p>
+              <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
+                  data-toggle="tooltip" class="label label-info"
+                  title="17 articles in this category">IT笔记</a>
+            <a href="/tag/v2ray.html" data-toggle="tooltip"
+      class="label label-default"
+      title="1 article with this tag">v2ray</a>
+            <a href="/tag/acmesh.html" data-toggle="tooltip"
+      class="label label-default"
+      title="1 article with this tag">acme.sh</a>
+            <a href="/tag/tls.html" data-toggle="tooltip"
+      class="label label-default"
+      title="1 article with this tag">tls</a>
+      </p>
+      <hr/>
+
+
+      <nav>
+        <ul class="pager">
+          <li class="previous ">
+            <a  href="https://www.solarck.com/lede-media-center2.html" title="LEDE/OpenWRT路由器打造家庭媒体影音中心（二）"  rel="prev">
+              <span aria-hidden="true">←</span> 旧文章
+            </a>
+          </li>
+          <li class="next ">
+            <a  href="https://www.solarck.com/systemd-wait-network-online.html" title="解决Haproxy用Systemd启动失败的问题"  rel="next">
+              新文章 <span aria-hidden="true">→</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    
+        <center><h4><b>目录</b></h4></center>
+        <nav class="toc">
+            <div id="toc"><ul><li><a class="toc-href" href="#fu-wu-qi-duan-pei-zhi" title="服务器端配置">服务器端配置</a><ul><li><a class="toc-href" href="#you-hua-wang-luo" title="优化网络">优化网络</a></li><li><a class="toc-href" href="#an-zhuang-v2ray" title="安装V2ray">安装V2ray</a></li><li><a class="toc-href" href="#tlsyu-ming-zheng-shu" title="TLS域名证书">TLS域名证书</a><ul><li><a class="toc-href" href="#an-zhuang-acme" title="安装acme">安装acme</a></li><li><a class="toc-href" href="#qian-fa-zheng-shu" title="签发证书">签发证书</a></li><li><a class="toc-href" href="#an-zhuang-zheng-shu" title="安装证书">安装证书</a></li><li><a class="toc-href" href="#zheng-shu-xu-qi" title="证书续期">证书续期</a></li></ul></li></ul></li><li><a class="toc-href" href="#ben-di-pei-zhi_2" title="本地配置">本地配置</a><ul><li><a class="toc-href" href="#an-zhuang" title="安装">安装</a></li></ul></li><li><a class="toc-href" href="#pei-zhi-wen-jian_1" title="配置文件">配置文件</a><ul><li><a class="toc-href" href="#pei-zhi-shuo-ming" title="配置说明">配置说明</a></li><li><a class="toc-href" href="#tcptlspei-zhi" title="TCP+TLS配置">TCP+TLS配置</a><ul><li><a class="toc-href" href="#pei-zhi-shuo-ming_1" title="配置说明">配置说明</a></li><li><a class="toc-href" href="#fu-wu-duan" title="服务端">服务端</a></li><li><a class="toc-href" href="#ke-hu-duan" title="客户端">客户端</a></li></ul></li></ul></li><li><a class="toc-href" href="#can-kao_2" title="参考">参考</a></li></ul></div>
+        </nav>
+
+  </div>
+            
+          </div>
+
+      </div>
+
+    </div>
+
+    <!-- TODO: make footer sticky -->
+    <footer class="container-fluid">
+      <div class="container">
+        <div class="row">
+
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+                <h5>链接</h5>
+                <ul class="list-unstyled">
+                  <li>  <a href="http://getpelican.com/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
+    Pelican
+  </a></li>
+                  <li>  <a href="http://python.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
+    Python.org
+  </a></li>
+                  <li>  <a href="http://jinja.pocoo.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
+    Jinja2
+  </a></li>
+                </ul>
+            </div>
+
+          <div class="col-md-2">
+            <h5>归档</h5>
+            <ul class="list-unstyled">
+                <li><a href="https://www.solarck.com/categories.html"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="https://www.solarck.com/archives.html"><i class="fa fa-calendar"></i> Dates</a></li>
+                <li><a href="https://www.solarck.com/tags.html"><i class="fa fa-tag"></i> Tags</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-2 text-muted">
+            <h5>Copyright</h5>
+            <p>© Copyright 2013-2018 Kevin Chen.</p>
+          </div>
+        <!--
+          <div class="col-md-2 text-muted">
+            <h5>Disclaimer</h5>
+              <p>All opinions expressed in this site are my own personal opinions and are not endorsed by, nor do they represent the opinions of my previous, current and future employers or any of its affiliates, partners or customers.</p>
+          </div>
+        -->
+          <div class="col-md-2">
+              <h5>Feeds</h5>
+              <ul class="list-unstyled">
+                  <li><small><a href="https://www.solarck.com/feeds/all.atom.xml"><i class="fa fa-rss"></i> All posts (Atom)</a></small></li>
+              </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <h5 class="text-right"><a href="#"><i class="fa fa-arrow-up"></i> Back to top</a></h5>
+
+      <div class="container">
+        <div class="row col-md-12 text-muted text-center">
+          Site generated by <a href="https://getpelican.com"> Pelican</a>.<br/>
+          <a href="https://github.com/kdeldycke/plumage"> Plumage</a> theme by <a href="https://kevin.deldycke.com">Kevin Deldycke</a>.
+        </div>
+      </div>
+
+    </footer>
+
+    <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-1337838-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
+    <script src="https://www.solarck.com/theme/js/jquery.mglass.js"></script>
+    <script src="https://www.solarck.com/theme/js/application.js"></script>
+
+  </body>
+</html>

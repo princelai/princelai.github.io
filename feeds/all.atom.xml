@@ -1,5 +1,542 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Solarck</title><link href="https://www.solarck.com/" rel="alternate"></link><link href="https://www.solarck.com/feeds/all.atom.xml" rel="self"></link><id>https://www.solarck.com/</id><updated>2018-07-10T13:07:00+08:00</updated><entry><title>LEDE/OpenWRT路由器打造家庭媒体影音中心（一）</title><link href="https://www.solarck.com/lede-media-center1.html" rel="alternate"></link><published>2018-07-10T13:07:00+08:00</published><updated>2018-07-10T13:07:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-10:/lede-media-center1.html</id><summary type="html">&lt;h1 id="qian-yan"&gt;前言&lt;/h1&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Solarck</title><link href="https://www.solarck.com/" rel="alternate"></link><link href="https://www.solarck.com/feeds/all.atom.xml" rel="self"></link><id>https://www.solarck.com/</id><updated>2018-07-13T12:35:00+08:00</updated><entry><title>解决Haproxy用Systemd启动失败的问题</title><link href="https://www.solarck.com/systemd-wait-network-online.html" rel="alternate"></link><published>2018-07-13T12:35:00+08:00</published><updated>2018-07-13T12:35:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-13:/systemd-wait-network-online.html</id><summary type="html">&lt;h1 id="wen-ti-miao-shu"&gt;问题描述&lt;/h1&gt;
+&lt;p&gt;配置好Haproxy的配置文件，手动可以无错误开启，但是&lt;code&gt;Systemctl enable haproxy.service&lt;/code&gt;开机启动每次都报错，系统启动后，手动开启还是没有问题。&lt;/p&gt;
+&lt;h1 id="fen-xi-yuan-yin"&gt;分析原因&lt;/h1&gt;
+&lt;h3 id="haproxypei-zhi-wen-ti"&gt;haproxy配置问题&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;/etc/haproxy.cfg&lt;/code&gt;是配置文件，因为手动指定配合文件可以启动，而且测试配置文件也没有报错或警报，所以首先排除是配置的问题。&lt;/p&gt;
+&lt;h3 id="systemdfu-wu-pei-zhi-wen-ti"&gt;systemd服务配置问题&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;haproxy.service&lt;/code&gt;是systemd用来启动服务的配置文件，第一眼看配置后，以为是创建PID没有权限，增加&lt;code&gt;User=root&lt;/code&gt;字段，但是重启后依然报错。原版配置只有&lt;code&gt;After=network.target&lt;/code&gt;，手动添加&lt;code&gt;Wants=network.target&lt;/code&gt;重启后，依然报错。&lt;/p&gt;
+&lt;h3 id="cha-kan-ri-zhi"&gt;查看日志&lt;/h3&gt;
+&lt;p&gt;正要灰心的时候，决定最后一搏，查看systemd启动日志，看看能不能找到点线索。&lt;/p&gt;
+&lt;p&gt;查看最近一次启动中haproxy的日志&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;journalctl -b -0 …&lt;/code&gt;&lt;/p&gt;</summary><content type="html">&lt;h1 id="wen-ti-miao-shu"&gt;问题描述&lt;/h1&gt;
+&lt;p&gt;配置好Haproxy的配置文件，手动可以无错误开启，但是&lt;code&gt;Systemctl enable haproxy.service&lt;/code&gt;开机启动每次都报错，系统启动后，手动开启还是没有问题。&lt;/p&gt;
+&lt;h1 id="fen-xi-yuan-yin"&gt;分析原因&lt;/h1&gt;
+&lt;h3 id="haproxypei-zhi-wen-ti"&gt;haproxy配置问题&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;/etc/haproxy.cfg&lt;/code&gt;是配置文件，因为手动指定配合文件可以启动，而且测试配置文件也没有报错或警报，所以首先排除是配置的问题。&lt;/p&gt;
+&lt;h3 id="systemdfu-wu-pei-zhi-wen-ti"&gt;systemd服务配置问题&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;haproxy.service&lt;/code&gt;是systemd用来启动服务的配置文件，第一眼看配置后，以为是创建PID没有权限，增加&lt;code&gt;User=root&lt;/code&gt;字段，但是重启后依然报错。原版配置只有&lt;code&gt;After=network.target&lt;/code&gt;，手动添加&lt;code&gt;Wants=network.target&lt;/code&gt;重启后，依然报错。&lt;/p&gt;
+&lt;h3 id="cha-kan-ri-zhi"&gt;查看日志&lt;/h3&gt;
+&lt;p&gt;正要灰心的时候，决定最后一搏，查看systemd启动日志，看看能不能找到点线索。&lt;/p&gt;
+&lt;p&gt;查看最近一次启动中haproxy的日志&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;journalctl -b -0 -u haproxy&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:20 kevin-pc systemd&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: haproxy.service: Main process exited, &lt;span class="nv"&gt;code&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;exited, &lt;span class="nv"&gt;status&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;/FAILURE
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:20 kevin-pc systemd&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: haproxy.service: Failed with result &lt;span class="s1"&gt;'exit-code'&lt;/span&gt;.
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:20 kevin-pc systemd&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: Failed to start HAProxy Load Balancer.
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:20 kevin-pc systemd&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: haproxy.service: Service &lt;span class="nv"&gt;RestartSec&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;100ms expired, scheduling restart.
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:20 kevin-pc systemd&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: haproxy.service: Scheduled restart job, restart counter is at &lt;span class="m"&gt;1&lt;/span&gt;.
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:20 kevin-pc systemd&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: Stopped HAProxy Load Balancer.
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:20 kevin-pc systemd&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: Starting HAProxy Load Balancer...
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:20 kevin-pc haproxy&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;554&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: &lt;span class="o"&gt;[&lt;/span&gt;ALERT&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="m"&gt;193&lt;/span&gt;/103220 &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;554&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; : parsing &lt;span class="o"&gt;[&lt;/span&gt;/etc/haproxy/haproxy.cfg:36&lt;span class="o"&gt;]&lt;/span&gt; : &lt;span class="s1"&gt;'server server1'&lt;/span&gt; : could not resolve address &lt;span class="s1"&gt;'xxxx.com'&lt;/span&gt;.
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:20 kevin-pc haproxy&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;554&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: &lt;span class="o"&gt;[&lt;/span&gt;ALERT&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="m"&gt;193&lt;/span&gt;/103220 &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;554&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; : parsing &lt;span class="o"&gt;[&lt;/span&gt;/etc/haproxy/haproxy.cfg:37&lt;span class="o"&gt;]&lt;/span&gt; : &lt;span class="s1"&gt;'server server2'&lt;/span&gt; : could not resolve address &lt;span class="s1"&gt;'xxxx.com'&lt;/span&gt;.
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:20 kevin-pc haproxy&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;554&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: &lt;span class="o"&gt;[&lt;/span&gt;ALERT&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="m"&gt;193&lt;/span&gt;/103220 &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;554&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; : parsing &lt;span class="o"&gt;[&lt;/span&gt;/etc/haproxy/haproxy.cfg:38&lt;span class="o"&gt;]&lt;/span&gt; : &lt;span class="s1"&gt;'server server3'&lt;/span&gt; : could not resolve address &lt;span class="s1"&gt;'xxxx.com'&lt;/span&gt;.
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;原因找到了，原来是我在haproxy配置文件的backend段中，使用了域名而不是IP，导致解析失败。但是明明我已经指定了haproxy的启动在network之后了，为什么还是会这个样子呢？&lt;/p&gt;
+&lt;p&gt;答案只能从network的服务中找&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;journalctl -b -0 -u NetworkManager&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:22 kevin-pc NetworkManager&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;493&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: &amp;lt;info&amp;gt;  &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1531449142&lt;/span&gt;.2279&lt;span class="o"&gt;]&lt;/span&gt; dhcp4 &lt;span class="o"&gt;(&lt;/span&gt;enp0s25&lt;span class="o"&gt;)&lt;/span&gt;: activation: beginning transaction &lt;span class="o"&gt;(&lt;/span&gt;timeout in &lt;span class="m"&gt;45&lt;/span&gt; seconds&lt;span class="o"&gt;)&lt;/span&gt;
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:22 kevin-pc NetworkManager&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;493&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: &amp;lt;info&amp;gt;  &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1531449142&lt;/span&gt;.2566&lt;span class="o"&gt;]&lt;/span&gt; dhcp4 &lt;span class="o"&gt;(&lt;/span&gt;enp0s25&lt;span class="o"&gt;)&lt;/span&gt;:   address &lt;span class="m"&gt;172&lt;/span&gt;.168.201.33
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:22 kevin-pc NetworkManager&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;493&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: &amp;lt;info&amp;gt;  &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1531449142&lt;/span&gt;.2566&lt;span class="o"&gt;]&lt;/span&gt; dhcp4 &lt;span class="o"&gt;(&lt;/span&gt;enp0s25&lt;span class="o"&gt;)&lt;/span&gt;:   plen &lt;span class="m"&gt;24&lt;/span&gt;
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:22 kevin-pc NetworkManager&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;493&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: &amp;lt;info&amp;gt;  &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1531449142&lt;/span&gt;.2566&lt;span class="o"&gt;]&lt;/span&gt; dhcp4 &lt;span class="o"&gt;(&lt;/span&gt;enp0s25&lt;span class="o"&gt;)&lt;/span&gt;:   expires in &lt;span class="m"&gt;86400&lt;/span&gt; seconds
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:22 kevin-pc NetworkManager&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;493&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: &amp;lt;info&amp;gt;  &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1531449142&lt;/span&gt;.2567&lt;span class="o"&gt;]&lt;/span&gt; dhcp4 &lt;span class="o"&gt;(&lt;/span&gt;enp0s25&lt;span class="o"&gt;)&lt;/span&gt;:   nameserver &lt;span class="s1"&gt;'172.168.13.100'&lt;/span&gt;
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:22 kevin-pc NetworkManager&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;493&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: &amp;lt;info&amp;gt;  &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1531449142&lt;/span&gt;.2567&lt;span class="o"&gt;]&lt;/span&gt; dhcp4 &lt;span class="o"&gt;(&lt;/span&gt;enp0s25&lt;span class="o"&gt;)&lt;/span&gt;:   nameserver &lt;span class="s1"&gt;'202.106.0.20'&lt;/span&gt;
+Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:22 kevin-pc NetworkManager&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;493&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: &amp;lt;info&amp;gt;  &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1531449142&lt;/span&gt;.2567&lt;span class="o"&gt;]&lt;/span&gt; dhcp4 &lt;span class="o"&gt;(&lt;/span&gt;enp0s25&lt;span class="o"&gt;)&lt;/span&gt;:   gateway &lt;span class="m"&gt;172&lt;/span&gt;.168.201.1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;对比两段日志的时间，原来虽然haproxy启动在network之后，但是network刚刚启动haproxy就开始启动，而network的启动内容比较多，还有很多网络通信，可能完全启动完需要一点时间。haproxy的启动时间比dhcp启动要早了2秒，这时无法进行DNS解析，所以就会造成启动失败，之前的所有问题也都说的通了。&lt;/p&gt;
+&lt;h1 id="jie-jue-fang-fa_1"&gt;解决方法&lt;/h1&gt;
+&lt;p&gt;知道了问题的原因，那么就要解决它。只要让haproxy在network完全启动后再启动，就应该可以正常启动了。那么如何做呢？&lt;/p&gt;
+&lt;p&gt;首先要替换&lt;code&gt;haproxy.service&lt;/code&gt;中的&lt;code&gt;After&lt;/code&gt;和&lt;code&gt;Wants&lt;/code&gt;字段，用&lt;code&gt;network-online.target&lt;/code&gt;替换&lt;code&gt;network.target&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="na"&gt;After&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;network-online.target&lt;/span&gt;
+&lt;span class="na"&gt;Wants&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;network-online.target&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;然后启动一个自带的网络等待服务&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; NetworkManager-wait-online.service
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;如果你是使用&lt;code&gt;systemd-network&lt;/code&gt;来管理网络服务，那么需要启动另外一个服务&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; systemd-networkd-wait-online.service
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;重启后，一切问题都解决了。&lt;/p&gt;
+&lt;h1 id="can-kao"&gt;参考&lt;/h1&gt;
+&lt;p&gt;&lt;a href="https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/"&gt;Running Services After the Network is&amp;nbsp;up&lt;/a&gt;&lt;/p&gt;</content><category term="haproxy"></category><category term="systemd"></category></entry><entry><title>快速配置V2ray</title><link href="https://www.solarck.com/v2ray-quick-config.html" rel="alternate"></link><published>2018-07-13T10:08:00+08:00</published><updated>2018-07-13T10:08:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-13:/v2ray-quick-config.html</id><summary type="html">&lt;h1 id="fu-wu-qi-duan-pei-zhi"&gt;服务器端配置&lt;/h1&gt;
+&lt;p&gt;服务器系统使用的是Debian 9&amp;nbsp;x86_64，Ubuntu大部分操作都通用。如果是CentOS的话，该文章仅作为参考。&lt;/p&gt;
+&lt;h3 id="you-hua-wang-luo"&gt;优化网络&lt;/h3&gt;
+&lt;p&gt;主要涉及bbr的安装配置，需要VPS是KVM架构，具体可以参照&lt;a href="https://www.solarck.com/shadowsocks-libev.html"&gt;之前的文章&lt;/a&gt;。&lt;/p&gt;
+&lt;h3 id="an-zhuang-v2ray"&gt;安装V2ray&lt;/h3&gt;
+&lt;p&gt;官方提供了安装脚本，需要系统使用systemd管理系统&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget https://install.direct/go.sh
+bash go.sh
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;安装好后，主要文件如下：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;/etc/systemd/system/v2ray.service&lt;/code&gt;：启动服务
+&lt;code&gt;/etc/v2ray/config.json&lt;/code&gt;：配置文件
+&lt;code&gt;/usr/bin/v2ray/v2ray&lt;/code&gt;：主程序&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="tlsyu-ming-zheng-shu"&gt;TLS域名证书&lt;/h3&gt;
+&lt;p&gt;因为最终配置要用到TLS链接，在这步之前，你需要一个域名，免费的也无所谓。&lt;/p&gt;
+&lt;p&gt;工具使用&lt;a href="https://github.com/Neilpang/acme.sh/wiki"&gt;acme.sh …&lt;/a&gt;&lt;/p&gt;</summary><content type="html">&lt;h1 id="fu-wu-qi-duan-pei-zhi"&gt;服务器端配置&lt;/h1&gt;
+&lt;p&gt;服务器系统使用的是Debian 9&amp;nbsp;x86_64，Ubuntu大部分操作都通用。如果是CentOS的话，该文章仅作为参考。&lt;/p&gt;
+&lt;h3 id="you-hua-wang-luo"&gt;优化网络&lt;/h3&gt;
+&lt;p&gt;主要涉及bbr的安装配置，需要VPS是KVM架构，具体可以参照&lt;a href="https://www.solarck.com/shadowsocks-libev.html"&gt;之前的文章&lt;/a&gt;。&lt;/p&gt;
+&lt;h3 id="an-zhuang-v2ray"&gt;安装V2ray&lt;/h3&gt;
+&lt;p&gt;官方提供了安装脚本，需要系统使用systemd管理系统&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget https://install.direct/go.sh
+bash go.sh
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;安装好后，主要文件如下：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;/etc/systemd/system/v2ray.service&lt;/code&gt;：启动服务
+&lt;code&gt;/etc/v2ray/config.json&lt;/code&gt;：配置文件
+&lt;code&gt;/usr/bin/v2ray/v2ray&lt;/code&gt;：主程序&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="tlsyu-ming-zheng-shu"&gt;TLS域名证书&lt;/h3&gt;
+&lt;p&gt;因为最终配置要用到TLS链接，在这步之前，你需要一个域名，免费的也无所谓。&lt;/p&gt;
+&lt;p&gt;工具使用&lt;a href="https://github.com/Neilpang/acme.sh/wiki"&gt;acme.sh&lt;/a&gt;，这是用来签发&lt;a href="https://letsencrypt.org/"&gt;Let&amp;rsquo;s Encrypt&lt;/a&gt;免费证书的脚本，非常好用。&lt;/p&gt;
+&lt;h4 id="an-zhuang-acme"&gt;&lt;em&gt;安装acme&lt;/em&gt;&lt;/h4&gt;
+&lt;p&gt;安装依赖工具&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;apt-get install -y socat netcat&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;安装acme.sh脚本&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;curl  https://get.acme.sh &lt;span class="p"&gt;|&lt;/span&gt; sh
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;默认是安装在&lt;code&gt;～/.acme.sh/&lt;/code&gt;&lt;/p&gt;
+&lt;h4 id="qian-fa-zheng-shu"&gt;&lt;em&gt;签发证书&lt;/em&gt;&lt;/h4&gt;
+&lt;p&gt;我使用的是ecc证书，需要把domain换成自己的域名&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;~/.acme.sh/acme.sh --issue -d domain --standalone -k ec-256
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h4 id="an-zhuang-zheng-shu"&gt;&lt;em&gt;安装证书&lt;/em&gt;&lt;/h4&gt;
+&lt;p&gt;证书会被安装到&lt;code&gt;/etc/v2ray&lt;/code&gt;目录下&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;~/.acme.sh/acme.sh --installcert -d domain --fullchainpath /etc/v2ray/v2ray.crt --keypath /etc/v2ray/v2ray.key --ecc
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h4 id="zheng-shu-xu-qi"&gt;&lt;em&gt;证书续期&lt;/em&gt;&lt;/h4&gt;
+&lt;p&gt;执行完签发命令后，系统已经加上了crond自动签发，如果你想手动签发，可以执行下面的命令。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;~/.acme.sh/acme.sh --renew -d domain --force --ecc&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id="ben-di-pei-zhi_2"&gt;本地配置&lt;/h1&gt;
+&lt;h3 id="an-zhuang"&gt;安装&lt;/h3&gt;
+&lt;p&gt;因为我使用的是Manjaro，一个基于Archlinux的Linux版本，所有安装只要一条命令&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yaourt -Sy v2ray
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;如果你用的是其他系统，可以参考服务器的安装脚本。&lt;/p&gt;
+&lt;h1 id="pei-zhi-wen-jian_1"&gt;配置文件&lt;/h1&gt;
+&lt;h3 id="pei-zhi-shuo-ming"&gt;配置说明&lt;/h3&gt;
+&lt;p&gt;我当前使用的连接方式是TCP+TLS这种，根据官方和网上收集的信息，据说当前最好的配置是WebSocket+&lt;span class="caps"&gt;WEB&lt;/span&gt;+&lt;span class="caps"&gt;TLS&lt;/span&gt;+&lt;span class="caps"&gt;CDN&lt;/span&gt;，我没有选择这种连接方式有以下几点原因：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Websocket效率低于TCP&lt;/li&gt;
+&lt;li&gt;多层转发导致速度可能会变慢&lt;/li&gt;
+&lt;li&gt;配置较麻烦&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;如果你的ISP没有QOS，没有TCP阻断，你连接服务器的流量没有很大的话，是没有必要折腾这种连接方式的。当然我在写这篇文章之前还使用过H2+TLS的连接方式，但是不知是服务器没有加Caddy转发还是H2方式不稳定，断流严重，换成TCP+TLS后，连接稳定，速度尚可，未出现断流。&lt;/p&gt;
+&lt;p&gt;每个人每个地区的ISP情况不尽相同，所以多试才能找到最适合你的配置，更多配置可以参考&lt;a href="https://github.com/KiriKira/vTemplate"&gt;配置模板&lt;/a&gt;。&lt;/p&gt;
+&lt;h3 id="tcptlspei-zhi"&gt;&lt;span class="caps"&gt;TCP&lt;/span&gt;+TLS配置&lt;/h3&gt;
+&lt;h4 id="pei-zhi-shuo-ming_1"&gt;&lt;strong&gt;配置说明&lt;/strong&gt;&lt;/h4&gt;
+&lt;p&gt;我有三台性能较弱的VPS，所以三台分别安装并部署了服务端的配置，而在本地客户端的outbound中连接三个服务器，v2ray可以进行简单的轮寻进行负载均衡。&lt;/p&gt;
+&lt;p&gt;为了简化操作，UUID设置为相同，当然不嫌麻烦的话可以设置为不同，但要和每台服务器的UUID相对应。&lt;/p&gt;
+&lt;p&gt;因为我认为vmess协议加密已经足够强壮，所以每台就没有再设置内容加密，如果不放心，可以使用auto或者AEAD方式加密。另外根据官方的测试，貌似&lt;code&gt;aes-256-gcm&lt;/code&gt; 和&lt;code&gt;chacha20-ietf-poly1305&lt;/code&gt;两种加密方式传输效率比不加密的效率还要高，可能与硬件加密有关系吧。&lt;/p&gt;
+&lt;p&gt;所有配置的详细内容都可以在官方文档或白话文教程里找到，其实配置v2ray并没有那么复杂。&lt;/p&gt;
+&lt;p&gt;最后贴上我的自用配置，生成UUID可以使用&lt;a href="https://www.uuidgenerator.net/"&gt;&lt;span class="caps"&gt;UUID&lt;/span&gt; Generator&lt;/a&gt;这个网站，或者Linux用户可以使用下面命令&lt;code&gt;cat /proc/sys/kernel/random/uuid&lt;/code&gt;生成。&lt;/p&gt;
+&lt;h4 id="fu-wu-duan"&gt;&lt;strong&gt;服务端&lt;/strong&gt;&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nt"&gt;"log"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;"loglevel"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"warning"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;"access"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"/var/log/v2ray/access.log"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;"error"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"/var/log/v2ray/error.log"&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+  &lt;span class="nt"&gt;"inbound"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;443&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;"protocol"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"vmess"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;"settings"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nt"&gt;"clients"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+        &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="nt"&gt;"id"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"xxxxxxxxx-xxxxxxxxxxx-xxxxxx"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"alterId"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;32&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"security"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"none"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"udp"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+      &lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="p"&gt;},&lt;/span&gt;
+    &lt;span class="nt"&gt;"streamSettings"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nt"&gt;"network"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"tcp"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nt"&gt;"security"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"tls"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nt"&gt;"tlsSettings"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nt"&gt;"certificates"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+          &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="nt"&gt;"certificateFile"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"/etc/v2ray/v2ray.crt"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="nt"&gt;"keyFile"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"/etc/v2ray/v2ray.key"&lt;/span&gt;
+          &lt;span class="p"&gt;}&lt;/span&gt;
+        &lt;span class="p"&gt;]&lt;/span&gt;
+      &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+  &lt;span class="nt"&gt;"outbound"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;"protocol"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"freedom"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;"settings"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{}&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+  &lt;span class="nt"&gt;"outboundDetour"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nt"&gt;"protocol"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"blackhole"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nt"&gt;"settings"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{},&lt;/span&gt;
+      &lt;span class="nt"&gt;"tag"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"blocked"&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;],&lt;/span&gt;
+  &lt;span class="nt"&gt;"routing"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;"strategy"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"rules"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;"settings"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nt"&gt;"rules"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+        &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="nt"&gt;"type"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"field"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"ip"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+            &lt;span class="s2"&gt;"geoip:private"&lt;/span&gt;
+          &lt;span class="p"&gt;],&lt;/span&gt;
+          &lt;span class="nt"&gt;"outboundTag"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"blocked"&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+      &lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h4 id="ke-hu-duan"&gt;&lt;strong&gt;客户端&lt;/strong&gt;&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nt"&gt;"log"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;"loglevel"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"warning"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;"access"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"/var/log/v2ray/access.log"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;"error"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"/var/log/v2ray/error.log"&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+  &lt;span class="nt"&gt;"inbound"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1080&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;"protocol"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"socks"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;"domainOverride"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+      &lt;span class="s2"&gt;"tls"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="s2"&gt;"http"&lt;/span&gt;
+    &lt;span class="p"&gt;],&lt;/span&gt;
+    &lt;span class="nt"&gt;"settings"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nt"&gt;"auth"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"noauth"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nt"&gt;"udp"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;true&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+  &lt;span class="nt"&gt;"outbound"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;"protocol"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"vmess"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;"settings"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nt"&gt;"vnext"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+      &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="nt"&gt;"address"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"domain.com"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;443&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"users"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+            &lt;span class="p"&gt;{&lt;/span&gt;
+              &lt;span class="nt"&gt;"id"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"xxxxxxxxx-xxxxxxxxxxx-xxxxxx"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+              &lt;span class="nt"&gt;"alterId"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;32&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+              &lt;span class="nt"&gt;"security"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"none"&lt;/span&gt;
+            &lt;span class="p"&gt;}&lt;/span&gt;
+          &lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="p"&gt;},&lt;/span&gt;
+      &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="nt"&gt;"address"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"domain.com"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;443&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"users"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+            &lt;span class="p"&gt;{&lt;/span&gt;
+              &lt;span class="nt"&gt;"id"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"xxxxxxxxx-xxxxxxxxxxx-xxxxxx"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+              &lt;span class="nt"&gt;"alterId"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;32&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+              &lt;span class="nt"&gt;"security"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"none"&lt;/span&gt;
+            &lt;span class="p"&gt;}&lt;/span&gt;
+          &lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="p"&gt;},&lt;/span&gt;
+      &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="nt"&gt;"address"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"domain.com"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;443&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"users"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+            &lt;span class="p"&gt;{&lt;/span&gt;
+              &lt;span class="nt"&gt;"id"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"xxxxxxxxx-xxxxxxxxxxx-xxxxxx"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+              &lt;span class="nt"&gt;"alterId"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;32&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+              &lt;span class="nt"&gt;"security"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"none"&lt;/span&gt;
+            &lt;span class="p"&gt;}&lt;/span&gt;
+          &lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+      &lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="p"&gt;},&lt;/span&gt;
+    &lt;span class="nt"&gt;"streamSettings"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nt"&gt;"network"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"tcp"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nt"&gt;"security"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"tls"&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+  &lt;span class="nt"&gt;"outboundDetour"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nt"&gt;"protocol"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"freedom"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nt"&gt;"settings"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{},&lt;/span&gt;
+      &lt;span class="nt"&gt;"tag"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"direct"&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;],&lt;/span&gt;
+  &lt;span class="nt"&gt;"dns"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;"servers"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+      &lt;span class="s2"&gt;"101.6.6.6"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="s2"&gt;"101.132.183.99"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="s2"&gt;"193.112.15.186"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="s2"&gt;"8.8.8.8"&lt;/span&gt;
+    &lt;span class="p"&gt;]&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+  &lt;span class="nt"&gt;"routing"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;"strategy"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"rules"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;"settings"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nt"&gt;"domainStrategy"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"IPIfNonMatch"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+      &lt;span class="nt"&gt;"rules"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+        &lt;span class="p"&gt;{&lt;/span&gt;
+         &lt;span class="nt"&gt;"type"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"field"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+         &lt;span class="nt"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;53&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+         &lt;span class="nt"&gt;"network"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"udp"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+         &lt;span class="nt"&gt;"outboundTag"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"direct"&lt;/span&gt;
+        &lt;span class="p"&gt;},&lt;/span&gt;
+        &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="nt"&gt;"type"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"field"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"ip"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+            &lt;span class="s2"&gt;"geoip:cn"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="s2"&gt;"geoip:private"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="s2"&gt;"172.168.0.0/16"&lt;/span&gt;
+          &lt;span class="p"&gt;],&lt;/span&gt;
+          &lt;span class="nt"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"0-10000"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"network"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"tcp,udp"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"outboundTag"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"direct"&lt;/span&gt;
+        &lt;span class="p"&gt;},&lt;/span&gt;
+        &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="nt"&gt;"type"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"field"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"domain"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+            &lt;span class="s2"&gt;"geosite:cn"&lt;/span&gt;
+          &lt;span class="p"&gt;],&lt;/span&gt;
+          &lt;span class="nt"&gt;"port"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"0-10000"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"network"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"tcp,udp"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;"outboundTag"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"direct"&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+      &lt;span class="p"&gt;]&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h1 id="can-kao_2"&gt;参考&lt;/h1&gt;
+&lt;p&gt;&lt;a href="https://www.v2ray.com/"&gt;v2ray官方文档&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://toutyrater.github.io"&gt;v2ray白话文教程&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/Neilpang/acme.sh/wiki"&gt;acme.sh&amp;nbsp;wiki&lt;/a&gt;&lt;/p&gt;</content><category term="v2ray"></category><category term="acme.sh"></category><category term="tls"></category></entry><entry><title>LEDE/OpenWRT路由器打造家庭媒体影音中心（二）</title><link href="https://www.solarck.com/lede-media-center2.html" rel="alternate"></link><published>2018-07-12T16:07:00+08:00</published><updated>2018-07-12T16:07:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-12:/lede-media-center2.html</id><summary type="html">&lt;h1 id="usbqu-dong"&gt;USB驱动&lt;/h1&gt;
+&lt;h3 id="cha-kan-yi-an-zhuang-de-qu-dong"&gt;查看已安装的驱动&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg list-installed | grep usb
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="an-zhuang-qu-dong-he-gong-ju"&gt;安装驱动和工具&lt;/h3&gt;
+&lt;p&gt;如果下列驱动未出现在上一步的结果中，请务必首先安装缺失的驱动&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg install kmod-usb-core kmod-usb-storage
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;kmod-usb-core&lt;/code&gt;:USB核心驱动&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;kmod-usb-storage&lt;/code&gt;:大容量存储设备驱动&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;kmod-usb2&lt;/code&gt;:WRT1900ACS有一个USB2.0/eSATA口，可以不安装&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;kmod-ata-marvell-sata&lt;/code&gt;:Marvell&amp;nbsp;SATA接口驱动，可以不安装&lt;/p&gt;
+&lt;p&gt;网上搜到的教程和官方指南里还让安装一些其他的应用，但这些都是不必要或已被编译至内核中，包括：&lt;code&gt;kmod-usb-ohci&lt;/code&gt;、&lt;code&gt;kmod-usb-uhci&lt;/code&gt;、&lt;code&gt;kmod-usb3&lt;/code&gt;、&lt;code&gt;kmod-usb-storage-uas&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id="an-zhuang-xiang-guan-gong-ju"&gt;安装相关工具&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk 
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;mount-utils&lt;/code&gt;:提供unmount,findmnt&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;usbutils&lt;/code&gt;:提供lsusb&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;block-mount …&lt;/code&gt;&lt;/p&gt;</summary><content type="html">&lt;h1 id="usbqu-dong"&gt;USB驱动&lt;/h1&gt;
+&lt;h3 id="cha-kan-yi-an-zhuang-de-qu-dong"&gt;查看已安装的驱动&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg list-installed | grep usb
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="an-zhuang-qu-dong-he-gong-ju"&gt;安装驱动和工具&lt;/h3&gt;
+&lt;p&gt;如果下列驱动未出现在上一步的结果中，请务必首先安装缺失的驱动&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg install kmod-usb-core kmod-usb-storage
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;kmod-usb-core&lt;/code&gt;:USB核心驱动&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;kmod-usb-storage&lt;/code&gt;:大容量存储设备驱动&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;kmod-usb2&lt;/code&gt;:WRT1900ACS有一个USB2.0/eSATA口，可以不安装&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;kmod-ata-marvell-sata&lt;/code&gt;:Marvell&amp;nbsp;SATA接口驱动，可以不安装&lt;/p&gt;
+&lt;p&gt;网上搜到的教程和官方指南里还让安装一些其他的应用，但这些都是不必要或已被编译至内核中，包括：&lt;code&gt;kmod-usb-ohci&lt;/code&gt;、&lt;code&gt;kmod-usb-uhci&lt;/code&gt;、&lt;code&gt;kmod-usb3&lt;/code&gt;、&lt;code&gt;kmod-usb-storage-uas&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id="an-zhuang-xiang-guan-gong-ju"&gt;安装相关工具&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk 
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;mount-utils&lt;/code&gt;:提供unmount,findmnt&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;usbutils&lt;/code&gt;:提供lsusb&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;block-mount&lt;/code&gt;:提供block，查看挂载点信息&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;e2fsprogs&lt;/code&gt;:格式化工具mkfs&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;kmod-fs-ext4&lt;/code&gt;:格式化为ext4格式&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;kmod-fs-ntfs&lt;/code&gt;:我不用ntfs格式，所以不安装这个，需要可以安装上&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gdisk&lt;/code&gt;:分区工具，支持GPT，硬盘容量超过2T需要用这个工具，当然容量小的也可以用这个&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;fdisk&lt;/code&gt;:分区工具，不支持GPT，常用来查看分区信息&lt;/p&gt;
+&lt;p&gt;以下几个命令查看已连接/挂载的USB设备&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;df -h
+lsusb -t
+ls -l /dev/sd*
+block info &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s2"&gt;"/dev/sd"&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;小提示：硬盘格式化为什么格式最好？&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;在Linux和LEDE平台上，微软的NTFS和FAT32绝对不是一个好的格式，设计的优劣不谈，这两个格式不是Linux平台原生支持的，安装额外的驱动可能会带来发热、读写速度慢、不稳定等多种负面效果。所以，对于机械硬盘来说，EXT4和BTRFS是最好的，对于SSD来说，F2FS格式是最好的。&lt;/p&gt;
+&lt;h1 id="ying-pan-xiang-guan-cao-zuo_1"&gt;硬盘相关操作&lt;/h1&gt;
+&lt;h3 id="ying-pan-fen-qu"&gt;硬盘分区&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gdisk /dev/sda
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;根据软件提示进行操作，主要命令有：&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;n&lt;/code&gt;:新建分区&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;w&lt;/code&gt;:保存分区内容&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;d&lt;/code&gt;:删除分区&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;p&lt;/code&gt;:打印分区列表&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;?&lt;/code&gt;:查看帮助&lt;/p&gt;
+&lt;p&gt;这里我把一块硬盘分为两个区&lt;code&gt;/dev/sda1&lt;/code&gt;，&lt;code&gt;/dev/sda2&lt;/code&gt;，分区1大小700G，分区2大小231G，总计1T。&lt;/p&gt;
+&lt;h3 id="ge-shi-hua-ying-pan"&gt;格式化硬盘&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mkfs.ext4 /dev/sda1
+mkfs.ext4 /dev/sda2
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;如果是SSD硬盘，则可以按照如下方式安装操作&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg install f2fs-tools
+opkg install kmod-fs-f2fs
+mkfs.f2fs /dev/sda1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="zi-dong-gua-zai-fen-qu"&gt;自动挂载分区&lt;/h3&gt;
+&lt;p&gt;这一部分请根据自己&lt;code&gt;fstab&lt;/code&gt;实际内容修改使用&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;block detect &amp;gt; /etc/config/fstab
+uci &lt;span class="nb"&gt;set&lt;/span&gt; fstab.@mount&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;.enabled&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'1'&lt;/span&gt;
+uci &lt;span class="nb"&gt;set&lt;/span&gt; fstab.@mount&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;.enabled&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'1'&lt;/span&gt;
+uci &lt;span class="nb"&gt;set&lt;/span&gt; fstab.@mount&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;.options&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'rw'&lt;/span&gt;
+uci &lt;span class="nb"&gt;set&lt;/span&gt; fstab.@mount&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;.options&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'rw'&lt;/span&gt;
+uci &lt;span class="nb"&gt;set&lt;/span&gt; fstab.@global&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;.check_fs&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'1'&lt;/span&gt;
+uci commit
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;查看当前挂载点设置&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;uci show fstab
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;卸载/挂载服务&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;block umount &amp;amp;&amp;amp; block mount
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="ying-pan-xiu-mian"&gt;硬盘休眠&lt;/h3&gt;
+&lt;h4 id="hdparm"&gt;&lt;em&gt;hdparm&lt;/em&gt;&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg install hdparm luci-app-hd-idle
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;执行下面的命令启动休眠&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;hdparm -S &lt;span class="m"&gt;120&lt;/span&gt; /dev/sda1
+hdparm -S &lt;span class="m"&gt;120&lt;/span&gt; /dev/sda2
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;-S后的参数含义为：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;0:关闭休眠&lt;/li&gt;
+&lt;li&gt;1-240：数字乘以5秒是时间，在设定时间内未使用则休眠&lt;/li&gt;
+&lt;li&gt;241-251：以30分钟为步进，时间为30分钟-5.5小时&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id="hd-idle"&gt;&lt;em&gt;hd-idle&lt;/em&gt;&lt;/h4&gt;
+&lt;p&gt;更简单的方法就是安装Luci管理工具&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg install hd-idle luci-app-hd-idle
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;img alt="hd-idle" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-idle.png"/&gt;&lt;/p&gt;
+&lt;h1 id="samba_2"&gt;Samba&lt;/h1&gt;
+&lt;h3 id="an-zhuang-samba"&gt;安装Samba&lt;/h3&gt;
+&lt;p&gt;查看可安装的版本&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg list &lt;span class="p"&gt;|&lt;/span&gt; grep samba
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;根据结果，安装适当的版本&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg install samba36-server luci-app-samba luci-i18n-samba-zh-cn
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="pei-zhi-fang-huo-qiang"&gt;配置防火墙&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;vim /etc/config/firewall&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="na"&gt;config 'rule'&lt;/span&gt;
+        &lt;span class="na"&gt;option 'src' 'lan'&lt;/span&gt;
+        &lt;span class="na"&gt;option 'proto' 'udp'&lt;/span&gt;
+        &lt;span class="na"&gt;option 'dest_port' '137-138'&lt;/span&gt;
+        &lt;span class="na"&gt;option 'target' 'ACCEPT'&lt;/span&gt;
+
+&lt;span class="na"&gt;config 'rule'&lt;/span&gt;
+        &lt;span class="na"&gt;option 'src' 'lan'&lt;/span&gt;
+        &lt;span class="na"&gt;option 'proto' 'tcp'&lt;/span&gt;
+        &lt;span class="na"&gt;option 'dest_port' '139'&lt;/span&gt;
+        &lt;span class="na"&gt;option 'target' 'ACCEPT'&lt;/span&gt;
+
+&lt;span class="na"&gt;config 'rule'&lt;/span&gt;
+        &lt;span class="na"&gt;option 'src' 'lan'&lt;/span&gt;
+        &lt;span class="na"&gt;option 'proto' 'tcp'&lt;/span&gt;
+        &lt;span class="na"&gt;option 'dest_port' '445'&lt;/span&gt;
+        &lt;span class="na"&gt;option 'target' 'ACCEPT'&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="sambapei-zhi"&gt;Samba配置&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;官方&lt;strong&gt;强烈建议&lt;/strong&gt;使用luci来配置Samba，然后通过修改临时文件来完成配置。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;路由器每次重启，&lt;code&gt;/etc/samba/smb.conf&lt;/code&gt;文件都将从&lt;code&gt;/etc/samba/smb.conf.template&lt;/code&gt;文件重新创建，所以修改配置时请修改后者。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;全局和共享配置可以在LuCi界面编辑也可以直接编辑文件，按照我的配置实现如下几个功能：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;禁止root用户访问，防止权限出现问题&lt;/li&gt;
+&lt;li&gt;允许匿名用户访问&lt;code&gt;/mnt/sda1&lt;/code&gt;，即Media文件夹&lt;/li&gt;
+&lt;li&gt;访问&lt;code&gt;/mnt/sda2&lt;/code&gt;，即Document文件夹必须登录，用户只能访问到自己创建的文件夹和文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="quan-ju-pei-zhi"&gt;&lt;strong&gt;全局配置&lt;/strong&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;vim /etc/samba/smb.conf.template&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;global&lt;span class="o"&gt;]&lt;/span&gt;
+    &lt;span class="c1"&gt;#netbios name = LEDE  #不设置默认是路由器host名&lt;/span&gt;
+    &lt;span class="c1"&gt;#workgroup = LEDE #不设置默认是WORKGROUP&lt;/span&gt;
+    server &lt;span class="nv"&gt;string&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; Samba on LEDE
+    &lt;span class="nv"&gt;syslog&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;5&lt;/span&gt;
+    encrypt &lt;span class="nv"&gt;passwords&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+    socket &lt;span class="nv"&gt;options&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; TCP_NODELAY IPTOS_LOWDELAY
+    unix &lt;span class="nv"&gt;charset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; UTF-8 
+    &lt;span class="nv"&gt;browseable&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; yes
+    &lt;span class="nb"&gt;local&lt;/span&gt; &lt;span class="nv"&gt;master&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; yes
+    preferred &lt;span class="nv"&gt;master&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; yes
+    &lt;span class="nv"&gt;security&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; user
+    null &lt;span class="nv"&gt;passwords&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; yes
+    guest &lt;span class="nv"&gt;account&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; nobody
+    invalid &lt;span class="nv"&gt;users&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; root
+    passdb &lt;span class="nv"&gt;backend&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; smbpasswd
+    smb passwd &lt;span class="nv"&gt;file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; /etc/samba/smbpasswd
+    map to &lt;span class="nv"&gt;guest&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; Bad User
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h4 id="gong-xiang-wen-jian-jia-she-zhi"&gt;&lt;strong&gt;共享文件夹设置&lt;/strong&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;vim /etc/config/samba&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;config samba
+        option charset &lt;span class="s1"&gt;'UTF-8'&lt;/span&gt;
+        option homes &lt;span class="s1"&gt;'0'&lt;/span&gt;
+        option interface &lt;span class="s1"&gt;'loopback lan'&lt;/span&gt;
+        option name &lt;span class="s1"&gt;'Lede'&lt;/span&gt;
+        option description &lt;span class="s1"&gt;'Samba on Lede'&lt;/span&gt;
+        option workgroup &lt;span class="s1"&gt;'Lede'&lt;/span&gt;
+
+config sambashare
+        option name &lt;span class="s1"&gt;'Media'&lt;/span&gt;
+        option path &lt;span class="s1"&gt;'/mnt/sda1'&lt;/span&gt;
+        option read_only &lt;span class="s1"&gt;'no'&lt;/span&gt;
+        option guest_ok &lt;span class="s1"&gt;'yes'&lt;/span&gt;
+        option create_mask &lt;span class="s1"&gt;'0777'&lt;/span&gt;
+        option dir_mask &lt;span class="s1"&gt;'0777'&lt;/span&gt;
+
+config sambashare
+        option path &lt;span class="s1"&gt;'/mnt/sda2'&lt;/span&gt;
+        option read_only &lt;span class="s1"&gt;'no'&lt;/span&gt;
+        option create_mask &lt;span class="s1"&gt;'0700'&lt;/span&gt;
+        option dir_mask &lt;span class="s1"&gt;'0700'&lt;/span&gt;
+        option name &lt;span class="s1"&gt;'Document'&lt;/span&gt;
+        option guest_ok &lt;span class="s1"&gt;'no'&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h4 id="wen-jian-jia-chu-shi-quan-xian-she-zhi"&gt;&lt;strong&gt;文件夹初始权限设置&lt;/strong&gt;&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;/mnt/sda2&lt;/code&gt;其实没必要更改所属用户和组，但是强迫症就是要给统一了。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;chown -R nobody /mnt/sda1
+chgrp -R nogroup /mnt/sda1
+chmod -R &lt;span class="m"&gt;777&lt;/span&gt; /mnt/sda1
+
+chown -R nobody /mnt/sda2
+chgrp -R nogroup /mnt/sda2
+chmod -R &lt;span class="m"&gt;777&lt;/span&gt; /mnt/sda2
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h4 id="tian-jia-yong-hu"&gt;&lt;strong&gt;添加用户&lt;/strong&gt;&lt;/h4&gt;
+&lt;p&gt;LEDE默认不带&lt;code&gt;useradd&lt;/code&gt;命令，需要手动安装&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
+opkg install shadow-useradd
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;添加用户和设置密码要分两步走，首先要添加系统用户，然后再为该用户设置Samba密码。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;useradd newuser
+passwd newuser
+smbpasswd -a newuser
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;最后启动/重启服务&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/etc/init.d/samba restart
+/etc/init.d/samba &lt;span class="nb"&gt;enable&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;至此，Samba设置完成，也达到了我的目的，有可以匿名随意访问的共享文件夹，也有实现了权限控制的私有文件夹。而且是全平台都可以访问，Windows、Linux和手机（需要有支持SMB协议的软件）。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="samba" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-samba.png"/&gt;&lt;/p&gt;
+&lt;h1 id="can-kao-lian-jie_2"&gt;参考链接&lt;/h1&gt;
+&lt;p&gt;&lt;a href="https://openwrt.org/docs/guide-user/storage/usb-installing"&gt;Installing &lt;span class="caps"&gt;USB&lt;/span&gt;&amp;nbsp;Drivers&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://openwrt.org/docs/guide-user/storage/usb-drives"&gt;Using storage devices&lt;/a&gt;
+&lt;a href="https://openwrt.org/docs/guide-user/services/nas/usb-storage-samba-webinterface"&gt;Share &lt;span class="caps"&gt;USB&lt;/span&gt; Hard-drive with Samba using the Luci web-interface&lt;/a&gt;
+&lt;a href="https://openwrt.org/docs/guide-user/services/nas/samba_configuration"&gt;&lt;span class="caps"&gt;SMB&lt;/span&gt; Samba share&amp;nbsp;overview&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://openwrt.org/docs/guide-user/services/nas/cifs.server"&gt;cifs.server&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://openwrt.org/docs/guide-user/services/nas/samba"&gt;Samba&lt;/a&gt;&lt;/p&gt;</content><category term="openwrt"></category><category term="lede"></category><category term="wrt1900acs"></category><category term="samba"></category><category term="nas"></category></entry><entry><title>LEDE/OpenWRT路由器打造家庭媒体影音中心（一）</title><link href="https://www.solarck.com/lede-media-center1.html" rel="alternate"></link><published>2018-07-10T13:07:00+08:00</published><updated>2018-07-10T13:07:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-10:/lede-media-center1.html</id><summary type="html">&lt;h1 id="qian-yan"&gt;前言&lt;/h1&gt;
 &lt;h3 id="ruan-ying-jian"&gt;软/硬件&lt;/h3&gt;
 &lt;p&gt;软件：本文系统都是基于LEDE&amp;nbsp;17.01.4&lt;/p&gt;
 &lt;p&gt;硬件：Linksys &lt;span class="caps"&gt;WRT1900ACS&lt;/span&gt;&amp;nbsp;V2&lt;/p&gt;

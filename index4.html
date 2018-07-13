@@ -113,6 +113,65 @@
 
     <article>
       <header>
+        <h2><a href="https://www.solarck.com/openwrt-samba.html" rel="bookmark" title="Permalink to openwrt开启Samba作为共享中心">openwrt开启Samba作为共享中心</a></h2>
+      </header>
+      <div><p>为Openwrt接入一个大U盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机BT下载提供一个基础。</p>
+<h3 id="an-zhuang">安装</h3>
+<div class="highlight"><pre><span></span>opkg update
+opkg install samba36-server luci-app-samba
+</pre></div>
+<!--more-->
+<h4 id="pei-zhi-wen-jian">配置文件</h4>
+<p>samba的配置文件只有两个，而且默认配置稍作修改就可以使用</p>
+<div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/samba/smb.conf.template
+<span class="o">[</span>global<span class="o">]</span>
+    netbios <span class="nv">name</span> <span class="o">=</span> OpenWrt
+    display <span class="nv">charset</span> <span class="o">=</span> UTF-8
+    <span class="nv">interfaces</span> <span class="o">=</span> <span class="m">127</span>.0.0.1/8 lo <span class="m">192</span>.168.3.1/24 fd73:3a9a:156::1/60 br-lan <span class="c1">#内网IP</span>
+    server <span class="nv">string</span> <span class="o">=</span> OpenWrt …</pre></div></div>
+      <div><a class="btn btn-primary" href="https://www.solarck.com/openwrt-samba.html"><strong>➟ 查看全文</strong></a></div>
+    </article>
+    <hr/>
+    <article>
+      <header>
+        <h2><a href="https://www.solarck.com/openwrt-extroot.html" rel="bookmark" title="Permalink to 用extroot为openwrt扩充存储空间">用extroot为openwrt扩充存储空间</a></h2>
+      </header>
+      <div><p>水星这款MW4350r内存为128M，运行很多程序都不在话下。但是却只提供了8M&nbsp;Flash存储空间，而路由器系统还占了1.9M，剩下的5M空间不足以支持安装很多软件，比如我在安装python的时候就报错提示存储空间不足，这确实很郁闷，但幸好Openwrt还提供了extroot方式来扩展存储，来发挥路由器和Openwrt系统的真正实力。</p>
+<p><strong>pivot-overlay还是pivot-root？</strong></p>
+<blockquote>
+<p>我把两种方式都试过，pivot-overlay方式不能够把安装程序的位置移到USB存储装置上，但是pivot-root方式可以，所以我选择了后者。pivot-root方式使/覆盖掉了/overlay成为rootfs，我认为这种方式更接近原生的Linux系统。  <br/>
+而从官方的文档来看，目前pivot-root已经没有以前的缺点和不足，选择哪个已经是个人需求而不是技术问题了。  <br/>
+网上大部分文章帖子都是2009-2010年间的，所以大部分可能都是pivot-overlay的。如果对这部分不太理解，请仔细阅读官方Wiki：<a href="http://wiki.openwrt.org/doc/howto/extroot/extroot.theory">ExtRoot: How it works</a>,<a href="http://wiki.openwrt.org/doc/techref/flash.layout">The OpenWrt Flash&nbsp;Layout</a></p>
+</blockquote>
+<!--more-->
+<h3 id="an-zhuang-bi-yao-de-bao">安装必要的包</h3>
+<div class="highlight"><pre><span></span>opkg update
+opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs-ext4 block-mount
+</pre></div>
+<p>e2fsprogs包提供了mkfs（mkfs.ext3 …</p></div>
+      <div><a class="btn btn-primary" href="https://www.solarck.com/openwrt-extroot.html"><strong>➟ 查看全文</strong></a></div>
+    </article>
+    <hr/>
+    <article>
+      <header>
+        <h2><a href="https://www.solarck.com/install-openwrt-on-mw4530r.html" rel="bookmark" title="Permalink to 水星（Mercury）MW4530r刷Openwrt">水星（Mercury）MW4530r刷Openwrt</a></h2>
+      </header>
+      <div><p>经过两天的不屑折腾，终于为我的Mw4530r安装上了Openwrt。从最后安装成功往回看，其实整个过程非常简单，但是由于是第一次接触，走了不少弯路，本应该一个小时就完成的工作，却整整花了我两天时间。再次发篇文章庆祝下，也给其他朋友一些参考。</p>
+<h3 id="xia-zai-wen-jian">下载文件</h3>
+<p>水星这款路由器是ar71xx芯片的，因为较新，所以还没有官方的稳定版。在Openwrt的<a href="http://downloads.openwrt.org/snapshots/trunk/ar71xx/">snapshots/trunk</a>目录搜索下载我们需要的刷机文件，一般情况一个型号有两个文件，一个名字里带factory，从其他固件系统刷Openwrt下载这个文件；一个名字带sysupgrade，已经是Openwrt系统的用此文件升级。</p>
+<h3 id="shua-ji">刷机</h3>
+<p>组装好路由器，接通电源，电脑网卡口连接路由器任意Lan口，打开浏览器访问http://192.168.1.1&nbsp;就可以看见水星的原厂界面。利用原厂固件的升级功能，提交下载好的Openwrt刷机文件即可直接刷机，非常的方便。稍等片刻等待路由器自动重启，此时刷机完成。</p>
+<!--more-->
+<h3 id="chu-shi-hua">初始化</h3>
+<p>Openwrt的固件是不带UI界面的，在安装用户界面之前，用户需要先进行简单的初始化工作。  <br/>&nbsp;使用telnet登陆路由器</p>
+<div class="highlight"><pre><span></span>telnet <span class="m">192</span>.168.1.1
+</pre></div>
+<p>Linux系统自带命令，Windows用户需要在控制面板 …</p></div>
+      <div><a class="btn btn-primary" href="https://www.solarck.com/install-openwrt-on-mw4530r.html"><strong>➟ 查看全文</strong></a></div>
+    </article>
+    <hr/>
+    <article>
+      <header>
         <h2><a href="https://www.solarck.com/repair-wnr2200.html" rel="bookmark" title="Permalink to 修复变砖的WNR2200">修复变砖的WNR2200</a></h2>
       </header>
       <div><p>手中有个NetGear&nbsp;WNR2200路由器，当初买这个就是看重可以刷机,但是买回来才发现只能刷DD-wrt，于是就刷了DD安心的用了半年。  </p>

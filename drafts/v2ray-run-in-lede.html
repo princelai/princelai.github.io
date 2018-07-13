@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  用extroot为openwrt扩充存储空间
+    <title>  在LEDE/OpenWRT上运行V2ray
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -105,7 +105,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://www.solarck.com/openwrt-extroot.html" rel="bookmark" title="Permalink to 用extroot为openwrt扩充存储空间">用extroot为openwrt扩充存储空间</a>
+    <a href="https://www.solarck.com/drafts/v2ray-run-in-lede.html" rel="bookmark" title="Permalink to 在LEDE/OpenWRT上运行V2ray">在LEDE/OpenWRT上运行V2ray</a>
   </h1>
         </div>
       </div>
@@ -117,71 +117,127 @@
   
 
   <div>
-    <p>水星这款MW4350r内存为128M，运行很多程序都不在话下。但是却只提供了8M&nbsp;Flash存储空间，而路由器系统还占了1.9M，剩下的5M空间不足以支持安装很多软件，比如我在安装python的时候就报错提示存储空间不足，这确实很郁闷，但幸好Openwrt还提供了extroot方式来扩展存储，来发挥路由器和Openwrt系统的真正实力。</p>
-<p><strong>pivot-overlay还是pivot-root？</strong></p>
-<blockquote>
-<p>我把两种方式都试过，pivot-overlay方式不能够把安装程序的位置移到USB存储装置上，但是pivot-root方式可以，所以我选择了后者。pivot-root方式使/覆盖掉了/overlay成为rootfs，我认为这种方式更接近原生的Linux系统。  <br/>
-而从官方的文档来看，目前pivot-root已经没有以前的缺点和不足，选择哪个已经是个人需求而不是技术问题了。  <br/>
-网上大部分文章帖子都是2009-2010年间的，所以大部分可能都是pivot-overlay的。如果对这部分不太理解，请仔细阅读官方Wiki：<a href="http://wiki.openwrt.org/doc/howto/extroot/extroot.theory">ExtRoot: How it works</a>,<a href="http://wiki.openwrt.org/doc/techref/flash.layout">The OpenWrt Flash&nbsp;Layout</a></p>
-</blockquote>
-<!--more-->
-<h3 id="an-zhuang-bi-yao-de-bao">安装必要的包</h3>
-<div class="highlight"><pre><span></span>opkg update
-opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs-ext4 block-mount
+    <p><code>/etc/init.d/v2ray</code></p>
+<div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#</span>
+<span class="c1"># v2ray        Startup script for v2ray</span>
+<span class="c1">#</span>
+<span class="c1"># chkconfig: - 24 76</span>
+<span class="c1"># processname: v2ray</span>
+<span class="c1"># pidfile: /var/run/v2ray.pid</span>
+<span class="c1"># description: V2Ray proxy services</span>
+<span class="c1">#</span>
+
+<span class="c1">### BEGIN INIT INFO</span>
+<span class="c1"># Provides:          v2ray</span>
+<span class="c1"># Required-Start:    $network $local_fs $remote_fs</span>
+<span class="c1"># Required-Stop:     $remote_fs</span>
+<span class="c1"># Default-Start:     2 3 4 5</span>
+<span class="c1"># Default-Stop:      0 1 6</span>
+<span class="c1"># Short-Description: V2Ray proxy services</span>
+<span class="c1"># Description:       V2Ray proxy services</span>
+<span class="c1">### END INIT INFO</span>
+
+<span class="nv">DESC</span><span class="o">=</span>v2ray
+<span class="nv">NAME</span><span class="o">=</span>v2ray
+<span class="nv">DAEMON</span><span class="o">=</span>/usr/bin/v2ray/v2ray
+<span class="nv">PIDFILE</span><span class="o">=</span>/var/run/<span class="nv">$NAME</span>.pid
+<span class="nv">LOCKFILE</span><span class="o">=</span>/var/lock/subsys/<span class="nv">$NAME</span>
+<span class="nv">SCRIPTNAME</span><span class="o">=</span>/etc/init.d/<span class="nv">$NAME</span>
+<span class="nv">RETVAL</span><span class="o">=</span><span class="m">0</span>
+
+<span class="nv">DAEMON_OPTS</span><span class="o">=</span><span class="s2">"-config /etc/v2ray/config.json"</span>
+
+<span class="c1"># Exit if the package is not installed</span>
+<span class="o">[</span> -x <span class="nv">$DAEMON</span> <span class="o">]</span> <span class="o">||</span> <span class="nb">exit</span> <span class="m">0</span>
+
+<span class="c1"># Read configuration variable file if it is present</span>
+<span class="o">[</span> -r /etc/default/<span class="nv">$NAME</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> . /etc/default/<span class="nv">$NAME</span>
+
+<span class="c1"># Source function library.</span>
+. /etc/rc.d/init.d/functions
+
+start<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">pids</span><span class="o">=</span><span class="k">$(</span>pgrep -f <span class="nv">$DAEMON</span><span class="k">)</span>
+  <span class="k">if</span> <span class="o">[</span> -n <span class="s2">"</span><span class="nv">$pids</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$NAME</span><span class="s2"> (pid </span><span class="nv">$pids</span><span class="s2">) is already running"</span>
+    <span class="nv">RETVAL</span><span class="o">=</span><span class="m">0</span>
+    <span class="k">return</span> <span class="m">0</span>
+  <span class="k">fi</span>
+
+  <span class="nb">echo</span> -n $<span class="s2">"Starting </span><span class="nv">$NAME</span><span class="s2">: "</span>
+
+  mkdir -p /var/log/v2ray
+  <span class="nv">$DAEMON</span> <span class="nv">$DAEMON_OPTS</span> <span class="m">1</span>&gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
+  <span class="nb">echo</span> <span class="nv">$!</span> &gt; <span class="nv">$PIDFILE</span>
+
+  sleep <span class="m">2</span>
+  pgrep -f <span class="nv">$DAEMON</span> &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+  <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
+  <span class="k">if</span> <span class="o">[</span> <span class="nv">$RETVAL</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    success<span class="p">;</span> <span class="nb">echo</span>
+    touch <span class="nv">$LOCKFILE</span>
+  <span class="k">else</span>
+    failure<span class="p">;</span> <span class="nb">echo</span>
+  <span class="k">fi</span>
+  <span class="k">return</span> <span class="nv">$RETVAL</span>
+<span class="o">}</span>
+
+stop<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">pids</span><span class="o">=</span><span class="k">$(</span>pgrep -f <span class="nv">$DAEMON</span><span class="k">)</span>
+  <span class="k">if</span> <span class="o">[</span> -z <span class="s2">"</span><span class="nv">$pids</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$NAME</span><span class="s2"> is not running"</span>
+    <span class="nv">RETVAL</span><span class="o">=</span><span class="m">0</span>
+    <span class="k">return</span> <span class="m">0</span>
+  <span class="k">fi</span>
+
+  <span class="nb">echo</span> -n $<span class="s2">"Stopping </span><span class="nv">$NAME</span><span class="s2">: "</span>
+  killproc -p <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">NAME</span><span class="si">}</span>
+  <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
+  <span class="nb">echo</span>
+  <span class="o">[</span> <span class="nv">$RETVAL</span> <span class="o">=</span> <span class="m">0</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -f <span class="si">${</span><span class="nv">LOCKFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span>
+<span class="o">}</span>
+
+reload<span class="o">()</span> <span class="o">{</span>
+  <span class="nb">echo</span> -n $<span class="s2">"Reloading </span><span class="nv">$NAME</span><span class="s2">: "</span>
+  killproc -p <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">NAME</span><span class="si">}</span> -HUP
+  <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
+  <span class="nb">echo</span>
+<span class="o">}</span>
+
+rh_status<span class="o">()</span> <span class="o">{</span>
+  status -p <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">DAEMON</span><span class="si">}</span>
+<span class="o">}</span>
+
+<span class="c1"># See how we were called.</span>
+<span class="k">case</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> in
+  start<span class="o">)</span>
+    rh_status &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> <span class="m">0</span>
+    start
+    <span class="p">;;</span>
+  stop<span class="o">)</span>
+    stop
+    <span class="p">;;</span>
+  status<span class="o">)</span>
+    rh_status
+    <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
+    <span class="p">;;</span>
+  restart<span class="o">)</span>
+    stop
+    start
+    <span class="p">;;</span>
+  reload<span class="o">)</span>
+    reload
+  <span class="p">;;</span>
+  *<span class="o">)</span>
+    <span class="nb">echo</span> <span class="s2">"Usage: </span><span class="nv">$SCRIPTNAME</span><span class="s2"> {start|stop|status|reload|restart}"</span> &gt;<span class="p">&amp;</span><span class="m">2</span>
+    <span class="nv">RETVAL</span><span class="o">=</span><span class="m">2</span>
+  <span class="p">;;</span>
+<span class="k">esac</span>
+<span class="nb">exit</span> <span class="nv">$RETVAL</span>
 </pre></div>
-<p>e2fsprogs包提供了mkfs（mkfs.ext3,mkfs.ext4）、fsck等工具。  <br/>
-kmod-usb2只提供了USb2.0的驱动，如果你的是USB1.0（1.1）的，还需要单独安装驱动。  <br/>
-kmod-fs-ext4是用来挂载ext4文件系统的，如果你想使用ext3文件格式就安装相应的包。  <br/>&nbsp;usbutils不是必装，仅提供了lsusb命令。</p>
-<h3 id="ge-shi-hua-upan">格式化U盘</h3>
-<p>插好U盘后，先查看下是否被系统识别出来</p>
-<div class="highlight"><pre><span></span>root@openwrt: ~# lsusb
-Bus <span class="m">001</span> Device <span class="m">002</span>: ID <span class="m">0781</span>:5571 SanDisk Corp. Cruzer Fit
-Bus <span class="m">001</span> Device <span class="m">001</span>: ID 1d6b:0002 Linux Foundation <span class="m">2</span>.0 root hub
-</pre></div>
-<div class="highlight"><pre><span></span>root@openwrt: ~# ls /dev/sd*
-/dev/sda    /dev/sda1
-</pre></div>
-<p>已经正确识别出来了，格式化系统为ext4</p>
-<div class="highlight"><pre><span></span>mkfs.ext4 /dev/sda1
-</pre></div>
-<p>挂载到当前系统</p>
-<div class="highlight"><pre><span></span>mount /dev/sda1 /mnt
-</pre></div>
-<p>创建一个128M的swap文件</p>
-<div class="highlight"><pre><span></span>dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>/mnt/swap <span class="nv">bs</span><span class="o">=</span><span class="m">2048</span> <span class="nv">count</span><span class="o">=</span><span class="m">65536</span>
-mkswap /mnt/swap
-swapon /mnt/swap
-</pre></div>
-<h3 id="extroot">extroot</h3>
-<p>把/目录下的文件迁移到U盘,pivot-root方式，适用于Barrier&nbsp;Breaker（trunk）版本</p>
-<div class="highlight"><pre><span></span>mkdir -p /tmp/cproot
-mount --bind / /tmp/cproot
-tar -C /tmp/cproot -cvf - . <span class="p">|</span> tar -C /mnt/ -xf -
-umount /tmp/cproot
-</pre></div>
-<h3 id="bian-ji-fstab">编辑fstab</h3>
-<p>我的系统默认没有/etc/config/fstab文件，可以用命令生成一个</p>
-<div class="highlight"><pre><span></span>block detect &gt; /etc/config/fstab
-</pre></div>
-<p>编辑这个文件，添加下面这段配置</p>
-<div class="highlight"><pre><span></span>config mount
-        option target        /
-        option device        /dev/sda1
-        option fstype        ext4
-        option options       rw,sync
-        option enabled       <span class="m">1</span>
-        option enabled_fsck  <span class="m">0</span>
-</pre></div>
-<p>重启后，查看下空间，如果类似我这样就是成功了</p>
-<div class="highlight"><pre><span></span>root@openwrt: ~# df -h
-Filesystem                Size      Used Available Use% Mounted on
-rootfs                    <span class="m">7</span>.2G    <span class="m">169</span>.9M      <span class="m">6</span>.7G   <span class="m">2</span>% /
-/dev/root                 <span class="m">1</span>.8M      <span class="m">1</span>.8M         <span class="m">0</span> <span class="m">100</span>% /rom
-tmpfs                    <span class="m">61</span>.7M      <span class="m">1</span>.0M     <span class="m">60</span>.7M   <span class="m">2</span>% /tmp
-/dev/sda1                 <span class="m">7</span>.2G    <span class="m">169</span>.9M      <span class="m">6</span>.7G   <span class="m">2</span>% /
-tmpfs                   <span class="m">512</span>.0K         <span class="m">0</span>    <span class="m">512</span>.0K   <span class="m">0</span>% /dev
-</pre></div>
-<p>大功告成，现在系统空间足够大了，任你怎么安装怎么下载。</p>
+<h1 id="can-kao">参考</h1>
+<p><a href="https://github.com/v2ray/v2ray-core/issues/101">init.d</a></p>
   </div>
 
     <hr />
@@ -191,6 +247,7 @@ tmpfs                   <span class="m">512</span>.0K         <span class="m">0<
         <li><a href="https://www.solarck.com/lede-media-center2.html"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（二）</a></li>
         <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（一）</a></li>
         <li><a href="https://www.solarck.com/openwrt-samba.html">openwrt开启Samba作为共享中心</a></li>
+        <li><a href="https://www.solarck.com/openwrt-extroot.html">用extroot为openwrt扩充存储空间</a></li>
         <li><a href="https://www.solarck.com/install-openwrt-on-mw4530r.html">水星（Mercury）MW4530r刷Openwrt</a></li>
       </ul>
 
@@ -198,9 +255,9 @@ tmpfs                   <span class="m">512</span>.0K         <span class="m">0<
       <div id="disqus_thread"></div>
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
-        var disqus_identifier = "openwrt-extroot.html";
-        var disqus_title = "用extroot为openwrt扩充存储空间";
-        var disqus_url = "https://www.solarck.com/openwrt-extroot.html";
+        var disqus_identifier = "drafts/v2ray-run-in-lede.html";
+        var disqus_title = "在LEDE/OpenWRT上运行V2ray";
+        var disqus_url = "https://www.solarck.com/drafts/v2ray-run-in-lede.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
           dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
@@ -215,7 +272,7 @@ tmpfs                   <span class="m">512</span>.0K         <span class="m">0<
           <div class="col-md-3">
   <div class="well">
 
-    <p><abbr title="2014-01-03T01:48:00+08:00"><i class="fa fa-calendar"></i> January 03, 2014</abbr></p>
+    <p><abbr title="2018-07-12T11:16:00+08:00"><i class="fa fa-calendar"></i> July 12, 2018</abbr></p>
 
       <p><address>
         <i class="fa fa-user"></i> 作者:
@@ -231,28 +288,20 @@ tmpfs                   <span class="m">512</span>.0K         <span class="m">0<
             <a href="/tag/openwrt.html" data-toggle="tooltip"
       class="label label-default"
       title="5 articles with this tag">openwrt</a>
+            <a href="/tag/lede.html" data-toggle="tooltip"
+      class="label label-default"
+      title="2 articles with this tag">lede</a>
+            <a href="/tag/v2ray.html" data-toggle="tooltip"
+      class="label label-default"
+      title="1 article with this tag">v2ray</a>
       </p>
       <hr/>
 
 
-      <nav>
-        <ul class="pager">
-          <li class="previous ">
-            <a  href="https://www.solarck.com/install-openwrt-on-mw4530r.html" title="水星（Mercury）MW4530r刷Openwrt"  rel="prev">
-              <span aria-hidden="true">←</span> 旧文章
-            </a>
-          </li>
-          <li class="next ">
-            <a  href="https://www.solarck.com/openwrt-samba.html" title="openwrt开启Samba作为共享中心"  rel="next">
-              新文章 <span aria-hidden="true">→</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#an-zhuang-bi-yao-de-bao" title="安装必要的包">安装必要的包</a></li><li><a class="toc-href" href="#ge-shi-hua-upan" title="格式化U盘">格式化U盘</a></li><li><a class="toc-href" href="#extroot" title="extroot">extroot</a></li><li><a class="toc-href" href="#bian-ji-fstab" title="编辑fstab">编辑fstab</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#can-kao" title="参考">参考</a></li></ul></div>
         </nav>
 
   </div>
