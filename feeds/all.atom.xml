@@ -68,9 +68,9 @@ bash go.sh
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;安装好后，主要文件如下：&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;code&gt;/etc/systemd/system/v2ray.service&lt;/code&gt;：启动服务
-&lt;code&gt;/etc/v2ray/config.json&lt;/code&gt;：配置文件
-&lt;code&gt;/usr/bin/v2ray/v2ray&lt;/code&gt;：主程序&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/etc/systemd/system/v2ray.service&lt;/code&gt;：启动服务&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/etc/v2ray/config.json&lt;/code&gt;：配置文件&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/usr/bin/v2ray/v2ray&lt;/code&gt;：主程序&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id="tlsyu-ming-zheng-shu"&gt;TLS域名证书&lt;/h3&gt;
 &lt;p&gt;因为最终配置要用到TLS链接，在这步之前，你需要一个域名，免费的也无所谓。&lt;/p&gt;
@@ -85,9 +85,9 @@ bash go.sh
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;安装好后，主要文件如下：&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;code&gt;/etc/systemd/system/v2ray.service&lt;/code&gt;：启动服务
-&lt;code&gt;/etc/v2ray/config.json&lt;/code&gt;：配置文件
-&lt;code&gt;/usr/bin/v2ray/v2ray&lt;/code&gt;：主程序&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/etc/systemd/system/v2ray.service&lt;/code&gt;：启动服务&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/etc/v2ray/config.json&lt;/code&gt;：配置文件&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/usr/bin/v2ray/v2ray&lt;/code&gt;：主程序&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id="tlsyu-ming-zheng-shu"&gt;TLS域名证书&lt;/h3&gt;
 &lt;p&gt;因为最终配置要用到TLS链接，在这步之前，你需要一个域名，免费的也无所谓。&lt;/p&gt;
@@ -109,7 +109,8 @@ bash go.sh
 &lt;/pre&gt;&lt;/div&gt;
 &lt;h4 id="zheng-shu-xu-qi"&gt;&lt;em&gt;证书续期&lt;/em&gt;&lt;/h4&gt;
 &lt;p&gt;执行完签发命令后，系统已经加上了crond自动签发，如果你想手动签发，可以执行下面的命令。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;~/.acme.sh/acme.sh --renew -d domain --force --ecc&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;~/.acme.sh/acme.sh --renew -d domain --force --ecc
+&lt;/pre&gt;&lt;/div&gt;
 &lt;h1 id="ben-di-pei-zhi_2"&gt;本地配置&lt;/h1&gt;
 &lt;h3 id="an-zhuang"&gt;安装&lt;/h3&gt;
 &lt;p&gt;因为我使用的是Manjaro，一个基于Archlinux的Linux版本，所有安装只要一条命令&lt;/p&gt;

@@ -128,9 +128,9 @@ bash go.sh
 </pre></div>
 <p>安装好后，主要文件如下：</p>
 <blockquote>
-<p><code>/etc/systemd/system/v2ray.service</code>：启动服务
-<code>/etc/v2ray/config.json</code>：配置文件
-<code>/usr/bin/v2ray/v2ray</code>：主程序</p>
+<p><code>/etc/systemd/system/v2ray.service</code>：启动服务</p>
+<p><code>/etc/v2ray/config.json</code>：配置文件</p>
+<p><code>/usr/bin/v2ray/v2ray</code>：主程序</p>
 </blockquote>
 <h3 id="tlsyu-ming-zheng-shu">TLS域名证书</h3>
 <p>因为最终配置要用到TLS链接，在这步之前，你需要一个域名，免费的也无所谓。</p>
@@ -152,7 +152,8 @@ bash go.sh
 </pre></div>
 <h4 id="zheng-shu-xu-qi"><em>证书续期</em></h4>
 <p>执行完签发命令后，系统已经加上了crond自动签发，如果你想手动签发，可以执行下面的命令。</p>
-<p><code>~/.acme.sh/acme.sh --renew -d domain --force --ecc</code></p>
+<div class="highlight"><pre><span></span>~/.acme.sh/acme.sh --renew -d domain --force --ecc
+</pre></div>
 <h1 id="ben-di-pei-zhi_2">本地配置</h1>
 <h3 id="an-zhuang">安装</h3>
 <p>因为我使用的是Manjaro，一个基于Archlinux的Linux版本，所有安装只要一条命令</p>
