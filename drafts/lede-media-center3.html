@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>  LEDE/OpenWRT 路由器打造家庭媒体影音中心（三）
+ | Solarck</title>
+
+    <meta name="author" content="Kevin Chen"/>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css"/>
+    <link rel="stylesheet" href="https://www.solarck.com/theme/css/jquery.mglass.css"/>
+    <link rel="stylesheet" href="https://www.solarck.com/theme/css/pygment-solarized-dark.css"/>
+    <link rel="stylesheet" href="https://www.solarck.com/theme/css/style.css"/>
+
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Istok+Web' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
+      <link href='https://fonts.googleapis.com/css?family=Expletus+Sans' rel='stylesheet' type='text/css'>
+
+
+    <link rel="icon" href="https://www.solarck.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://www.solarck.com/favicon.ico" type="image/x-icon">
+
+    <!-- Feeds -->
+      <link href="https://www.solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Solarck - All posts - Atom Feed"/>
+
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="page-header">
+          <a href="https://www.solarck.com" class="avatar-container pull-left">
+            <div class="avatar ">
+              <div class="side"><img src="https://www.solarck.com/static/avatar.jpg" class="img-responsive"/></div>
+            </div>
+          </a>
+        <h1><a href="https://www.solarck.com">Solarck</a> <small>金融民工与程序猿的结合体</small></h1>
+      </div>
+
+      <nav class="navbar navbar-default">
+
+        <!-- Hamburger menu for mobile -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#plumage-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://www.solarck.com" title="金融民工与程序猿的结合体">Solarck</a>
+        </div>
+
+        <!-- Menus and search forms -->
+        <div class="collapse navbar-collapse" id="plumage-navbar-collapse-1">
+
+          <ul class="nav navbar-nav">
+<li  class="active" >
+                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记 <span class="sr-only">(current)</span></a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/pages/aboutme.html">关于我</a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/pages/resume.html">简历</a>
+                </li>
+
+          </ul>
+
+
+            <form class="navbar-form navbar-right" role="search" action="https://www.solarck.com/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fa
+                        fa-search fa-fw"></i></button>
+                  </span>
+                </div>
+              </div>
+            </form>
+
+        </div>
+
+      </nav>
+
+    </div>
+
+
+    <div class="container main">
+
+
+      <div class="row">
+        <div class=" col-md-9  ">
+  <h1>
+    <a href="https://www.solarck.com/drafts/lede-media-center3.html" rel="bookmark" title="Permalink to LEDE/OpenWRT 路由器打造家庭媒体影音中心（三）"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（三）</a>
+  </h1>
+        </div>
+      </div>
+
+      <div class="row">
+
+
+        <div class=" col-md-9 " id="content" role="main">
+  
+
+  <div>
+    <h1 id="ddns"><span class="caps">DDNS</span></h1>
+<p>几个比较著名的 <span class="caps">DDNS</span>&nbsp;服务商</p>
+<blockquote>
+<p><a href="https://www.dnsdynamic.org">https://www.dnsdynamic.org</a> &gt; <a href="http://www.pubyun.com/">http://www.pubyun.com/</a> &gt; <a href="https://www.changeip.com/">https://www.changeip.com/</a> &gt; <a href="https://www.noip.com/">https://www.noip.com/</a></p>
+</blockquote>
+<p>安装工具和脚本</p>
+<div class="highlight"><pre><span></span>opkg update
+opkg install wget curl bind-host knot-host drill ddns-scripts luci-app-ddns luci-i18n-ddns-zh-cn ddns-scripts_cloudflare.com-v4 ddns-scripts_no-ip_com
+</pre></div>
+<p>uhttpd&nbsp;设置</p>
+<p>修改 http&nbsp;监听端口</p>
+<p>即使是公网 <span class="caps">IP</span>，国内 <span class="caps">ISP</span> 基本也都封了 80 端口，如果能破解光纤猫，那确实有办法打开 80 端口，但是惹不起躲得起，把 http&nbsp;监听端口改一下就可以绕过这个限制。</p>
+<p>uhttpd&nbsp;在保存应用后，不会自动重启，需要手动执行</p>
+<div class="highlight"><pre><span></span>/etc/init.d/uhttpd restart
+</pre></div>
+<p>防火墙设置</p>
+<p>流量规则</p>
+<p>firewall-&gt;Traffic&nbsp;Rules</p>
+<p>开启 666&nbsp;端口</p>
+<p>端口转发</p>
+<p>firewall-&gt;Port&nbsp;Forwards</p>
+<p>把所有 666&nbsp;端口的请求转发到</p>
+<h1 id="dlna"><span class="caps">DLNA</span></h1>
+<div class="highlight"><pre><span></span>opkg install minidlna luci-app-minidlna luci-i18n-minidlna-zh-cn
+</pre></div>
+<h1 id="adblock">Adblock</h1>
+<div class="highlight"><pre><span></span>opkg update
+opkg install adblock luci-app-adblock luci-i18n-adblock-zh-cn
+</pre></div>
+<h1 id="python3">Python3</h1>
+<div class="highlight"><pre><span></span>opkg update
+opkg install python3 python3-pip
+</pre></div>
+<blockquote>
+<p>terminfo. python3-base. libffi. libbz2. python3-light. python3-pydoc. liblzma. python3-email. python3-decimal. python3-xml. libxml2. libncurses. python3-ncurses. python3-distutils. python3-codecs. python3-multiprocessing. python3-unittest. python3-ctypes. libgdbm. python3-gdbm. libsqlite3. python3-sqlite3. python3-logging. python3-openssl. libdb47. python3-dbm. python3-asyncio. python3-lzma.&nbsp;python3.</p>
+</blockquote>
+<p>大约会占&nbsp;30M</p>
+<h1 id="can-kao-lian-jie">参考链接</h1>
+<p><a href="https://openwrt.org/docs/guide-user/services/ddns/client"><span class="caps">DDNS</span>&nbsp;Client</a></p>
+<p><a href="https://openwrt.org/docs/guide-user/services/media_server/dlna"><span class="caps">DLNA</span> Media&nbsp;Server</a></p>
+  </div>
+
+    <hr />
+    <h3>相关文章</h3>
+    <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
+    <ul>
+        <li><a href="https://www.solarck.com/lede-media-center2.html"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（二）</a></li>
+        <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（一）</a></li>
+        <li><a href="https://www.solarck.com/upgrade-lede-to-1806.html">升级 Openwrt/<span class="caps">LEDE</span> 大版本至&nbsp;18.06</a></li>
+        <li><a href="https://www.solarck.com/openwrt-samba.html">openwrt 开启 Samba&nbsp;作为共享中心</a></li>
+        <li><a href="https://www.solarck.com/openwrt-extroot.html">用 extroot 为 openwrt&nbsp;扩充存储空间</a></li>
+      </ul>
+
+    <div class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'solarck';
+        var disqus_identifier = "drafts/lede-media-center3.html";
+        var disqus_title = "LEDE/OpenWRT 路由器打造家庭媒体影音中心（三）";
+        var disqus_url = "https://www.solarck.com/drafts/lede-media-center3.html";
+        (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.</noscript>
+    </div>
+
+        </div>
+
+          <div class="col-md-3">
+  <div class="well">
+
+    <p><abbr title="2018-06-15T13:07:00+08:00"><i class="fa fa-calendar"></i> June 15, 2018</abbr></p>
+
+      <p><address>
+        <i class="fa fa-user"></i> 作者:
+          <a href="https://www.solarck.com/author/kevin-chen.html" rel="author">Kevin Chen</a>
+      </address></p>
+
+    <hr/>
+
+      <p>
+              <a href="https://www.solarck.com/category/it-bi-ji.html" rel="tag"
+                  data-toggle="tooltip" class="label label-info"
+                  title="17 articles in this category">IT 笔记</a>
+            <a href="/tag/openwrt.html" data-toggle="tooltip"
+      class="label label-default"
+      title="6 articles with this tag">openwrt</a>
+            <a href="/tag/lede.html" data-toggle="tooltip"
+      class="label label-default"
+      title="3 articles with this tag">lede</a>
+            <a href="/tag/wrt1900acs.html" data-toggle="tooltip"
+      class="label label-default"
+      title="2 articles with this tag">wrt1900acs</a>
+      </p>
+      <hr/>
+
+
+    
+        <center><h4><b>目录</b></h4></center>
+        <nav class="toc">
+            <div id="toc"><ul><li><a class="toc-href" href="#ddns" title="DDNS">DDNS</a></li><li><a class="toc-href" href="#dlna" title="DLNA">DLNA</a></li><li><a class="toc-href" href="#adblock" title="Adblock">Adblock</a></li><li><a class="toc-href" href="#python3" title="Python3">Python3</a></li><li><a class="toc-href" href="#can-kao-lian-jie" title="参考链接">参考链接</a></li></ul></div>
+        </nav>
+
+  </div>
+            
+          </div>
+
+      </div>
+
+    </div>
+
+    <!-- TODO: make footer sticky -->
+    <footer class="container-fluid">
+      <div class="container">
+        <div class="row">
+
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+                <h5>链接</h5>
+                <ul class="list-unstyled">
+                  <li>  <a href="http://getpelican.com/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
+    Pelican
+  </a></li>
+                  <li>  <a href="http://python.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
+    Python.org
+  </a></li>
+                  <li>  <a href="http://jinja.pocoo.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
+    Jinja2
+  </a></li>
+                </ul>
+            </div>
+
+          <div class="col-md-2">
+            <h5>归档</h5>
+            <ul class="list-unstyled">
+                <li><a href="https://www.solarck.com/categories.html"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="https://www.solarck.com/archives.html"><i class="fa fa-calendar"></i> Dates</a></li>
+                <li><a href="https://www.solarck.com/tags.html"><i class="fa fa-tag"></i> Tags</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-2 text-muted">
+            <h5>Copyright</h5>
+            <p>© Copyright 2013-2018 Kevin Chen.</p>
+          </div>
+        <!--
+          <div class="col-md-2 text-muted">
+            <h5>Disclaimer</h5>
+              <p>All opinions expressed in this site are my own personal opinions and are not endorsed by, nor do they represent the opinions of my previous, current and future employers or any of its affiliates, partners or customers.</p>
+          </div>
+        -->
+          <div class="col-md-2">
+              <h5>Feeds</h5>
+              <ul class="list-unstyled">
+                  <li><small><a href="https://www.solarck.com/feeds/all.atom.xml"><i class="fa fa-rss"></i> All posts (Atom)</a></small></li>
+              </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <h5 class="text-right"><a href="#"><i class="fa fa-arrow-up"></i> Back to top</a></h5>
+
+      <div class="container">
+        <div class="row col-md-12 text-muted text-center">
+          Site generated by <a href="https://getpelican.com"> Pelican</a>.<br/>
+          <a href="https://github.com/kdeldycke/plumage"> Plumage</a> theme by <a href="https://kevin.deldycke.com">Kevin Deldycke</a>.
+        </div>
+      </div>
+
+    </footer>
+
+    <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-1337838-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
+    <script src="https://www.solarck.com/theme/js/jquery.mglass.js"></script>
+    <script src="https://www.solarck.com/theme/js/application.js"></script>
+
+  </body>
+</html>
