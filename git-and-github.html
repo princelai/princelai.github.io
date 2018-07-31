@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  git和github主要使用方法
+    <title>  git 和 github 主要使用方法
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -65,7 +65,10 @@
 
           <ul class="nav navbar-nav">
 <li  class="active" >
-                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记 <span class="sr-only">(current)</span></a>
+                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记 <span class="sr-only">(current)</span></a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
                 </li>
 <li >
                   <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
@@ -105,7 +108,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://www.solarck.com/git-and-github.html" rel="bookmark" title="Permalink to git和github主要使用方法">git和github主要使用方法</a>
+    <a href="https://www.solarck.com/git-and-github.html" rel="bookmark" title="Permalink to git 和 github 主要使用方法">git 和 github&nbsp;主要使用方法</a>
   </h1>
         </div>
       </div>
@@ -117,17 +120,17 @@
   
 
   <div>
-    <h3 id="sshhe-mi-yao">ssh和密钥</h3>
+    <h3 id="ssh-he-mi-yao">ssh&nbsp;和密钥</h3>
 <p><code>ssh-keygen -t rsa -b 4096 -C "princelailai@gmail.com"</code>：生成密钥</p>
 <p><code>cat ~/.ssh/id_rsa.pub</code>：查看密钥</p>
 <p><code>ssh -T git@github.com</code>：测试密钥是否可以正常登录</p>
 <h3 id="she-zhi">设置</h3>
-<p><code>git config --list</code>：列出当前repo所有设置</p>
+<p><code>git config --list</code>：列出当前 repo&nbsp;所有设置</p>
 <p><code>git config --global user.name "princelai"</code>：设置用户名</p>
-<p><code>git config --global user.email "princelailai@gmail.com"</code>：设置E-mail</p>
+<p><code>git config --global user.email "princelailai@gmail.com"</code>：设置&nbsp;E-mail</p>
 <p><code>echo "# mydotfiles" &gt; README.md</code>：</p>
 <h3 id="ji-ben-cao-zuo">基本操作</h3>
-<p><code>git init</code>：初始化，创建.git文件夹</p>
+<p><code>git init</code>：初始化，创建.git&nbsp;文件夹</p>
 <p><code>git status</code>：查看当前工作区/缓存区状态</p>
 <h3 id="tian-jia-he-ti-jiao">添加和提交</h3>
 <p><code>git add &lt;文件&gt;</code>：添加文件至缓存区</p>
@@ -135,22 +138,22 @@
 <p><code>git commit -am "说明"</code>：前面两种的合并版</p>
 <p><code>git commit --amend "说明"</code>：替换掉上一次的提交</p>
 <h3 id="shan-chu-wen-jian">删除文件</h3>
-<p><code>git rm &lt;文件&gt;</code>：从repo中删除文件</p>
+<p><code>git rm &lt;文件&gt;</code>：从 repo&nbsp;中删除文件</p>
 <p><code>git rm --cached &lt;文件&gt;</code>：</p>
 <h3 id="hui-fu">恢复</h3>
 <p><code>git checkout -- &lt;文件&gt;</code>：撤销文件工作区的修改</p>
 <p><code>git reset HEAD &lt;文件&gt;</code>：撤销文件暂存区的修改，放回工作区</p>
 <p><code>git reset --hard ad93b89</code>：所有文件退回至指定版本</p>
 <h3 id="ban-ben-he-ri-zhi">版本和日志</h3>
-<p><code>git log --oneline</code>:简版log</p>
-<p><code>git log --graph</code>：带合并图形版log</p>
+<p><code>git log --oneline</code>:简版&nbsp;log</p>
+<p><code>git log --graph</code>：带合并图形版&nbsp;log</p>
 <h3 id="yuan-cheng-cang-ku">远程仓库</h3>
 <p><code>git remote show origin</code>：查看远程仓库详情</p>
 <p><code>git clone git-url</code>：从远程仓库克隆至本地</p>
 <p><code>git remote add origin git-url</code>：关联远程和本地仓库</p>
 <h3 id="yuan-cheng-cang-ku-de-ti-jiao-he-la-qu">远程仓库的提交和拉取</h3>
 <p><code>git pull origin master</code>：把远程仓库拉取到本地仓库</p>
-<p><code>git push origin master</code>：本地仓库推送至远程仓库，-u用于第一次关联</p>
+<p><code>git push origin master</code>：本地仓库推送至远程仓库，-u&nbsp;用于第一次关联</p>
 <h3 id="fen-zhi">分支</h3>
 <p><code>git branch</code>：列出本地分支</p>
 <p><code>git branch -r</code>：列出远程分支</p>
@@ -163,7 +166,7 @@
 <p><code>git checkout -b 分支</code>：创建并切换到分支</p>
 <h3 id="he-bing">合并</h3>
 <p><code>git merge 分支</code>：把指定分支合并到当前分支</p>
-<p><code>git merge --no-ff -m "说明" 分支</code>：禁止Fast&nbsp;forward模式，创建新的commit</p>
+<p><code>git merge --no-ff -m "说明" 分支</code>：禁止 Fast forward 模式，创建新的&nbsp;commit</p>
 <h3 id="can-kao">参考</h3>
 <ol>
 <li><a href="https://www.jianshu.com/p/e4e29c9c3bd9">简书</a></li>
@@ -178,7 +181,7 @@
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
         var disqus_identifier = "git-and-github.html";
-        var disqus_title = "git和github主要使用方法";
+        var disqus_title = "git 和 github 主要使用方法";
         var disqus_url = "https://www.solarck.com/git-and-github.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -204,9 +207,9 @@
     <hr/>
 
       <p>
-              <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
+              <a href="https://www.solarck.com/category/it-bi-ji.html" rel="tag"
                   data-toggle="tooltip" class="label label-info"
-                  title="17 articles in this category">IT笔记</a>
+                  title="17 articles in this category">IT 笔记</a>
             <a href="/tag/git.html" data-toggle="tooltip"
       class="label label-default"
       title="1 article with this tag">git</a>
@@ -234,7 +237,7 @@
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#sshhe-mi-yao" title="ssh和密钥">ssh和密钥</a></li><li><a class="toc-href" href="#she-zhi" title="设置">设置</a></li><li><a class="toc-href" href="#ji-ben-cao-zuo" title="基本操作">基本操作</a></li><li><a class="toc-href" href="#tian-jia-he-ti-jiao" title="添加和提交">添加和提交</a></li><li><a class="toc-href" href="#shan-chu-wen-jian" title="删除文件">删除文件</a></li><li><a class="toc-href" href="#hui-fu" title="恢复">恢复</a></li><li><a class="toc-href" href="#ban-ben-he-ri-zhi" title="版本和日志">版本和日志</a></li><li><a class="toc-href" href="#yuan-cheng-cang-ku" title="远程仓库">远程仓库</a></li><li><a class="toc-href" href="#yuan-cheng-cang-ku-de-ti-jiao-he-la-qu" title="远程仓库的提交和拉取">远程仓库的提交和拉取</a></li><li><a class="toc-href" href="#fen-zhi" title="分支">分支</a></li><li><a class="toc-href" href="#checkout" title="checkout">checkout</a></li><li><a class="toc-href" href="#he-bing" title="合并">合并</a></li><li><a class="toc-href" href="#can-kao" title="参考">参考</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#ssh-he-mi-yao" title="ssh&nbsp;和密钥">ssh&nbsp;和密钥</a></li><li><a class="toc-href" href="#she-zhi" title="设置">设置</a></li><li><a class="toc-href" href="#ji-ben-cao-zuo" title="基本操作">基本操作</a></li><li><a class="toc-href" href="#tian-jia-he-ti-jiao" title="添加和提交">添加和提交</a></li><li><a class="toc-href" href="#shan-chu-wen-jian" title="删除文件">删除文件</a></li><li><a class="toc-href" href="#hui-fu" title="恢复">恢复</a></li><li><a class="toc-href" href="#ban-ben-he-ri-zhi" title="版本和日志">版本和日志</a></li><li><a class="toc-href" href="#yuan-cheng-cang-ku" title="远程仓库">远程仓库</a></li><li><a class="toc-href" href="#yuan-cheng-cang-ku-de-ti-jiao-he-la-qu" title="远程仓库的提交和拉取">远程仓库的提交和拉取</a></li><li><a class="toc-href" href="#fen-zhi" title="分支">分支</a></li><li><a class="toc-href" href="#checkout" title="checkout">checkout</a></li><li><a class="toc-href" href="#he-bing" title="合并">合并</a></li><li><a class="toc-href" href="#can-kao" title="参考">参考</a></li></ul></div>
         </nav>
 
   </div>

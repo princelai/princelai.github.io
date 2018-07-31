@@ -5,8 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  Articles by Kevin Chen
- | Solarck</title>
+    <title>主页 | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
 
@@ -107,9 +106,6 @@
 
       <div class="row">
         <div class=" col-md-12  ">
-  <h1>
-    <a href="https://www.solarck.com/author/kevin-chen.html" rel="bookmark" title="Permalink to Kevin Chen's articles">Articles by Kevin Chen</a>
-  </h1>
         </div>
       </div>
 
@@ -120,148 +116,60 @@
 
     <article>
       <header>
-        <h2><a href="https://www.solarck.com/upgrade-lede-to-1806.html" rel="bookmark" title="Permalink to 升级 Openwrt/LEDE 大版本至 18.06">升级 Openwrt/<span class="caps">LEDE</span> 大版本至&nbsp;18.06</a></h2>
+        <h2><a href="https://www.solarck.com/repair-wnr2200.html" rel="bookmark" title="Permalink to 修复变砖的 WNR2200">修复变砖的 <span class="caps">WNR2200</span></a></h2>
       </header>
-      <div><h1 id="xia-zai-sheng-ji-bao">下载升级包</h1>
-<p>首先下载新版文件，点击下方链接中任意一个，进入你的路由器架构，然后搜索路由器型号，如果你已经是 Openwrt/<span class="caps">LEDE</span>&nbsp;系统，可以下载升级包*-squashfs-sysupgrade.bin，如果不是，则要下载完整安装包*-squashfs-factory.img。</p>
-<p><a href="https://downloads.openwrt.org/releases/18.06.0/targets/">官方下载</a></p>
-<p><a href="https://mirrors.ustc.edu.cn/lede/releases/18.06.0/targets/">中科大</a></p>
-<p><a href="https://mirrors.tuna.tsinghua.edu.cn/lede/releases/18.06.0/targets">清华大学</a></p>
-<h1 id="bei-fen-geng-xin">备份 <span class="amp">&amp;</span>&nbsp;更新</h1>
-<p>下载好文件后，进入路由器 Luci 界面，System &mdash;-&gt; Backup / Flash&nbsp;Firmware</p>
-<p><img alt="backup and flash" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-backup-flash.png"/></p>
-<p>建议先备份一份配置到本地，备份好后，上传文件，开刷！等待路由器重启后进入后面的步骤。</p>
-<h1 id="geng-xin-yuan">更新源</h1>
-<p>关于详细的如何更换源操作，我在<a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT 路由器打造家庭媒体影音中心（一）</a>中有写，这里仅给出自定义源文件的内容。</p>
-<p><code>vim /etc/opkg/customfeeds.conf</code></p>
-<div class="highlight"><pre><span></span><span class="c1">#Tsinghua</span>
-<span class="na">src …</span></pre></div></div>
-      <div><a class="btn btn-primary" href="https://www.solarck.com/upgrade-lede-to-1806.html"><strong>➟ 查看全文</strong></a></div>
-    </article>
-    <hr/>
-    <article>
-      <header>
-        <h2><a href="https://www.solarck.com/compile-tensorflow-gpu.html" rel="bookmark" title="Permalink to 编译 Tensorflow 1.10 + CUDA9.2 + MKL">编译 Tensorflow 1.10 + <span class="caps">CUDA9</span>.2 + <span class="caps">MKL</span></a></h2>
-      </header>
-      <div><p>我的电脑系统是基于 Archlinux 的 Manjaro，软件包更新的比较激进，很早就已经是 <span class="caps">CUDA</span> 9.2 了，而目前 Tensorflow 的官方编译版本对 <span class="caps">CUDA</span> 的支持还只停留在 <span class="caps">CUDA</span> 9.0。由于还不太会用 mxnet 和 pytorch，这时倍加想念 Keras 的简单。最近忙里偷闲研究了一下编译安装&nbsp;Tensorflow，发现还挺简单的，把成功的喜悦分享出来，也供有需要的朋友参考。</p>
-<h1 id="cha-kan-xi-tong-xin-xi">查看系统信息</h1>
-<h3 id="cha-kan-xi-tong-jia-gou-he-fa-xing-ban-ben">查看系统架构和发行版本</h3>
-<p>我用的 Manjaro&nbsp;x86_64</p>
-<p><code>uname -m &amp;&amp; cat /etc/*release</code></p>
-<div class="highlight"><pre><span></span>x86_64
-Manjaro Linux
-DISTRIB_ID=ManjaroLinux
-DISTRIB_RELEASE=17.1.11
-DISTRIB_CODENAME …</pre></div></div>
-      <div><a class="btn btn-primary" href="https://www.solarck.com/compile-tensorflow-gpu.html"><strong>➟ 查看全文</strong></a></div>
-    </article>
-    <hr/>
-    <article>
-      <header>
-        <h2><a href="https://www.solarck.com/systemd-wait-network-online.html" rel="bookmark" title="Permalink to 解决 Haproxy 用 Systemd 启动失败的问题">解决 Haproxy 用 Systemd&nbsp;启动失败的问题</a></h2>
-      </header>
-      <div><h1 id="wen-ti-miao-shu">问题描述</h1>
-<p>配置好 Haproxy 的配置文件，手动可以无错误开启，但是<code>Systemctl enable haproxy.service</code>开机启动每次都报错，系统启动后，手动开启还是没有问题。</p>
-<h1 id="fen-xi-yuan-yin">分析原因</h1>
-<h3 id="haproxy-pei-zhi-wen-ti">haproxy&nbsp;配置问题</h3>
-<p><code>/etc/haproxy.cfg</code>是配置文件，因为手动指定配合文件可以启动，而且测试配置文件也没有报错或警报，所以首先排除是配置的问题。</p>
-<h3 id="systemd-fu-wu-pei-zhi-wen-ti">systemd&nbsp;服务配置问题</h3>
-<p><code>haproxy.service</code>是 systemd 用来启动服务的配置文件，第一眼看配置后，以为是创建 <span class="caps">PID</span> 没有权限，增加<code>User=root</code>字段，但是重启后依然报错。原版配置只有<code>After=network.target</code>，手动添加<code>Wants=network.target</code>重启后，依然报错。</p>
-<h3 id="cha-kan-ri-zhi">查看日志 …</h3></div>
-      <div><a class="btn btn-primary" href="https://www.solarck.com/systemd-wait-network-online.html"><strong>➟ 查看全文</strong></a></div>
-    </article>
-    <hr/>
-    <article>
-      <header>
-        <h2><a href="https://www.solarck.com/v2ray-quick-config.html" rel="bookmark" title="Permalink to 快速配置V2ray">快速配置V2ray</a></h2>
-      </header>
-      <div><h1 id="fu-wu-qi-duan-pei-zhi">服务器端配置</h1>
-<p>服务器系统使用的是Debian 9&nbsp;x86_64，Ubuntu大部分操作都通用。如果是CentOS的话，该文章仅作为参考。</p>
-<h3 id="you-hua-wang-luo">优化网络</h3>
-<p>主要涉及bbr的安装配置，需要VPS是KVM架构，具体可以参照<a href="https://www.solarck.com/shadowsocks-libev.html">之前的文章</a>。</p>
-<h3 id="an-zhuang-v2ray">安装V2ray</h3>
-<p>官方提供了安装脚本，需要系统使用systemd管理系统</p>
-<div class="highlight"><pre><span></span>wget https://install.direct/go.sh
-bash go.sh
-</pre></div>
-<p>安装好后，主要文件如下：</p>
-<blockquote>
-<p><code>/etc/systemd/system/v2ray.service</code>：启动服务</p>
-<p><code>/etc/v2ray/config.json</code>：配置文件</p>
-<p><code>/usr/bin/v2ray/v2ray</code>：主程序</p>
-</blockquote>
-<h3 id="tlsyu-ming-zheng-shu">TLS域名证书</h3>
-<p>因为最终配置要用到TLS链接，在这步之前，你需要一个域名，免费的也无所谓。</p>
-<p>工具使用<a href="https://github.com/Neilpang/acme.sh/wiki">acme.sh …</a></p></div>
-      <div><a class="btn btn-primary" href="https://www.solarck.com/v2ray-quick-config.html"><strong>➟ 查看全文</strong></a></div>
-    </article>
-    <hr/>
-    <article>
-      <header>
-        <h2><a href="https://www.solarck.com/lede-media-center2.html" rel="bookmark" title="Permalink to LEDE/OpenWRT 路由器打造家庭媒体影音中心（二）"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（二）</a></h2>
-      </header>
-      <div><h1 id="usb-qu-dong"><span class="caps">USB</span>&nbsp;驱动</h1>
-<h3 id="cha-kan-yi-an-zhuang-de-qu-dong">查看已安装的驱动</h3>
-<div class="highlight"><pre><span></span>opkg update
-opkg list-installed | grep usb
-</pre></div>
-<h3 id="an-zhuang-qu-dong-he-gong-ju">安装驱动和工具</h3>
-<p>如果下列驱动未出现在上一步的结果中，请务必首先安装缺失的驱动</p>
-<div class="highlight"><pre><span></span>opkg install kmod-usb-core kmod-usb-storage
-</pre></div>
-<p><code>kmod-usb-core</code>:<span class="caps">USB</span>&nbsp;核心驱动</p>
-<p><code>kmod-usb-storage</code>:大容量存储设备驱动</p>
-<p><code>kmod-usb2</code>:<span class="caps">WRT1900ACS</span> 有一个 <span class="caps">USB2</span>.0/eSATA&nbsp;口，可以不安装</p>
-<p><code>kmod-ata-marvell-sata</code>:Marvell <span class="caps">SATA</span>&nbsp;接口驱动，可以不安装</p>
-<p>网上搜到的教程和官方指南里还让安装一些其他的应用，但这些都是不必要或已被编译至内核中，包括：<code>kmod-usb-ohci</code>、<code>kmod-usb-uhci</code>、<code>kmod-usb3</code>、<code>kmod-usb-storage-uas</code></p>
-<h3 id="an-zhuang-xiang-guan-gong-ju">安装相关工具</h3>
-<div class="highlight"><pre><span></span>opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk …</pre></div></div>
-      <div><a class="btn btn-primary" href="https://www.solarck.com/lede-media-center2.html"><strong>➟ 查看全文</strong></a></div>
+      <div><p>手中有个 NetGear <span class="caps">WNR2200</span> 路由器，当初买这个就是看重可以刷机,但是买回来才发现只能刷 <span class="caps">DD</span>-wrt，于是就刷了 <span class="caps">DD</span>&nbsp;安心的用了半年。</p>
+<p>最近看到 Openwrt 的 trunk 目录里有我这款机器的固件了，立刻操刀刷起。不幸的是刷完后 telnet 不通网关，failsafe 模式也无法开启。无奈中发现 NetGear 官网提供了 tftp&nbsp;小工具确实有效，让我变砖的路由器起死回生。</p>
+<p>方法也很简单，官方文库里说明的很详细，这里简单记录下要点。<br/>
+1.下载工具和路由器官方固件<br/>
+2.打开下载好的软件，设置好网关 192.168.1.1，加载下载好的固件，密码不用填<br/>
+3.断开路由器电源 10 秒左右，之后接通电源，立刻点击软件上的&nbsp;Upgrade，等待修复完成 …</p></div>
+      <div><a class="btn btn-primary" href="https://www.solarck.com/repair-wnr2200.html"><strong>➟ 查看全文</strong></a></div>
     </article>
     <hr/>
 
   <nav>
     <ul class="pagination">
-        <li class="disabled">
-          <a aria-label="Previous" rel="prev">
+        <li>
+          <a href="https://www.solarck.com/index4.html"
+              aria-label="Previous" rel="prev">
             <span aria-hidden="true">&larr;</span>
           </a>
         </li>
 
-<li class="active">
-            <a href="https://www.solarck.com/author/kevin-chen.html"
+<li class="">
+            <a href="https://www.solarck.com/index.html"
               rel="
  first ">
               1
-                <span class="sr-only">(current)</span>
             </a>
           </li>
 <li class="">
-            <a href="https://www.solarck.com/author/kevin-chen2.html"
+            <a href="https://www.solarck.com/index2.html"
               rel="
- next ">
+">
               2
             </a>
           </li>
           <li class="disabled"><a>…</a></li>
 <li class="">
-            <a href="https://www.solarck.com/author/kevin-chen4.html"
+            <a href="https://www.solarck.com/index4.html"
               rel="
-">
+ prev ">
               4
             </a>
           </li>
-<li class="">
-            <a href="https://www.solarck.com/author/kevin-chen5.html"
+<li class="active">
+            <a href="https://www.solarck.com/index5.html"
               rel="
  last ">
               5
+                <span class="sr-only">(current)</span>
             </a>
           </li>
 
-        <li>
-          <a href="https://www.solarck.com/author/kevin-chen2.html"
-              aria-label="Next" rel="next">
+        <li class="disabled">
+          <a aria-label="Next" rel="next">
             <span aria-hidden="true">&rarr;</span>
           </a>
         </li>

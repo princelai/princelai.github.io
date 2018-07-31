@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  LEDE/OpenWRT路由器打造家庭媒体影音中心（二）
+    <title>  LEDE/OpenWRT 路由器打造家庭媒体影音中心（二）
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -65,7 +65,10 @@
 
           <ul class="nav navbar-nav">
 <li  class="active" >
-                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记 <span class="sr-only">(current)</span></a>
+                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记 <span class="sr-only">(current)</span></a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
                 </li>
 <li >
                   <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
@@ -105,7 +108,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://www.solarck.com/lede-media-center2.html" rel="bookmark" title="Permalink to LEDE/OpenWRT路由器打造家庭媒体影音中心（二）"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（二）</a>
+    <a href="https://www.solarck.com/lede-media-center2.html" rel="bookmark" title="Permalink to LEDE/OpenWRT 路由器打造家庭媒体影音中心（二）"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（二）</a>
   </h1>
         </div>
       </div>
@@ -117,7 +120,7 @@
   
 
   <div>
-    <h1 id="usbqu-dong">USB驱动</h1>
+    <h1 id="usb-qu-dong"><span class="caps">USB</span>&nbsp;驱动</h1>
 <h3 id="cha-kan-yi-an-zhuang-de-qu-dong">查看已安装的驱动</h3>
 <div class="highlight"><pre><span></span>opkg update
 opkg list-installed | grep usb
@@ -126,30 +129,30 @@ opkg list-installed | grep usb
 <p>如果下列驱动未出现在上一步的结果中，请务必首先安装缺失的驱动</p>
 <div class="highlight"><pre><span></span>opkg install kmod-usb-core kmod-usb-storage
 </pre></div>
-<p><code>kmod-usb-core</code>:USB核心驱动</p>
+<p><code>kmod-usb-core</code>:<span class="caps">USB</span>&nbsp;核心驱动</p>
 <p><code>kmod-usb-storage</code>:大容量存储设备驱动</p>
-<p><code>kmod-usb2</code>:WRT1900ACS有一个USB2.0/eSATA口，可以不安装</p>
-<p><code>kmod-ata-marvell-sata</code>:Marvell&nbsp;SATA接口驱动，可以不安装</p>
+<p><code>kmod-usb2</code>:<span class="caps">WRT1900ACS</span> 有一个 <span class="caps">USB2</span>.0/eSATA&nbsp;口，可以不安装</p>
+<p><code>kmod-ata-marvell-sata</code>:Marvell <span class="caps">SATA</span>&nbsp;接口驱动，可以不安装</p>
 <p>网上搜到的教程和官方指南里还让安装一些其他的应用，但这些都是不必要或已被编译至内核中，包括：<code>kmod-usb-ohci</code>、<code>kmod-usb-uhci</code>、<code>kmod-usb3</code>、<code>kmod-usb-storage-uas</code></p>
 <h3 id="an-zhuang-xiang-guan-gong-ju">安装相关工具</h3>
-<div class="highlight"><pre><span></span>opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk 
+<div class="highlight"><pre><span></span>opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk
 </pre></div>
-<p><code>mount-utils</code>:提供unmount,findmnt</p>
-<p><code>usbutils</code>:提供lsusb</p>
-<p><code>block-mount</code>:提供block，查看挂载点信息</p>
-<p><code>e2fsprogs</code>:格式化工具mkfs</p>
-<p><code>kmod-fs-ext4</code>:格式化为ext4格式</p>
-<p><code>kmod-fs-ntfs</code>:我不用ntfs格式，所以不安装这个，需要可以安装上</p>
-<p><code>gdisk</code>:分区工具，支持GPT，硬盘容量超过2T需要用这个工具，当然容量小的也可以用这个</p>
-<p><code>fdisk</code>:分区工具，不支持GPT，常用来查看分区信息</p>
-<p>以下几个命令查看已连接/挂载的USB设备</p>
+<p><code>mount-utils</code>:提供&nbsp;unmount,findmnt</p>
+<p><code>usbutils</code>:提供&nbsp;lsusb</p>
+<p><code>block-mount</code>:提供&nbsp;block，查看挂载点信息</p>
+<p><code>e2fsprogs</code>:格式化工具&nbsp;mkfs</p>
+<p><code>kmod-fs-ext4</code>:格式化为 ext4&nbsp;格式</p>
+<p><code>kmod-fs-ntfs</code>:我不用 ntfs&nbsp;格式，所以不安装这个，需要可以安装上</p>
+<p><code>gdisk</code>:分区工具，支持 <span class="caps">GPT</span>，硬盘容量超过 2T&nbsp;需要用这个工具，当然容量小的也可以用这个</p>
+<p><code>fdisk</code>:分区工具，不支持 <span class="caps">GPT</span>，常用来查看分区信息</p>
+<p>以下几个命令查看已连接/挂载的 <span class="caps">USB</span>&nbsp;设备</p>
 <div class="highlight"><pre><span></span>df -h
 lsusb -t
 ls -l /dev/sd*
 block info <span class="p">|</span> grep <span class="s2">"/dev/sd"</span>
 </pre></div>
 <p><em>小提示：硬盘格式化为什么格式最好？</em></p>
-<p>在Linux和LEDE平台上，微软的NTFS和FAT32绝对不是一个好的格式，设计的优劣不谈，这两个格式不是Linux平台原生支持的，安装额外的驱动可能会带来发热、读写速度慢、不稳定等多种负面效果。所以，对于机械硬盘来说，EXT4和BTRFS是最好的，对于SSD来说，F2FS格式是最好的。</p>
+<p>在 Linux 和 <span class="caps">LEDE</span> 平台上，微软的 <span class="caps">NTFS</span> 和 <span class="caps">FAT32</span> 绝对不是一个好的格式，设计的优劣不谈，这两个格式不是 Linux 平台原生支持的，安装额外的驱动可能会带来发热、读写速度慢、不稳定等多种负面效果。所以，对于机械硬盘来说，<span class="caps">EXT4</span> 和 <span class="caps">BTRFS</span> 是最好的，对于 <span class="caps">SSD</span> 来说，<span class="caps">F2FS</span>&nbsp;格式是最好的。</p>
 <h1 id="ying-pan-xiang-guan-cao-zuo_1">硬盘相关操作</h1>
 <h3 id="ying-pan-fen-qu">硬盘分区</h3>
 <div class="highlight"><pre><span></span>gdisk /dev/sda
@@ -160,12 +163,12 @@ block info <span class="p">|</span> grep <span class="s2">"/dev/sd"</span>
 <p><code>d</code>:删除分区</p>
 <p><code>p</code>:打印分区列表</p>
 <p><code>?</code>:查看帮助</p>
-<p>这里我把一块硬盘分为两个区<code>/dev/sda1</code>，<code>/dev/sda2</code>，分区1大小700G，分区2大小231G，总计1T。</p>
+<p>这里我把一块硬盘分为两个区<code>/dev/sda1</code>，<code>/dev/sda2</code>，分区 1 大小 700G，分区 2 大小 231G，总计&nbsp;1T。</p>
 <h3 id="ge-shi-hua-ying-pan">格式化硬盘</h3>
 <div class="highlight"><pre><span></span>mkfs.ext4 /dev/sda1
 mkfs.ext4 /dev/sda2
 </pre></div>
-<p>如果是SSD硬盘，则可以按照如下方式安装操作</p>
+<p>如果是 <span class="caps">SSD</span>&nbsp;硬盘，则可以按照如下方式安装操作</p>
 <div class="highlight"><pre><span></span>opkg install f2fs-tools
 opkg install kmod-fs-f2fs
 mkfs.f2fs /dev/sda1
@@ -195,20 +198,20 @@ opkg install hdparm luci-app-hd-idle
 <div class="highlight"><pre><span></span>hdparm -S <span class="m">120</span> /dev/sda1
 hdparm -S <span class="m">120</span> /dev/sda2
 </pre></div>
-<p>-S后的参数含义为：</p>
+<p>-S&nbsp;后的参数含义为：</p>
 <ol>
 <li>0:关闭休眠</li>
-<li>1-240：数字乘以5秒是时间，在设定时间内未使用则休眠</li>
-<li>241-251：以30分钟为步进，时间为30分钟-5.5小时</li>
+<li>1-240：数字乘以 5&nbsp;秒是时间，在设定时间内未使用则休眠</li>
+<li>241-251：以 30 分钟为步进，时间为 30 分钟-5.5&nbsp;小时</li>
 </ol>
 <h4 id="hd-idle"><em>hd-idle</em></h4>
-<p>更简单的方法就是安装Luci管理工具</p>
+<p>更简单的方法就是安装 Luci&nbsp;管理工具</p>
 <div class="highlight"><pre><span></span>opkg update
 opkg install hd-idle luci-app-hd-idle
 </pre></div>
 <p><img alt="hd-idle" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-idle.png"/></p>
 <h1 id="samba_2">Samba</h1>
-<h3 id="an-zhuang-samba">安装Samba</h3>
+<h3 id="an-zhuang-samba">安装&nbsp;Samba</h3>
 <p>查看可安装的版本</p>
 <div class="highlight"><pre><span></span>opkg update
 opkg list <span class="p">|</span> grep samba
@@ -236,14 +239,14 @@ opkg list <span class="p">|</span> grep samba
         <span class="na">option 'dest_port' '445'</span>
         <span class="na">option 'target' 'ACCEPT'</span>
 </pre></div>
-<h3 id="sambapei-zhi">Samba配置</h3>
-<p><em>官方<strong>强烈建议</strong>使用luci来配置Samba，然后通过修改临时文件来完成配置。</em></p>
+<h3 id="samba-pei-zhi">Samba&nbsp;配置</h3>
+<p><em>官方<strong>强烈建议</strong>使用 luci 来配置&nbsp;Samba，然后通过修改临时文件来完成配置。</em></p>
 <p><em>路由器每次重启，<code>/etc/samba/smb.conf</code>文件都将从<code>/etc/samba/smb.conf.template</code>文件重新创建，所以修改配置时请修改后者。</em></p>
-<p>全局和共享配置可以在LuCi界面编辑也可以直接编辑文件，按照我的配置实现如下几个功能：</p>
+<p>全局和共享配置可以在 LuCi&nbsp;界面编辑也可以直接编辑文件，按照我的配置实现如下几个功能：</p>
 <ul>
-<li>禁止root用户访问，防止权限出现问题</li>
-<li>允许匿名用户访问<code>/mnt/sda1</code>，即Media文件夹</li>
-<li>访问<code>/mnt/sda2</code>，即Document文件夹必须登录，用户只能访问到自己创建的文件夹和文件</li>
+<li>禁止 root&nbsp;用户访问，防止权限出现问题</li>
+<li>允许匿名用户访问<code>/mnt/sda1</code>，即 Media&nbsp;文件夹</li>
+<li>访问<code>/mnt/sda2</code>，即 Document&nbsp;文件夹必须登录，用户只能访问到自己创建的文件夹和文件</li>
 </ul>
 <h4 id="quan-ju-pei-zhi"><strong>全局配置</strong></h4>
 <p><code>vim /etc/samba/smb.conf.template</code></p>
@@ -254,7 +257,7 @@ opkg list <span class="p">|</span> grep samba
     <span class="nv">syslog</span> <span class="o">=</span> <span class="m">5</span>
     encrypt <span class="nv">passwords</span> <span class="o">=</span> <span class="nb">true</span>
     socket <span class="nv">options</span> <span class="o">=</span> TCP_NODELAY IPTOS_LOWDELAY
-    unix <span class="nv">charset</span> <span class="o">=</span> UTF-8 
+    unix <span class="nv">charset</span> <span class="o">=</span> UTF-8
     <span class="nv">browseable</span> <span class="o">=</span> yes
     <span class="nb">local</span> <span class="nv">master</span> <span class="o">=</span> yes
     preferred <span class="nv">master</span> <span class="o">=</span> yes
@@ -303,11 +306,11 @@ chgrp -R nogroup /mnt/sda2
 chmod -R <span class="m">777</span> /mnt/sda2
 </pre></div>
 <h4 id="tian-jia-yong-hu"><strong>添加用户</strong></h4>
-<p>LEDE默认不带<code>useradd</code>命令，需要手动安装</p>
+<p><span class="caps">LEDE</span> 默认不带<code>useradd</code>命令，需要手动安装</p>
 <div class="highlight"><pre><span></span>opkg update
 opkg install shadow-useradd
 </pre></div>
-<p>添加用户和设置密码要分两步走，首先要添加系统用户，然后再为该用户设置Samba密码。</p>
+<p>添加用户和设置密码要分两步走，首先要添加系统用户，然后再为该用户设置 Samba&nbsp;密码。</p>
 <div class="highlight"><pre><span></span>useradd newuser
 passwd newuser
 smbpasswd -a newuser
@@ -316,7 +319,7 @@ smbpasswd -a newuser
 <div class="highlight"><pre><span></span>/etc/init.d/samba restart
 /etc/init.d/samba <span class="nb">enable</span>
 </pre></div>
-<p>至此，Samba设置完成，也达到了我的目的，有可以匿名随意访问的共享文件夹，也有实现了权限控制的私有文件夹。而且是全平台都可以访问，Windows、Linux和手机（需要有支持SMB协议的软件）。</p>
+<p>至此，Samba 设置完成，也达到了我的目的，有可以匿名随意访问的共享文件夹，也有实现了权限控制的私有文件夹。而且是全平台都可以访问，Windows、Linux 和手机（需要有支持 <span class="caps">SMB</span>&nbsp;协议的软件）。</p>
 <p><img alt="samba" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-samba.png"/></p>
 <h1 id="can-kao-lian-jie_2">参考链接</h1>
 <p><a href="https://openwrt.org/docs/guide-user/storage/usb-installing">Installing <span class="caps">USB</span>&nbsp;Drivers</a></p>
@@ -331,10 +334,11 @@ smbpasswd -a newuser
     <h3>相关文章</h3>
     <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
     <ul>
-        <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（一）</a></li>
-        <li><a href="https://www.solarck.com/openwrt-samba.html">openwrt开启Samba作为共享中心</a></li>
-        <li><a href="https://www.solarck.com/openwrt-extroot.html">用extroot为openwrt扩充存储空间</a></li>
-        <li><a href="https://www.solarck.com/install-openwrt-on-mw4530r.html">水星（Mercury）MW4530r刷Openwrt</a></li>
+        <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（一）</a></li>
+        <li><a href="https://www.solarck.com/upgrade-lede-to-1806.html">升级 Openwrt/<span class="caps">LEDE</span> 大版本至&nbsp;18.06</a></li>
+        <li><a href="https://www.solarck.com/openwrt-samba.html">openwrt 开启 Samba&nbsp;作为共享中心</a></li>
+        <li><a href="https://www.solarck.com/openwrt-extroot.html">用 extroot 为 openwrt&nbsp;扩充存储空间</a></li>
+        <li><a href="https://www.solarck.com/install-openwrt-on-mw4530r.html">水星（Mercury）MW4530r 刷&nbsp;Openwrt</a></li>
       </ul>
 
     <div class="comments">
@@ -342,7 +346,7 @@ smbpasswd -a newuser
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
         var disqus_identifier = "lede-media-center2.html";
-        var disqus_title = "LEDE/OpenWRT路由器打造家庭媒体影音中心（二）";
+        var disqus_title = "LEDE/OpenWRT 路由器打造家庭媒体影音中心（二）";
         var disqus_url = "https://www.solarck.com/lede-media-center2.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -368,15 +372,15 @@ smbpasswd -a newuser
     <hr/>
 
       <p>
-              <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
+              <a href="https://www.solarck.com/category/it-bi-ji.html" rel="tag"
                   data-toggle="tooltip" class="label label-info"
-                  title="17 articles in this category">IT笔记</a>
+                  title="17 articles in this category">IT 笔记</a>
             <a href="/tag/openwrt.html" data-toggle="tooltip"
       class="label label-default"
-      title="5 articles with this tag">openwrt</a>
+      title="6 articles with this tag">openwrt</a>
             <a href="/tag/lede.html" data-toggle="tooltip"
       class="label label-default"
-      title="2 articles with this tag">lede</a>
+      title="3 articles with this tag">lede</a>
             <a href="/tag/wrt1900acs.html" data-toggle="tooltip"
       class="label label-default"
       title="2 articles with this tag">wrt1900acs</a>
@@ -393,7 +397,7 @@ smbpasswd -a newuser
       <nav>
         <ul class="pager">
           <li class="previous ">
-            <a  href="https://www.solarck.com/lede-media-center1.html" title="LEDE/OpenWRT路由器打造家庭媒体影音中心（一）"  rel="prev">
+            <a  href="https://www.solarck.com/lede-media-center1.html" title="LEDE/OpenWRT 路由器打造家庭媒体影音中心（一）"  rel="prev">
               <span aria-hidden="true">←</span> 旧文章
             </a>
           </li>
@@ -407,7 +411,7 @@ smbpasswd -a newuser
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#usbqu-dong" title="USB驱动">USB驱动</a><ul><li><a class="toc-href" href="#cha-kan-yi-an-zhuang-de-qu-dong" title="查看已安装的驱动">查看已安装的驱动</a></li><li><a class="toc-href" href="#an-zhuang-qu-dong-he-gong-ju" title="安装驱动和工具">安装驱动和工具</a></li><li><a class="toc-href" href="#an-zhuang-xiang-guan-gong-ju" title="安装相关工具">安装相关工具</a></li></ul></li><li><a class="toc-href" href="#ying-pan-xiang-guan-cao-zuo_1" title="硬盘相关操作">硬盘相关操作</a><ul><li><a class="toc-href" href="#ying-pan-fen-qu" title="硬盘分区">硬盘分区</a></li><li><a class="toc-href" href="#ge-shi-hua-ying-pan" title="格式化硬盘">格式化硬盘</a></li><li><a class="toc-href" href="#zi-dong-gua-zai-fen-qu" title="自动挂载分区">自动挂载分区</a></li><li><a class="toc-href" href="#ying-pan-xiu-mian" title="硬盘休眠">硬盘休眠</a><ul><li><a class="toc-href" href="#hdparm" title="hdparm">hdparm</a></li><li><a class="toc-href" href="#hd-idle" title="hd-idle">hd-idle</a></li></ul></li></ul></li><li><a class="toc-href" href="#samba_2" title="Samba">Samba</a><ul><li><a class="toc-href" href="#an-zhuang-samba" title="安装Samba">安装Samba</a></li><li><a class="toc-href" href="#pei-zhi-fang-huo-qiang" title="配置防火墙">配置防火墙</a></li><li><a class="toc-href" href="#sambapei-zhi" title="Samba配置">Samba配置</a><ul><li><a class="toc-href" href="#quan-ju-pei-zhi" title="全局配置">全局配置</a></li><li><a class="toc-href" href="#gong-xiang-wen-jian-jia-she-zhi" title="共享文件夹设置">共享文件夹设置</a></li><li><a class="toc-href" href="#wen-jian-jia-chu-shi-quan-xian-she-zhi" title="文件夹初始权限设置">文件夹初始权限设置</a></li><li><a class="toc-href" href="#tian-jia-yong-hu" title="添加用户">添加用户</a></li></ul></li></ul></li><li><a class="toc-href" href="#can-kao-lian-jie_2" title="参考链接">参考链接</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#usb-qu-dong" title="USB&nbsp;驱动">USB&nbsp;驱动</a><ul><li><a class="toc-href" href="#cha-kan-yi-an-zhuang-de-qu-dong" title="查看已安装的驱动">查看已安装的驱动</a></li><li><a class="toc-href" href="#an-zhuang-qu-dong-he-gong-ju" title="安装驱动和工具">安装驱动和工具</a></li><li><a class="toc-href" href="#an-zhuang-xiang-guan-gong-ju" title="安装相关工具">安装相关工具</a></li></ul></li><li><a class="toc-href" href="#ying-pan-xiang-guan-cao-zuo_1" title="硬盘相关操作">硬盘相关操作</a><ul><li><a class="toc-href" href="#ying-pan-fen-qu" title="硬盘分区">硬盘分区</a></li><li><a class="toc-href" href="#ge-shi-hua-ying-pan" title="格式化硬盘">格式化硬盘</a></li><li><a class="toc-href" href="#zi-dong-gua-zai-fen-qu" title="自动挂载分区">自动挂载分区</a></li><li><a class="toc-href" href="#ying-pan-xiu-mian" title="硬盘休眠">硬盘休眠</a><ul><li><a class="toc-href" href="#hdparm" title="hdparm">hdparm</a></li><li><a class="toc-href" href="#hd-idle" title="hd-idle">hd-idle</a></li></ul></li></ul></li><li><a class="toc-href" href="#samba_2" title="Samba">Samba</a><ul><li><a class="toc-href" href="#an-zhuang-samba" title="安装&nbsp;Samba">安装&nbsp;Samba</a></li><li><a class="toc-href" href="#pei-zhi-fang-huo-qiang" title="配置防火墙">配置防火墙</a></li><li><a class="toc-href" href="#samba-pei-zhi" title="Samba&nbsp;配置">Samba&nbsp;配置</a><ul><li><a class="toc-href" href="#quan-ju-pei-zhi" title="全局配置">全局配置</a></li><li><a class="toc-href" href="#gong-xiang-wen-jian-jia-she-zhi" title="共享文件夹设置">共享文件夹设置</a></li><li><a class="toc-href" href="#wen-jian-jia-chu-shi-quan-xian-she-zhi" title="文件夹初始权限设置">文件夹初始权限设置</a></li><li><a class="toc-href" href="#tian-jia-yong-hu" title="添加用户">添加用户</a></li></ul></li></ul></li><li><a class="toc-href" href="#can-kao-lian-jie_2" title="参考链接">参考链接</a></li></ul></div>
         </nav>
 
   </div>

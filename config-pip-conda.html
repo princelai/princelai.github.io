@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  配置pip和conda
+    <title>  配置 pip 和 conda
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -65,7 +65,10 @@
 
           <ul class="nav navbar-nav">
 <li  class="active" >
-                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记 <span class="sr-only">(current)</span></a>
+                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记 <span class="sr-only">(current)</span></a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
                 </li>
 <li >
                   <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
@@ -105,7 +108,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://www.solarck.com/config-pip-conda.html" rel="bookmark" title="Permalink to 配置pip和conda">配置pip和conda</a>
+    <a href="https://www.solarck.com/config-pip-conda.html" rel="bookmark" title="Permalink to 配置 pip 和 conda">配置 pip 和&nbsp;conda</a>
   </h1>
         </div>
       </div>
@@ -117,32 +120,33 @@
   
 
   <div>
-    <p>首先需要确认已经安装Python环境，建议用于科学计算的朋友下载安装<a href="https://www.anaconda.com/download/">Anaconda</a>或者<a href="https://conda.io/miniconda.html">Miniconda</a>。</p>
+    <p>首先需要确认已经安装 Python 环境，建议用于科学计算的朋友下载安装<a href="https://www.anaconda.com/download/">Anaconda</a>或者<a href="https://conda.io/miniconda.html">Miniconda</a>。</p>
 <h3 id="huan-jing-bian-liang-he-qi-yong-pei-zhi">环境变量和启用配置</h3>
 <p>安装好后还需要把安装路径添加到系统环境变量</p>
-<p>Linux用户查看系统环境变量</p>
+<p>Linux&nbsp;用户查看系统环境变量</p>
 <div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">$PATH</span>
 </pre></div>
-<p>Windows用户查看系统环境变量</p>
+<p>Windows&nbsp;用户查看系统环境变量</p>
 <div class="highlight"><pre><span></span><span class="nb">echo</span> %PATH%
 </pre></div>
-<p>如果没有Anaconda的路径，就需要自己手动添加</p>
-<p>Linux用户编辑~/.bashrc，在最后添加以下内容，注意自己修改安装路径</p>
+<p>如果没有 Anaconda&nbsp;的路径，就需要自己手动添加</p>
+<p>Linux&nbsp;用户编辑~/.bashrc，在最后添加以下内容，注意自己修改安装路径</p>
 <div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/anaconda3/bin:</span><span class="nv">$PATH</span><span class="s2">"</span>
 </pre></div>
 <p>最后再执行</p>
 <div class="highlight"><pre><span></span><span class="nb">source</span> ~/.bashrc
 </pre></div>
-<p>如果没有效果，可是尝试编辑~/.profile或 ~/.bash_profile文件&nbsp;zsh或其他shell用户可以自行修改</p>
-<p>Windows用户在cmd执行如下命令，如果不是默认安装到用户目录，需要手动修改下路径。如果创建了自定义env，那么root改为你自己的env名字。</p>
+<p>如果没有效果，可是尝试编辑~/.profile 或 ~/.bash_profile 文件
+zsh 或其他 shell&nbsp;用户可以自行修改</p>
+<p>Windows 用户在 cmd 执行如下命令，如果不是默认安装到用户目录，需要手动修改下路径。如果创建了自定义 env，那么 root 改为你自己的 env&nbsp;名字。</p>
 <div class="highlight"><pre><span></span><span class="nb">set</span> <span class="nv">PATH</span><span class="o">=</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="p">;</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="se">\L</span>ibrary<span class="se">\b</span>in<span class="p">;</span>%USERPROFILE%<span class="se">\A</span>naconda3<span class="se">\S</span>cripts<span class="p">;</span>%PATH%
 activate root
 </pre></div>
 <h3 id="geng-huan-yuan">更换源</h3>
-<p>conda官方源非常慢，甚至有时候经常无法连接；pip时快时慢，也是经常无法连接，所以我们把更新源换为国内的，加快更新速度。</p>
+<p>conda 官方源非常慢，甚至有时候经常无法连接；pip&nbsp;时快时慢，也是经常无法连接，所以我们把更新源换为国内的，加快更新速度。</p>
 <h4 id="pip"><strong>pip</strong></h4>
-<p>目前国内常用的pip源有<a href="http://mirrors.aliyun.com/help/pypi">阿里云</a>和豆瓣。</p>
-<p>Linux用户编辑~/.pip/pip.conf文件，粘贴以下内容</p>
+<p>目前国内常用的 pip 源有<a href="http://mirrors.aliyun.com/help/pypi">阿里云</a>和豆瓣。</p>
+<p>Linux 用户编辑~/.pip/pip.conf&nbsp;文件，粘贴以下内容</p>
 <div class="highlight"><pre><span></span><span class="k">[global]</span>
 <span class="na">index-url</span> <span class="o">=</span> <span class="s">https://pypi.doubanio.com/simple/</span>
 <span class="na">format</span> <span class="o">=</span> <span class="s">columns</span>
@@ -152,10 +156,10 @@ activate root
 <span class="na">index-url</span> <span class="o">=</span> <span class="s">https://mirrors.aliyun.com/pypi/simple/</span>
 <span class="na">format</span> <span class="o">=</span> <span class="s">columns</span>
 </pre></div>
-<p>Windows用户编辑%<span class="caps">USERPROFILE</span>%\pip\pip.ini，没有就新建一个，内容和Linux一样。</p>
+<p>Windows 用户编辑%<span class="caps">USERPROFILE</span>%\pip\pip.ini，没有就新建一个，内容和 Linux&nbsp;一样。</p>
 <h4 id="conda"><strong>conda</strong></h4>
-<p>目前国内常用的conda源有<a href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">清华</a>和<a href="http://mirrors.ustc.edu.cn/help/anaconda.html">中科大</a>两个</p>
-<p>Linux和Windows用户执行下面的命令添加conda源</p>
+<p>目前国内常用的 conda 源有<a href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">清华</a>和<a href="http://mirrors.ustc.edu.cn/help/anaconda.html">中科大</a>两个</p>
+<p>Linux 和 Windows 用户执行下面的命令添加 conda&nbsp;源</p>
 <div class="highlight"><pre><span></span>conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
 conda config --set show_channel_urls yes
@@ -166,13 +170,13 @@ conda config --set show_channel_urls yes
 </pre></div>
 <h3 id="geng-xin_1">更新</h3>
 <h4 id="conda_1"><strong>conda</strong></h4>
-<p>conda常用更新命令</p>
+<p>conda&nbsp;常用更新命令</p>
 <div class="highlight"><pre><span></span>conda update XXX        <span class="c1">#更新XXX包</span>
 conda update --all      <span class="c1">#更新所有可更新的包到最新</span>
 conda update conda      <span class="c1">#conda整体升级，并不一定最新，但是稳定</span>
 conda update anaconda   <span class="c1">#同上</span>
 </pre></div>
-<p>conda其他常用命令</p>
+<p>conda&nbsp;其他常用命令</p>
 <div class="highlight"><pre><span></span>conda info              <span class="c1">#当前conda环境信息</span>
 conda install XXX       <span class="c1">#安装XXX</span>
 conda search XXX        <span class="c1">#搜索XXX</span>
@@ -183,7 +187,7 @@ conda config --get channels     <span class="c1">#获取当前使用的源，配
 conda config --remove channels https://XXX
 </pre></div>
 <h4 id="pip_1"><strong>pip</strong></h4>
-<p>pip常用更新命令</p>
+<p>pip&nbsp;常用更新命令</p>
 <div class="highlight"><pre><span></span>pip search XXX      <span class="c1">#搜索</span>
 pip install XXX     <span class="c1">#安装</span>
 pip uninstall XXX   <span class="c1">#卸载</span>
@@ -197,11 +201,11 @@ pip show XXX        <span class="c1">#查看包的路径和依赖等信息</span
     <h3>相关文章</h3>
     <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
     <ul>
-        <li><a href="https://www.solarck.com/python-send-gmail.html">使用Python发送Gmail</a></li>
-        <li><a href="https://www.solarck.com/pandas-timeseries.html">Pandas时间处理函数速度对比</a></li>
+        <li><a href="https://www.solarck.com/python-send-gmail.html">使用 Python 发送&nbsp;Gmail</a></li>
+        <li><a href="https://www.solarck.com/pandas-timeseries.html">Pandas&nbsp;时间处理函数速度对比</a></li>
         <li><a href="https://www.solarck.com/using-python-descript-vaiance-std.html">用股票数据说明方差和标准差的特性</a></li>
         <li><a href="https://www.solarck.com/argparse-brief-usage.html">argparse模块简要用法</a></li>
-        <li><a href="https://www.solarck.com/matplotlib-chinese-fonts.html">matplotlib中文字体配置</a></li>
+        <li><a href="https://www.solarck.com/matplotlib-chinese-fonts.html">matplotlib&nbsp;中文字体配置</a></li>
       </ul>
 
     <div class="comments">
@@ -209,7 +213,7 @@ pip show XXX        <span class="c1">#查看包的路径和依赖等信息</span
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
         var disqus_identifier = "config-pip-conda.html";
-        var disqus_title = "配置pip和conda";
+        var disqus_title = "配置 pip 和 conda";
         var disqus_url = "https://www.solarck.com/config-pip-conda.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -235,9 +239,9 @@ pip show XXX        <span class="c1">#查看包的路径和依赖等信息</span
     <hr/>
 
       <p>
-              <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
+              <a href="https://www.solarck.com/category/it-bi-ji.html" rel="tag"
                   data-toggle="tooltip" class="label label-info"
-                  title="17 articles in this category">IT笔记</a>
+                  title="17 articles in this category">IT 笔记</a>
             <a href="/tag/python.html" data-toggle="tooltip"
       class="label label-default"
       title="6 articles with this tag">python</a>
@@ -254,12 +258,12 @@ pip show XXX        <span class="c1">#查看包的路径和依赖等信息</span
       <nav>
         <ul class="pager">
           <li class="previous ">
-            <a  href="https://www.solarck.com/openwrt-samba.html" title="openwrt开启Samba作为共享中心"  rel="prev">
+            <a  href="https://www.solarck.com/openwrt-samba.html" title="openwrt 开启 Samba 作为共享中心"  rel="prev">
               <span aria-hidden="true">←</span> 旧文章
             </a>
           </li>
           <li class="next ">
-            <a  href="https://www.solarck.com/shadowsocks-libev.html" title="VPS搭梯子指南——shadowsocks+BBR+obfs"  rel="next">
+            <a  href="https://www.solarck.com/shadowsocks-libev.html" title="VPS 搭梯子指南——shadowsocks+BBR+obfs"  rel="next">
               新文章 <span aria-hidden="true">→</span>
             </a>
           </li>

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  openwrt开启Samba作为共享中心
+    <title>  openwrt 开启 Samba 作为共享中心
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -65,7 +65,10 @@
 
           <ul class="nav navbar-nav">
 <li  class="active" >
-                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记 <span class="sr-only">(current)</span></a>
+                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记 <span class="sr-only">(current)</span></a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
                 </li>
 <li >
                   <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
@@ -105,7 +108,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://www.solarck.com/openwrt-samba.html" rel="bookmark" title="Permalink to openwrt开启Samba作为共享中心">openwrt开启Samba作为共享中心</a>
+    <a href="https://www.solarck.com/openwrt-samba.html" rel="bookmark" title="Permalink to openwrt 开启 Samba 作为共享中心">openwrt 开启 Samba&nbsp;作为共享中心</a>
   </h1>
         </div>
       </div>
@@ -117,14 +120,13 @@
   
 
   <div>
-    <p>为Openwrt接入一个大U盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机BT下载提供一个基础。</p>
+    <p>为 Openwrt 接入一个大 U 盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机 <span class="caps">BT</span>&nbsp;下载提供一个基础。</p>
 <h3 id="an-zhuang">安装</h3>
 <div class="highlight"><pre><span></span>opkg update
 opkg install samba36-server luci-app-samba
 </pre></div>
-<!--more-->
 <h4 id="pei-zhi-wen-jian">配置文件</h4>
-<p>samba的配置文件只有两个，而且默认配置稍作修改就可以使用</p>
+<p>samba&nbsp;的配置文件只有两个，而且默认配置稍作修改就可以使用</p>
 <div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/samba/smb.conf.template
 <span class="o">[</span>global<span class="o">]</span>
     netbios <span class="nv">name</span> <span class="o">=</span> OpenWrt
@@ -183,31 +185,31 @@ config <span class="s1">'sambashare'</span>
 <p>或者更改文件夹用户</p>
 <div class="highlight"><pre><span></span>chown nobody:nobody /share
 </pre></div>
-<p>最后重启samba服务并开机启动</p>
+<p>最后重启 samba&nbsp;服务并开机启动</p>
 <div class="highlight"><pre><span></span>/etc/init.d/samba restart
 /etc/init.d/samba <span class="nb">enable</span>
 </pre></div>
 <h3 id="fang-wen_1">访问</h3>
-<p>Windows用户很容易访问，在网络邻居（网络）里就可以看到WORKGROUP&mdash;&gt;<span class="caps">OPENWRT</span>&mdash;&gt;Share文件夹了，但是linux用户需要一些其他命令。  <br/>
-<strong>1.&nbsp;安装g2sc</strong> </p>
+<p>Windows 用户很容易访问，在网络邻居（网络）里就可以看到 <span class="caps">WORKGROUP</span>&mdash;&gt;<span class="caps">OPENWRT</span>&mdash;&gt;Share 文件夹了，但是 linux 用户需要一些其他命令。<br/>
+<strong>1. 安装&nbsp;g2sc</strong></p>
 <div class="highlight"><pre><span></span>yaourt -S g2sc
 </pre></div>
-<p>安装完就可以像Windows一样看到工作组和文件夹，但是只能下载，没有上传功能。    </p>
+<p>安装完就可以像 Windows&nbsp;一样看到工作组和文件夹，但是只能下载，没有上传功能。</p>
 <p><strong>2. sambclient</strong>&nbsp;安装工具</p>
 <div class="highlight"><pre><span></span>yaourt -S sambaclient
 </pre></div>
-<p>连接主机    </p>
+<p>连接主机</p>
 <div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: smbclient -L OPENWRT
 Enter kevins password:  <span class="c1">#没设密码直接回车</span>
 
     Sharename       Type      Comment
     ---------       ----      -------
-    Shares          Disk      
+    Shares          Disk
     IPC$            IPC       IPC Service <span class="o">(</span>OpenWrt<span class="o">)</span>
 
     Server               Comment
     ---------            -------
-    CHEN-PC              
+    CHEN-PC
     OPENWRT              OpenWrt
 
     Workgroup            Master
@@ -217,30 +219,31 @@ Enter kevins password:  <span class="c1">#没设密码直接回车</span>
 <div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: smbclient //OPENWRT/Shares <span class="c1">#格式为//Servername/Sharename</span>
 smb: <span class="se">\&gt;</span>
 </pre></div>
-<p>出现了smb的命令行</p>
-<div class="highlight"><pre><span></span>get ****    <span class="c1">#下载某个文件    </span>
+<p>出现了 smb&nbsp;的命令行</p>
+<div class="highlight"><pre><span></span>get ****    <span class="c1">#下载某个文件</span>
 put ****    <span class="c1">#上传某个文件</span>
 </pre></div>
 <p>更多命令输入?查看</p>
-<p><strong>3.&nbsp;mount挂载</strong></p>
+<p><strong>3. mount&nbsp;挂载</strong></p>
 <div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: mkdir /mnt/samba
 kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
 </pre></div>
 <h3 id="wan-cheng">完成</h3>
-<p>由于安装了Luci，所以开启了uhttp服务，把共享目录链接到/www目录同样可以通过浏览器直接下载，相当于把Samba目录同样做成了FTP目录。</p>
+<p>由于安装了 Luci，所以开启了 uhttp 服务，把共享目录链接到/www 目录同样可以通过浏览器直接下载，相当于把 Samba 目录同样做成了 <span class="caps">FTP</span>&nbsp;目录。</p>
 <div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: ln -s /share /www/share
 </pre></div>
-<p>Samba共享就全部完成，之后再继续研究BT下载，配合Samba的共享就等于免费拥有了一个简版NAS。</p>
+<p>Samba 共享就全部完成，之后再继续研究 <span class="caps">BT</span> 下载，配合 Samba 的共享就等于免费拥有了一个简版 <span class="caps">NAS</span>。</p>
   </div>
 
     <hr />
     <h3>相关文章</h3>
     <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
     <ul>
-        <li><a href="https://www.solarck.com/lede-media-center2.html"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（二）</a></li>
-        <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（一）</a></li>
-        <li><a href="https://www.solarck.com/openwrt-extroot.html">用extroot为openwrt扩充存储空间</a></li>
-        <li><a href="https://www.solarck.com/install-openwrt-on-mw4530r.html">水星（Mercury）MW4530r刷Openwrt</a></li>
+        <li><a href="https://www.solarck.com/upgrade-lede-to-1806.html">升级 Openwrt/<span class="caps">LEDE</span> 大版本至&nbsp;18.06</a></li>
+        <li><a href="https://www.solarck.com/lede-media-center2.html"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（二）</a></li>
+        <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（一）</a></li>
+        <li><a href="https://www.solarck.com/openwrt-extroot.html">用 extroot 为 openwrt&nbsp;扩充存储空间</a></li>
+        <li><a href="https://www.solarck.com/install-openwrt-on-mw4530r.html">水星（Mercury）MW4530r 刷&nbsp;Openwrt</a></li>
       </ul>
 
     <div class="comments">
@@ -248,7 +251,7 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
         var disqus_identifier = "openwrt-samba.html";
-        var disqus_title = "openwrt开启Samba作为共享中心";
+        var disqus_title = "openwrt 开启 Samba 作为共享中心";
         var disqus_url = "https://www.solarck.com/openwrt-samba.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -274,12 +277,12 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
     <hr/>
 
       <p>
-              <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
+              <a href="https://www.solarck.com/category/it-bi-ji.html" rel="tag"
                   data-toggle="tooltip" class="label label-info"
-                  title="17 articles in this category">IT笔记</a>
+                  title="17 articles in this category">IT 笔记</a>
             <a href="/tag/openwrt.html" data-toggle="tooltip"
       class="label label-default"
-      title="5 articles with this tag">openwrt</a>
+      title="6 articles with this tag">openwrt</a>
       </p>
       <hr/>
 
@@ -287,12 +290,12 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
       <nav>
         <ul class="pager">
           <li class="previous ">
-            <a  href="https://www.solarck.com/openwrt-extroot.html" title="用extroot为openwrt扩充存储空间"  rel="prev">
+            <a  href="https://www.solarck.com/openwrt-extroot.html" title="用 extroot 为 openwrt 扩充存储空间"  rel="prev">
               <span aria-hidden="true">←</span> 旧文章
             </a>
           </li>
           <li class="next ">
-            <a  href="https://www.solarck.com/config-pip-conda.html" title="配置pip和conda"  rel="next">
+            <a  href="https://www.solarck.com/config-pip-conda.html" title="配置 pip 和 conda"  rel="next">
               新文章 <span aria-hidden="true">→</span>
             </a>
           </li>

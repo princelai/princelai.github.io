@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>  升级 Openwrt/LEDE 大版本至 18.06
+ | Solarck</title>
+
+    <meta name="author" content="Kevin Chen"/>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css"/>
+    <link rel="stylesheet" href="https://www.solarck.com/theme/css/jquery.mglass.css"/>
+    <link rel="stylesheet" href="https://www.solarck.com/theme/css/pygment-solarized-dark.css"/>
+    <link rel="stylesheet" href="https://www.solarck.com/theme/css/style.css"/>
+
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Istok+Web' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'/>
+      <link href='https://fonts.googleapis.com/css?family=Expletus+Sans' rel='stylesheet' type='text/css'>
+
+
+    <link rel="icon" href="https://www.solarck.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://www.solarck.com/favicon.ico" type="image/x-icon">
+
+    <!-- Feeds -->
+      <link href="https://www.solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Solarck - All posts - Atom Feed"/>
+
+
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="page-header">
+          <a href="https://www.solarck.com" class="avatar-container pull-left">
+            <div class="avatar ">
+              <div class="side"><img src="https://www.solarck.com/static/avatar.jpg" class="img-responsive"/></div>
+            </div>
+          </a>
+        <h1><a href="https://www.solarck.com">Solarck</a> <small>金融民工与程序猿的结合体</small></h1>
+      </div>
+
+      <nav class="navbar navbar-default">
+
+        <!-- Hamburger menu for mobile -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#plumage-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://www.solarck.com" title="金融民工与程序猿的结合体">Solarck</a>
+        </div>
+
+        <!-- Menus and search forms -->
+        <div class="collapse navbar-collapse" id="plumage-navbar-collapse-1">
+
+          <ul class="nav navbar-nav">
+<li  class="active" >
+                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记 <span class="sr-only">(current)</span></a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/pages/aboutme.html">关于我</a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/pages/resume.html">简历</a>
+                </li>
+
+          </ul>
+
+
+            <form class="navbar-form navbar-right" role="search" action="https://www.solarck.com/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fa
+                        fa-search fa-fw"></i></button>
+                  </span>
+                </div>
+              </div>
+            </form>
+
+        </div>
+
+      </nav>
+
+    </div>
+
+
+    <div class="container main">
+
+
+      <div class="row">
+        <div class=" col-md-9  ">
+  <h1>
+    <a href="https://www.solarck.com/upgrade-lede-to-1806.html" rel="bookmark" title="Permalink to 升级 Openwrt/LEDE 大版本至 18.06">升级 Openwrt/<span class="caps">LEDE</span> 大版本至&nbsp;18.06</a>
+  </h1>
+        </div>
+      </div>
+
+      <div class="row">
+
+
+        <div class=" col-md-9 " id="content" role="main">
+  
+
+  <div>
+    <h1 id="xia-zai-sheng-ji-bao">下载升级包</h1>
+<p>首先下载新版文件，点击下方链接中任意一个，进入你的路由器架构，然后搜索路由器型号，如果你已经是 Openwrt/<span class="caps">LEDE</span>&nbsp;系统，可以下载升级包*-squashfs-sysupgrade.bin，如果不是，则要下载完整安装包*-squashfs-factory.img。</p>
+<p><a href="https://downloads.openwrt.org/releases/18.06.0/targets/">官方下载</a></p>
+<p><a href="https://mirrors.ustc.edu.cn/lede/releases/18.06.0/targets/">中科大</a></p>
+<p><a href="https://mirrors.tuna.tsinghua.edu.cn/lede/releases/18.06.0/targets">清华大学</a></p>
+<h1 id="bei-fen-geng-xin">备份 <span class="amp">&amp;</span>&nbsp;更新</h1>
+<p>下载好文件后，进入路由器 Luci 界面，System &mdash;-&gt; Backup / Flash&nbsp;Firmware</p>
+<p><img alt="backup and flash" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-backup-flash.png"/></p>
+<p>建议先备份一份配置到本地，备份好后，上传文件，开刷！等待路由器重启后进入后面的步骤。</p>
+<h1 id="geng-xin-yuan">更新源</h1>
+<p>关于详细的如何更换源操作，我在<a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT 路由器打造家庭媒体影音中心（一）</a>中有写，这里仅给出自定义源文件的内容。</p>
+<p><code>vim /etc/opkg/customfeeds.conf</code></p>
+<div class="highlight"><pre><span></span><span class="c1">#Tsinghua</span>
+<span class="na">src/gz reboot_core https://mirrors.tuna.tsinghua.edu.cn/lede/releases/18.06.0/targets/mvebu/cortexa9/packages</span>
+<span class="na">src/gz reboot_base https://mirrors.tuna.tsinghua.edu.cn/lede/releases/18.06.0/packages/arm_cortex-a9_vfpv3/base</span>
+<span class="na">src/gz reboot_luci https://mirrors.tuna.tsinghua.edu.cn/lede/releases/18.06.0/packages/arm_cortex-a9_vfpv3/luci</span>
+<span class="na">src/gz reboot_packages https://mirrors.tuna.tsinghua.edu.cn/lede/releases/18.06.0/packages/arm_cortex-a9_vfpv3/packages</span>
+<span class="na">src/gz reboot_routing https://mirrors.tuna.tsinghua.edu.cn/lede/releases/18.06.0/packages/arm_cortex-a9_vfpv3/routing</span>
+<span class="na">src/gz reboot_telephony https://mirrors.tuna.tsinghua.edu.cn/lede/releases/18.06.0/packages/arm_cortex-a9_vfpv3/telephony</span>
+
+<span class="c1">#USTC</span>
+<span class="c1">#src/gz reboot_core https://mirrors.ustc.edu.cn/lede/releases/18.06.0/targets/mvebu/cortexa9/packages</span>
+<span class="c1">#src/gz reboot_base https://mirrors.ustc.edu.cn/lede/releases/18.06.0/packages/arm_cortex-a9_vfpv3/base</span>
+<span class="c1">#src/gz reboot_luci https://mirrors.ustc.edu.cn/lede/releases/18.06.0/packages/arm_cortex-a9_vfpv3/luci</span>
+<span class="c1">#src/gz reboot_packages https://mirrors.ustc.edu.cn/lede/releases/18.06.0/packages/arm_cortex-a9_vfpv3/packages</span>
+<span class="c1">#src/gz reboot_routing https://mirrors.ustc.edu.cn/lede/releases/18.06.0/packages/arm_cortex-a9_vfpv3/routing</span>
+<span class="c1">#src/gz reboot_telephony https://mirrors.ustc.edu.cn/lede/releases/18.06.0/packages/arm_cortex-a9_vfpv3/telephony</span>
+
+<span class="c1">#shadowsocks</span>
+<span class="na">src/gz openwrt_dist http://openwrt-dist.sourceforge.net/packages/base/arm_cortex-a9_vfpv3</span>
+<span class="na">src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/packages/luci</span>
+</pre></div>
+<p>改好源后，可以使用下面的命令更新软件</p>
+<div class="highlight"><pre><span></span>opkg update
+opkg list-upgradable <span class="p">|</span> cut -f <span class="m">1</span> -d <span class="s1">' '</span> <span class="p">|</span> xargs opkg upgrade
+</pre></div>
+<h1 id="yi-ge-wu-liao-de-jiao-ben">一个无聊的脚本</h1>
+<p>整个过程到上面就已经结束了，不过本着继(凑)续(字)深(数)挖的态度，花点时间写了个 python 脚本，用来分析所有 ipk&nbsp;包的升级情况。对了，写这个脚本的时候还发现有个源网址改变了，所以写自定义源的时候一定要注意。</p>
+<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">"""</span>
+<span class="sd">Created on Tue Jul 31 14:40:26 2018</span>
+
+<span class="sd">@author: kevin</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span> <span class="nn">requests_html</span> <span class="kn">import</span> <span class="n">HTMLSession</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="n">web_main</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'http://downloads.lede-project.org/releases/17.01.5'</span><span class="p">,</span>
+            <span class="s1">'http://downloads.lede-project.org/releases/18.06.0'</span><span class="p">]</span>
+<span class="n">web_packages</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'/targets/mvebu/generic/packages/'</span><span class="p">,</span><span class="s1">'/targets/mvebu/cortexa9/packages/'</span><span class="p">),</span>
+                <span class="s1">'/packages/arm_cortex-a9_vfpv3/base'</span><span class="p">,</span>
+                <span class="s1">'/packages/arm_cortex-a9_vfpv3/luci'</span><span class="p">,</span>
+                <span class="s1">'/packages/arm_cortex-a9_vfpv3/packages'</span><span class="p">,</span>
+                <span class="s1">'/packages/arm_cortex-a9_vfpv3/routing'</span><span class="p">,</span>
+                <span class="s1">'/packages/arm_cortex-a9_vfpv3/telephony'</span><span class="p">]</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">pack</span> <span class="ow">in</span> <span class="n">web_packages</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">main</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">web_main</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pack</span><span class="p">,</span><span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">website</span> <span class="o">=</span> <span class="n">main</span> <span class="o">+</span> <span class="n">pack</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">website</span> <span class="o">=</span> <span class="n">main</span> <span class="o">+</span> <span class="n">pack</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">HTMLSession</span><span class="p">()</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">website</span><span class="p">,</span><span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">td</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">'body &gt; table &gt; tr &gt; td &gt; a'</span><span class="p">)</span>
+        <span class="n">ispackages</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">td</span> <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">'.ipk'</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ispackages</span><span class="p">:</span>
+            <span class="n">packname</span><span class="p">,</span><span class="n">version</span><span class="p">,</span><span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'_'</span><span class="p">)</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">packname</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
+
+<span class="n">output_str</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">output_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'New Add:</span><span class="se">\t</span><span class="s1">{}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">output_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'Version Up:</span><span class="se">\t</span><span class="s1">{}|{} --&gt; {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'lede_upgrade.txt'</span><span class="p">,</span><span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_str</span><span class="p">))</span>
+</pre></div>
+<p>写完这个脚本才发现有个 bug，~~但是我懒得改了~~，我忽略了在两个版本的相同 packages 包中，一个有某软件包一个没有的情况，也就是说输出文件的<code>New Add</code>不是真正的新增，还有被剔除的包。</p>
+<p>两个版本相同源地址的软件包共 6473 个，本次升级有版本升级、新增、剔除的包一共 5665&nbsp;个，可见大部分还都是进行了例行的升级。</p>
+<div class="highlight"><pre><span></span>$ cat lede_upgrade.txt<span class="p">|</span>grep <span class="s2">"New Add"</span><span class="p">|</span>wc -l
+<span class="m">2180</span>
+</pre></div>
+<p>新增、剔除的包共 2180&nbsp;个，具体那个是新增哪个是剔除我没有区分出来。</p>
+<div class="highlight"><pre><span></span>$ cat lede_upgrade.txt<span class="p">|</span>grep <span class="s2">"Version Up"</span><span class="p">|</span>wc -l
+<span class="m">3485</span>
+</pre></div>
+<p>版本升级的包有 3485 个，这两项加起来正好 5665&nbsp;个。</p>
+<p>由于版本号的命名十分不规则，本来还想弄个大版本号、次版本号、小版本号的对比，无奈最终还是搁浅了。</p>
+  </div>
+
+    <hr />
+    <h3>相关文章</h3>
+    <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
+    <ul>
+        <li><a href="https://www.solarck.com/lede-media-center2.html"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（二）</a></li>
+        <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（一）</a></li>
+        <li><a href="https://www.solarck.com/openwrt-samba.html">openwrt 开启 Samba&nbsp;作为共享中心</a></li>
+        <li><a href="https://www.solarck.com/openwrt-extroot.html">用 extroot 为 openwrt&nbsp;扩充存储空间</a></li>
+        <li><a href="https://www.solarck.com/install-openwrt-on-mw4530r.html">水星（Mercury）MW4530r 刷&nbsp;Openwrt</a></li>
+      </ul>
+
+    <div class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'solarck';
+        var disqus_identifier = "upgrade-lede-to-1806.html";
+        var disqus_title = "升级 Openwrt/LEDE 大版本至 18.06";
+        var disqus_url = "https://www.solarck.com/upgrade-lede-to-1806.html";
+        (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.</noscript>
+    </div>
+
+        </div>
+
+          <div class="col-md-3">
+  <div class="well">
+
+    <p><abbr title="2018-07-31T14:31:00+08:00"><i class="fa fa-calendar"></i> July 31, 2018</abbr></p>
+
+      <p><address>
+        <i class="fa fa-user"></i> 作者:
+          <a href="https://www.solarck.com/author/kevin-chen.html" rel="author">Kevin Chen</a>
+      </address></p>
+
+    <hr/>
+
+      <p>
+              <a href="https://www.solarck.com/category/it-bi-ji.html" rel="tag"
+                  data-toggle="tooltip" class="label label-info"
+                  title="17 articles in this category">IT 笔记</a>
+            <a href="/tag/openwrt.html" data-toggle="tooltip"
+      class="label label-default"
+      title="6 articles with this tag">openwrt</a>
+            <a href="/tag/lede.html" data-toggle="tooltip"
+      class="label label-default"
+      title="3 articles with this tag">lede</a>
+      </p>
+      <hr/>
+
+
+      <nav>
+        <ul class="pager">
+          <li class="previous ">
+            <a  href="https://www.solarck.com/compile-tensorflow-gpu.html" title="编译 Tensorflow 1.10 + CUDA9.2 + MKL"  rel="prev">
+              <span aria-hidden="true">←</span> 旧文章
+            </a>
+          </li>
+          <li class="next  disabled ">
+            <a  rel="next">
+              新文章 <span aria-hidden="true">→</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    
+        <center><h4><b>目录</b></h4></center>
+        <nav class="toc">
+            <div id="toc"><ul><li><a class="toc-href" href="#xia-zai-sheng-ji-bao" title="下载升级包">下载升级包</a></li><li><a class="toc-href" href="#bei-fen-geng-xin" title="备份 &amp;&nbsp;更新">备份 &amp;&nbsp;更新</a></li><li><a class="toc-href" href="#geng-xin-yuan" title="更新源">更新源</a></li><li><a class="toc-href" href="#yi-ge-wu-liao-de-jiao-ben" title="一个无聊的脚本">一个无聊的脚本</a></li></ul></div>
+        </nav>
+
+  </div>
+            
+          </div>
+
+      </div>
+
+    </div>
+
+    <!-- TODO: make footer sticky -->
+    <footer class="container-fluid">
+      <div class="container">
+        <div class="row">
+
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-2">
+                <h5>链接</h5>
+                <ul class="list-unstyled">
+                  <li>  <a href="http://getpelican.com/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
+    Pelican
+  </a></li>
+                  <li>  <a href="http://python.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
+    Python.org
+  </a></li>
+                  <li>  <a href="http://jinja.pocoo.org/">
+      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
+    Jinja2
+  </a></li>
+                </ul>
+            </div>
+
+          <div class="col-md-2">
+            <h5>归档</h5>
+            <ul class="list-unstyled">
+                <li><a href="https://www.solarck.com/categories.html"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="https://www.solarck.com/archives.html"><i class="fa fa-calendar"></i> Dates</a></li>
+                <li><a href="https://www.solarck.com/tags.html"><i class="fa fa-tag"></i> Tags</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-2 text-muted">
+            <h5>Copyright</h5>
+            <p>© Copyright 2013-2018 Kevin Chen.</p>
+          </div>
+        <!--
+          <div class="col-md-2 text-muted">
+            <h5>Disclaimer</h5>
+              <p>All opinions expressed in this site are my own personal opinions and are not endorsed by, nor do they represent the opinions of my previous, current and future employers or any of its affiliates, partners or customers.</p>
+          </div>
+        -->
+          <div class="col-md-2">
+              <h5>Feeds</h5>
+              <ul class="list-unstyled">
+                  <li><small><a href="https://www.solarck.com/feeds/all.atom.xml"><i class="fa fa-rss"></i> All posts (Atom)</a></small></li>
+              </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <h5 class="text-right"><a href="#"><i class="fa fa-arrow-up"></i> Back to top</a></h5>
+
+      <div class="container">
+        <div class="row col-md-12 text-muted text-center">
+          Site generated by <a href="https://getpelican.com"> Pelican</a>.<br/>
+          <a href="https://github.com/kdeldycke/plumage"> Plumage</a> theme by <a href="https://kevin.deldycke.com">Kevin Deldycke</a>.
+        </div>
+      </div>
+
+    </footer>
+
+    <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-1337838-7', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
+    <script src="https://www.solarck.com/theme/js/jquery.mglass.js"></script>
+    <script src="https://www.solarck.com/theme/js/application.js"></script>
+
+  </body>
+</html>

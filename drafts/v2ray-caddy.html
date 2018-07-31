@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  IT笔记
+    <title>  
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -64,11 +64,11 @@
         <div class="collapse navbar-collapse" id="plumage-navbar-collapse-1">
 
           <ul class="nav navbar-nav">
-<li >
-                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记</a>
-                </li>
 <li  class="active" >
-                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记 <span class="sr-only">(current)</span></a>
+                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记 <span class="sr-only">(current)</span></a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
                 </li>
 <li >
                   <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
@@ -106,9 +106,9 @@
 
 
       <div class="row">
-        <div class=" col-md-12  ">
+        <div class=" col-md-9  ">
   <h1>
-    <a  href="https://www.solarck.com/category/itbi-ji.html" rel="bookmark" title="Permalink to IT笔记 articles">IT笔记 articles</a>
+    <a href="https://www.solarck.com/drafts/v2ray-caddy.html" rel="bookmark" title="Permalink to "></a>
   </h1>
         </div>
       </div>
@@ -116,15 +116,99 @@
       <div class="row">
 
 
-        <div class=" col-md-12 " id="content" role="main">
-  <dl class="dl-horizontal">
-      <dt><abbr class="published" title="2018-07-13T10:08:00+08:00">July 13, 2018</abbr></dt>
-      <dd><a href="https://www.solarck.com/v2ray-quick-config.html">快速配置V2ray</a></dd>
-      <dt><abbr class="published" title="2018-01-08T17:41:00+08:00">January 08, 2018</abbr></dt>
-      <dd><a href="https://www.solarck.com/argparse-brief-usage.html">argparse模块简要用法</a></dd>
-  </dl>
+        <div class=" col-md-9 " id="content" role="main">
+  
+
+  <div>
+    <div class="highlight"><pre><span></span>curl https://getcaddy.com | bash -s personal
+ulimit -n 8192
+</pre></div>
+<div class="highlight"><pre><span></span>example.top {
+    tls princelailai@gmail.com
+    root /var/www/
+    log /var/caddy/log
+    timeouts none
+    gzip
+
+    proxy /h2ray localhost:10010 {
+        header_upstream Host "example.top"
+        header_upstream X-Forwarded-Proto "https"
+    }
+
+    proxy /wsray localhost:10086 {
+        websocket
+        header_upstream -Origin
+    }
+}
+</pre></div>
+<div class="highlight"><pre><span></span>mkdir /etc/Caddy
+nano /etc/Caddy/CaddyFile
+
+systemctl stop v2ray@mKcp-server.service
+systemctl start v2ray@TCP-TLS-server.service
+
+mkdir /var/log/caddy/
+caddy -conf /etc/Caddy/CaddyFile
+
+nohup caddy -conf /etc/Caddy/CaddyFile &amp;
+systemctl stop v2ray@H2-TLS-server
+systemctl start v2ray@H2-TLS-server
+</pre></div>
+  </div>
+
+    <hr />
+    <h3>相关文章</h3>
+    <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
+    <ul>
+        <li><a href="https://www.solarck.com/v2ray-quick-config.html">快速配置V2ray</a></li>
+      </ul>
+
+    <div class="comments">
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+        var disqus_shortname = 'solarck';
+        var disqus_identifier = "drafts/v2ray-caddy.html";
+        var disqus_title = "";
+        var disqus_url = "https://www.solarck.com/drafts/v2ray-caddy.html";
+        (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.</noscript>
+    </div>
+
         </div>
 
+          <div class="col-md-3">
+  <div class="well">
+
+    <p><abbr title="2018-07-24T12:30:00+08:00"><i class="fa fa-calendar"></i> July 24, 2018</abbr></p>
+
+      <p><address>
+        <i class="fa fa-user"></i> 作者:
+          <a href="https://www.solarck.com/author/kevin-chen.html" rel="author">Kevin Chen</a>
+      </address></p>
+
+    <hr/>
+
+      <p>
+              <a href="https://www.solarck.com/category/it-bi-ji.html" rel="tag"
+                  data-toggle="tooltip" class="label label-info"
+                  title="17 articles in this category">IT 笔记</a>
+            <a href="/tag/v2ray.html" data-toggle="tooltip"
+      class="label label-default"
+      title="1 article with this tag">v2ray</a>
+      </p>
+      <hr/>
+
+
+    
+
+  </div>
+            
+          </div>
 
       </div>
 
@@ -166,7 +250,7 @@
 
           <div class="col-md-2 text-muted">
             <h5>Copyright</h5>
-            <p>© Copyright 2018 Kevin Chen.</p>
+            <p>© Copyright 2013-2018 Kevin Chen.</p>
           </div>
         <!--
           <div class="col-md-2 text-muted">

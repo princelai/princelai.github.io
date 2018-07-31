@@ -65,6 +65,9 @@
 
           <ul class="nav navbar-nav">
 <li >
+                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记</a>
+                </li>
+<li >
                   <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
                 </li>
 <li  class="active" >
@@ -130,13 +133,13 @@
 <p>
 上面两个公式也可以写为下面这样：
 </p>
-<div class="math">$$\sigma^2=\frac{1}{N}\sum_{i=1}^{N}(x_i-\mu)^2=\frac{(\sum_{i=1}^{N}x_i^2-\mu^2)}{N}$$</div>
+<div class="math">$$\sigma^2=\frac{1}{N}\sum*{i=1}^{N}(x_i-\mu)^2=\frac{(\sum*{i=1}^{N}x_i^2-\mu^2)}{N}$$</div>
 <p>标准差的定义和公式和方差类似，就是对方差开平方根即可得到。</p>
 <div class="math">$$SD(X) = \sigma = \sqrt{E(X-E(X))^2}$$</div>
-<div class="math">$$\sigma = \sqrt{\frac{\sum_{i=1}^NX_i^2}{N}-\mu^2}$$</div>
-<div class="math">$$\sigma = \sqrt{\frac{(\sum_{i=1}^{N}x_i^2-\mu^2)}{N}}$$</div>
+<div class="math">$$\sigma = \sqrt{\frac{\sum*{i=1}^NX_i^2}{N}-\mu^2}$$</div>
+<div class="math">$$\sigma = \sqrt{\frac{(\sum*{i=1}^{N}x_i^2-\mu^2)}{N}}$$</div>
 <h3 id="2zhun-bei-shu-ju">2.准备数据</h3>
-<p>这里使用一个开源免费的股票数据模块tushare，获取贵州茅台的数据，并截取数据的前600天，把数据平分为2部分。获取后的数据格式为DataFrame。</p>
+<p>这里使用一个开源免费的股票数据模块 tushare，获取贵州茅台的数据，并截取数据的前 600 天，把数据平分为 2 部分。获取后的数据格式为&nbsp;DataFrame。</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tushare</span> <span class="kn">as</span> <span class="nn">ts</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
@@ -147,11 +150,11 @@
 <span class="n">stock_part2</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
 </pre></div>
 <h3 id="3te-xing-yan-zheng">3.特性验证</h3>
-<p>对于方差的计算，我们可以把数据带入公式直接计算，python代码可以这样写，这里使用的是无偏估计，所以分母是N-1。</p>
+<p>对于方差的计算，我们可以把数据带入公式直接计算，python 代码可以这样写，这里使用的是无偏估计，所以分母是&nbsp;N-1。</p>
 <div class="highlight"><pre><span></span><span class="p">((</span><span class="n">stock</span> <span class="o">-</span> <span class="n">stock</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">stock</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
-<p>不过幸好Numpy和Pandas都提供了快速计算方差和标准差的方法，我们可以调用<code>var()</code>方法和<code>std()</code>方法使用。</p>
-<p><strong>性质1，一个常数被加至变量数列中，此数列方差不变。</strong>
+<p>不过幸好 Numpy 和 Pandas 都提供了快速计算方差和标准差的方法，我们可以调用<code>var()</code>方法和<code>std()</code>方法使用。</p>
+<p><strong>性质&nbsp;1，一个常数被加至变量数列中，此数列方差不变。</strong>
 </p>
 <div class="math">$$Var(X+c) = Var(X)$$</div>
 <div class="math">$$SD(X+c) = SD(X)$$</div>
@@ -160,7 +163,7 @@
 <span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">((</span><span class="n">stock</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span><span class="n">stock</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span><span class="bp">True</span> <span class="c1">#标准差</span>
 </pre></div>
-<p><strong>性质2，数列被放大一个常数倍，此数列的方差变大常数的平方倍</strong>
+<p><strong>性质&nbsp;2，数列被放大一个常数倍，此数列的方差变大常数的平方倍</strong>
 </p>
 <div class="math">$$Var(cX) = c^2 \times Var(X)$$</div>
 <div class="math">$$SD(cX) = c \times SD(X)$$</div>
@@ -169,7 +172,7 @@
 <span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">((</span><span class="n">stock</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span><span class="mi">4</span><span class="o">*</span><span class="n">stock</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="bp">True</span> <span class="c1">#标准差</span>
 </pre></div>
-<p><strong>性质3，两个数列和（差）的方差</strong></p>
+<p><strong>性质&nbsp;3，两个数列和（差）的方差</strong></p>
 <div class="math">$$Var(aX+bY)=a^2Var(X)+b^2Var(Y)+2 \times ab \times Cov(X,Y)$$</div>
 <div class="math">$$Var(X-Y)=Var(X)+Var(Y)-2 \times Cov(X,Y)$$</div>
 <p>标准差也有同样的性质</p>
@@ -240,11 +243,11 @@
     <h3>相关文章</h3>
     <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
     <ul>
-        <li><a href="https://www.solarck.com/python-send-gmail.html">使用Python发送Gmail</a></li>
-        <li><a href="https://www.solarck.com/pandas-timeseries.html">Pandas时间处理函数速度对比</a></li>
+        <li><a href="https://www.solarck.com/python-send-gmail.html">使用 Python 发送&nbsp;Gmail</a></li>
+        <li><a href="https://www.solarck.com/pandas-timeseries.html">Pandas&nbsp;时间处理函数速度对比</a></li>
         <li><a href="https://www.solarck.com/argparse-brief-usage.html">argparse模块简要用法</a></li>
-        <li><a href="https://www.solarck.com/matplotlib-chinese-fonts.html">matplotlib中文字体配置</a></li>
-        <li><a href="https://www.solarck.com/config-pip-conda.html">配置pip和conda</a></li>
+        <li><a href="https://www.solarck.com/matplotlib-chinese-fonts.html">matplotlib&nbsp;中文字体配置</a></li>
+        <li><a href="https://www.solarck.com/config-pip-conda.html">配置 pip 和&nbsp;conda</a></li>
       </ul>
 
     <div class="comments">
@@ -302,7 +305,7 @@
             </a>
           </li>
           <li class="next ">
-            <a  href="https://www.solarck.com/git-and-github.html" title="git和github主要使用方法"  rel="next">
+            <a  href="https://www.solarck.com/git-and-github.html" title="git 和 github 主要使用方法"  rel="next">
               新文章 <span aria-hidden="true">→</span>
             </a>
           </li>

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  水星（Mercury）MW4530r刷Openwrt
+    <title>  水星（Mercury）MW4530r 刷 Openwrt
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -65,7 +65,10 @@
 
           <ul class="nav navbar-nav">
 <li  class="active" >
-                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记 <span class="sr-only">(current)</span></a>
+                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记 <span class="sr-only">(current)</span></a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
                 </li>
 <li >
                   <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
@@ -105,7 +108,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://www.solarck.com/install-openwrt-on-mw4530r.html" rel="bookmark" title="Permalink to 水星（Mercury）MW4530r刷Openwrt">水星（Mercury）MW4530r刷Openwrt</a>
+    <a href="https://www.solarck.com/install-openwrt-on-mw4530r.html" rel="bookmark" title="Permalink to 水星（Mercury）MW4530r 刷 Openwrt">水星（Mercury）MW4530r 刷&nbsp;Openwrt</a>
   </h1>
         </div>
       </div>
@@ -117,29 +120,30 @@
   
 
   <div>
-    <p>经过两天的不屑折腾，终于为我的Mw4530r安装上了Openwrt。从最后安装成功往回看，其实整个过程非常简单，但是由于是第一次接触，走了不少弯路，本应该一个小时就完成的工作，却整整花了我两天时间。再次发篇文章庆祝下，也给其他朋友一些参考。</p>
+    <p>经过两天的不屑折腾，终于为我的 Mw4530r 安装上了&nbsp;Openwrt。从最后安装成功往回看，其实整个过程非常简单，但是由于是第一次接触，走了不少弯路，本应该一个小时就完成的工作，却整整花了我两天时间。再次发篇文章庆祝下，也给其他朋友一些参考。</p>
 <h3 id="xia-zai-wen-jian">下载文件</h3>
-<p>水星这款路由器是ar71xx芯片的，因为较新，所以还没有官方的稳定版。在Openwrt的<a href="http://downloads.openwrt.org/snapshots/trunk/ar71xx/">snapshots/trunk</a>目录搜索下载我们需要的刷机文件，一般情况一个型号有两个文件，一个名字里带factory，从其他固件系统刷Openwrt下载这个文件；一个名字带sysupgrade，已经是Openwrt系统的用此文件升级。</p>
+<p>水星这款路由器是 ar71xx 芯片的，因为较新，所以还没有官方的稳定版。在 Openwrt 的<a href="http://downloads.openwrt.org/snapshots/trunk/ar71xx/">snapshots/trunk</a>目录搜索下载我们需要的刷机文件，一般情况一个型号有两个文件，一个名字里带 factory，从其他固件系统刷 Openwrt 下载这个文件；一个名字带 sysupgrade，已经是 Openwrt&nbsp;系统的用此文件升级。</p>
 <h3 id="shua-ji">刷机</h3>
-<p>组装好路由器，接通电源，电脑网卡口连接路由器任意Lan口，打开浏览器访问http://192.168.1.1&nbsp;就可以看见水星的原厂界面。利用原厂固件的升级功能，提交下载好的Openwrt刷机文件即可直接刷机，非常的方便。稍等片刻等待路由器自动重启，此时刷机完成。</p>
-<!--more-->
+<p>组装好路由器，接通电源，电脑网卡口连接路由器任意 Lan 口，打开浏览器访问http://192.168.1.1 就可以看见水星的原厂界面。利用原厂固件的升级功能，提交下载好的 Openwrt&nbsp;刷机文件即可直接刷机，非常的方便。稍等片刻等待路由器自动重启，此时刷机完成。</p>
 <h3 id="chu-shi-hua">初始化</h3>
-<p>Openwrt的固件是不带UI界面的，在安装用户界面之前，用户需要先进行简单的初始化工作。  <br/>&nbsp;使用telnet登陆路由器</p>
+<p>Openwrt 的固件是不带 <span class="caps">UI</span> 界面的，在安装用户界面之前，用户需要先进行简单的初始化工作。<br/>
+使用 telnet&nbsp;登陆路由器</p>
 <div class="highlight"><pre><span></span>telnet <span class="m">192</span>.168.1.1
 </pre></div>
-<p>Linux系统自带命令，Windows用户需要在控制面板&mdash;&gt;程序里面启用telnet功能。</p>
+<p>Linux 系统自带命令，Windows 用户需要在控制面板&mdash;&gt;程序里面启用 telnet&nbsp;功能。</p>
 <p>修改登录密码</p>
 <div class="highlight"><pre><span></span>passwd
 </pre></div>
-<p>更改好密码后，dropbear（ssh）登录方式开启，telnet登录方式关闭。</p>
-<p>退出telnet，用ssh方式登陆，Windows用户可以下载putty登陆</p>
+<p>更改好密码后，dropbear（ssh）登录方式开启，telnet&nbsp;登录方式关闭。</p>
+<p>退出 telnet，用 ssh 方式登陆，Windows 用户可以下载 putty&nbsp;登陆</p>
 <div class="highlight"><pre><span></span><span class="nb">exit</span>
 ssh root@192.168.1.1
 </pre></div>
-<p>到此我们已经成功初始化了Openwrt。</p>
+<p>到此我们已经成功初始化了&nbsp;Openwrt。</p>
 <h3 id="wang-luo-pei-zhi">网络配置</h3>
-<p><strong>强烈建议基础配置尤其是网络设置都使用CLI界面，切勿乱修改原始配置，我就在这里经历的惨痛的教训</strong><br/>&nbsp;我使用的是联通ADSL，所以需要拨号（pppoe）才能上网。     </p>
-<p>配置网络连接，修改wan部分</p>
+<p><strong>强烈建议基础配置尤其是网络设置都使用 <span class="caps">CLI</span> 界面，切勿乱修改原始配置，我就在这里经历的惨痛的教训</strong><br/>
+我使用的是联通 <span class="caps">ADSL</span>，所以需要拨号（pppoe）才能上网。</p>
+<p>配置网络连接，修改 wan&nbsp;部分</p>
 <div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/config/network
 config interface <span class="s1">'wan'</span>
     option ifname <span class="s1">'eth0.2'</span>
@@ -147,33 +151,33 @@ config interface <span class="s1">'wan'</span>
     option username <span class="s1">'ISP提供的用户名'</span>
     option password <span class="s1">'密码'</span>
 </pre></div>
-<p>或者用uci方式进行配置</p>
+<p>或者用 uci&nbsp;方式进行配置</p>
 <div class="highlight"><pre><span></span>uci <span class="nb">set</span> network.wan.proto<span class="o">=</span>pppoe
 uci <span class="nb">set</span> network.wan.username<span class="o">=</span><span class="s1">'ISP提供的用户名'</span>
 uci <span class="nb">set</span> network.wan.password<span class="o">=</span><span class="s1">'密码'</span>
 uci commit network
 ifup wan
 </pre></div>
-<p>配置wifi，根据你的路由器配置生成一个默认的配置文件</p>
+<p>配置&nbsp;wifi，根据你的路由器配置生成一个默认的配置文件</p>
 <div class="highlight"><pre><span></span>wifi detect &gt; /etc/config/wireless
 </pre></div>
-<p>重启后，互联网和wifi都应该已经正常工作，wifi的密码和名称我们之后可以在UI界面修改，接下来安装用户界面。</p>
+<p>重启后，互联网和 wifi 都应该已经正常工作，wifi 的密码和名称我们之后可以在 <span class="caps">UI</span>&nbsp;界面修改，接下来安装用户界面。</p>
 <h3 id="yong-hu-jie-mian">用户界面</h3>
-<p>安装Luci    </p>
+<p>安装&nbsp;Luci</p>
 <div class="highlight"><pre><span></span>opkg update
 opkg install luci luci-ssl luci-i18n-chinese
 </pre></div>
-<p>启动Luci服务</p>
+<p>启动 Luci&nbsp;服务</p>
 <div class="highlight"><pre><span></span>/etc/init.d/uhttpd start
 /etc/init.d/uhttpd <span class="nb">enable</span>
 </pre></div>
-<p>打开浏览器输入http://192.168.1.1&nbsp;，就可以进入WebUI界面了，现在就可以向普通路由器一样进行管理了。</p>
+<p>打开浏览器输入http://192.168.1.1 ，就可以进入 WebUI&nbsp;界面了，现在就可以向普通路由器一样进行管理了。</p>
 <h3 id="xiao-ti-shi">小提示</h3>
 <blockquote>
-<p>1.MW4530r进入failsafe的方法是：路由器断电&mdash;&gt;接通电源&mdash;&gt;断续的按面板前的WPS键，直到SYS指示灯从慢闪变为快闪就是成功进入了failsafe模式了。  <br/>
-2.初始配置尽量用CLI方式配置（或uci），最好不要用WebUI。&nbsp;3.不要乱动乱删配置文件，尤其是端口路由表（switch0）。</p>
+<p>1.MW4530r 进入 failsafe 的方法是：路由器断电&mdash;&gt;接通电源&mdash;&gt;断续的按面板前的 <span class="caps">WPS</span> 键，直到 <span class="caps">SYS</span> 指示灯从慢闪变为快闪就是成功进入了 failsafe 模式了。<br/>
+2.初始配置尽量用 <span class="caps">CLI</span> 方式配置（或 uci），最好不要用 WebUI。&nbsp;3.不要乱动乱删配置文件，尤其是端口路由表（switch0）。</p>
 </blockquote>
-<p>贴一张Openwrt的路由架构图，这张图帮助我理解了端口和路由的关系。      </p>
+<p>贴一张 Openwrt&nbsp;的路由架构图，这张图帮助我理解了端口和路由的关系。</p>
 <p><img src="http://www.macfreek.nl/memory/images/Linksys_internals.png" title="switch" width="450"/></p>
   </div>
 
@@ -181,10 +185,11 @@ opkg install luci luci-ssl luci-i18n-chinese
     <h3>相关文章</h3>
     <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
     <ul>
-        <li><a href="https://www.solarck.com/lede-media-center2.html"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（二）</a></li>
-        <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（一）</a></li>
-        <li><a href="https://www.solarck.com/openwrt-samba.html">openwrt开启Samba作为共享中心</a></li>
-        <li><a href="https://www.solarck.com/openwrt-extroot.html">用extroot为openwrt扩充存储空间</a></li>
+        <li><a href="https://www.solarck.com/upgrade-lede-to-1806.html">升级 Openwrt/<span class="caps">LEDE</span> 大版本至&nbsp;18.06</a></li>
+        <li><a href="https://www.solarck.com/lede-media-center2.html"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（二）</a></li>
+        <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（一）</a></li>
+        <li><a href="https://www.solarck.com/openwrt-samba.html">openwrt 开启 Samba&nbsp;作为共享中心</a></li>
+        <li><a href="https://www.solarck.com/openwrt-extroot.html">用 extroot 为 openwrt&nbsp;扩充存储空间</a></li>
       </ul>
 
     <div class="comments">
@@ -192,7 +197,7 @@ opkg install luci luci-ssl luci-i18n-chinese
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
         var disqus_identifier = "install-openwrt-on-mw4530r.html";
-        var disqus_title = "水星（Mercury）MW4530r刷Openwrt";
+        var disqus_title = "水星（Mercury）MW4530r 刷 Openwrt";
         var disqus_url = "https://www.solarck.com/install-openwrt-on-mw4530r.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -218,12 +223,12 @@ opkg install luci luci-ssl luci-i18n-chinese
     <hr/>
 
       <p>
-              <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
+              <a href="https://www.solarck.com/category/it-bi-ji.html" rel="tag"
                   data-toggle="tooltip" class="label label-info"
-                  title="17 articles in this category">IT笔记</a>
+                  title="17 articles in this category">IT 笔记</a>
             <a href="/tag/openwrt.html" data-toggle="tooltip"
       class="label label-default"
-      title="5 articles with this tag">openwrt</a>
+      title="6 articles with this tag">openwrt</a>
       </p>
       <hr/>
 
@@ -231,12 +236,12 @@ opkg install luci luci-ssl luci-i18n-chinese
       <nav>
         <ul class="pager">
           <li class="previous ">
-            <a  href="https://www.solarck.com/repair-wnr2200.html" title="修复变砖的WNR2200"  rel="prev">
+            <a  href="https://www.solarck.com/repair-wnr2200.html" title="修复变砖的 WNR2200"  rel="prev">
               <span aria-hidden="true">←</span> 旧文章
             </a>
           </li>
           <li class="next ">
-            <a  href="https://www.solarck.com/openwrt-extroot.html" title="用extroot为openwrt扩充存储空间"  rel="next">
+            <a  href="https://www.solarck.com/openwrt-extroot.html" title="用 extroot 为 openwrt 扩充存储空间"  rel="next">
               新文章 <span aria-hidden="true">→</span>
             </a>
           </li>

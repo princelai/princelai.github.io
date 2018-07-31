@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  matplotlib中文字体配置
+    <title>  matplotlib 中文字体配置
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -65,7 +65,10 @@
 
           <ul class="nav navbar-nav">
 <li  class="active" >
-                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记 <span class="sr-only">(current)</span></a>
+                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记 <span class="sr-only">(current)</span></a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
                 </li>
 <li >
                   <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
@@ -105,7 +108,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://www.solarck.com/matplotlib-chinese-fonts.html" rel="bookmark" title="Permalink to matplotlib中文字体配置">matplotlib中文字体配置</a>
+    <a href="https://www.solarck.com/matplotlib-chinese-fonts.html" rel="bookmark" title="Permalink to matplotlib 中文字体配置">matplotlib&nbsp;中文字体配置</a>
   </h1>
         </div>
       </div>
@@ -117,30 +120,29 @@
   
 
   <div>
-    <p>matplotlib是Python的优秀绘图包，但是不论是在Windows还是Linux中默认都是不支持中文的，尤其是在Linux中设置更加复杂一点，设置方法如下：</p>
-<p>首先我们需要获取到matplotlib配置文件的文件夹</p>
+    <p>matplotlib 是 Python 的优秀绘图包，但是不论是在 Windows 还是 Linux 中默认都是不支持中文的，尤其是在 Linux&nbsp;中设置更加复杂一点，设置方法如下：</p>
+<p>首先我们需要获取到 matplotlib&nbsp;配置文件的文件夹</p>
 <div class="highlight"><pre><span></span>python -c <span class="s2">"import matplotlib as mpl;print(mpl.get_configdir())"</span>
 /home/kevin/.config/matplotlib
 </pre></div>
-<!--more-->
-<p>然后需要一个默认的matplotlibrc文件用于修改</p>
+<p>然后需要一个默认的 matplotlibrc&nbsp;文件用于修改</p>
 <div class="highlight"><pre><span></span>python -c <span class="s2">"import matplotlib as mpl;print(mpl.matplotlib_fname())"</span>
 /opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc
 </pre></div>
 <p>这个位置会根据每个人安装位置不同而改变</p>
-<p>然后把默认的rc文件拷贝到用户的配置文件夹</p>
+<p>然后把默认的 rc&nbsp;文件拷贝到用户的配置文件夹</p>
 <div class="highlight"><pre><span></span>cp /opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc ~/.config/matplotlib
 </pre></div>
-<p>之后的工作都是围绕这个rc文件，一般情况下只需要修改如下两个字段，把注释打开。</p>
+<p>之后的工作都是围绕这个 rc&nbsp;文件，一般情况下只需要修改如下两个字段，把注释打开。</p>
 <div class="highlight"><pre><span></span>font.sans-serif     : DejaVu Sans, Bitstream Vera Sans, Lucida Grande, Verdana, Geneva
 axes.unicode_minus  : False
 </pre></div>
 <p>第一个字段负责中文字体显示，但是目前还没有，第二个负责正负号的显示。</p>
-<p>由于matplotlib不使用系统字体，所以需要找到一个matplotlib支持的字体且已在系统中</p>
+<p>由于 matplotlib 不使用系统字体，所以需要找到一个 matplotlib&nbsp;支持的字体且已在系统中</p>
 <div class="highlight"><pre><span></span>fc-list :lang=zh |grep -i ttf
 </pre></div>
-<p>在shell中执行这个命令，就能找到几个字体，选择一个填到上面第一行第一个即可，通常建议选择<code>Droid Sans Fallback</code></p>
-<p>修改好后重启整个python或ipython之后应该就可以看到中文，不过还是不可以的话可以使用下面方案二查找，这个方法出自<a href="https://segmentfault.com/a/1190000000621721">segmentfault</a>。</p>
+<p>在 shell 中执行这个命令，就能找到几个字体，选择一个填到上面第一行第一个即可，通常建议选择<code>Droid Sans Fallback</code></p>
+<p>修改好后重启整个 python 或 ipython 之后应该就可以看到中文，不过还是不可以的话可以使用下面方案二查找，这个方法出自<a href="https://segmentfault.com/a/1190000000621721">segmentfault</a>。</p>
 <div class="highlight"><pre><span></span><span class="ch">#! /usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">from</span> <span class="nn">matplotlib.font_manager</span> <span class="kn">import</span> <span class="n">FontManager</span>
@@ -160,7 +162,7 @@ axes.unicode_minus  : False
 <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">available</span><span class="p">:</span>
     <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
-<p>如果不想使用rc文件来配置，那么可以在每次使用的时候在python中执行以下命令即可。</p>
+<p>如果不想使用 rc 文件来配置，那么可以在每次使用的时候在 python&nbsp;中执行以下命令即可。</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'font.sans-serif'</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="s1">'Droid Sans Fallback'</span><span class="p">]</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'axes.unicode_minus'</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
@@ -171,11 +173,11 @@ axes.unicode_minus  : False
     <h3>相关文章</h3>
     <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
     <ul>
-        <li><a href="https://www.solarck.com/python-send-gmail.html">使用Python发送Gmail</a></li>
-        <li><a href="https://www.solarck.com/pandas-timeseries.html">Pandas时间处理函数速度对比</a></li>
+        <li><a href="https://www.solarck.com/python-send-gmail.html">使用 Python 发送&nbsp;Gmail</a></li>
+        <li><a href="https://www.solarck.com/pandas-timeseries.html">Pandas&nbsp;时间处理函数速度对比</a></li>
         <li><a href="https://www.solarck.com/using-python-descript-vaiance-std.html">用股票数据说明方差和标准差的特性</a></li>
         <li><a href="https://www.solarck.com/argparse-brief-usage.html">argparse模块简要用法</a></li>
-        <li><a href="https://www.solarck.com/config-pip-conda.html">配置pip和conda</a></li>
+        <li><a href="https://www.solarck.com/config-pip-conda.html">配置 pip 和&nbsp;conda</a></li>
       </ul>
 
     <div class="comments">
@@ -183,7 +185,7 @@ axes.unicode_minus  : False
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
         var disqus_identifier = "matplotlib-chinese-fonts.html";
-        var disqus_title = "matplotlib中文字体配置";
+        var disqus_title = "matplotlib 中文字体配置";
         var disqus_url = "https://www.solarck.com/matplotlib-chinese-fonts.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -209,9 +211,9 @@ axes.unicode_minus  : False
     <hr/>
 
       <p>
-              <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
+              <a href="https://www.solarck.com/category/it-bi-ji.html" rel="tag"
                   data-toggle="tooltip" class="label label-info"
-                  title="17 articles in this category">IT笔记</a>
+                  title="17 articles in this category">IT 笔记</a>
             <a href="/tag/python.html" data-toggle="tooltip"
       class="label label-default"
       title="6 articles with this tag">python</a>
@@ -225,7 +227,7 @@ axes.unicode_minus  : False
       <nav>
         <ul class="pager">
           <li class="previous ">
-            <a  href="https://www.solarck.com/linux-desktop-entries.html" title="自定义Linux桌面启动程序"  rel="prev">
+            <a  href="https://www.solarck.com/linux-desktop-entries.html" title="自定义 Linux 桌面启动程序"  rel="prev">
               <span aria-hidden="true">←</span> 旧文章
             </a>
           </li>

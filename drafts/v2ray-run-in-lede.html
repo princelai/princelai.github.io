@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  在LEDE/OpenWRT上运行V2ray
+    <title>  V2ray 网关透明代理
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -65,7 +65,10 @@
 
           <ul class="nav navbar-nav">
 <li  class="active" >
-                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记 <span class="sr-only">(current)</span></a>
+                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记 <span class="sr-only">(current)</span></a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
                 </li>
 <li >
                   <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
@@ -105,7 +108,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://www.solarck.com/drafts/v2ray-run-in-lede.html" rel="bookmark" title="Permalink to 在LEDE/OpenWRT上运行V2ray">在LEDE/OpenWRT上运行V2ray</a>
+    <a href="https://www.solarck.com/drafts/v2ray-run-in-lede.html" rel="bookmark" title="Permalink to V2ray 网关透明代理">V2ray&nbsp;网关透明代理</a>
   </h1>
         </div>
       </div>
@@ -117,156 +120,88 @@
   
 
   <div>
-    <div class="highlight"><pre><span></span>curl -x socks5://127.0.0.1:1080 google.com
-
-ping -c 5 baidu.com
-
-mkdir /var/log/v2ray/
-nohup /usr/bin/v2ray/v2ray -config /etc/v2ray/LEDE-client.json &amp;
-/usr/bin/v2ray/update_iptables.sh 
-
-iptables -t nat -nvL V2RAY --line-numbers
-
-
-/usr/bin/v2ray/gfwlist2dnsmasq.sh -d 101.132.183.99  -p 53 -o /tmp/gfwlist.overall
-
-
-curl -X GET "https://httpbin.org/ip" -H "accept: application/json"
+    <p>get</p>
+<div class="highlight"><pre><span></span>wget https://www.v2ray.com/download/Core_v3.31/v2ray-linux-arm.zip
+unzip v2ray-linux-arm.zip
+<span class="nb">cd</span> v2ray-v3.31-linux-arm/
+cp geoip.dat geosite.dat v2ctl v2ray v2ray_armv7 /usr/bin/v2ray/
 </pre></div>
-<p><code>/etc/init.d/v2ray</code></p>
-<div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
-<span class="c1">#</span>
-<span class="c1"># v2ray        Startup script for v2ray</span>
-<span class="c1">#</span>
-<span class="c1"># chkconfig: - 24 76</span>
-<span class="c1"># processname: v2ray</span>
-<span class="c1"># pidfile: /var/run/v2ray.pid</span>
-<span class="c1"># description: V2Ray proxy services</span>
-<span class="c1">#</span>
+<p>tmp</p>
+<div class="highlight"><pre><span></span>iptables -t nat -nvL V2RAY --line-numbers
 
-<span class="c1">### BEGIN INIT INFO</span>
-<span class="c1"># Provides:          v2ray</span>
-<span class="c1"># Required-Start:    $network $local_fs $remote_fs</span>
-<span class="c1"># Required-Stop:     $remote_fs</span>
-<span class="c1"># Default-Start:     2 3 4 5</span>
-<span class="c1"># Default-Stop:      0 1 6</span>
-<span class="c1"># Short-Description: V2Ray proxy services</span>
-<span class="c1"># Description:       V2Ray proxy services</span>
-<span class="c1">### END INIT INFO</span>
+/usr/bin/v2ray/gfwlist2dnsmasq.sh -d 8.8.8.8  -p 53 -o /tmp/gfwlist.overall
+</pre></div>
+<div class="highlight"><pre><span></span><span class="ch">#!/bin/ash</span>
+<span class="nv">chnroute_url</span><span class="o">=</span>http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest
+curl <span class="nv">$chnroute_url</span> <span class="p">|</span> grep ipv4 <span class="p">|</span> grep CN <span class="p">|</span> awk -F<span class="se">\|</span> <span class="s1">'{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }'</span> &gt; /tmp/chnroute.txt
 
-<span class="nv">DESC</span><span class="o">=</span>v2ray
-<span class="nv">NAME</span><span class="o">=</span>v2ray
-<span class="nv">DAEMON</span><span class="o">=</span>/usr/bin/v2ray/v2ray
-<span class="nv">PIDFILE</span><span class="o">=</span>/var/run/<span class="nv">$NAME</span>.pid
-<span class="nv">LOCKFILE</span><span class="o">=</span>/var/lock/subsys/<span class="nv">$NAME</span>
-<span class="nv">SCRIPTNAME</span><span class="o">=</span>/etc/init.d/<span class="nv">$NAME</span>
-<span class="nv">RETVAL</span><span class="o">=</span><span class="m">0</span>
+<span class="c1"># Create new chain</span>
+iptables -t nat -N V2RAY
 
-<span class="nv">DAEMON_OPTS</span><span class="o">=</span><span class="s2">"-config /etc/v2ray/config.json"</span>
+<span class="c1"># Ignore your V2Ray server's addresses</span>
+iptables -t nat -A V2RAY -d <span class="m">95</span>.169.10.107 -j RETURN
+iptables -t nat -A V2RAY -d <span class="m">95</span>.169.3.48 -j RETURN
+iptables -t nat -A V2RAY -d <span class="m">107</span>.172.103.201 -j RETURN
+<span class="c1">#your china dns</span>
+<span class="c1">#iptables -t nat -A V2RAY -d 101.6.6.6 -j RETURN</span>
+<span class="c1">#iptables -t nat -A V2RAY -d 101.132.183.99 -j RETURN</span>
+<span class="c1">#iptables -t nat -A V2RAY -d 193.112.15.186 -j RETURN</span>
+<span class="c1">#iptables -t nat -A V2RAY -d 223.113.97.99 -j RETURN</span>
 
-<span class="c1"># Exit if the package is not installed</span>
-<span class="o">[</span> -x <span class="nv">$DAEMON</span> <span class="o">]</span> <span class="o">||</span> <span class="nb">exit</span> <span class="m">0</span>
+<span class="c1"># Ignore LANs and any other addresses you'd like to bypass the proxy</span>
+iptables -t nat -A V2RAY -d <span class="m">0</span>.0.0.0/8 -j RETURN
+iptables -t nat -A V2RAY -d <span class="m">10</span>.0.0.0/8 -j RETURN
+iptables -t nat -A V2RAY -d <span class="m">127</span>.0.0.0/8 -j RETURN
+iptables -t nat -A V2RAY -d <span class="m">169</span>.254.0.0/16 -j RETURN
+iptables -t nat -A V2RAY -d <span class="m">172</span>.16.0.0/12 -j RETURN
+iptables -t nat -A V2RAY -d <span class="m">192</span>.168.0.0/16 -j RETURN
+iptables -t nat -A V2RAY -d <span class="m">224</span>.0.0.0/4 -j RETURN
+iptables -t nat -A V2RAY -d <span class="m">240</span>.0.0.0/4 -j RETURN
 
-<span class="c1"># Read configuration variable file if it is present</span>
-<span class="o">[</span> -r /etc/default/<span class="nv">$NAME</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> . /etc/default/<span class="nv">$NAME</span>
+<span class="c1"># Ignore chinaroute</span>
+ipset create chnroute hash:net
+<span class="k">for</span> i in <span class="sb">`</span>cat /tmp/chnroute.txt<span class="sb">`</span><span class="p">;</span>
+<span class="k">do</span>
+  ipset add chnroute <span class="nv">$i</span>
+<span class="k">done</span>
 
-<span class="c1"># Source function library.</span>
-. /etc/rc.d/init.d/functions
+iptables -t nat -A V2RAY -m <span class="nb">set</span> --match-set chnroute dst -j RETURN
 
-start<span class="o">()</span> <span class="o">{</span>
-  <span class="nb">local</span> <span class="nv">pids</span><span class="o">=</span><span class="k">$(</span>pgrep -f <span class="nv">$DAEMON</span><span class="k">)</span>
-  <span class="k">if</span> <span class="o">[</span> -n <span class="s2">"</span><span class="nv">$pids</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$NAME</span><span class="s2"> (pid </span><span class="nv">$pids</span><span class="s2">) is already running"</span>
-    <span class="nv">RETVAL</span><span class="o">=</span><span class="m">0</span>
-    <span class="k">return</span> <span class="m">0</span>
-  <span class="k">fi</span>
-
-  <span class="nb">echo</span> -n $<span class="s2">"Starting </span><span class="nv">$NAME</span><span class="s2">: "</span>
-
-  mkdir -p /var/log/v2ray
-  <span class="nv">$DAEMON</span> <span class="nv">$DAEMON_OPTS</span> <span class="m">1</span>&gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
-  <span class="nb">echo</span> <span class="nv">$!</span> &gt; <span class="nv">$PIDFILE</span>
-
-  sleep <span class="m">2</span>
-  pgrep -f <span class="nv">$DAEMON</span> &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
-  <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
-  <span class="k">if</span> <span class="o">[</span> <span class="nv">$RETVAL</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    success<span class="p">;</span> <span class="nb">echo</span>
-    touch <span class="nv">$LOCKFILE</span>
-  <span class="k">else</span>
-    failure<span class="p">;</span> <span class="nb">echo</span>
-  <span class="k">fi</span>
-  <span class="k">return</span> <span class="nv">$RETVAL</span>
-<span class="o">}</span>
-
-stop<span class="o">()</span> <span class="o">{</span>
-  <span class="nb">local</span> <span class="nv">pids</span><span class="o">=</span><span class="k">$(</span>pgrep -f <span class="nv">$DAEMON</span><span class="k">)</span>
-  <span class="k">if</span> <span class="o">[</span> -z <span class="s2">"</span><span class="nv">$pids</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$NAME</span><span class="s2"> is not running"</span>
-    <span class="nv">RETVAL</span><span class="o">=</span><span class="m">0</span>
-    <span class="k">return</span> <span class="m">0</span>
-  <span class="k">fi</span>
-
-  <span class="nb">echo</span> -n $<span class="s2">"Stopping </span><span class="nv">$NAME</span><span class="s2">: "</span>
-  killproc -p <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">NAME</span><span class="si">}</span>
-  <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
-  <span class="nb">echo</span>
-  <span class="o">[</span> <span class="nv">$RETVAL</span> <span class="o">=</span> <span class="m">0</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -f <span class="si">${</span><span class="nv">LOCKFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span>
-<span class="o">}</span>
-
-reload<span class="o">()</span> <span class="o">{</span>
-  <span class="nb">echo</span> -n $<span class="s2">"Reloading </span><span class="nv">$NAME</span><span class="s2">: "</span>
-  killproc -p <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">NAME</span><span class="si">}</span> -HUP
-  <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
-  <span class="nb">echo</span>
-<span class="o">}</span>
-
-rh_status<span class="o">()</span> <span class="o">{</span>
-  status -p <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">DAEMON</span><span class="si">}</span>
-<span class="o">}</span>
-
-<span class="c1"># See how we were called.</span>
-<span class="k">case</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> in
-  start<span class="o">)</span>
-    rh_status &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> <span class="m">0</span>
-    start
-    <span class="p">;;</span>
-  stop<span class="o">)</span>
-    stop
-    <span class="p">;;</span>
-  status<span class="o">)</span>
-    rh_status
-    <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
-    <span class="p">;;</span>
-  restart<span class="o">)</span>
-    stop
-    start
-    <span class="p">;;</span>
-  reload<span class="o">)</span>
-    reload
-  <span class="p">;;</span>
-  *<span class="o">)</span>
-    <span class="nb">echo</span> <span class="s2">"Usage: </span><span class="nv">$SCRIPTNAME</span><span class="s2"> {start|stop|status|reload|restart}"</span> &gt;<span class="p">&amp;</span><span class="m">2</span>
-    <span class="nv">RETVAL</span><span class="o">=</span><span class="m">2</span>
-  <span class="p">;;</span>
-<span class="k">esac</span>
-<span class="nb">exit</span> <span class="nv">$RETVAL</span>
+<span class="c1"># Anything else should be redirected to Dokodemo-door's local port</span>
+iptables -t nat -A V2RAY -p all -j REDIRECT --to-ports <span class="m">1060</span>
+iptables -t nat -A PREROUTING -p all -j V2RAY
+<span class="nb">exit</span> <span class="m">0</span>
+</pre></div>
+<p>get&nbsp;h2y</p>
+<div class="highlight"><pre><span></span>wget https://github.com/ToutyRater/v2ray-SiteDAT/releases/download/v0.0.1/h2y.dat
+chmod a+x h2y.dat
+</pre></div>
+<p>init&nbsp;script</p>
+<div class="highlight"><pre><span></span><span class="c1"># Put your custom commands here that should be executed once</span>
+<span class="c1"># the system init finished. By default this file does nothing.</span>
+<span class="nb">ulimit</span> -n <span class="m">8192</span>
+<span class="nb">alias</span> <span class="nv">upgrade</span><span class="o">=</span><span class="s2">"opkg list-upgradable | cut -f 1 -d ' ' | xargs opkg upgrade"</span>
+mkdir /var/log/v2ray/
+nohup /usr/bin/env v2ray.ray.buffer.size<span class="o">=</span><span class="m">1024</span> /usr/bin/v2ray/v2ray_armv7 -config /etc/v2ray/LEDE-H2-client.json <span class="p">&amp;</span>
+<span class="c1">#nohup /usr/bin/env v2ray.ray.buffer.size=1024 /usr/bin/v2ray/v2ray_armv7 -config /etc/v2ray/LEDE-KCP-client.json &amp;</span>
+/usr/bin/v2ray/update_iptables.sh
+<span class="nb">exit</span> <span class="m">0</span>
 </pre></div>
 <h1 id="can-kao">参考</h1>
 <p><a href="https://github.com/v2ray/v2ray-core/issues/101">init.d</a></p>
 <p><a href="https://cryptopunk.me/posts/27406/">利用 V2Ray + GFWList&nbsp;实现路由器自动翻墙</a></p>
-<p><a href="https://dakai.github.io/2017/11/27/v2ray.html">网关服务器上设置V2Ray+dnsmasq透明代理</a></p>
+<p><a href="https://dakai.github.io/2017/11/27/v2ray.html">网关服务器上设置 V2Ray+dnsmasq&nbsp;透明代理</a></p>
   </div>
 
     <hr />
     <h3>相关文章</h3>
     <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
     <ul>
-        <li><a href="https://www.solarck.com/lede-media-center2.html"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（二）</a></li>
-        <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT路由器打造家庭媒体影音中心（一）</a></li>
-        <li><a href="https://www.solarck.com/openwrt-samba.html">openwrt开启Samba作为共享中心</a></li>
-        <li><a href="https://www.solarck.com/openwrt-extroot.html">用extroot为openwrt扩充存储空间</a></li>
-        <li><a href="https://www.solarck.com/install-openwrt-on-mw4530r.html">水星（Mercury）MW4530r刷Openwrt</a></li>
+        <li><a href="https://www.solarck.com/upgrade-lede-to-1806.html">升级 Openwrt/<span class="caps">LEDE</span> 大版本至&nbsp;18.06</a></li>
+        <li><a href="https://www.solarck.com/lede-media-center2.html"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（二）</a></li>
+        <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（一）</a></li>
+        <li><a href="https://www.solarck.com/openwrt-samba.html">openwrt 开启 Samba&nbsp;作为共享中心</a></li>
+        <li><a href="https://www.solarck.com/openwrt-extroot.html">用 extroot 为 openwrt&nbsp;扩充存储空间</a></li>
       </ul>
 
     <div class="comments">
@@ -274,7 +209,7 @@ rh_status<span class="o">()</span> <span class="o">{</span>
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
         var disqus_identifier = "drafts/v2ray-run-in-lede.html";
-        var disqus_title = "在LEDE/OpenWRT上运行V2ray";
+        var disqus_title = "V2ray 网关透明代理";
         var disqus_url = "https://www.solarck.com/drafts/v2ray-run-in-lede.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -300,15 +235,15 @@ rh_status<span class="o">()</span> <span class="o">{</span>
     <hr/>
 
       <p>
-              <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
+              <a href="https://www.solarck.com/category/it-bi-ji.html" rel="tag"
                   data-toggle="tooltip" class="label label-info"
-                  title="17 articles in this category">IT笔记</a>
+                  title="17 articles in this category">IT 笔记</a>
             <a href="/tag/openwrt.html" data-toggle="tooltip"
       class="label label-default"
-      title="5 articles with this tag">openwrt</a>
+      title="6 articles with this tag">openwrt</a>
             <a href="/tag/lede.html" data-toggle="tooltip"
       class="label label-default"
-      title="2 articles with this tag">lede</a>
+      title="3 articles with this tag">lede</a>
             <a href="/tag/v2ray.html" data-toggle="tooltip"
       class="label label-default"
       title="1 article with this tag">v2ray</a>

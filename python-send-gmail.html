@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  使用Python发送Gmail
+    <title>  使用 Python 发送 Gmail
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -65,7 +65,10 @@
 
           <ul class="nav navbar-nav">
 <li  class="active" >
-                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记 <span class="sr-only">(current)</span></a>
+                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记 <span class="sr-only">(current)</span></a>
+                </li>
+<li >
+                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
                 </li>
 <li >
                   <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
@@ -105,7 +108,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://www.solarck.com/python-send-gmail.html" rel="bookmark" title="Permalink to 使用Python发送Gmail">使用Python发送Gmail</a>
+    <a href="https://www.solarck.com/python-send-gmail.html" rel="bookmark" title="Permalink to 使用 Python 发送 Gmail">使用 Python 发送&nbsp;Gmail</a>
   </h1>
         </div>
       </div>
@@ -117,7 +120,7 @@
   
 
   <div>
-    <p>本文基于一个真实的项目，使用python3.6和最新官方smtplib接口。项目的目的是爬取网站，然后通过邮件给自己发送邮件提醒新文章。最后使用linux系统的crond服务定时执行。</p>
+    <p>本文基于一个真实的项目，使用 python3.6 和最新官方 smtplib 接口。项目的目的是爬取网站，然后通过邮件给自己发送邮件提醒新文章。最后使用 linux 系统的 crond&nbsp;服务定时执行。</p>
 <h3 id="fa-you-jian-fang-fa">发邮件方法</h3>
 <p>在定义发邮件方法之前，我们还定义了一个类和类中的爬虫，单拿出来发邮件来说，代码如下：</p>
 <div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">sent_email</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -145,16 +148,16 @@
 </pre></div>
 <p>需要注意的有几点：</p>
 <ol>
-<li>邮件正文需要是MIMEText格式的</li>
-<li>发信人、收信人、主题要用Header添加</li>
-<li>如果你的Google账号开启了两步验证，那么你的邮箱密码就不是登录密码，而是app密码，关于app密码怎么生成可以查看这篇文章<a href="https://support.google.com/accounts/answer/185833#generate">Sign in using App&nbsp;Passwords</a></li>
-<li>其他关于smtp地址和端口的问题，可以查看这篇文章<a href="https://support.google.com/mail/answer/7126229?visit_id=1-636642850165284125-2014875658&amp;hl=en&amp;rd=1">Use <span class="caps">IMAP</span> to check Gmail on other email&nbsp;clients</a></li>
+<li>邮件正文需要是 MIMEText&nbsp;格式的</li>
+<li>发信人、收信人、主题要用 Header&nbsp;添加</li>
+<li>如果你的 Google 账号开启了两步验证，那么你的邮箱密码就不是登录密码，而是 app 密码，关于 app 密码怎么生成可以查看这篇文章<a href="https://support.google.com/accounts/answer/185833#generate">Sign in using App&nbsp;Passwords</a></li>
+<li>其他关于 smtp 地址和端口的问题，可以查看这篇文章<a href="https://support.google.com/mail/answer/7126229?visit_id=1-636642850165284125-2014875658&amp;hl=en&amp;rd=1">Use <span class="caps">IMAP</span> to check Gmail on other email&nbsp;clients</a></li>
 </ol>
 <h3 id="ding-shi-qi-dong">定时启动</h3>
-<p>创建一个文本文件，用于创建单一用户的crond文件</p>
+<p>创建一个文本文件，用于创建单一用户的 crond&nbsp;文件</p>
 <div class="highlight"><pre><span></span><span class="m">0</span> <span class="m">6</span> */3 * * /root/miniconda3/bin/python /root/monitor_house_info/monitor_house_info.py
 </pre></div>
-<p>关于crond配置，网上教程很多，或者<code>man 5 crontab</code>就可以看到详细的用法。</p>
+<p>关于 crond 配置，网上教程很多，或者<code>man 5 crontab</code>就可以看到详细的用法。</p>
 <p>最后输入<code>crontab file</code>导入文件，就可以坐等收邮件了。</p>
 <h3 id="quan-bu-dai-ma">全部代码</h3>
 <div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
@@ -251,11 +254,11 @@
     <h3>相关文章</h3>
     <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
     <ul>
-        <li><a href="https://www.solarck.com/pandas-timeseries.html">Pandas时间处理函数速度对比</a></li>
+        <li><a href="https://www.solarck.com/pandas-timeseries.html">Pandas&nbsp;时间处理函数速度对比</a></li>
         <li><a href="https://www.solarck.com/using-python-descript-vaiance-std.html">用股票数据说明方差和标准差的特性</a></li>
         <li><a href="https://www.solarck.com/argparse-brief-usage.html">argparse模块简要用法</a></li>
-        <li><a href="https://www.solarck.com/matplotlib-chinese-fonts.html">matplotlib中文字体配置</a></li>
-        <li><a href="https://www.solarck.com/config-pip-conda.html">配置pip和conda</a></li>
+        <li><a href="https://www.solarck.com/matplotlib-chinese-fonts.html">matplotlib&nbsp;中文字体配置</a></li>
+        <li><a href="https://www.solarck.com/config-pip-conda.html">配置 pip 和&nbsp;conda</a></li>
       </ul>
 
     <div class="comments">
@@ -263,7 +266,7 @@
       <script type="text/javascript">
         var disqus_shortname = 'solarck';
         var disqus_identifier = "python-send-gmail.html";
-        var disqus_title = "使用Python发送Gmail";
+        var disqus_title = "使用 Python 发送 Gmail";
         var disqus_url = "https://www.solarck.com/python-send-gmail.html";
         (function() {
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -289,9 +292,9 @@
     <hr/>
 
       <p>
-              <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
+              <a href="https://www.solarck.com/category/it-bi-ji.html" rel="tag"
                   data-toggle="tooltip" class="label label-info"
-                  title="17 articles in this category">IT笔记</a>
+                  title="17 articles in this category">IT 笔记</a>
             <a href="/tag/python.html" data-toggle="tooltip"
       class="label label-default"
       title="6 articles with this tag">python</a>
@@ -305,12 +308,12 @@
       <nav>
         <ul class="pager">
           <li class="previous ">
-            <a  href="https://www.solarck.com/pandas-timeseries.html" title="Pandas时间处理函数速度对比"  rel="prev">
+            <a  href="https://www.solarck.com/pandas-timeseries.html" title="Pandas 时间处理函数速度对比"  rel="prev">
               <span aria-hidden="true">←</span> 旧文章
             </a>
           </li>
           <li class="next ">
-            <a  href="https://www.solarck.com/centos6-datebase-server.html" title="CentOS6数据库服务器配置"  rel="next">
+            <a  href="https://www.solarck.com/centos6-datebase-server.html" title="CentOS6 数据库服务器配置"  rel="next">
               新文章 <span aria-hidden="true">→</span>
             </a>
           </li>

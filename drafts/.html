@@ -14,9 +14,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css"/>
-    <link rel="stylesheet" href="https://www.solarck.com/theme/css/jquery.mglass.css"/>
-    <link rel="stylesheet" href="https://www.solarck.com/theme/css/pygment-solarized-dark.css"/>
-    <link rel="stylesheet" href="https://www.solarck.com/theme/css/style.css"/>
+    <link rel="stylesheet" href="/theme/css/jquery.mglass.css"/>
+    <link rel="stylesheet" href="/theme/css/pygment-solarized-dark.css"/>
+    <link rel="stylesheet" href="/theme/css/style.css"/>
 
     <!-- Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
@@ -25,11 +25,10 @@
       <link href='https://fonts.googleapis.com/css?family=Expletus+Sans' rel='stylesheet' type='text/css'>
 
 
-    <link rel="icon" href="https://www.solarck.com/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="https://www.solarck.com/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
     <!-- Feeds -->
-      <link href="https://www.solarck.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Solarck - All posts - Atom Feed"/>
 
 
   </head>
@@ -39,12 +38,12 @@
     <div class="container">
 
       <div class="page-header">
-          <a href="https://www.solarck.com" class="avatar-container pull-left">
+          <a href="" class="avatar-container pull-left">
             <div class="avatar ">
-              <div class="side"><img src="https://www.solarck.com/static/avatar.jpg" class="img-responsive"/></div>
+              <div class="side"><img src="/static/avatar.jpg" class="img-responsive"/></div>
             </div>
           </a>
-        <h1><a href="https://www.solarck.com">Solarck</a> <small>金融民工与程序猿的结合体</small></h1>
+        <h1><a href="">Solarck</a> <small>金融民工与程序猿的结合体</small></h1>
       </div>
 
       <nav class="navbar navbar-default">
@@ -57,7 +56,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="https://www.solarck.com" title="金融民工与程序猿的结合体">Solarck</a>
+          <a class="navbar-brand" href="" title="金融民工与程序猿的结合体">Solarck</a>
         </div>
 
         <!-- Menus and search forms -->
@@ -65,22 +64,25 @@
 
           <ul class="nav navbar-nav">
 <li >
-                  <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
+                  <a href="/category/it-bi-ji.html">IT 笔记</a>
                 </li>
 <li >
-                  <a href="https://www.solarck.com/category/jin-rong-bi-ji.html">金融笔记</a>
+                  <a href="/category/itbi-ji.html">IT笔记</a>
                 </li>
 <li >
-                  <a href="https://www.solarck.com/pages/aboutme.html">关于我</a>
+                  <a href="/category/jin-rong-bi-ji.html">金融笔记</a>
                 </li>
 <li >
-                  <a href="https://www.solarck.com/pages/resume.html">简历</a>
+                  <a href="/pages/aboutme.html">关于我</a>
+                </li>
+<li >
+                  <a href="/pages/resume.html">简历</a>
                 </li>
 
           </ul>
 
 
-            <form class="navbar-form navbar-right" role="search" action="https://www.solarck.com/search.html" onsubmit="return validateForm(this.elements['q'].value);">
+            <form class="navbar-form navbar-right" role="search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);">
               <div class="form-group">
                 <div class="input-group">
                   <input type="text" name="q" id="tipue_search_input" class="form-control search-query" placeholder="Search" required />
@@ -105,7 +107,7 @@
       <div class="row">
         <div class=" col-md-9  ">
   <h1>
-    <a href="https://www.solarck.com/drafts/.html" rel="bookmark" title="Permalink to "></a>
+    <a href="/drafts/.html" rel="bookmark" title="Permalink to "></a>
   </h1>
         </div>
       </div>
@@ -114,161 +116,57 @@
 
 
         <div class=" col-md-9 " id="content" role="main">
-      Translations:
-      <a href="https://www.solarck.com/drafts/.html">zh</a>
-
+  
 
   <div>
-    <p><code>/etc/init.d/v2ray</code></p>
-<div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
-<span class="c1">#</span>
-<span class="c1"># v2ray        Startup script for v2ray</span>
-<span class="c1">#</span>
-<span class="c1"># chkconfig: - 24 76</span>
-<span class="c1"># processname: v2ray</span>
-<span class="c1"># pidfile: /var/run/v2ray.pid</span>
-<span class="c1"># description: V2Ray proxy services</span>
-<span class="c1">#</span>
-
-<span class="c1">### BEGIN INIT INFO</span>
-<span class="c1"># Provides:          v2ray</span>
-<span class="c1"># Required-Start:    $network $local_fs $remote_fs</span>
-<span class="c1"># Required-Stop:     $remote_fs</span>
-<span class="c1"># Default-Start:     2 3 4 5</span>
-<span class="c1"># Default-Stop:      0 1 6</span>
-<span class="c1"># Short-Description: V2Ray proxy services</span>
-<span class="c1"># Description:       V2Ray proxy services</span>
-<span class="c1">### END INIT INFO</span>
-
-<span class="nv">DESC</span><span class="o">=</span>v2ray
-<span class="nv">NAME</span><span class="o">=</span>v2ray
-<span class="nv">DAEMON</span><span class="o">=</span>/usr/bin/v2ray/v2ray
-<span class="nv">PIDFILE</span><span class="o">=</span>/var/run/<span class="nv">$NAME</span>.pid
-<span class="nv">LOCKFILE</span><span class="o">=</span>/var/lock/subsys/<span class="nv">$NAME</span>
-<span class="nv">SCRIPTNAME</span><span class="o">=</span>/etc/init.d/<span class="nv">$NAME</span>
-<span class="nv">RETVAL</span><span class="o">=</span><span class="m">0</span>
-
-<span class="nv">DAEMON_OPTS</span><span class="o">=</span><span class="s2">"-config /etc/v2ray/config.json"</span>
-
-<span class="c1"># Exit if the package is not installed</span>
-<span class="o">[</span> -x <span class="nv">$DAEMON</span> <span class="o">]</span> <span class="o">||</span> <span class="nb">exit</span> <span class="m">0</span>
-
-<span class="c1"># Read configuration variable file if it is present</span>
-<span class="o">[</span> -r /etc/default/<span class="nv">$NAME</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> . /etc/default/<span class="nv">$NAME</span>
-
-<span class="c1"># Source function library.</span>
-. /etc/rc.d/init.d/functions
-
-start<span class="o">()</span> <span class="o">{</span>
-  <span class="nb">local</span> <span class="nv">pids</span><span class="o">=</span><span class="k">$(</span>pgrep -f <span class="nv">$DAEMON</span><span class="k">)</span>
-  <span class="k">if</span> <span class="o">[</span> -n <span class="s2">"</span><span class="nv">$pids</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$NAME</span><span class="s2"> (pid </span><span class="nv">$pids</span><span class="s2">) is already running"</span>
-    <span class="nv">RETVAL</span><span class="o">=</span><span class="m">0</span>
-    <span class="k">return</span> <span class="m">0</span>
-  <span class="k">fi</span>
-
-  <span class="nb">echo</span> -n $<span class="s2">"Starting </span><span class="nv">$NAME</span><span class="s2">: "</span>
-
-  mkdir -p /var/log/v2ray
-  <span class="nv">$DAEMON</span> <span class="nv">$DAEMON_OPTS</span> <span class="m">1</span>&gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
-  <span class="nb">echo</span> <span class="nv">$!</span> &gt; <span class="nv">$PIDFILE</span>
-
-  sleep <span class="m">2</span>
-  pgrep -f <span class="nv">$DAEMON</span> &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
-  <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
-  <span class="k">if</span> <span class="o">[</span> <span class="nv">$RETVAL</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    success<span class="p">;</span> <span class="nb">echo</span>
-    touch <span class="nv">$LOCKFILE</span>
-  <span class="k">else</span>
-    failure<span class="p">;</span> <span class="nb">echo</span>
-  <span class="k">fi</span>
-  <span class="k">return</span> <span class="nv">$RETVAL</span>
-<span class="o">}</span>
-
-stop<span class="o">()</span> <span class="o">{</span>
-  <span class="nb">local</span> <span class="nv">pids</span><span class="o">=</span><span class="k">$(</span>pgrep -f <span class="nv">$DAEMON</span><span class="k">)</span>
-  <span class="k">if</span> <span class="o">[</span> -z <span class="s2">"</span><span class="nv">$pids</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$NAME</span><span class="s2"> is not running"</span>
-    <span class="nv">RETVAL</span><span class="o">=</span><span class="m">0</span>
-    <span class="k">return</span> <span class="m">0</span>
-  <span class="k">fi</span>
-
-  <span class="nb">echo</span> -n $<span class="s2">"Stopping </span><span class="nv">$NAME</span><span class="s2">: "</span>
-  killproc -p <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">NAME</span><span class="si">}</span>
-  <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
-  <span class="nb">echo</span>
-  <span class="o">[</span> <span class="nv">$RETVAL</span> <span class="o">=</span> <span class="m">0</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -f <span class="si">${</span><span class="nv">LOCKFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span>
-<span class="o">}</span>
-
-reload<span class="o">()</span> <span class="o">{</span>
-  <span class="nb">echo</span> -n $<span class="s2">"Reloading </span><span class="nv">$NAME</span><span class="s2">: "</span>
-  killproc -p <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">NAME</span><span class="si">}</span> -HUP
-  <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
-  <span class="nb">echo</span>
-<span class="o">}</span>
-
-rh_status<span class="o">()</span> <span class="o">{</span>
-  status -p <span class="si">${</span><span class="nv">PIDFILE</span><span class="si">}</span> <span class="si">${</span><span class="nv">DAEMON</span><span class="si">}</span>
-<span class="o">}</span>
-
-<span class="c1"># See how we were called.</span>
-<span class="k">case</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> in
-  start<span class="o">)</span>
-    rh_status &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> <span class="m">0</span>
-    start
-    <span class="p">;;</span>
-  stop<span class="o">)</span>
-    stop
-    <span class="p">;;</span>
-  status<span class="o">)</span>
-    rh_status
-    <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
-    <span class="p">;;</span>
-  restart<span class="o">)</span>
-    stop
-    start
-    <span class="p">;;</span>
-  reload<span class="o">)</span>
-    reload
-  <span class="p">;;</span>
-  *<span class="o">)</span>
-    <span class="nb">echo</span> <span class="s2">"Usage: </span><span class="nv">$SCRIPTNAME</span><span class="s2"> {start|stop|status|reload|restart}"</span> &gt;<span class="p">&amp;</span><span class="m">2</span>
-    <span class="nv">RETVAL</span><span class="o">=</span><span class="m">2</span>
-  <span class="p">;;</span>
-<span class="k">esac</span>
-<span class="nb">exit</span> <span class="nv">$RETVAL</span>
+    <div class="highlight"><pre><span></span>curl https://getcaddy.com | bash -s personal
+ulimit -n 8192
 </pre></div>
-<h1 id="can-kao">参考</h1>
-<p><a href="https://github.com/v2ray/v2ray-core/issues/101">init.d</a></p>
+<div class="highlight"><pre><span></span>example.top {
+    tls princelailai@gmail.com
+    root /var/www/
+    log /var/caddy/log
+    timeouts none
+    gzip
+
+    proxy /h2ray localhost:10010 {
+        header_upstream Host "example.top"
+        header_upstream X-Forwarded-Proto "https"
+    }
+
+    proxy /wsray localhost:10086 {
+        websocket
+        header_upstream -Origin
+    }
+}
+</pre></div>
+<div class="highlight"><pre><span></span>mkdir /etc/Caddy
+nano /etc/Caddy/CaddyFile
+
+systemctl stop v2ray@mKcp-server.service 
+systemctl start v2ray@TCP-TLS-server.service   
+
+mkdir /var/log/caddy/
+caddy -conf /etc/Caddy/CaddyFile
+
+nohup caddy -conf /etc/Caddy/CaddyFile &amp;
+systemctl stop v2ray@H2-TLS-server
+systemctl start v2ray@H2-TLS-server
+</pre></div>
   </div>
 
 
-    <div class="comments">
-      <div id="disqus_thread"></div>
-      <script type="text/javascript">
-        var disqus_shortname = 'solarck';
-        var disqus_identifier = "drafts/.html";
-        var disqus_title = "";
-        var disqus_url = "https://www.solarck.com/drafts/.html";
-        (function() {
-          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-          dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-      </script>
-      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.</noscript>
-    </div>
 
         </div>
 
           <div class="col-md-3">
   <div class="well">
 
-    <p><abbr title="2018-07-12T11:16:00+08:00"><i class="fa fa-calendar"></i> July 12, 2018</abbr></p>
+    <p><abbr title="2018-07-24T12:30:00+08:00"><i class="fa fa-calendar"></i> July 24, 2018</abbr></p>
 
       <p><address>
         <i class="fa fa-user"></i> 作者:
-          <a href="https://www.solarck.com/author/kevin-chen.html" rel="author">Kevin Chen</a>
+          <a href="/author/kevin-chen.html" rel="author">Kevin Chen</a>
       </address></p>
 
     <hr/>
@@ -279,10 +177,6 @@ rh_status<span class="o">()</span> <span class="o">{</span>
 
 
     
-        <center><h4><b>目录</b></h4></center>
-        <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#can-kao" title="参考">参考</a></li></ul></div>
-        </nav>
 
   </div>
             
@@ -320,9 +214,9 @@ rh_status<span class="o">()</span> <span class="o">{</span>
           <div class="col-md-2">
             <h5>归档</h5>
             <ul class="list-unstyled">
-                <li><a href="https://www.solarck.com/categories.html"><i class="fa fa-tags"></i> Categories</a></li>
-                <li><a href="https://www.solarck.com/archives.html"><i class="fa fa-calendar"></i> Dates</a></li>
-                <li><a href="https://www.solarck.com/tags.html"><i class="fa fa-tag"></i> Tags</a></li>
+                <li><a href="/categories.html"><i class="fa fa-tags"></i> Categories</a></li>
+                <li><a href="/archives.html"><i class="fa fa-calendar"></i> Dates</a></li>
+                <li><a href="/tags.html"><i class="fa fa-tag"></i> Tags</a></li>
             </ul>
           </div>
 
@@ -337,10 +231,6 @@ rh_status<span class="o">()</span> <span class="o">{</span>
           </div>
         -->
           <div class="col-md-2">
-              <h5>Feeds</h5>
-              <ul class="list-unstyled">
-                  <li><small><a href="https://www.solarck.com/feeds/all.atom.xml"><i class="fa fa-rss"></i> All posts (Atom)</a></small></li>
-              </ul>
           </div>
 
         </div>
@@ -371,8 +261,8 @@ rh_status<span class="o">()</span> <span class="o">{</span>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
-    <script src="https://www.solarck.com/theme/js/jquery.mglass.js"></script>
-    <script src="https://www.solarck.com/theme/js/application.js"></script>
+    <script src="/theme/js/jquery.mglass.js"></script>
+    <script src="/theme/js/application.js"></script>
 
   </body>
 </html>
