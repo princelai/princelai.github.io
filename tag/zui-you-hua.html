@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>  LEDE/OpenWRT 路由器打造家庭媒体影音中心（三）
+    <title>  最优化
  | Solarck</title>
 
     <meta name="author" content="Kevin Chen"/>
@@ -64,8 +64,8 @@
         <div class="collapse navbar-collapse" id="plumage-navbar-collapse-1">
 
           <ul class="nav navbar-nav">
-<li  class="active" >
-                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记 <span class="sr-only">(current)</span></a>
+<li >
+                  <a href="https://www.solarck.com/category/it-bi-ji.html">IT 笔记</a>
                 </li>
 <li >
                   <a href="https://www.solarck.com/category/itbi-ji.html">IT笔记</a>
@@ -106,9 +106,9 @@
 
 
       <div class="row">
-        <div class=" col-md-9  ">
+        <div class=" col-md-12  ">
   <h1>
-    <a href="https://www.solarck.com/drafts/lede-media-center3.html" rel="bookmark" title="Permalink to LEDE/OpenWRT 路由器打造家庭媒体影音中心（三）"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（三）</a>
+    <a  href="https://www.solarck.com/tag/zui-you-hua.html" rel="bookmark" title="Permalink to 最优化 articles">最优化 articles</a>
   </h1>
         </div>
       </div>
@@ -116,119 +116,11 @@
       <div class="row">
 
 
-        <div class=" col-md-9 " id="content" role="main">
-  
-
-  <div>
-    <h1 id="ddns"><span class="caps">DDNS</span></h1>
-<p>几个比较著名的 <span class="caps">DDNS</span>&nbsp;服务商</p>
-<blockquote>
-<p><a href="https://www.dnsdynamic.org">https://www.dnsdynamic.org</a> &gt; <a href="http://www.pubyun.com/">http://www.pubyun.com/</a> &gt; <a href="https://www.changeip.com/">https://www.changeip.com/</a> &gt; <a href="https://www.noip.com/">https://www.noip.com/</a></p>
-</blockquote>
-<p>安装工具和脚本</p>
-<div class="highlight"><pre><span></span>opkg update
-opkg install wget curl bind-host knot-host drill ddns-scripts luci-app-ddns luci-i18n-ddns-zh-cn ddns-scripts_cloudflare.com-v4
-</pre></div>
-<p>uhttpd&nbsp;设置</p>
-<p>修改 http&nbsp;监听端口</p>
-<p>即使是公网 <span class="caps">IP</span>，国内 <span class="caps">ISP</span> 基本也都封了 80 端口，如果能破解光纤猫，那确实有办法打开 80 端口，但是惹不起躲得起，把 http&nbsp;监听端口改一下就可以绕过这个限制。</p>
-<p>uhttpd&nbsp;在保存应用后，不会自动重启，需要手动执行</p>
-<div class="highlight"><pre><span></span>/etc/init.d/uhttpd restart
-</pre></div>
-<p>防火墙设置</p>
-<p>流量规则</p>
-<p>firewall-&gt;Traffic&nbsp;Rules</p>
-<p>开启 666&nbsp;端口</p>
-<p>端口转发</p>
-<p>firewall-&gt;Port&nbsp;Forwards</p>
-<p>把所有 666&nbsp;端口的请求转发到</p>
-<h1 id="dlna"><span class="caps">DLNA</span></h1>
-<div class="highlight"><pre><span></span>opkg install minidlna luci-app-minidlna luci-i18n-minidlna-zh-cn
-</pre></div>
-<h1 id="adblock">Adblock</h1>
-<div class="highlight"><pre><span></span>opkg update
-opkg install adblock luci-app-adblock luci-i18n-adblock-zh-cn
-</pre></div>
-<h1 id="python3">Python3</h1>
-<div class="highlight"><pre><span></span>opkg update
-opkg install python3 python3-pip
-</pre></div>
-<blockquote>
-<p>terminfo. python3-base. libffi. libbz2. python3-light. python3-pydoc. liblzma. python3-email. python3-decimal. python3-xml. libxml2. libncurses. python3-ncurses. python3-distutils. python3-codecs. python3-multiprocessing. python3-unittest. python3-ctypes. libgdbm. python3-gdbm. libsqlite3. python3-sqlite3. python3-logging. python3-openssl. libdb47. python3-dbm. python3-asyncio. python3-lzma.&nbsp;python3.</p>
-</blockquote>
-<p>大约会占&nbsp;30M</p>
-<h1 id="can-kao-lian-jie">参考链接</h1>
-<p><a href="https://openwrt.org/docs/guide-user/services/ddns/client"><span class="caps">DDNS</span>&nbsp;Client</a></p>
-<p><a href="https://openwrt.org/docs/guide-user/services/media_server/dlna"><span class="caps">DLNA</span> Media&nbsp;Server</a></p>
-  </div>
-
-    <hr />
-    <h3>相关文章</h3>
-    <!-- TODO: Use fancier related layout, as in https://kevin.deldycke.com/2012/04/beautify-contextual-related-posts-wordpress-plugin/ -->
-    <ul>
-        <li><a href="https://www.solarck.com/lede-media-center2.html"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（二）</a></li>
-        <li><a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（一）</a></li>
-        <li><a href="https://www.solarck.com/upgrade-lede-to-1806.html">升级 Openwrt/<span class="caps">LEDE</span> 大版本至&nbsp;18.06</a></li>
-        <li><a href="https://www.solarck.com/openwrt-samba.html">openwrt 开启 Samba&nbsp;作为共享中心</a></li>
-        <li><a href="https://www.solarck.com/openwrt-extroot.html">用 extroot 为 openwrt&nbsp;扩充存储空间</a></li>
-      </ul>
-
-    <div class="comments">
-      <div id="disqus_thread"></div>
-      <script type="text/javascript">
-        var disqus_shortname = 'solarck';
-        var disqus_identifier = "drafts/lede-media-center3.html";
-        var disqus_title = "LEDE/OpenWRT 路由器打造家庭媒体影音中心（三）";
-        var disqus_url = "https://www.solarck.com/drafts/lede-media-center3.html";
-        (function() {
-          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-          dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-      </script>
-      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.</noscript>
-    </div>
-
+        <div class=" col-md-12 " id="content" role="main">
+  <dl class="dl-horizontal">
+  </dl>
         </div>
 
-          <div class="col-md-3">
-  <div class="well">
-
-    <p><abbr title="2018-06-15T13:07:00+08:00"><i class="fa fa-calendar"></i> June 15, 2018</abbr></p>
-
-      <p><address>
-        <i class="fa fa-user"></i> 作者:
-          <a href="https://www.solarck.com/author/kevin-chen.html" rel="author">Kevin Chen</a>
-      </address></p>
-
-    <hr/>
-
-      <p>
-              <a href="https://www.solarck.com/category/it-bi-ji.html" rel="tag"
-                  data-toggle="tooltip" class="label label-info"
-                  title="17 articles in this category">IT 笔记</a>
-            <a href="/tag/openwrt.html" data-toggle="tooltip"
-      class="label label-default"
-      title="6 articles with this tag">openwrt</a>
-            <a href="/tag/lede.html" data-toggle="tooltip"
-      class="label label-default"
-      title="3 articles with this tag">lede</a>
-            <a href="/tag/wrt1900acs.html" data-toggle="tooltip"
-      class="label label-default"
-      title="2 articles with this tag">wrt1900acs</a>
-      </p>
-      <hr/>
-
-
-    
-        <center><h4><b>目录</b></h4></center>
-        <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#ddns" title="DDNS">DDNS</a></li><li><a class="toc-href" href="#dlna" title="DLNA">DLNA</a></li><li><a class="toc-href" href="#adblock" title="Adblock">Adblock</a></li><li><a class="toc-href" href="#python3" title="Python3">Python3</a></li><li><a class="toc-href" href="#can-kao-lian-jie" title="参考链接">参考链接</a></li></ul></div>
-        </nav>
-
-  </div>
-            
-          </div>
 
       </div>
 
@@ -270,7 +162,7 @@ opkg install python3 python3-pip
 
           <div class="col-md-2 text-muted">
             <h5>Copyright</h5>
-            <p>© Copyright 2013-2018 Kevin Chen.</p>
+            <p>© Copyright  Kevin Chen.</p>
           </div>
         <!--
           <div class="col-md-2 text-muted">
