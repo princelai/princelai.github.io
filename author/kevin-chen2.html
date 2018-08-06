@@ -120,6 +120,29 @@
 
     <article>
       <header>
+        <h2><a href="https://www.solarck.com/lede-media-center2.html" rel="bookmark" title="Permalink to LEDE/OpenWRT 路由器打造家庭媒体影音中心（二）"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（二）</a></h2>
+      </header>
+      <div><h1 id="usb-qu-dong"><span class="caps">USB</span>&nbsp;驱动</h1>
+<h3 id="cha-kan-yi-an-zhuang-de-qu-dong">查看已安装的驱动</h3>
+<div class="highlight"><pre><span></span>opkg update
+opkg list-installed | grep usb
+</pre></div>
+<h3 id="an-zhuang-qu-dong-he-gong-ju">安装驱动和工具</h3>
+<p>如果下列驱动未出现在上一步的结果中，请务必首先安装缺失的驱动</p>
+<div class="highlight"><pre><span></span>opkg install kmod-usb-core kmod-usb-storage
+</pre></div>
+<p><code>kmod-usb-core</code>:<span class="caps">USB</span>&nbsp;核心驱动</p>
+<p><code>kmod-usb-storage</code>:大容量存储设备驱动</p>
+<p><code>kmod-usb2</code>:<span class="caps">WRT1900ACS</span> 有一个 <span class="caps">USB2</span>.0/eSATA&nbsp;口，可以不安装</p>
+<p><code>kmod-ata-marvell-sata</code>:Marvell <span class="caps">SATA</span>&nbsp;接口驱动，可以不安装</p>
+<p>网上搜到的教程和官方指南里还让安装一些其他的应用，但这些都是不必要或已被编译至内核中，包括：<code>kmod-usb-ohci</code>、<code>kmod-usb-uhci</code>、<code>kmod-usb3</code>、<code>kmod-usb-storage-uas</code></p>
+<h3 id="an-zhuang-xiang-guan-gong-ju">安装相关工具</h3>
+<div class="highlight"><pre><span></span>opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk …</pre></div></div>
+      <div><a class="btn btn-primary" href="https://www.solarck.com/lede-media-center2.html"><strong>➟ 查看全文</strong></a></div>
+    </article>
+    <hr/>
+    <article>
+      <header>
         <h2><a href="https://www.solarck.com/lede-media-center1.html" rel="bookmark" title="Permalink to LEDE/OpenWRT 路由器打造家庭媒体影音中心（一）"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（一）</a></h2>
       </header>
       <div><h1 id="qian-yan">前言</h1>
@@ -177,22 +200,6 @@
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size</span><span class="p">),</span><span class="n">index</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
 <span class="n">ser</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size …</span></pre></div></div>
       <div><a class="btn btn-primary" href="https://www.solarck.com/pandas-timeseries.html"><strong>➟ 查看全文</strong></a></div>
-    </article>
-    <hr/>
-    <article>
-      <header>
-        <h2><a href="https://www.solarck.com/Is-AIP-better-than-ETF.html" rel="bookmark" title="Permalink to 用数据验证定投是否优于直接投资">用数据验证定投是否优于直接投资</a></h2>
-      </header>
-      <div><p>一直以来，定投的营销话术都是分批建仓，上涨时投资少降低成本，下跌时投资多赚取低估价值，但定投是否真的如宣传的那么美好？今天就用数据来模拟两种投资方式，看看孰优孰劣。</p>
-<h3 id="shu-ju-shuo-ming">数据说明</h3>
-<p>本次实验使用三只 <span class="caps">ETF</span> 基金作为投资和定投标的，分别为华夏上证 <span class="caps">50ETF</span>（510050），华泰柏瑞沪深 <span class="caps">300ETF</span>（510300），广发中证 <span class="caps">500ETF</span>（510510），时间区间为 2013 年 5 月 27 日至 2018 年 6 月 7&nbsp;日。</p>
-<p>先上图了解下这段时间 <span class="caps">ETF</span>&nbsp;基金大致走势。</p>
-<p><em><span class="caps">50ETF</span>&nbsp;月线</em></p>
-<p><img alt="上证50ETF" src="http://kevinstuchuang.qiniudn.com/blog-pic/ETF50close.png"/></p>
-<p><em><span class="caps">500ETF</span>&nbsp;周线</em></p>
-<p><img alt="500ETF" src="http://kevinstuchuang.qiniudn.com/blog-pic/ETF500close.png"/></p>
-<p>这段区间整体来看是上涨的，大盘股涨的多，小盘股涨得少。分段来看 2013 年中至 2014 年中，属于震荡行情，2014 …</p></div>
-      <div><a class="btn btn-primary" href="https://www.solarck.com/Is-AIP-better-than-ETF.html"><strong>➟ 查看全文</strong></a></div>
     </article>
     <hr/>
 

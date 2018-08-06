@@ -116,6 +116,82 @@
 
     <article>
       <header>
+        <h2><a href="https://www.solarck.com/gift-card-discount-value.html" rel="bookmark" title="Permalink to 充值卡折现价值分析">充值卡折现价值分析</a></h2>
+      </header>
+      <div><p>前几天，媳妇把收到的一条短信转给我，问我值不值，我的第一反应当然是不值，这种预存方式都是欺负不懂时间价值的人玩的把戏。为了说服她，特地手算折现，但是发现，嗯？好像还是挺值的啊。于是就有了这篇文章，把计算的完整思路和代码贴出来。</p>
+<p><img alt="message" src="http://kevinstuchuang.qiniudn.com/blog-pic/gift-card-message.jpg"/></p>
+<p><em>注：计算全部使用年华利率按月折现</em></p>
+<p>求真正价值的思路很简单，</p>
+<blockquote>
+<p>真实价值 = 充值卡的标称价值向后折现再折回<span class="math">\(T_0\)</span> - 付出的价格按类似年金的方式收息后把总利息折回<span class="math">\(T_0\)</span>时刻</p>
+</blockquote>
+<p>代码如下：</p>
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calculate_value</span><span class="p">(</span><span class="n">month_after_use</span><span class="p">,</span> <span class="n">year_yield</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">printlog</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="n">cash_flow</span> <span class="o">=</span> <span class="n">value</span> <span class="o">/</span> <span class="mi">12</span>
+
+    <span class="k">def</span> <span class="nf">discount</span><span class="p">():</span>
+        <span class="n">fv</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+            <span class="n">cash_flow</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">year_yield</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">y</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">12</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">return …</span></pre></div><script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width < 768) ? "left" : align;
+        indent = (screen.width < 768) ? "0em" : indent;
+        linebreak = (screen.width < 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+      <div><a class="btn btn-primary" href="https://www.solarck.com/gift-card-discount-value.html"><strong>➟ 查看全文</strong></a></div>
+    </article>
+    <hr/>
+    <article>
+      <header>
         <h2><a href="https://www.solarck.com/upgrade-lede-to-1806.html" rel="bookmark" title="Permalink to 升级 Openwrt/LEDE 大版本至 18.06">升级 Openwrt/<span class="caps">LEDE</span> 大版本至&nbsp;18.06</a></h2>
       </header>
       <div><h1 id="xia-zai-sheng-ji-bao">下载升级包</h1>
@@ -190,29 +266,6 @@ bash go.sh
 <p>因为最终配置要用到TLS链接，在这步之前，你需要一个域名，免费的也无所谓。</p>
 <p>工具使用<a href="https://github.com/Neilpang/acme.sh/wiki">acme.sh …</a></p></div>
       <div><a class="btn btn-primary" href="https://www.solarck.com/v2ray-quick-config.html"><strong>➟ 查看全文</strong></a></div>
-    </article>
-    <hr/>
-    <article>
-      <header>
-        <h2><a href="https://www.solarck.com/lede-media-center2.html" rel="bookmark" title="Permalink to LEDE/OpenWRT 路由器打造家庭媒体影音中心（二）"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（二）</a></h2>
-      </header>
-      <div><h1 id="usb-qu-dong"><span class="caps">USB</span>&nbsp;驱动</h1>
-<h3 id="cha-kan-yi-an-zhuang-de-qu-dong">查看已安装的驱动</h3>
-<div class="highlight"><pre><span></span>opkg update
-opkg list-installed | grep usb
-</pre></div>
-<h3 id="an-zhuang-qu-dong-he-gong-ju">安装驱动和工具</h3>
-<p>如果下列驱动未出现在上一步的结果中，请务必首先安装缺失的驱动</p>
-<div class="highlight"><pre><span></span>opkg install kmod-usb-core kmod-usb-storage
-</pre></div>
-<p><code>kmod-usb-core</code>:<span class="caps">USB</span>&nbsp;核心驱动</p>
-<p><code>kmod-usb-storage</code>:大容量存储设备驱动</p>
-<p><code>kmod-usb2</code>:<span class="caps">WRT1900ACS</span> 有一个 <span class="caps">USB2</span>.0/eSATA&nbsp;口，可以不安装</p>
-<p><code>kmod-ata-marvell-sata</code>:Marvell <span class="caps">SATA</span>&nbsp;接口驱动，可以不安装</p>
-<p>网上搜到的教程和官方指南里还让安装一些其他的应用，但这些都是不必要或已被编译至内核中，包括：<code>kmod-usb-ohci</code>、<code>kmod-usb-uhci</code>、<code>kmod-usb3</code>、<code>kmod-usb-storage-uas</code></p>
-<h3 id="an-zhuang-xiang-guan-gong-ju">安装相关工具</h3>
-<div class="highlight"><pre><span></span>opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk …</pre></div></div>
-      <div><a class="btn btn-primary" href="https://www.solarck.com/lede-media-center2.html"><strong>➟ 查看全文</strong></a></div>
     </article>
     <hr/>
 
