@@ -120,14 +120,39 @@
 
     <article>
       <header>
+        <h2><a href="https://www.solarck.com/v2ray-quick-config.html" rel="bookmark" title="Permalink to 快速配置V2ray">快速配置V2ray</a></h2>
+      </header>
+      <div><h1 id="fu wu qi duan pei zhi">服务器端配置</h1>
+<p>服务器系统使用的是Debian 9&nbsp;x86_64，Ubuntu大部分操作都通用。如果是CentOS的话，该文章仅作为参考。</p>
+<h3 id="you hua wang luo">优化网络</h3>
+<p>主要涉及bbr的安装配置，需要VPS是KVM架构，具体可以参照<a href="https://www.solarck.com/shadowsocks-libev.html">之前的文章</a>。</p>
+<h3 id="an zhuang v2ray">安装V2ray</h3>
+<p>官方提供了安装脚本，需要系统使用systemd管理系统</p>
+<div class="highlight"><pre><span></span>wget https://install.direct/go.sh
+bash go.sh
+</pre></div>
+<p>安装好后，主要文件如下：</p>
+<blockquote>
+<p><code>/etc/systemd/system/v2ray.service</code>：启动服务</p>
+<p><code>/etc/v2ray/config.json</code>：配置文件</p>
+<p><code>/usr/bin/v2ray/v2ray</code>：主程序</p>
+</blockquote>
+<h3 id="tlsyu ming zheng shu">TLS域名证书</h3>
+<p>因为最终配置要用到TLS链接，在这步之前，你需要一个域名，免费的也无所谓。</p>
+<p>工具使用<a href="https://github.com/Neilpang/acme.sh/wiki">acme.sh …</a></p></div>
+      <div><a class="btn btn-primary" href="https://www.solarck.com/v2ray-quick-config.html"><strong>➟ 查看全文</strong></a></div>
+    </article>
+    <hr/>
+    <article>
+      <header>
         <h2><a href="https://www.solarck.com/lede-media-center2.html" rel="bookmark" title="Permalink to LEDE/OpenWRT 路由器打造家庭媒体影音中心（二）"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（二）</a></h2>
       </header>
-      <div><h1 id="usb-qu-dong"><span class="caps">USB</span>&nbsp;驱动</h1>
-<h3 id="cha-kan-yi-an-zhuang-de-qu-dong">查看已安装的驱动</h3>
+      <div><h1 id="usb qu dong"><span class="caps">USB</span>&nbsp;驱动</h1>
+<h3 id="cha kan yi an zhuang de qu dong">查看已安装的驱动</h3>
 <div class="highlight"><pre><span></span>opkg update
 opkg list-installed | grep usb
 </pre></div>
-<h3 id="an-zhuang-qu-dong-he-gong-ju">安装驱动和工具</h3>
+<h3 id="an zhuang qu dong he gong ju">安装驱动和工具</h3>
 <p>如果下列驱动未出现在上一步的结果中，请务必首先安装缺失的驱动</p>
 <div class="highlight"><pre><span></span>opkg install kmod-usb-core kmod-usb-storage
 </pre></div>
@@ -136,7 +161,7 @@ opkg list-installed | grep usb
 <p><code>kmod-usb2</code>:<span class="caps">WRT1900ACS</span> 有一个 <span class="caps">USB2</span>.0/eSATA&nbsp;口，可以不安装</p>
 <p><code>kmod-ata-marvell-sata</code>:Marvell <span class="caps">SATA</span>&nbsp;接口驱动，可以不安装</p>
 <p>网上搜到的教程和官方指南里还让安装一些其他的应用，但这些都是不必要或已被编译至内核中，包括：<code>kmod-usb-ohci</code>、<code>kmod-usb-uhci</code>、<code>kmod-usb3</code>、<code>kmod-usb-storage-uas</code></p>
-<h3 id="an-zhuang-xiang-guan-gong-ju">安装相关工具</h3>
+<h3 id="an zhuang xiang guan gong ju">安装相关工具</h3>
 <div class="highlight"><pre><span></span>opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk …</pre></div></div>
       <div><a class="btn btn-primary" href="https://www.solarck.com/lede-media-center2.html"><strong>➟ 查看全文</strong></a></div>
     </article>
@@ -145,13 +170,13 @@ opkg list-installed | grep usb
       <header>
         <h2><a href="https://www.solarck.com/lede-media-center1.html" rel="bookmark" title="Permalink to LEDE/OpenWRT 路由器打造家庭媒体影音中心（一）"><span class="caps">LEDE</span>/OpenWRT&nbsp;路由器打造家庭媒体影音中心（一）</a></h2>
       </header>
-      <div><h1 id="qian-yan">前言</h1>
-<h3 id="ruan-ying-jian">软/硬件</h3>
+      <div><h1 id="qian yan">前言</h1>
+<h3 id="ruan /ying jian">软/硬件</h3>
 <p>软件：本文系统都是基于 <span class="caps">LEDE</span>&nbsp;17.01.4</p>
 <p>硬件：Linksys <span class="caps">WRT1900ACS</span>&nbsp;V2</p>
 <p>其他：一台电脑，最好是 Linux 带 <span class="caps">SSH</span>，Windows 的话可以下个 putty&nbsp;安装上</p>
 <p>前提：我不会从头写起，而是从路由器已刷好 <span class="caps">LEDE</span> 17.01.4，<span class="caps">WAN</span> 口已联网，且已经可以 <span class="caps">SSH</span> 登录之后开始，其他外设，如硬盘、硬盘盒、用于 Extroot 的 U&nbsp;盘都已准备好。</p>
-<h3 id="shi-xian-mu-de">实现目的</h3>
+<h3 id="shi xian mu de">实现目的</h3>
 <p>基于 Linksys <span class="caps">WRT1900ACS</span> 强悍的性能和扩展功能丰富的 <span class="caps">LEDE</span>，打造一个有权限控制的 …</p></div>
       <div><a class="btn btn-primary" href="https://www.solarck.com/lede-media-center1.html"><strong>➟ 查看全文</strong></a></div>
     </article>
@@ -162,9 +187,9 @@ opkg list-installed | grep usb
       </header>
       <div><p>本文章仅用于记录在公司服务器上通过 yum repo 来安装官方提供的数据库程序，而非通过编译方式来安装。通过官方仓库来安装有很多好处，比如升级、打补丁都很方便，不用编译浪费时间，更不需要安装多个版本的 gcc&nbsp;来满足各种不同软件的要求。</p>
 <h3 id="mysql">Mysql</h3>
-<h4 id="xia-zai-an-zhuang-mysql-repo"><strong>下载安装 mysql&nbsp;repo</strong></h4>
+<h4 id="xia zai an zhuang  mysql repo"><strong>下载安装 mysql&nbsp;repo</strong></h4>
 <p><code>rpm -Uvh https://repo.mysql.com//mysql80-community-release-el6-1.noarch.rpm</code></p>
-<h4 id="sheng-ji-zhi-57-ban-ben"><strong>升级至 57&nbsp;版本</strong></h4>
+<h4 id="sheng ji zhi  57 ban ben"><strong>升级至 57&nbsp;版本</strong></h4>
 <p><code>yum --disablerepo=mysql80-community --enablerepo=mysql57-community upgrade</code></p>
 <p>当前默认是 80 版本，如果未来需要升级，如果未来一直要维持在 57&nbsp;版本，那么建议修改配置文件，以免每次都带上两个参数</p>
 <p><code>vim /etc/yum.repos.d/mysql-community.repo …</code></p></div>
@@ -176,7 +201,7 @@ opkg list-installed | grep usb
         <h2><a href="https://www.solarck.com/python-send-gmail.html" rel="bookmark" title="Permalink to 使用 Python 发送 Gmail">使用 Python 发送&nbsp;Gmail</a></h2>
       </header>
       <div><p>本文基于一个真实的项目，使用 python3.6 和最新官方 smtplib 接口。项目的目的是爬取网站，然后通过邮件给自己发送邮件提醒新文章。最后使用 linux 系统的 crond&nbsp;服务定时执行。</p>
-<h3 id="fa-you-jian-fang-fa">发邮件方法</h3>
+<h3 id="fa you jian fang fa">发邮件方法</h3>
 <p>在定义发邮件方法之前，我们还定义了一个类和类中的爬虫，单拿出来发邮件来说，代码如下：</p>
 <div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">sent_email</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">fromaddr</span> <span class="o">=</span> <span class="s1">'princelailai@gmail.com'</span>
@@ -184,22 +209,6 @@ opkg list-installed | grep usb
         <span class="n">subject</span> <span class="o">=</span> <span class="s2">"{}{}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y年%m月</span><span class="si">%d</span><span class="s1">日'</span><span class="p">),</span><span class="s1">'共有产权房信息'</span><span class="p">)</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">'日期:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">标题:</span><span class="se">\t</span><span class="s1">{}</span><span class="se">\n</span><span class="s1">地址:</span><span class="se">\t …</span></pre></div></div>
       <div><a class="btn btn-primary" href="https://www.solarck.com/python-send-gmail.html"><strong>➟ 查看全文</strong></a></div>
-    </article>
-    <hr/>
-    <article>
-      <header>
-        <h2><a href="https://www.solarck.com/pandas-timeseries.html" rel="bookmark" title="Permalink to Pandas 时间处理函数速度对比">Pandas&nbsp;时间处理函数速度对比</a></h2>
-      </header>
-      <div><p>Pandas&nbsp;非常擅长处理时间序列，拥有多种处理时间序列的函数和方法，自己做了几个小测试，看看内置函数都能适配哪种格式、哪种情况，速度又有多快。</p>
-<p>我用到的时间处理主要是对细粒度的时间重采样至粗粒度，之后再对重采样后的时间进行分组再进行后续操作，如求和、求平均或取最后值。</p>
-<p>所以我就设计两个场景，第一个场景是对频率为秒的时间序列重采样至一分钟然后求平均；第二个场景就是对频率为秒的时间序列重采样至 3&nbsp;分钟然后对新的时间序列取每个时间的最新值。</p>
-<p>所以首先是要生成一组数据</p>
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-
-<span class="n">rng</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s1">'2018-04-07'</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">'2018-04-08'</span><span class="p">,</span><span class="n">freq</span><span class="o">=</span><span class="s1">'s'</span><span class="p">)</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size</span><span class="p">),</span><span class="n">index</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
-<span class="n">ser</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">size …</span></pre></div></div>
-      <div><a class="btn btn-primary" href="https://www.solarck.com/pandas-timeseries.html"><strong>➟ 查看全文</strong></a></div>
     </article>
     <hr/>
 
@@ -278,14 +287,6 @@ opkg list-installed | grep usb
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

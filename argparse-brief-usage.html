@@ -149,7 +149,7 @@
 <li>metavar -&nbsp;使用消息中参数的名称。</li>
 <li>dest -&nbsp;要添加到由parse_args()返回的对象的属性的名称。</li>
 </ul>
-<h3 id="1-name-or-flags">1. name or&nbsp;flags</h3>
+<h3 id="1. name or flags">1. name or&nbsp;flags</h3>
 <p>唯一的必填参数，可以创建位置参数（必填）和可选参数</p>
 <div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'PROG'</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'-s'</span><span class="p">,</span><span class="s1">'--save'</span><span class="p">)</span>
@@ -159,7 +159,7 @@
 </pre></div>
 <p>可选参数以<code>-</code>或<code>--</code>开始，其余的均为位置参数
 大部分情况下，未填的可选参数默认都是<code>None</code>,如果有<code>--</code>开始的参数，则参数名以后面的字符串命名。</p>
-<h3 id="2-action">2.&nbsp;action</h3>
+<h3 id="2. action">2.&nbsp;action</h3>
 <p>action用于将命令和动作关联起来，常用的动作有如下几种：</p>
 <ul>
 <li>store -&nbsp;仅保存参数后的值</li>
@@ -189,7 +189,7 @@
 <p>只给出a1参数，arg1的值为0。
 没有给出a2参数，则a2的const没有被调用，使用default的值，当然default默认就是None，不写也可以。
 a3参数其实就是store_true的实现。&nbsp;const和default的区别就是当命令给出但是后面未接值时，使用const值，如果命令那个都没有给出，则使用default的值。</p>
-<h3 id="3-nargs">3.&nbsp;nargs</h3>
+<h3 id="3. nargs">3.&nbsp;nargs</h3>
 <p>nargs定义参数后面值的个数，可选值有几种：</p>
 <blockquote>
 <ul>
@@ -208,7 +208,7 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
 <span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">Namespace</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">],</span> <span class="n">args2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args3</span><span class="o">=</span><span class="p">[</span><span class="s1">'aa'</span><span class="p">,</span> <span class="s1">'bb'</span><span class="p">])</span>
 </pre></div>
 <p>结果很好理解，?可以配合const使用，其他的可以配合default使用，调用了就是一个列表，使用const或default就是一个值。</p>
-<h3 id="4-typehe-metavar">4.&nbsp;type和metavar</h3>
+<h3 id="4. typehe metavar">4.&nbsp;type和metavar</h3>
 <p>这两个参数偶尔能用到，</p>
 <div class="highlight"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'PROG'</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'a1'</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
@@ -227,7 +227,7 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
   <span class="o">-</span><span class="n">a2</span> <span class="n">STR</span><span class="p">,</span> <span class="o">--</span><span class="n">args2</span> <span class="n">STR</span>
 </pre></div>
 <p>metavar仅改变了help说明里的变量名。</p>
-<h3 id="can-kao-wen-dang">参考文档</h3>
+<h3 id="can kao wen dang">参考文档</h3>
 <ol>
 <li><a href="https://docs.python.org/3/library/argparse.html">官方文档</a></li>
 <li><a href="http://python.usyiyi.cn/translate/python_352/library/argparse.html">中文文档</a></li>
@@ -278,7 +278,7 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
       <p>
               <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
                   data-toggle="tooltip" class="label label-info"
-                  title="2 articles in this category">IT笔记</a>
+                  title="3 articles in this category">IT笔记</a>
             <a href="/tag/python.html" data-toggle="tooltip"
       class="label label-default"
       title="6 articles with this tag">python</a>
@@ -306,7 +306,7 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#1-name-or-flags" title="1. name or&nbsp;flags">1. name or&nbsp;flags</a></li><li><a class="toc-href" href="#2-action" title="2.&nbsp;action">2.&nbsp;action</a></li><li><a class="toc-href" href="#3-nargs" title="3.&nbsp;nargs">3.&nbsp;nargs</a></li><li><a class="toc-href" href="#4-typehe-metavar" title="4.&nbsp;type和metavar">4.&nbsp;type和metavar</a></li><li><a class="toc-href" href="#can-kao-wen-dang" title="参考文档">参考文档</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#1. name or flags" title="1. name or&nbsp;flags">1. name or&nbsp;flags</a></li><li><a class="toc-href" href="#2. action" title="2.&nbsp;action">2.&nbsp;action</a></li><li><a class="toc-href" href="#3. nargs" title="3.&nbsp;nargs">3.&nbsp;nargs</a></li><li><a class="toc-href" href="#4. typehe metavar" title="4.&nbsp;type和metavar">4.&nbsp;type和metavar</a></li><li><a class="toc-href" href="#can kao wen dang" title="参考文档">参考文档</a></li></ul></div>
         </nav>
 
   </div>
@@ -330,14 +330,6 @@ a3参数其实就是store_true的实现。&nbsp;const和default的区别就是�
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

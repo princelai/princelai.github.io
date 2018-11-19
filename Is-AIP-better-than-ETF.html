@@ -121,7 +121,7 @@
 
   <div>
     <p>一直以来，定投的营销话术都是分批建仓，上涨时投资少降低成本，下跌时投资多赚取低估价值，但定投是否真的如宣传的那么美好？今天就用数据来模拟两种投资方式，看看孰优孰劣。</p>
-<h3 id="shu-ju-shuo-ming">数据说明</h3>
+<h3 id="shu ju shuo ming">数据说明</h3>
 <p>本次实验使用三只 <span class="caps">ETF</span> 基金作为投资和定投标的，分别为华夏上证 <span class="caps">50ETF</span>（510050），华泰柏瑞沪深 <span class="caps">300ETF</span>（510300），广发中证 <span class="caps">500ETF</span>（510510），时间区间为 2013 年 5 月 27 日至 2018 年 6 月 7&nbsp;日。</p>
 <p>先上图了解下这段时间 <span class="caps">ETF</span>&nbsp;基金大致走势。</p>
 <p><em><span class="caps">50ETF</span>&nbsp;月线</em></p>
@@ -131,7 +131,7 @@
 <p>这段区间整体来看是上涨的，大盘股涨的多，小盘股涨得少。分段来看 2013 年中至 2014 年中，属于震荡行情，2014 年中至 2015 年中是暴涨行情，2015 年中至 2016 年初是暴跌行情，2016 年初至 2018&nbsp;年中行情分化，大盘股再次进入牛市，中盘股属于慢牛，小盘股是横盘震荡走势。</p>
 <p>选择这个区间的行情，是因为这五年属于一个完整的周期，活跃时波动率大，行情过后的低迷时期波动率又小，是典型的中国股市。另外从长期来看，股票波动向上才应该是上市公司内在价值增长的表现。</p>
 <p>当然，用这个区间的数据做分析是有一个缺点的，就是这三只 <span class="caps">ETF</span> 基金整体涨幅都在&nbsp;40%-50%之间，如果在一开始就持有至当前日期，那么一定是一次性直接投资要优于定投，不过放心，后面编程不会让这种事情发生，我会加入时间随机项，尽量减小整体上涨带来的影响。</p>
-<h3 id="kai-shi-shi-yan">开始实验</h3>
+<h3 id="kai shi shi yan">开始实验</h3>
 <p>首先要导入用到的包</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tushare</span> <span class="kn">as</span> <span class="nn">ts</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
@@ -225,7 +225,7 @@ compare('ETF500',aip.weekly)
 #用每周定投500元ETF300来比较，共模拟10次，每次打印出走势对比图
 compare('ETF300',aip.weekly,times=10,money=500,plot=True)
 </pre></div>
-<h3 id="bi-jiao-jie-guo">比较结果</h3>
+<h3 id="bi jiao jie guo">比较结果</h3>
 <p><code>compare('ETF50',aip.monthly)</code></p>
 <div class="highlight"><pre><span></span>from 2015-09-30 to 2017-08-31,dirctly invest ETF exceed AIP 8.07%
 from 2014-07-31 to 2016-06-30,dirctly invest ETF exceed AIP 30.34%
@@ -266,7 +266,7 @@ In 15 times simulation,dirctly invest ETF exceed AIP's mean is 32.02%
 </pre></div>
 <p>从上面的运行结果来看，把资金一次性全部投入比定投的平均收益是要高的，如果有兴趣，可以自己修改程序，改变开始和结束时间来验证结果，相信结论应该上面的相差不会太多。</p>
 <p>当然，定投也不是一无是处，至少对于当前资金不足，只想从每月工资中拿出一部分来投资的人来说，还是一种很好的投资方式的。</p>
-<h3 id="wan-zheng-dai-ma">完整代码</h3>
+<h3 id="wan zheng dai ma">完整代码</h3>
 <div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
@@ -388,7 +388,7 @@ In 15 times simulation,dirctly invest ETF exceed AIP's mean is 32.02%
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#shu-ju-shuo-ming" title="数据说明">数据说明</a></li><li><a class="toc-href" href="#kai-shi-shi-yan" title="开始实验">开始实验</a></li><li><a class="toc-href" href="#bi-jiao-jie-guo" title="比较结果">比较结果</a></li><li><a class="toc-href" href="#wan-zheng-dai-ma" title="完整代码">完整代码</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#shu ju shuo ming" title="数据说明">数据说明</a></li><li><a class="toc-href" href="#kai shi shi yan" title="开始实验">开始实验</a></li><li><a class="toc-href" href="#bi jiao jie guo" title="比较结果">比较结果</a></li><li><a class="toc-href" href="#wan zheng dai ma" title="完整代码">完整代码</a></li></ul></div>
         </nav>
 
   </div>
@@ -412,14 +412,6 @@ In 15 times simulation,dirctly invest ETF exceed AIP's mean is 32.02%
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

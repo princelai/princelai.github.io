@@ -122,7 +122,7 @@
   <div>
     <p>近期开会导致墙越来越高，迫不得已升级自建的 ss 服务，由于 shadowsocks 原版已经停更，shadowsocksR 也已经删库，所以就锁定 libev 版本。
 <strong><em>注：以下服务器端内容请切换到 root&nbsp;操作</em></strong></p>
-<h3 id="1-sheng-ji-debian">1. 升级&nbsp;Debian</h3>
+<h3 id="1. sheng ji  debian">1. 升级&nbsp;Debian</h3>
 <p>在升级之前，我需要先把服务器从 Debian 8 升级到 Debian 9，如果不是 Debian&nbsp;用户，或者不想升级的可以跳过，这一步不影响后续操作，但是部分代码可能需要修改。</p>
 <p>首先要把 Debian 8&nbsp;升级到最新版本</p>
 <div class="highlight"><pre><span></span>apt update
@@ -141,7 +141,7 @@ apt upgrade
  apt dist-upgrade
  apt autoremove
 </pre></div>
-<h3 id="2-kai-qi-bbr">2. 开启 <span class="caps">BBR</span></h3>
+<h3 id="2. kai qi  bbr">2. 开启 <span class="caps">BBR</span></h3>
 <p>使用一键脚本安装并开启 bbr，此步除 OpenVZ&nbsp;以外的服务器都可以开启，跳过不影响后续内容。</p>
 <div class="highlight"><pre><span></span>wget --no-check-certificate https://raw.githubusercontent.com/princelai/across/master/bbr.sh
 chmod +x bbr.sh
@@ -151,13 +151,13 @@ echo "net.ipv4.tcp_congestion_control=bbr" &gt;&gt; /etc/sysctl.conf
 sysctl -p
 lsmod | grep bbr
 </pre></div>
-<h3 id="3-an-zhuang-shadowsocks-libev-he-simple-obfs-hun-yao">3. 安装 shadowsocks-libev 和 simple-obfs&nbsp;混淆</h3>
+<h3 id="3. an zhuang  shadowsocks-libev he  simple-obfs hun yao">3. 安装 shadowsocks-libev 和 simple-obfs&nbsp;混淆</h3>
 <p>需要从 stretch-backports 库中安装，非 Debian 9 用户请参考<a href="https://github.com/shadowsocks/shadowsocks-libev#pre-build-configure-guide">文档</a></p>
 <div class="highlight"><pre><span></span>sh -c <span class="s1">'printf "deb http://deb.debian.org/debian stretch-backports main" &gt; /etc/apt/sources.list.d/stretch-backports.list'</span>
 apt update
 apt -t stretch-backports install shadowsocks-libev simple-obfs
 </pre></div>
-<h3 id="4-you-hua-tcp-wang-luo">4. 优化 <span class="caps">TCP</span>&nbsp;网络</h3>
+<h3 id="4. you hua  tcp wang luo">4. 优化 <span class="caps">TCP</span>&nbsp;网络</h3>
 <p>编辑 sysctl 文件，把下面的内容复制过去，
 如果第二步中没有开启&nbsp;bbr，那么请删除前两行。</p>
 <p><code>vim /etc/sysctl.conf</code></p>
@@ -187,7 +187,7 @@ apt -t stretch-backports install shadowsocks-libev simple-obfs
 <p>更改保存后执行</p>
 <div class="highlight"><pre><span></span>sysctl -p
 </pre></div>
-<h3 id="5-pei-zhi-fu-wu-duan">5.&nbsp;配置服务端</h3>
+<h3 id="5. pei zhi fu wu duan">5.&nbsp;配置服务端</h3>
 <p><strong>修改配置</strong></p>
 <p>编辑配置文件，填上自己的密码，端口建议使用 443，别的端口封杀的太严重。
 关于加密方式，现在新版都支持 <span class="caps">AEAD</span> 加密方式，详细内容请点<a href="https://shadowsocks.org/en/spec/AEAD-Ciphers.html">这里</a>。</p>
@@ -211,7 +211,7 @@ apt -t stretch-backports install shadowsocks-libev simple-obfs
 systemctl start shadowsocks-libev <span class="c1">#后台启动</span>
 systemctl <span class="nb">enable</span> shadowsocks-libev <span class="c1">#开机启动</span>
 </pre></div>
-<h3 id="6-pei-zhi-ke-hu-duan">6.&nbsp;配置客户端</h3>
+<h3 id="6. pei zhi ke hu duan">6.&nbsp;配置客户端</h3>
 <p><strong>Windows</strong></p>
 <p>下载<a href="https://github.com/shadowsocks/shadowsocks-windows/releases">shadowsocks-windows</a>解压缩，
 下载<a href="https://github.com/imgk/simple-obfs-Cygwin/releases">simple-obfs</a>中的 obfs-local.exe 和 msys-2.0.dll 放到 shadowsocks-windows 目录中,obfs-host 随意写一个中国可以访问的网站。
@@ -261,10 +261,10 @@ sudo systemctl <span class="nb">enable</span>  shadowsocks-libev@libev
 <p>其他内容请参考<a href="https://wiki.archlinux.org/index.php/Shadowsocks_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E5.91.BD.E4.BB.A4.E8.A1.8C">Archlinux Wiki</a>
 shadowsocks-qt5 目前功能严重缺失，不建议使用，Linux&nbsp;平台最好是命令行模式</p>
 <p><a href="https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif?hl=zh-CN">SwitchyOmega</a>是目前 Chome 最好的代理插件，可以在<a href="https://www.switchyomega.com/download.html">官网</a>下载最新版本安装。</p>
-<h3 id="7android-ke-hu-duan-pei-zhi">7.Android&nbsp;客户端配置</h3>
+<h3 id="7.android ke hu duan pei zhi">7.Android&nbsp;客户端配置</h3>
 <p>如果 Android 手机可以访问 Google Play，则可以直接在上面搜 shadowsocks 和 obfs&nbsp;分别安装后再配置即可。</p>
 <p>如果当前手机不能访问 Play，可以在 github releases 上分别下载<a href="https://github.com/shadowsocks/shadowsocks-android/releases">shadowsocks-android</a>和<a href="https://github.com/shadowsocks/simple-obfs-android/releases">simple-obfs-android</a>，安装后再配置自己的服务端信息。</p>
-<h3 id="8socks5-zhuan-httphttps">8.socks5 转&nbsp;http/https</h3>
+<h3 id="8.socks5 zhuan  http/https">8.socks5 转&nbsp;http/https</h3>
 <p>实际使用中，经常会遇到命令行终端或本地程序需要代理，但是他们只支持 http 或 https 协议，所以就需要把 socks5 协议的代理转换协议，以 Archlinux&nbsp;为例，方法也很简单。</p>
 <p>安装&nbsp;privoxy</p>
 <div class="highlight"><pre><span></span>sudo pacman -S privoxy
@@ -282,7 +282,7 @@ sudo systemctl restart privoxy
 <div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">https_proxy</span><span class="o">=</span><span class="m">127</span>.0.0.1:8118
 <span class="nb">echo</span> <span class="nv">http_proxy</span><span class="o">=</span><span class="m">127</span>.0.0.1:8118
 </pre></div>
-<h3 id="9-fu-wu-qi-duan-chang-yong-de-ming-ling">9.&nbsp;服务器端常用的命令</h3>
+<h3 id="9. fu wu qi duan chang yong de ming ling">9.&nbsp;服务器端常用的命令</h3>
 <div class="highlight"><pre><span></span><span class="c1">#测试ss+obfs是否正常启动</span>
 ss-server -c config.json --plugin obfs-server --plugin-opts <span class="s2">"obfs=http"</span>
 <span class="c1">#查看obfs的进程编号</span>
@@ -353,7 +353,7 @@ netstat -nlp <span class="p">|</span>grep ss-server
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#1-sheng-ji-debian" title="1. 升级&nbsp;Debian">1. 升级&nbsp;Debian</a></li><li><a class="toc-href" href="#2-kai-qi-bbr" title="2. 开启 BBR">2. 开启 BBR</a></li><li><a class="toc-href" href="#3-an-zhuang-shadowsocks-libev-he-simple-obfs-hun-yao" title="3. 安装 shadowsocks-libev 和 simple-obfs&nbsp;混淆">3. 安装 shadowsocks-libev 和 simple-obfs&nbsp;混淆</a></li><li><a class="toc-href" href="#4-you-hua-tcp-wang-luo" title="4. 优化 TCP&nbsp;网络">4. 优化 TCP&nbsp;网络</a></li><li><a class="toc-href" href="#5-pei-zhi-fu-wu-duan" title="5.&nbsp;配置服务端">5.&nbsp;配置服务端</a></li><li><a class="toc-href" href="#6-pei-zhi-ke-hu-duan" title="6.&nbsp;配置客户端">6.&nbsp;配置客户端</a></li><li><a class="toc-href" href="#7android-ke-hu-duan-pei-zhi" title="7.Android&nbsp;客户端配置">7.Android&nbsp;客户端配置</a></li><li><a class="toc-href" href="#8socks5-zhuan-httphttps" title="8.socks5 转&nbsp;http/https">8.socks5 转&nbsp;http/https</a></li><li><a class="toc-href" href="#9-fu-wu-qi-duan-chang-yong-de-ming-ling" title="9.&nbsp;服务器端常用的命令">9.&nbsp;服务器端常用的命令</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#1. sheng ji  debian" title="1. 升级&nbsp;Debian">1. 升级&nbsp;Debian</a></li><li><a class="toc-href" href="#2. kai qi  bbr" title="2. 开启 BBR">2. 开启 BBR</a></li><li><a class="toc-href" href="#3. an zhuang  shadowsocks-libev he  simple-obfs hun yao" title="3. 安装 shadowsocks-libev 和 simple-obfs&nbsp;混淆">3. 安装 shadowsocks-libev 和 simple-obfs&nbsp;混淆</a></li><li><a class="toc-href" href="#4. you hua  tcp wang luo" title="4. 优化 TCP&nbsp;网络">4. 优化 TCP&nbsp;网络</a></li><li><a class="toc-href" href="#5. pei zhi fu wu duan" title="5.&nbsp;配置服务端">5.&nbsp;配置服务端</a></li><li><a class="toc-href" href="#6. pei zhi ke hu duan" title="6.&nbsp;配置客户端">6.&nbsp;配置客户端</a></li><li><a class="toc-href" href="#7.android ke hu duan pei zhi" title="7.Android&nbsp;客户端配置">7.Android&nbsp;客户端配置</a></li><li><a class="toc-href" href="#8.socks5 zhuan  http/https" title="8.socks5 转&nbsp;http/https">8.socks5 转&nbsp;http/https</a></li><li><a class="toc-href" href="#9. fu wu qi duan chang yong de ming ling" title="9.&nbsp;服务器端常用的命令">9.&nbsp;服务器端常用的命令</a></li></ul></div>
         </nav>
 
   </div>
@@ -377,14 +377,6 @@ netstat -nlp <span class="p">|</span>grep ss-server
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

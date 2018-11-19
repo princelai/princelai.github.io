@@ -127,7 +127,7 @@
 而从官方的文档来看，目前 pivot-root 已经没有以前的缺点和不足，选择哪个已经是个人需求而不是技术问题了。<br/>
 网上大部分文章帖子都是 2009-2010 年间的，所以大部分可能都是 pivot-overlay 的。如果对这部分不太理解，请仔细阅读官方 Wiki：<a href="http://wiki.openwrt.org/doc/howto/extroot/extroot.theory">ExtRoot: How it works</a>,<a href="http://wiki.openwrt.org/doc/techref/flash.layout">The OpenWrt Flash&nbsp;Layout</a></p>
 </blockquote>
-<h3 id="an-zhuang-bi-yao-de-bao">安装必要的包</h3>
+<h3 id="an zhuang bi yao de bao">安装必要的包</h3>
 <div class="highlight"><pre><span></span>opkg update
 opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs-ext4 block-mount
 </pre></div>
@@ -135,7 +135,7 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
 kmod-usb2 只提供了 USb2.0 的驱动，如果你的是 <span class="caps">USB1</span>.0（1.1）的，还需要单独安装驱动。<br/>
 kmod-fs-ext4 是用来挂载 ext4 文件系统的，如果你想使用 ext3 文件格式就安装相应的包。<br/>
 usbutils 不是必装，仅提供了 lsusb&nbsp;命令。</p>
-<h3 id="ge-shi-hua-u-pan">格式化 U&nbsp;盘</h3>
+<h3 id="ge shi hua  u pan">格式化 U&nbsp;盘</h3>
 <p>插好 U&nbsp;盘后，先查看下是否被系统识别出来</p>
 <div class="highlight"><pre><span></span>root@openwrt: ~# lsusb
 Bus <span class="m">001</span> Device <span class="m">002</span>: ID <span class="m">0781</span>:5571 SanDisk Corp. Cruzer Fit
@@ -162,7 +162,7 @@ mount --bind / /tmp/cproot
 tar -C /tmp/cproot -cvf - . <span class="p">|</span> tar -C /mnt/ -xf -
 umount /tmp/cproot
 </pre></div>
-<h3 id="bian-ji-fstab">编辑&nbsp;fstab</h3>
+<h3 id="bian ji  fstab">编辑&nbsp;fstab</h3>
 <p>我的系统默认没有/etc/config/fstab&nbsp;文件，可以用命令生成一个</p>
 <div class="highlight"><pre><span></span>block detect &gt; /etc/config/fstab
 </pre></div>
@@ -256,7 +256,7 @@ tmpfs                   <span class="m">512</span>.0K         <span class="m">0<
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#an-zhuang-bi-yao-de-bao" title="安装必要的包">安装必要的包</a></li><li><a class="toc-href" href="#ge-shi-hua-u-pan" title="格式化 U&nbsp;盘">格式化 U&nbsp;盘</a></li><li><a class="toc-href" href="#extroot" title="extroot">extroot</a></li><li><a class="toc-href" href="#bian-ji-fstab" title="编辑&nbsp;fstab">编辑&nbsp;fstab</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#an zhuang bi yao de bao" title="安装必要的包">安装必要的包</a></li><li><a class="toc-href" href="#ge shi hua  u pan" title="格式化 U&nbsp;盘">格式化 U&nbsp;盘</a></li><li><a class="toc-href" href="#extroot" title="extroot">extroot</a></li><li><a class="toc-href" href="#bian ji  fstab" title="编辑&nbsp;fstab">编辑&nbsp;fstab</a></li></ul></div>
         </nav>
 
   </div>
@@ -280,14 +280,6 @@ tmpfs                   <span class="m">512</span>.0K         <span class="m">0<
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

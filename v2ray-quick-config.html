@@ -120,11 +120,11 @@
   
 
   <div>
-    <h1 id="fu-wu-qi-duan-pei-zhi">服务器端配置</h1>
+    <h1 id="fu wu qi duan pei zhi">服务器端配置</h1>
 <p>服务器系统使用的是Debian 9&nbsp;x86_64，Ubuntu大部分操作都通用。如果是CentOS的话，该文章仅作为参考。</p>
-<h3 id="you-hua-wang-luo">优化网络</h3>
+<h3 id="you hua wang luo">优化网络</h3>
 <p>主要涉及bbr的安装配置，需要VPS是KVM架构，具体可以参照<a href="https://www.solarck.com/shadowsocks-libev.html">之前的文章</a>。</p>
-<h3 id="an-zhuang-v2ray">安装V2ray</h3>
+<h3 id="an zhuang v2ray">安装V2ray</h3>
 <p>官方提供了安装脚本，需要系统使用systemd管理系统</p>
 <div class="highlight"><pre><span></span>wget https://install.direct/go.sh
 bash go.sh
@@ -135,36 +135,36 @@ bash go.sh
 <p><code>/etc/v2ray/config.json</code>：配置文件</p>
 <p><code>/usr/bin/v2ray/v2ray</code>：主程序</p>
 </blockquote>
-<h3 id="tlsyu-ming-zheng-shu">TLS域名证书</h3>
+<h3 id="tlsyu ming zheng shu">TLS域名证书</h3>
 <p>因为最终配置要用到TLS链接，在这步之前，你需要一个域名，免费的也无所谓。</p>
 <p>工具使用<a href="https://github.com/Neilpang/acme.sh/wiki">acme.sh</a>，这是用来签发<a href="https://letsencrypt.org/">Let&rsquo;s Encrypt</a>免费证书的脚本，非常好用。</p>
-<h4 id="an-zhuang-acme"><em>安装acme</em></h4>
+<h4 id="an zhuang acme"><em>安装acme</em></h4>
 <p>安装依赖工具</p>
 <p><code>apt-get install -y socat netcat</code></p>
 <p>安装acme.sh脚本</p>
 <div class="highlight"><pre><span></span>curl  https://get.acme.sh <span class="p">|</span> sh
 </pre></div>
 <p>默认是安装在<code>～/.acme.sh/</code></p>
-<h4 id="qian-fa-zheng-shu"><em>签发证书</em></h4>
+<h4 id="qian fa zheng shu"><em>签发证书</em></h4>
 <p>我使用的是ecc证书，需要把domain换成自己的域名</p>
 <div class="highlight"><pre><span></span>~/.acme.sh/acme.sh --issue -d domain --standalone -k ec-256
 </pre></div>
-<h4 id="an-zhuang-zheng-shu"><em>安装证书</em></h4>
+<h4 id="an zhuang zheng shu"><em>安装证书</em></h4>
 <p>证书会被安装到<code>/etc/v2ray</code>目录下</p>
 <div class="highlight"><pre><span></span>~/.acme.sh/acme.sh --installcert -d domain --fullchainpath /etc/v2ray/v2ray.crt --keypath /etc/v2ray/v2ray.key --ecc
 </pre></div>
-<h4 id="zheng-shu-xu-qi"><em>证书续期</em></h4>
+<h4 id="zheng shu xu qi"><em>证书续期</em></h4>
 <p>执行完签发命令后，系统已经加上了crond自动签发，如果你想手动签发，可以执行下面的命令。</p>
 <div class="highlight"><pre><span></span>~/.acme.sh/acme.sh --renew -d domain --force --ecc
 </pre></div>
-<h1 id="ben-di-pei-zhi_2">本地配置</h1>
-<h3 id="an-zhuang">安装</h3>
+<h1 id="ben di pei zhi_2">本地配置</h1>
+<h3 id="an zhuang">安装</h3>
 <p>因为我使用的是Manjaro，一个基于Archlinux的Linux版本，所有安装只要一条命令</p>
 <div class="highlight"><pre><span></span>yaourt -Sy v2ray
 </pre></div>
 <p>如果你用的是其他系统，可以参考服务器的安装脚本。</p>
-<h1 id="pei-zhi-wen-jian_1">配置文件</h1>
-<h3 id="pei-zhi-shuo-ming">配置说明</h3>
+<h1 id="pei zhi wen jian_1">配置文件</h1>
+<h3 id="pei zhi shuo ming">配置说明</h3>
 <p>我当前使用的连接方式是TCP+TLS这种，根据官方和网上收集的信息，据说当前最好的配置是WebSocket+<span class="caps">WEB</span>+<span class="caps">TLS</span>+<span class="caps">CDN</span>，我没有选择这种连接方式有以下几点原因：</p>
 <ol>
 <li>Websocket效率低于TCP</li>
@@ -173,14 +173,14 @@ bash go.sh
 </ol>
 <p>如果你的ISP没有QOS，没有TCP阻断，你连接服务器的流量没有很大的话，是没有必要折腾这种连接方式的。当然我在写这篇文章之前还使用过H2+TLS的连接方式，但是不知是服务器没有加Caddy转发还是H2方式不稳定，断流严重，换成TCP+TLS后，连接稳定，速度尚可，未出现断流。</p>
 <p>每个人每个地区的ISP情况不尽相同，所以多试才能找到最适合你的配置，更多配置可以参考<a href="https://github.com/KiriKira/vTemplate">配置模板</a>。</p>
-<h3 id="tcptlspei-zhi"><span class="caps">TCP</span>+TLS配置</h3>
-<h4 id="pei-zhi-shuo-ming_1"><strong>配置说明</strong></h4>
+<h3 id="tcp+tlspei zhi"><span class="caps">TCP</span>+TLS配置</h3>
+<h4 id="pei zhi shuo ming_1"><strong>配置说明</strong></h4>
 <p>我有三台性能较弱的VPS，所以三台分别安装并部署了服务端的配置，而在本地客户端的outbound中连接三个服务器，v2ray可以进行简单的轮寻进行负载均衡。</p>
 <p>为了简化操作，UUID设置为相同，当然不嫌麻烦的话可以设置为不同，但要和每台服务器的UUID相对应。</p>
 <p>因为我认为vmess协议加密已经足够强壮，所以每台就没有再设置内容加密，如果不放心，可以使用auto或者AEAD方式加密。另外根据官方的测试，貌似<code>aes-256-gcm</code> 和<code>chacha20-ietf-poly1305</code>两种加密方式传输效率比不加密的效率还要高，可能与硬件加密有关系吧。</p>
 <p>所有配置的详细内容都可以在官方文档或白话文教程里找到，其实配置v2ray并没有那么复杂。</p>
 <p>最后贴上我的自用配置，生成UUID可以使用<a href="https://www.uuidgenerator.net/"><span class="caps">UUID</span> Generator</a>这个网站，或者Linux用户可以使用下面命令<code>cat /proc/sys/kernel/random/uuid</code>生成。</p>
-<h4 id="fu-wu-duan"><strong>服务端</strong></h4>
+<h4 id="fu wu duan"><strong>服务端</strong></h4>
 <div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="nt">"log"</span><span class="p">:</span> <span class="p">{</span>
     <span class="nt">"loglevel"</span><span class="p">:</span> <span class="s2">"warning"</span><span class="p">,</span>
@@ -240,7 +240,7 @@ bash go.sh
   <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
-<h4 id="ke-hu-duan"><strong>客户端</strong></h4>
+<h4 id="ke hu duan"><strong>客户端</strong></h4>
 <div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="nt">"log"</span><span class="p">:</span> <span class="p">{</span>
     <span class="nt">"loglevel"</span><span class="p">:</span> <span class="s2">"warning"</span><span class="p">,</span>
@@ -354,7 +354,7 @@ bash go.sh
   <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
-<h1 id="can-kao_2">参考</h1>
+<h1 id="can kao_2">参考</h1>
 <p><a href="https://www.v2ray.com/">v2ray官方文档</a></p>
 <p><a href="https://toutyrater.github.io">v2ray白话文教程</a></p>
 <p><a href="https://github.com/Neilpang/acme.sh/wiki">acme.sh&nbsp;wiki</a></p>
@@ -394,7 +394,7 @@ bash go.sh
       <p>
               <a href="https://www.solarck.com/category/itbi-ji.html" rel="tag"
                   data-toggle="tooltip" class="label label-info"
-                  title="2 articles in this category">IT笔记</a>
+                  title="3 articles in this category">IT笔记</a>
             <a href="/tag/v2ray.html" data-toggle="tooltip"
       class="label label-default"
       title="1 article with this tag">v2ray</a>
@@ -425,7 +425,7 @@ bash go.sh
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#fu-wu-qi-duan-pei-zhi" title="服务器端配置">服务器端配置</a><ul><li><a class="toc-href" href="#you-hua-wang-luo" title="优化网络">优化网络</a></li><li><a class="toc-href" href="#an-zhuang-v2ray" title="安装V2ray">安装V2ray</a></li><li><a class="toc-href" href="#tlsyu-ming-zheng-shu" title="TLS域名证书">TLS域名证书</a><ul><li><a class="toc-href" href="#an-zhuang-acme" title="安装acme">安装acme</a></li><li><a class="toc-href" href="#qian-fa-zheng-shu" title="签发证书">签发证书</a></li><li><a class="toc-href" href="#an-zhuang-zheng-shu" title="安装证书">安装证书</a></li><li><a class="toc-href" href="#zheng-shu-xu-qi" title="证书续期">证书续期</a></li></ul></li></ul></li><li><a class="toc-href" href="#ben-di-pei-zhi_2" title="本地配置">本地配置</a><ul><li><a class="toc-href" href="#an-zhuang" title="安装">安装</a></li></ul></li><li><a class="toc-href" href="#pei-zhi-wen-jian_1" title="配置文件">配置文件</a><ul><li><a class="toc-href" href="#pei-zhi-shuo-ming" title="配置说明">配置说明</a></li><li><a class="toc-href" href="#tcptlspei-zhi" title="TCP+TLS配置">TCP+TLS配置</a><ul><li><a class="toc-href" href="#pei-zhi-shuo-ming_1" title="配置说明">配置说明</a></li><li><a class="toc-href" href="#fu-wu-duan" title="服务端">服务端</a></li><li><a class="toc-href" href="#ke-hu-duan" title="客户端">客户端</a></li></ul></li></ul></li><li><a class="toc-href" href="#can-kao_2" title="参考">参考</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#fu wu qi duan pei zhi" title="服务器端配置">服务器端配置</a><ul><li><a class="toc-href" href="#you hua wang luo" title="优化网络">优化网络</a></li><li><a class="toc-href" href="#an zhuang v2ray" title="安装V2ray">安装V2ray</a></li><li><a class="toc-href" href="#tlsyu ming zheng shu" title="TLS域名证书">TLS域名证书</a><ul><li><a class="toc-href" href="#an zhuang acme" title="安装acme">安装acme</a></li><li><a class="toc-href" href="#qian fa zheng shu" title="签发证书">签发证书</a></li><li><a class="toc-href" href="#an zhuang zheng shu" title="安装证书">安装证书</a></li><li><a class="toc-href" href="#zheng shu xu qi" title="证书续期">证书续期</a></li></ul></li></ul></li><li><a class="toc-href" href="#ben di pei zhi_2" title="本地配置">本地配置</a><ul><li><a class="toc-href" href="#an zhuang" title="安装">安装</a></li></ul></li><li><a class="toc-href" href="#pei zhi wen jian_1" title="配置文件">配置文件</a><ul><li><a class="toc-href" href="#pei zhi shuo ming" title="配置说明">配置说明</a></li><li><a class="toc-href" href="#tcp+tlspei zhi" title="TCP+TLS配置">TCP+TLS配置</a><ul><li><a class="toc-href" href="#pei zhi shuo ming_1" title="配置说明">配置说明</a></li><li><a class="toc-href" href="#fu wu duan" title="服务端">服务端</a></li><li><a class="toc-href" href="#ke hu duan" title="客户端">客户端</a></li></ul></li></ul></li><li><a class="toc-href" href="#can kao_2" title="参考">参考</a></li></ul></div>
         </nav>
 
   </div>
@@ -449,14 +449,6 @@ bash go.sh
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

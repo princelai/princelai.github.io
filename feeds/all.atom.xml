@@ -1,5 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Solarck</title><link href="https://www.solarck.com/" rel="alternate"></link><link href="https://www.solarck.com/feeds/all.atom.xml" rel="self"></link><id>https://www.solarck.com/</id><updated>2018-08-06T15:58:00+08:00</updated><entry><title>充值卡折现价值分析</title><link href="https://www.solarck.com/gift-card-discount-value.html" rel="alternate"></link><published>2018-08-06T15:58:00+08:00</published><updated>2018-08-06T15:58:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-08-06:/gift-card-discount-value.html</id><summary type="html">&lt;p&gt;前几天，媳妇把收到的一条短信转给我，问我值不值，我的第一反应当然是不值，这种预存方式都是欺负不懂时间价值的人玩的把戏。为了说服她，特地手算折现，但是发现，嗯？好像还是挺值的啊。于是就有了这篇文章，把计算的完整思路和代码贴出来。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Solarck</title><link href="https://www.solarck.com/" rel="alternate"></link><link href="https://www.solarck.com/feeds/all.atom.xml" rel="self"></link><id>https://www.solarck.com/</id><updated>2018-11-16T18:35:00+08:00</updated><subtitle>金融民工与程序猿的结合体</subtitle><entry><title>tshark常用命令详解</title><link href="https://www.solarck.com/tshark-freq-cmd.html" rel="alternate"></link><published>2018-11-16T18:35:00+08:00</published><updated>2018-11-16T18:35:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-11-16:/tshark-freq-cmd.html</id><summary type="html">&lt;h3 id="wiresharkjian jie"&gt;Wireshark简介&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Wireshark&amp;nbsp;是一款免费开源的包分析器。可用于网络排错、网络分析、软件和通讯协议开发以及教学等。tshark是wireshark的cli版本&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="an zhuang"&gt;安装&lt;/h3&gt;
+&lt;p&gt;Archlinux&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yaourt -Syu wireshark-cli
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Debian&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;apt-get update
+apt-get install tshark
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;查看权限&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ getcap /usr/bin/dumpcap
+/usr/bin/dumpcap &lt;span class="o"&gt;=&lt;/span&gt; cap_net_admin,cap_net_raw+eip
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;dumpcap的位置也可能在&lt;code&gt;/usr/sbin/dumpcap&lt;/code&gt;，如果输出结果不像上面那样，则还需要设置权限&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# setcap 'CAP_NET_RAW+eip CAP_NET_ADMIN+eip' /usr/sbin/dumpcap
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;把用户添加至wireshark用户组&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# gpasswd -a username wireshark
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;切换至新用户组&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ newgrp …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;h3 id="wiresharkjian jie"&gt;Wireshark简介&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Wireshark&amp;nbsp;是一款免费开源的包分析器。可用于网络排错、网络分析、软件和通讯协议开发以及教学等。tshark是wireshark的cli版本&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="an zhuang"&gt;安装&lt;/h3&gt;
+&lt;p&gt;Archlinux&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yaourt -Syu wireshark-cli
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Debian&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;apt-get update
+apt-get install tshark
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;查看权限&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ getcap /usr/bin/dumpcap
+/usr/bin/dumpcap &lt;span class="o"&gt;=&lt;/span&gt; cap_net_admin,cap_net_raw+eip
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;dumpcap的位置也可能在&lt;code&gt;/usr/sbin/dumpcap&lt;/code&gt;，如果输出结果不像上面那样，则还需要设置权限&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# setcap 'CAP_NET_RAW+eip CAP_NET_ADMIN+eip' /usr/sbin/dumpcap
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;把用户添加至wireshark用户组&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# gpasswd -a username wireshark
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;切换至新用户组&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ newgrp wireshark
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="cha kan httpqing qiu 1"&gt;查看http请求1&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;tshark -i em1 -n -Y http.request -T fields  -e "ip.src" -e "http.request.method" -e "http.request.uri"
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h4 id="can shu"&gt;参数&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;-i&lt;/code&gt;：网络设备名，默认为第一个非环路设备，可用&lt;code&gt;ip link&lt;/code&gt;或&lt;code&gt;ifconfig&lt;/code&gt;查看&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-n&lt;/code&gt;：禁止域名解析，显示原始IP地址&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-Y&lt;/code&gt;：显示过滤，使用Wireshark display filter语法，通常用于后接单一过滤器；查看过滤语法，&lt;a href="https://wiki.wireshark.org/DisplayFilters"&gt;DisplayFilters&lt;/a&gt;，&lt;a href="http://packetlife.net/blog/2008/oct/18/cheat-sheets-tcpdump-and-wireshark/"&gt;CheatSheet&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-T&lt;/code&gt;：文本输出格式&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-e&lt;/code&gt;：输出Fields的某一字段&lt;/p&gt;
+&lt;h4 id="shu chu jie guo"&gt;输出结果&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;117.136.0.189   POST    /api/anonymous/notice/new
+119.123.197.16  POST    /web/wechat/login
+113.120.250.84  POST    /api/projectlib/detail
+113.120.250.84  POST    /api/projectlib/getProjectFile
+113.120.250.84  POST    /api/projectlib/getBasicProject
+113.120.250.84  POST    /api/projectlib/getGuessProjectList
+113.120.250.84  POST    /api/projectcomment/commentlist
+119.123.197.16  POST    /web/wechat/login
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="cha kan httpqing qiu 2_1"&gt;查看http请求2&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;tshark -i em1 -f 'tcp dst port 80 and src host 111.207.128.226' -R 'http.host and http.request.uri' -T fields  -e http.request.uri -e http.user_agent
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h4 id="can shu_1"&gt;参数&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;-f&lt;/code&gt;：包过滤，使用libpcap filter语法；查看过滤语法，&lt;a href="https://wiki.wireshark.org/CaptureFilters"&gt;CaptureFilters&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-R&lt;/code&gt;：显示过滤，使用Wireshark display filter语法，通常用于后接多个过滤器；查看过滤语法，&lt;a href="https://wiki.wireshark.org/DisplayFilters"&gt;DisplayFilters&lt;/a&gt;，&lt;a href="http://packetlife.net/blog/2008/oct/18/cheat-sheets-tcpdump-and-wireshark/"&gt;CheatSheet&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id="shu chu jie guo_1"&gt;输出结果&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/api/projectlib/getProvincelist290      okhttp/3.3.1
+/api/projectlib/findBaseDataInfo        okhttp/3.3.1
+/api/corpinvestor/getInvestorCity       okhttp/3.3.1
+/api/advertisement/splashScreen okhttp/3.3.1
+/api/commons/check      okhttp/3.3.1
+/api/userinfo/getPending        okhttp/3.3.1
+/api/index/getIndexCard okhttp/3.3.1
+/api/myinvest/checkPrefer       okhttp/3.3.1
+/api/index/450/indexInfo        okhttp/3.3.1
+/api/chat/list  okhttp/3.3.1
+/api/employee/getMyInfomsgNew   okhttp/3.3.1
+/api/index/getTopNewsList       okhttp/3.3.1
+/api/anonymous/list     okhttp/3.3.1
+/api/anonymous/notice/new       okhttp/3.3.1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="cha kan dnsbao_1"&gt;查看DNS包&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;tshark -n  -f "dst port 53" -T fields -e dns.qry.name -e dns.resp.addr
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;上面是老版本的写法，如果提示无效的过滤器&lt;code&gt;dns.resp.addr&lt;/code&gt;，可以使用下面的新版命令&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;tshark -n  -f "dst port 53" -T fields -e dns.qry.name -e dns.a
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h4 id="shu chu jie guo_2"&gt;输出结果&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;lightcone.jd.com        211.151.10.150,123.126.36.173
+logo.clearbit.com       52.85.82.40,52.85.82.50,52.85.82.241,52.85.82.178
+lightcone.jd.com        211.151.10.150,123.126.36.173
+www.ipip.net            180.97.158.241
+logo.clearbit.com       54.230.147.88,54.230.147.109,54.230.147.76,54.230.147.126
+cloud.mongodb.com       18.210.185.2
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id="tong ji httpbao_1"&gt;统计http包&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;tshark -f "tcp  port 80 or  port 443 and host 58.68.234.140" -n -q -z http,stat, -z http,tree
+&lt;/pre&gt;&lt;/div&gt;
+&lt;h4 id="can shu_2"&gt;参数&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;-q&lt;/code&gt;：只有在抓包结束后才显示结果，通常用于统计&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-z&lt;/code&gt;：统计变量，可以使用&lt;code&gt;tshark -z help&lt;/code&gt;查看&lt;/p&gt;
+&lt;h4 id="shu chu jie guo_3"&gt;输出结果&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;2249 packets captured
+
+===================================================================
+ HTTP/Packet Counter           value            rate         percent
+-------------------------------------------------------------------
+ Total HTTP Packets             350       0.000077                
+  HTTP Request Packets           175       0.000038          50.00%
+   POST                           172       0.000038          98.29%
+   GET                              3       0.000001           1.71%
+  HTTP Response Packets          174       0.000038          49.71%
+   ???: broken                      0       0.000000           0.00%
+   1xx: Informational               0       0.000000           0.00%
+   2xx: Success                   174       0.000038         100.00%
+    200 OK                         174       0.000038         100.00%
+   3xx: Redirection                 0       0.000000           0.00%
+   4xx: Client Error                0       0.000000           0.00%
+   5xx: Server Error                0       0.000000           0.00%
+  Other HTTP Packets               1       0.000000           0.29%
+
+===================================================================
+
+===================================================================
+HTTP Statistics
+* HTTP Status Codes in reply packets
+    HTTP 200 OK
+* List of HTTP Request methods
+        POST  172 
+         GET  3 
+===================================================================
+&lt;/pre&gt;&lt;/div&gt;</content><category term="wireshark"></category><category term="tshark"></category></entry><entry><title>充值卡折现价值分析</title><link href="https://www.solarck.com/gift-card-discount-value.html" rel="alternate"></link><published>2018-08-06T15:58:00+08:00</published><updated>2018-08-06T15:58:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-08-06:/gift-card-discount-value.html</id><summary type="html">&lt;p&gt;前几天，媳妇把收到的一条短信转给我，问我值不值，我的第一反应当然是不值，这种预存方式都是欺负不懂时间价值的人玩的把戏。为了说服她，特地手算折现，但是发现，嗯？好像还是挺值的啊。于是就有了这篇文章，把计算的完整思路和代码贴出来。&lt;/p&gt;
 &lt;p&gt;&lt;img alt="message" src="http://kevinstuchuang.qiniudn.com/blog-pic/gift-card-message.jpg"/&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;注：计算全部使用年华利率按月折现&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;求真正价值的思路很简单，&lt;/p&gt;
@@ -13,61 +152,7 @@
     &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;discount&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
         &lt;span class="n"&gt;fv&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
             &lt;span class="n"&gt;cash_flow&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;year_yield&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;y&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
-        &lt;span class="k"&gt;return …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;&lt;script type='text/javascript'&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width &lt; 768) ? "left" : align;
-        indent = (screen.width &lt; 768) ? "0em" : indent;
-        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-&lt;/script&gt;</summary><content type="html">&lt;p&gt;前几天，媳妇把收到的一条短信转给我，问我值不值，我的第一反应当然是不值，这种预存方式都是欺负不懂时间价值的人玩的把戏。为了说服她，特地手算折现，但是发现，嗯？好像还是挺值的啊。于是就有了这篇文章，把计算的完整思路和代码贴出来。&lt;/p&gt;
+        &lt;span class="k"&gt;return …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;前几天，媳妇把收到的一条短信转给我，问我值不值，我的第一反应当然是不值，这种预存方式都是欺负不懂时间价值的人玩的把戏。为了说服她，特地手算折现，但是发现，嗯？好像还是挺值的啊。于是就有了这篇文章，把计算的完整思路和代码贴出来。&lt;/p&gt;
 &lt;p&gt;&lt;img alt="message" src="http://kevinstuchuang.qiniudn.com/blog-pic/gift-card-message.jpg"/&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;注：计算全部使用年华利率按月折现&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;求真正价值的思路很简单，&lt;/p&gt;
@@ -231,29 +316,29 @@ You earn 738.0 YUAN.
         "}";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</content><category term="折现"></category><category term="最优化"></category></entry><entry><title>升级 Openwrt/LEDE 大版本至 18.06</title><link href="https://www.solarck.com/upgrade-lede-to-1806.html" rel="alternate"></link><published>2018-07-31T14:31:00+08:00</published><updated>2018-07-31T14:31:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-31:/upgrade-lede-to-1806.html</id><summary type="html">&lt;h1 id="xia-zai-sheng-ji-bao"&gt;下载升级包&lt;/h1&gt;
+&lt;/script&gt;</content><category term="折现"></category><category term="最优化"></category></entry><entry><title>升级 Openwrt/LEDE 大版本至 18.06</title><link href="https://www.solarck.com/upgrade-lede-to-1806.html" rel="alternate"></link><published>2018-07-31T14:31:00+08:00</published><updated>2018-07-31T14:31:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-31:/upgrade-lede-to-1806.html</id><summary type="html">&lt;h1 id="xia zai sheng ji bao"&gt;下载升级包&lt;/h1&gt;
 &lt;p&gt;首先下载新版文件，点击下方链接中任意一个，进入你的路由器架构，然后搜索路由器型号，如果你已经是 Openwrt/&lt;span class="caps"&gt;LEDE&lt;/span&gt;&amp;nbsp;系统，可以下载升级包*-squashfs-sysupgrade.bin，如果不是，则要下载完整安装包*-squashfs-factory.img。&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://downloads.openwrt.org/releases/18.06.0/targets/"&gt;官方下载&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://mirrors.ustc.edu.cn/lede/releases/18.06.0/targets/"&gt;中科大&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://mirrors.tuna.tsinghua.edu.cn/lede/releases/18.06.0/targets"&gt;清华大学&lt;/a&gt;&lt;/p&gt;
-&lt;h1 id="bei-fen-geng-xin"&gt;备份 &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt;&amp;nbsp;更新&lt;/h1&gt;
+&lt;h1 id="bei fen  &amp;amp; geng xin"&gt;备份 &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt;&amp;nbsp;更新&lt;/h1&gt;
 &lt;p&gt;下载好文件后，进入路由器 Luci 界面，System &amp;mdash;-&amp;gt; Backup / Flash&amp;nbsp;Firmware&lt;/p&gt;
-&lt;p&gt;&lt;img alt="backup and flash" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-backup-flash.png"/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="backup and flash" src="https://ws1.sinaimg.cn/large/65f2a787ly1fxa2pretyzj20qi0jugnh.jpg"/&gt;&lt;/p&gt;
 &lt;p&gt;建议先备份一份配置到本地，备份好后，上传文件，开刷！等待路由器重启后进入后面的步骤。&lt;/p&gt;
-&lt;h1 id="geng-xin-yuan"&gt;更新源&lt;/h1&gt;
+&lt;h1 id="geng xin yuan"&gt;更新源&lt;/h1&gt;
 &lt;p&gt;关于详细的如何更换源操作，我在&lt;a href="https://www.solarck.com/lede-media-center1.html"&gt;&lt;span class="caps"&gt;LEDE&lt;/span&gt;/OpenWRT 路由器打造家庭媒体影音中心（一）&lt;/a&gt;中有写，这里仅给出自定义源文件的内容。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;vim /etc/opkg/customfeeds.conf&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#Tsinghua&lt;/span&gt;
-&lt;span class="na"&gt;src …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;h1 id="xia-zai-sheng-ji-bao"&gt;下载升级包&lt;/h1&gt;
+&lt;span class="na"&gt;src …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;h1 id="xia zai sheng ji bao"&gt;下载升级包&lt;/h1&gt;
 &lt;p&gt;首先下载新版文件，点击下方链接中任意一个，进入你的路由器架构，然后搜索路由器型号，如果你已经是 Openwrt/&lt;span class="caps"&gt;LEDE&lt;/span&gt;&amp;nbsp;系统，可以下载升级包*-squashfs-sysupgrade.bin，如果不是，则要下载完整安装包*-squashfs-factory.img。&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://downloads.openwrt.org/releases/18.06.0/targets/"&gt;官方下载&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://mirrors.ustc.edu.cn/lede/releases/18.06.0/targets/"&gt;中科大&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://mirrors.tuna.tsinghua.edu.cn/lede/releases/18.06.0/targets"&gt;清华大学&lt;/a&gt;&lt;/p&gt;
-&lt;h1 id="bei-fen-geng-xin"&gt;备份 &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt;&amp;nbsp;更新&lt;/h1&gt;
+&lt;h1 id="bei fen  &amp;amp; geng xin"&gt;备份 &lt;span class="amp"&gt;&amp;amp;&lt;/span&gt;&amp;nbsp;更新&lt;/h1&gt;
 &lt;p&gt;下载好文件后，进入路由器 Luci 界面，System &amp;mdash;-&amp;gt; Backup / Flash&amp;nbsp;Firmware&lt;/p&gt;
-&lt;p&gt;&lt;img alt="backup and flash" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-backup-flash.png"/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="backup and flash" src="https://ws1.sinaimg.cn/large/65f2a787ly1fxa2pretyzj20qi0jugnh.jpg"/&gt;&lt;/p&gt;
 &lt;p&gt;建议先备份一份配置到本地，备份好后，上传文件，开刷！等待路由器重启后进入后面的步骤。&lt;/p&gt;
-&lt;h1 id="geng-xin-yuan"&gt;更新源&lt;/h1&gt;
+&lt;h1 id="geng xin yuan"&gt;更新源&lt;/h1&gt;
 &lt;p&gt;关于详细的如何更换源操作，我在&lt;a href="https://www.solarck.com/lede-media-center1.html"&gt;&lt;span class="caps"&gt;LEDE&lt;/span&gt;/OpenWRT 路由器打造家庭媒体影音中心（一）&lt;/a&gt;中有写，这里仅给出自定义源文件的内容。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;vim /etc/opkg/customfeeds.conf&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#Tsinghua&lt;/span&gt;
@@ -280,7 +365,7 @@ You earn 738.0 YUAN.
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg list-upgradable &lt;span class="p"&gt;|&lt;/span&gt; cut -f &lt;span class="m"&gt;1&lt;/span&gt; -d &lt;span class="s1"&gt;' '&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; xargs opkg upgrade
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h1 id="yi-ge-wu-liao-de-jiao-ben"&gt;一个无聊的脚本&lt;/h1&gt;
+&lt;h1 id="yi ge wu liao de jiao ben"&gt;一个无聊的脚本&lt;/h1&gt;
 &lt;p&gt;整个过程到上面就已经结束了，不过本着继(凑)续(字)深(数)挖的态度，花点时间写了个 python 脚本，用来分析所有 ipk&amp;nbsp;包的升级情况。对了，写这个脚本的时候还发现有个源网址改变了，所以写自定义源的时候一定要注意。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/usr/bin/env python3&lt;/span&gt;
 &lt;span class="c1"&gt;# -*- coding: utf-8 -*-&lt;/span&gt;
@@ -340,8 +425,8 @@ opkg list-upgradable &lt;span class="p"&gt;|&lt;/span&gt; cut -f &lt;span class=
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;版本升级的包有 3485 个，这两项加起来正好 5665&amp;nbsp;个。&lt;/p&gt;
 &lt;p&gt;由于版本号的命名十分不规则，本来还想弄个大版本号、次版本号、小版本号的对比，无奈最终还是搁浅了。&lt;/p&gt;</content><category term="openwrt"></category><category term="lede"></category></entry><entry><title>编译 Tensorflow 1.10 + CUDA9.2 + MKL</title><link href="https://www.solarck.com/compile-tensorflow-gpu.html" rel="alternate"></link><published>2018-07-30T18:43:00+08:00</published><updated>2018-07-30T18:43:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-30:/compile-tensorflow-gpu.html</id><summary type="html">&lt;p&gt;我的电脑系统是基于 Archlinux 的 Manjaro，软件包更新的比较激进，很早就已经是 &lt;span class="caps"&gt;CUDA&lt;/span&gt; 9.2 了，而目前 Tensorflow 的官方编译版本对 &lt;span class="caps"&gt;CUDA&lt;/span&gt; 的支持还只停留在 &lt;span class="caps"&gt;CUDA&lt;/span&gt; 9.0。由于还不太会用 mxnet 和 pytorch，这时倍加想念 Keras 的简单。最近忙里偷闲研究了一下编译安装&amp;nbsp;Tensorflow，发现还挺简单的，把成功的喜悦分享出来，也供有需要的朋友参考。&lt;/p&gt;
-&lt;h1 id="cha-kan-xi-tong-xin-xi"&gt;查看系统信息&lt;/h1&gt;
-&lt;h3 id="cha-kan-xi-tong-jia-gou-he-fa-xing-ban-ben"&gt;查看系统架构和发行版本&lt;/h3&gt;
+&lt;h1 id="cha kan xi tong xin xi"&gt;查看系统信息&lt;/h1&gt;
+&lt;h3 id="cha kan xi tong jia gou he fa xing ban ben"&gt;查看系统架构和发行版本&lt;/h3&gt;
 &lt;p&gt;我用的 Manjaro&amp;nbsp;x86_64&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;uname -m &amp;amp;&amp;amp; cat /etc/*release&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;x86_64
@@ -349,8 +434,8 @@ Manjaro Linux
 DISTRIB_ID=ManjaroLinux
 DISTRIB_RELEASE=17.1.11
 DISTRIB_CODENAME …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;我的电脑系统是基于 Archlinux 的 Manjaro，软件包更新的比较激进，很早就已经是 &lt;span class="caps"&gt;CUDA&lt;/span&gt; 9.2 了，而目前 Tensorflow 的官方编译版本对 &lt;span class="caps"&gt;CUDA&lt;/span&gt; 的支持还只停留在 &lt;span class="caps"&gt;CUDA&lt;/span&gt; 9.0。由于还不太会用 mxnet 和 pytorch，这时倍加想念 Keras 的简单。最近忙里偷闲研究了一下编译安装&amp;nbsp;Tensorflow，发现还挺简单的，把成功的喜悦分享出来，也供有需要的朋友参考。&lt;/p&gt;
-&lt;h1 id="cha-kan-xi-tong-xin-xi"&gt;查看系统信息&lt;/h1&gt;
-&lt;h3 id="cha-kan-xi-tong-jia-gou-he-fa-xing-ban-ben"&gt;查看系统架构和发行版本&lt;/h3&gt;
+&lt;h1 id="cha kan xi tong xin xi"&gt;查看系统信息&lt;/h1&gt;
+&lt;h3 id="cha kan xi tong jia gou he fa xing ban ben"&gt;查看系统架构和发行版本&lt;/h3&gt;
 &lt;p&gt;我用的 Manjaro&amp;nbsp;x86_64&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;uname -m &amp;amp;&amp;amp; cat /etc/*release&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;x86_64
@@ -368,12 +453,12 @@ HOME_URL="https://www.manjaro.org/"
 SUPPORT_URL="https://www.manjaro.org/"
 BUG_REPORT_URL="https://bugs.manjaro.org/"
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="cha-kan-cpu-zhi-chi-de-zhi-ling-ji"&gt;查看 &lt;span class="caps"&gt;CPU&lt;/span&gt;&amp;nbsp;支持的指令集&lt;/h3&gt;
+&lt;h3 id="cha kan  cpu zhi chi de zhi ling ji"&gt;查看 &lt;span class="caps"&gt;CPU&lt;/span&gt;&amp;nbsp;支持的指令集&lt;/h3&gt;
 &lt;p&gt;嗯，这个貌似没什么用&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;cat /proc/cpuinfo |grep -m1 flags |cut -f2 -d":"&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 invpcid_single pti intel_ppin ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a rdseed adx smap intel_pt xsaveopt cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="cha-kan-python-huan-jing"&gt;查看 Python&amp;nbsp;环境&lt;/h3&gt;
+&lt;h3 id="cha kan  python huan jing"&gt;查看 Python&amp;nbsp;环境&lt;/h3&gt;
 &lt;p&gt;我用 Anaconda 构建的虚拟环境，Python 3.6.6。这里要注意记住&lt;code&gt;base environment&lt;/code&gt;环境路径。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;conda info&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;     active environment : None
@@ -399,7 +484,7 @@ BUG_REPORT_URL="https://bugs.manjaro.org/"
              netrc file : None
            offline mode : False
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="cha-kan-gpu-xin-xi"&gt;查看 &lt;span class="caps"&gt;GPU&lt;/span&gt;&amp;nbsp;信息&lt;/h3&gt;
+&lt;h3 id="cha kan  gpu xin xi"&gt;查看 &lt;span class="caps"&gt;GPU&lt;/span&gt;&amp;nbsp;信息&lt;/h3&gt;
 &lt;p&gt;如果你执行不了下面这个命令，那么证明你的驱动装的有问题，要用闭源的 Nvidia 驱动，不要用开源的。Manjaro&amp;nbsp;安装驱动太简单了，就不详细说了。&lt;/p&gt;
 &lt;p&gt;其次你还要去&lt;a href="https://developer.nvidia.com/cuda-gpus"&gt;&lt;span class="caps"&gt;CUDA&lt;/span&gt; &lt;span class="caps"&gt;GPU&lt;/span&gt;&lt;/a&gt;根据显卡型号查询你 &lt;span class="caps"&gt;GPU&lt;/span&gt; 的算力，这个算力后面会用到。如果你的显卡是 Nvidia 1000 系列，且型号大于 1050，那么算力就是&amp;nbsp;6.1。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;nvidia-smi&lt;/code&gt;&lt;/p&gt;
@@ -426,8 +511,8 @@ BUG_REPORT_URL="https://bugs.manjaro.org/"
 |    0     13026      G   ...-token=F6A861CA29AB37BD6D50C064EC6A95F0    40MiB |
 +-----------------------------------------------------------------------------+
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h1 id="an-zhuang-bian-yi-yi-lai_1"&gt;安装编译依赖&lt;/h1&gt;
-&lt;h3 id="an-zhuang-xian-qia-xiang-guan-yi-lai"&gt;安装显卡相关依赖&lt;/h3&gt;
+&lt;h1 id="an zhuang bian yi yi lai_1"&gt;安装编译依赖&lt;/h1&gt;
+&lt;h3 id="an zhuang xian qia xiang guan yi lai"&gt;安装显卡相关依赖&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yaourt -S --needed linux418-nvidia cuda cudnn
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;安装好之后你还需要记住 cuDNN&amp;nbsp;的版本和路径&lt;/p&gt;
@@ -447,20 +532,20 @@ cuda /usr/share/man/man7/libcudart.so.7.gz
 &lt;p&gt;&lt;code&gt;echo $PATH&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/opt/bin:/opt/cuda/bin:/opt/Anaconda3/bin:/opt/android-sdk/platform-tools:/opt/android-sdk/tools:/opt/android-sdk/tools/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/local/sbin:/usr/local/bin:/usr/bin:/opt/android-sdk/platform-tools:/opt/android-sdk/tools:/opt/android-sdk/tools/bin:/opt/cuda/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="an-zhuang-bian-yi-gong-ju"&gt;安装编译工具&lt;/h3&gt;
+&lt;h3 id="an zhuang bian yi gong ju"&gt;安装编译工具&lt;/h3&gt;
 &lt;p&gt;Tensorflow 需要使用 bazel 构建，gcc7 编译，当前我的系统 gcc 版本是 8.1 我已经帮你试过了，Tensorflow 不允许 gcc 版本高于&amp;nbsp;7。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yaourt -S bazel gcc7 gcc7-libs
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="xia-zai-yuan-ma"&gt;下载源码&lt;/h3&gt;
+&lt;h3 id="xia zai yuan ma"&gt;下载源码&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git clone https://github.com/tensorflow/tensorflow
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="xuan-ze-an-zhuang-ban-ben"&gt;选择安装版本&lt;/h3&gt;
+&lt;h3 id="xuan ze an zhuang ban ben"&gt;选择安装版本&lt;/h3&gt;
 &lt;p&gt;当前稳定版本为 1.9，1.10 处于 rc2&amp;nbsp;阶段，编译哪个版本自己选择。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;cd tensorflow
 git checkout r1.10
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h1 id="bian-yi-an-zhuang_1"&gt;编译安装&lt;/h1&gt;
-&lt;h3 id="bian-yi-pei-zhi"&gt;编译配置&lt;/h3&gt;
+&lt;h1 id="bian yi an zhuang_1"&gt;编译安装&lt;/h1&gt;
+&lt;h3 id="bian yi pei zhi"&gt;编译配置&lt;/h3&gt;
 &lt;p&gt;如没有特殊要求，按照我的选择就可以，注意路径要换成自己的。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;configure&lt;/span&gt;
 &lt;span class="n"&gt;Extracting&lt;/span&gt; &lt;span class="n"&gt;Bazel&lt;/span&gt; &lt;span class="n"&gt;installation&lt;/span&gt;&lt;span class="p"&gt;...&lt;/span&gt;
@@ -546,7 +631,7 @@ git checkout r1.10
         &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;monolithic&lt;/span&gt;     &lt;span class="err"&gt;#&lt;/span&gt; &lt;span class="n"&gt;Config&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;mostly&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="n"&gt;monolithic&lt;/span&gt; &lt;span class="n"&gt;build&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
 &lt;span class="n"&gt;Configuration&lt;/span&gt; &lt;span class="n"&gt;finished&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="kai-shi-bian-yi"&gt;开始编译&lt;/h3&gt;
+&lt;h3 id="kai shi bian yi"&gt;开始编译&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;--config=mkl&lt;/code&gt;可以选择不添加，Intel &lt;span class="caps"&gt;CPU&lt;/span&gt;&amp;nbsp;加了也没什么坏处。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;bazel build --config=opt --config=cuda --config=mkl //tensorflow/tools/pip_package:build_pip_package
 &lt;/pre&gt;&lt;/div&gt;
@@ -555,17 +640,17 @@ git checkout r1.10
 &lt;span class="n"&gt;INFO&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;8105&lt;/span&gt; &lt;span class="n"&gt;processes&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;8105&lt;/span&gt; &lt;span class="n"&gt;local&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
 &lt;span class="n"&gt;INFO&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Build&lt;/span&gt; &lt;span class="n"&gt;completed&lt;/span&gt; &lt;span class="n"&gt;successfully&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;8292&lt;/span&gt; &lt;span class="n"&gt;total&lt;/span&gt; &lt;span class="n"&gt;actions&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="dao-chu-wei-wheel-wen-jian"&gt;导出为 wheel&amp;nbsp;文件&lt;/h3&gt;
+&lt;h3 id="dao chu wei  wheel wen jian"&gt;导出为 wheel&amp;nbsp;文件&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 $ ls -lh /tmp/tensorflow_pkg
 -rw-r--r-- &lt;span class="m"&gt;1&lt;/span&gt; kevin kevin 135M Jul &lt;span class="m"&gt;30&lt;/span&gt; &lt;span class="m"&gt;14&lt;/span&gt;:03 tensorflow-1.10.0rc1-cp36-cp36m-linux_x86_64.whl
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="pip-an-zhuang"&gt;pip&amp;nbsp;安装&lt;/h3&gt;
+&lt;h3 id="pip an zhuang"&gt;pip&amp;nbsp;安装&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install /tmp/tensorflow_pkg/tensorflow-1.10.0rc1-cp36-cp36m-linux_x86_64.whl
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h1 id="ce-shi_1"&gt;测试&lt;/h1&gt;
+&lt;h1 id="ce shi_1"&gt;测试&lt;/h1&gt;
 &lt;p&gt;安装好之后，可以通过下面两种不同的方法查看是否已经开启了 &lt;span class="caps"&gt;GPU&lt;/span&gt;。&lt;/p&gt;
-&lt;h3 id="fang-fa-yi"&gt;方法一&lt;/h3&gt;
+&lt;h3 id="fang fa yi"&gt;方法一&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;tensorflow&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;tf&lt;/span&gt;
 &lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;device&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'/gpu:0'&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
   &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;constant&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="mf"&gt;1.0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;2.0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;3.0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;4.0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;5.0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mf"&gt;6.0&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'a'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -574,28 +659,28 @@ $ ls -lh /tmp/tensorflow_pkg
 &lt;span class="n"&gt;sess&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Session&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ConfigProto&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;log_device_placement&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sess&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;run&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="fang-fa-er"&gt;方法二&lt;/h3&gt;
+&lt;h3 id="fang fa er"&gt;方法二&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;test&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gpu_device_name&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
     &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'Default GPU Device: {}'&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;tf&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;test&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;gpu_device_name&lt;/span&gt;&lt;span class="p"&gt;()))&lt;/span&gt;
 &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
     &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;"Please install GPU version of TF"&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h1 id="can-kao_1"&gt;参考&lt;/h1&gt;
-&lt;p&gt;&lt;a href="https://www.tensorflow.org/install/install_sources?hl=zh-cn"&gt;从源代码安装&amp;nbsp;TensorFlow&lt;/a&gt;&lt;/p&gt;</content><category term="tensorflow"></category><category term="cuda"></category><category term="GPU"></category></entry><entry><title>解决 Haproxy 用 Systemd 启动失败的问题</title><link href="https://www.solarck.com/systemd-wait-network-online.html" rel="alternate"></link><published>2018-07-13T12:35:00+08:00</published><updated>2018-07-13T12:35:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-13:/systemd-wait-network-online.html</id><summary type="html">&lt;h1 id="wen-ti-miao-shu"&gt;问题描述&lt;/h1&gt;
+&lt;h1 id="can kao_1"&gt;参考&lt;/h1&gt;
+&lt;p&gt;&lt;a href="https://www.tensorflow.org/install/install_sources?hl=zh-cn"&gt;从源代码安装&amp;nbsp;TensorFlow&lt;/a&gt;&lt;/p&gt;</content><category term="tensorflow"></category><category term="cuda"></category><category term="GPU"></category></entry><entry><title>解决 Haproxy 用 Systemd 启动失败的问题</title><link href="https://www.solarck.com/systemd-wait-network-online.html" rel="alternate"></link><published>2018-07-13T12:35:00+08:00</published><updated>2018-07-13T12:35:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-13:/systemd-wait-network-online.html</id><summary type="html">&lt;h1 id="wen ti miao shu"&gt;问题描述&lt;/h1&gt;
 &lt;p&gt;配置好 Haproxy 的配置文件，手动可以无错误开启，但是&lt;code&gt;Systemctl enable haproxy.service&lt;/code&gt;开机启动每次都报错，系统启动后，手动开启还是没有问题。&lt;/p&gt;
-&lt;h1 id="fen-xi-yuan-yin"&gt;分析原因&lt;/h1&gt;
-&lt;h3 id="haproxy-pei-zhi-wen-ti"&gt;haproxy&amp;nbsp;配置问题&lt;/h3&gt;
+&lt;h1 id="fen xi yuan yin"&gt;分析原因&lt;/h1&gt;
+&lt;h3 id="haproxy pei zhi wen ti"&gt;haproxy&amp;nbsp;配置问题&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;/etc/haproxy.cfg&lt;/code&gt;是配置文件，因为手动指定配合文件可以启动，而且测试配置文件也没有报错或警报，所以首先排除是配置的问题。&lt;/p&gt;
-&lt;h3 id="systemd-fu-wu-pei-zhi-wen-ti"&gt;systemd&amp;nbsp;服务配置问题&lt;/h3&gt;
+&lt;h3 id="systemd fu wu pei zhi wen ti"&gt;systemd&amp;nbsp;服务配置问题&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;haproxy.service&lt;/code&gt;是 systemd 用来启动服务的配置文件，第一眼看配置后，以为是创建 &lt;span class="caps"&gt;PID&lt;/span&gt; 没有权限，增加&lt;code&gt;User=root&lt;/code&gt;字段，但是重启后依然报错。原版配置只有&lt;code&gt;After=network.target&lt;/code&gt;，手动添加&lt;code&gt;Wants=network.target&lt;/code&gt;重启后，依然报错。&lt;/p&gt;
-&lt;h3 id="cha-kan-ri-zhi"&gt;查看日志 …&lt;/h3&gt;</summary><content type="html">&lt;h1 id="wen-ti-miao-shu"&gt;问题描述&lt;/h1&gt;
+&lt;h3 id="cha kan ri zhi"&gt;查看日志 …&lt;/h3&gt;</summary><content type="html">&lt;h1 id="wen ti miao shu"&gt;问题描述&lt;/h1&gt;
 &lt;p&gt;配置好 Haproxy 的配置文件，手动可以无错误开启，但是&lt;code&gt;Systemctl enable haproxy.service&lt;/code&gt;开机启动每次都报错，系统启动后，手动开启还是没有问题。&lt;/p&gt;
-&lt;h1 id="fen-xi-yuan-yin"&gt;分析原因&lt;/h1&gt;
-&lt;h3 id="haproxy-pei-zhi-wen-ti"&gt;haproxy&amp;nbsp;配置问题&lt;/h3&gt;
+&lt;h1 id="fen xi yuan yin"&gt;分析原因&lt;/h1&gt;
+&lt;h3 id="haproxy pei zhi wen ti"&gt;haproxy&amp;nbsp;配置问题&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;/etc/haproxy.cfg&lt;/code&gt;是配置文件，因为手动指定配合文件可以启动，而且测试配置文件也没有报错或警报，所以首先排除是配置的问题。&lt;/p&gt;
-&lt;h3 id="systemd-fu-wu-pei-zhi-wen-ti"&gt;systemd&amp;nbsp;服务配置问题&lt;/h3&gt;
+&lt;h3 id="systemd fu wu pei zhi wen ti"&gt;systemd&amp;nbsp;服务配置问题&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;haproxy.service&lt;/code&gt;是 systemd 用来启动服务的配置文件，第一眼看配置后，以为是创建 &lt;span class="caps"&gt;PID&lt;/span&gt; 没有权限，增加&lt;code&gt;User=root&lt;/code&gt;字段，但是重启后依然报错。原版配置只有&lt;code&gt;After=network.target&lt;/code&gt;，手动添加&lt;code&gt;Wants=network.target&lt;/code&gt;重启后，依然报错。&lt;/p&gt;
-&lt;h3 id="cha-kan-ri-zhi"&gt;查看日志&lt;/h3&gt;
+&lt;h3 id="cha kan ri zhi"&gt;查看日志&lt;/h3&gt;
 &lt;p&gt;正要灰心的时候，决定最后一搏，查看 systemd&amp;nbsp;启动日志，看看能不能找到点线索。&lt;/p&gt;
 &lt;p&gt;查看最近一次启动中 haproxy&amp;nbsp;的日志&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;journalctl -b -0 -u haproxy&lt;/code&gt;&lt;/p&gt;
@@ -622,7 +707,7 @@ Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:
 Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:32:22 kevin-pc NetworkManager&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;493&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;: &amp;lt;info&amp;gt;  &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1531449142&lt;/span&gt;.2567&lt;span class="o"&gt;]&lt;/span&gt; dhcp4 &lt;span class="o"&gt;(&lt;/span&gt;enp0s25&lt;span class="o"&gt;)&lt;/span&gt;:   gateway &lt;span class="m"&gt;172&lt;/span&gt;.168.201.1
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;对比两段日志的时间，原来虽然 haproxy 启动在 network 之后，但是 network 刚刚启动 haproxy 就开始启动，而 network 的启动内容比较多，还有很多网络通信，可能完全启动完需要一点时间。haproxy 的启动时间比 dhcp 启动要早了 2 秒，这时无法进行 &lt;span class="caps"&gt;DNS&lt;/span&gt;&amp;nbsp;解析，所以就会造成启动失败，之前的所有问题也都说的通了。&lt;/p&gt;
-&lt;h1 id="jie-jue-fang-fa_1"&gt;解决方法&lt;/h1&gt;
+&lt;h1 id="jie jue fang fa_1"&gt;解决方法&lt;/h1&gt;
 &lt;p&gt;知道了问题的原因，那么就要解决它。只要让 haproxy 在 network&amp;nbsp;完全启动后再启动，就应该可以正常启动了。那么如何做呢？&lt;/p&gt;
 &lt;p&gt;首先要替换&lt;code&gt;haproxy.service&lt;/code&gt;中的&lt;code&gt;After&lt;/code&gt;和&lt;code&gt;Wants&lt;/code&gt;字段，用&lt;code&gt;network-online.target&lt;/code&gt;替换&lt;code&gt;network.target&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="na"&gt;After&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;network-online.target&lt;/span&gt;
@@ -635,12 +720,12 @@ Jul &lt;span class="m"&gt;13&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; systemd-networkd-wait-online.service
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;重启后，一切问题都解决了。&lt;/p&gt;
-&lt;h1 id="can-kao"&gt;参考&lt;/h1&gt;
-&lt;p&gt;&lt;a href="https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/"&gt;Running Services After the Network is&amp;nbsp;up&lt;/a&gt;&lt;/p&gt;</content><category term="haproxy"></category><category term="systemd"></category></entry><entry><title>快速配置V2ray</title><link href="https://www.solarck.com/v2ray-quick-config.html" rel="alternate"></link><published>2018-07-13T10:08:00+08:00</published><updated>2018-07-13T10:08:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-13:/v2ray-quick-config.html</id><summary type="html">&lt;h1 id="fu-wu-qi-duan-pei-zhi"&gt;服务器端配置&lt;/h1&gt;
+&lt;h1 id="can kao"&gt;参考&lt;/h1&gt;
+&lt;p&gt;&lt;a href="https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/"&gt;Running Services After the Network is&amp;nbsp;up&lt;/a&gt;&lt;/p&gt;</content><category term="haproxy"></category><category term="systemd"></category></entry><entry><title>快速配置V2ray</title><link href="https://www.solarck.com/v2ray-quick-config.html" rel="alternate"></link><published>2018-07-13T10:08:00+08:00</published><updated>2018-07-13T10:08:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-13:/v2ray-quick-config.html</id><summary type="html">&lt;h1 id="fu wu qi duan pei zhi"&gt;服务器端配置&lt;/h1&gt;
 &lt;p&gt;服务器系统使用的是Debian 9&amp;nbsp;x86_64，Ubuntu大部分操作都通用。如果是CentOS的话，该文章仅作为参考。&lt;/p&gt;
-&lt;h3 id="you-hua-wang-luo"&gt;优化网络&lt;/h3&gt;
+&lt;h3 id="you hua wang luo"&gt;优化网络&lt;/h3&gt;
 &lt;p&gt;主要涉及bbr的安装配置，需要VPS是KVM架构，具体可以参照&lt;a href="https://www.solarck.com/shadowsocks-libev.html"&gt;之前的文章&lt;/a&gt;。&lt;/p&gt;
-&lt;h3 id="an-zhuang-v2ray"&gt;安装V2ray&lt;/h3&gt;
+&lt;h3 id="an zhuang v2ray"&gt;安装V2ray&lt;/h3&gt;
 &lt;p&gt;官方提供了安装脚本，需要系统使用systemd管理系统&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget https://install.direct/go.sh
 bash go.sh
@@ -651,13 +736,13 @@ bash go.sh
 &lt;p&gt;&lt;code&gt;/etc/v2ray/config.json&lt;/code&gt;：配置文件&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;/usr/bin/v2ray/v2ray&lt;/code&gt;：主程序&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h3 id="tlsyu-ming-zheng-shu"&gt;TLS域名证书&lt;/h3&gt;
+&lt;h3 id="tlsyu ming zheng shu"&gt;TLS域名证书&lt;/h3&gt;
 &lt;p&gt;因为最终配置要用到TLS链接，在这步之前，你需要一个域名，免费的也无所谓。&lt;/p&gt;
-&lt;p&gt;工具使用&lt;a href="https://github.com/Neilpang/acme.sh/wiki"&gt;acme.sh …&lt;/a&gt;&lt;/p&gt;</summary><content type="html">&lt;h1 id="fu-wu-qi-duan-pei-zhi"&gt;服务器端配置&lt;/h1&gt;
+&lt;p&gt;工具使用&lt;a href="https://github.com/Neilpang/acme.sh/wiki"&gt;acme.sh …&lt;/a&gt;&lt;/p&gt;</summary><content type="html">&lt;h1 id="fu wu qi duan pei zhi"&gt;服务器端配置&lt;/h1&gt;
 &lt;p&gt;服务器系统使用的是Debian 9&amp;nbsp;x86_64，Ubuntu大部分操作都通用。如果是CentOS的话，该文章仅作为参考。&lt;/p&gt;
-&lt;h3 id="you-hua-wang-luo"&gt;优化网络&lt;/h3&gt;
+&lt;h3 id="you hua wang luo"&gt;优化网络&lt;/h3&gt;
 &lt;p&gt;主要涉及bbr的安装配置，需要VPS是KVM架构，具体可以参照&lt;a href="https://www.solarck.com/shadowsocks-libev.html"&gt;之前的文章&lt;/a&gt;。&lt;/p&gt;
-&lt;h3 id="an-zhuang-v2ray"&gt;安装V2ray&lt;/h3&gt;
+&lt;h3 id="an zhuang v2ray"&gt;安装V2ray&lt;/h3&gt;
 &lt;p&gt;官方提供了安装脚本，需要系统使用systemd管理系统&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget https://install.direct/go.sh
 bash go.sh
@@ -668,36 +753,36 @@ bash go.sh
 &lt;p&gt;&lt;code&gt;/etc/v2ray/config.json&lt;/code&gt;：配置文件&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;/usr/bin/v2ray/v2ray&lt;/code&gt;：主程序&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h3 id="tlsyu-ming-zheng-shu"&gt;TLS域名证书&lt;/h3&gt;
+&lt;h3 id="tlsyu ming zheng shu"&gt;TLS域名证书&lt;/h3&gt;
 &lt;p&gt;因为最终配置要用到TLS链接，在这步之前，你需要一个域名，免费的也无所谓。&lt;/p&gt;
 &lt;p&gt;工具使用&lt;a href="https://github.com/Neilpang/acme.sh/wiki"&gt;acme.sh&lt;/a&gt;，这是用来签发&lt;a href="https://letsencrypt.org/"&gt;Let&amp;rsquo;s Encrypt&lt;/a&gt;免费证书的脚本，非常好用。&lt;/p&gt;
-&lt;h4 id="an-zhuang-acme"&gt;&lt;em&gt;安装acme&lt;/em&gt;&lt;/h4&gt;
+&lt;h4 id="an zhuang acme"&gt;&lt;em&gt;安装acme&lt;/em&gt;&lt;/h4&gt;
 &lt;p&gt;安装依赖工具&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;apt-get install -y socat netcat&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;安装acme.sh脚本&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;curl  https://get.acme.sh &lt;span class="p"&gt;|&lt;/span&gt; sh
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;默认是安装在&lt;code&gt;～/.acme.sh/&lt;/code&gt;&lt;/p&gt;
-&lt;h4 id="qian-fa-zheng-shu"&gt;&lt;em&gt;签发证书&lt;/em&gt;&lt;/h4&gt;
+&lt;h4 id="qian fa zheng shu"&gt;&lt;em&gt;签发证书&lt;/em&gt;&lt;/h4&gt;
 &lt;p&gt;我使用的是ecc证书，需要把domain换成自己的域名&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;~/.acme.sh/acme.sh --issue -d domain --standalone -k ec-256
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id="an-zhuang-zheng-shu"&gt;&lt;em&gt;安装证书&lt;/em&gt;&lt;/h4&gt;
+&lt;h4 id="an zhuang zheng shu"&gt;&lt;em&gt;安装证书&lt;/em&gt;&lt;/h4&gt;
 &lt;p&gt;证书会被安装到&lt;code&gt;/etc/v2ray&lt;/code&gt;目录下&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;~/.acme.sh/acme.sh --installcert -d domain --fullchainpath /etc/v2ray/v2ray.crt --keypath /etc/v2ray/v2ray.key --ecc
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id="zheng-shu-xu-qi"&gt;&lt;em&gt;证书续期&lt;/em&gt;&lt;/h4&gt;
+&lt;h4 id="zheng shu xu qi"&gt;&lt;em&gt;证书续期&lt;/em&gt;&lt;/h4&gt;
 &lt;p&gt;执行完签发命令后，系统已经加上了crond自动签发，如果你想手动签发，可以执行下面的命令。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;~/.acme.sh/acme.sh --renew -d domain --force --ecc
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h1 id="ben-di-pei-zhi_2"&gt;本地配置&lt;/h1&gt;
-&lt;h3 id="an-zhuang"&gt;安装&lt;/h3&gt;
+&lt;h1 id="ben di pei zhi_2"&gt;本地配置&lt;/h1&gt;
+&lt;h3 id="an zhuang"&gt;安装&lt;/h3&gt;
 &lt;p&gt;因为我使用的是Manjaro，一个基于Archlinux的Linux版本，所有安装只要一条命令&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yaourt -Sy v2ray
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;如果你用的是其他系统，可以参考服务器的安装脚本。&lt;/p&gt;
-&lt;h1 id="pei-zhi-wen-jian_1"&gt;配置文件&lt;/h1&gt;
-&lt;h3 id="pei-zhi-shuo-ming"&gt;配置说明&lt;/h3&gt;
+&lt;h1 id="pei zhi wen jian_1"&gt;配置文件&lt;/h1&gt;
+&lt;h3 id="pei zhi shuo ming"&gt;配置说明&lt;/h3&gt;
 &lt;p&gt;我当前使用的连接方式是TCP+TLS这种，根据官方和网上收集的信息，据说当前最好的配置是WebSocket+&lt;span class="caps"&gt;WEB&lt;/span&gt;+&lt;span class="caps"&gt;TLS&lt;/span&gt;+&lt;span class="caps"&gt;CDN&lt;/span&gt;，我没有选择这种连接方式有以下几点原因：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Websocket效率低于TCP&lt;/li&gt;
@@ -706,14 +791,14 @@ bash go.sh
 &lt;/ol&gt;
 &lt;p&gt;如果你的ISP没有QOS，没有TCP阻断，你连接服务器的流量没有很大的话，是没有必要折腾这种连接方式的。当然我在写这篇文章之前还使用过H2+TLS的连接方式，但是不知是服务器没有加Caddy转发还是H2方式不稳定，断流严重，换成TCP+TLS后，连接稳定，速度尚可，未出现断流。&lt;/p&gt;
 &lt;p&gt;每个人每个地区的ISP情况不尽相同，所以多试才能找到最适合你的配置，更多配置可以参考&lt;a href="https://github.com/KiriKira/vTemplate"&gt;配置模板&lt;/a&gt;。&lt;/p&gt;
-&lt;h3 id="tcptlspei-zhi"&gt;&lt;span class="caps"&gt;TCP&lt;/span&gt;+TLS配置&lt;/h3&gt;
-&lt;h4 id="pei-zhi-shuo-ming_1"&gt;&lt;strong&gt;配置说明&lt;/strong&gt;&lt;/h4&gt;
+&lt;h3 id="tcp+tlspei zhi"&gt;&lt;span class="caps"&gt;TCP&lt;/span&gt;+TLS配置&lt;/h3&gt;
+&lt;h4 id="pei zhi shuo ming_1"&gt;&lt;strong&gt;配置说明&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;我有三台性能较弱的VPS，所以三台分别安装并部署了服务端的配置，而在本地客户端的outbound中连接三个服务器，v2ray可以进行简单的轮寻进行负载均衡。&lt;/p&gt;
 &lt;p&gt;为了简化操作，UUID设置为相同，当然不嫌麻烦的话可以设置为不同，但要和每台服务器的UUID相对应。&lt;/p&gt;
 &lt;p&gt;因为我认为vmess协议加密已经足够强壮，所以每台就没有再设置内容加密，如果不放心，可以使用auto或者AEAD方式加密。另外根据官方的测试，貌似&lt;code&gt;aes-256-gcm&lt;/code&gt; 和&lt;code&gt;chacha20-ietf-poly1305&lt;/code&gt;两种加密方式传输效率比不加密的效率还要高，可能与硬件加密有关系吧。&lt;/p&gt;
 &lt;p&gt;所有配置的详细内容都可以在官方文档或白话文教程里找到，其实配置v2ray并没有那么复杂。&lt;/p&gt;
 &lt;p&gt;最后贴上我的自用配置，生成UUID可以使用&lt;a href="https://www.uuidgenerator.net/"&gt;&lt;span class="caps"&gt;UUID&lt;/span&gt; Generator&lt;/a&gt;这个网站，或者Linux用户可以使用下面命令&lt;code&gt;cat /proc/sys/kernel/random/uuid&lt;/code&gt;生成。&lt;/p&gt;
-&lt;h4 id="fu-wu-duan"&gt;&lt;strong&gt;服务端&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="fu wu duan"&gt;&lt;strong&gt;服务端&lt;/strong&gt;&lt;/h4&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
   &lt;span class="nt"&gt;"log"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
     &lt;span class="nt"&gt;"loglevel"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"warning"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
@@ -773,7 +858,7 @@ bash go.sh
   &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id="ke-hu-duan"&gt;&lt;strong&gt;客户端&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="ke hu duan"&gt;&lt;strong&gt;客户端&lt;/strong&gt;&lt;/h4&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
   &lt;span class="nt"&gt;"log"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
     &lt;span class="nt"&gt;"loglevel"&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;"warning"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
@@ -887,15 +972,15 @@ bash go.sh
   &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h1 id="can-kao_2"&gt;参考&lt;/h1&gt;
+&lt;h1 id="can kao_2"&gt;参考&lt;/h1&gt;
 &lt;p&gt;&lt;a href="https://www.v2ray.com/"&gt;v2ray官方文档&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://toutyrater.github.io"&gt;v2ray白话文教程&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://github.com/Neilpang/acme.sh/wiki"&gt;acme.sh&amp;nbsp;wiki&lt;/a&gt;&lt;/p&gt;</content><category term="v2ray"></category><category term="acme.sh"></category><category term="tls"></category></entry><entry><title>LEDE/OpenWRT 路由器打造家庭媒体影音中心（二）</title><link href="https://www.solarck.com/lede-media-center2.html" rel="alternate"></link><published>2018-07-12T16:07:00+08:00</published><updated>2018-07-12T16:07:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-12:/lede-media-center2.html</id><summary type="html">&lt;h1 id="usb-qu-dong"&gt;&lt;span class="caps"&gt;USB&lt;/span&gt;&amp;nbsp;驱动&lt;/h1&gt;
-&lt;h3 id="cha-kan-yi-an-zhuang-de-qu-dong"&gt;查看已安装的驱动&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/Neilpang/acme.sh/wiki"&gt;acme.sh&amp;nbsp;wiki&lt;/a&gt;&lt;/p&gt;</content><category term="v2ray"></category><category term="acme.sh"></category><category term="tls"></category></entry><entry><title>LEDE/OpenWRT 路由器打造家庭媒体影音中心（二）</title><link href="https://www.solarck.com/lede-media-center2.html" rel="alternate"></link><published>2018-07-12T16:07:00+08:00</published><updated>2018-07-12T16:07:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-12:/lede-media-center2.html</id><summary type="html">&lt;h1 id="usb qu dong"&gt;&lt;span class="caps"&gt;USB&lt;/span&gt;&amp;nbsp;驱动&lt;/h1&gt;
+&lt;h3 id="cha kan yi an zhuang de qu dong"&gt;查看已安装的驱动&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg list-installed | grep usb
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="an-zhuang-qu-dong-he-gong-ju"&gt;安装驱动和工具&lt;/h3&gt;
+&lt;h3 id="an zhuang qu dong he gong ju"&gt;安装驱动和工具&lt;/h3&gt;
 &lt;p&gt;如果下列驱动未出现在上一步的结果中，请务必首先安装缺失的驱动&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg install kmod-usb-core kmod-usb-storage
 &lt;/pre&gt;&lt;/div&gt;
@@ -904,13 +989,13 @@ opkg list-installed | grep usb
 &lt;p&gt;&lt;code&gt;kmod-usb2&lt;/code&gt;:&lt;span class="caps"&gt;WRT1900ACS&lt;/span&gt; 有一个 &lt;span class="caps"&gt;USB2&lt;/span&gt;.0/eSATA&amp;nbsp;口，可以不安装&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;kmod-ata-marvell-sata&lt;/code&gt;:Marvell &lt;span class="caps"&gt;SATA&lt;/span&gt;&amp;nbsp;接口驱动，可以不安装&lt;/p&gt;
 &lt;p&gt;网上搜到的教程和官方指南里还让安装一些其他的应用，但这些都是不必要或已被编译至内核中，包括：&lt;code&gt;kmod-usb-ohci&lt;/code&gt;、&lt;code&gt;kmod-usb-uhci&lt;/code&gt;、&lt;code&gt;kmod-usb3&lt;/code&gt;、&lt;code&gt;kmod-usb-storage-uas&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id="an-zhuang-xiang-guan-gong-ju"&gt;安装相关工具&lt;/h3&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;h1 id="usb-qu-dong"&gt;&lt;span class="caps"&gt;USB&lt;/span&gt;&amp;nbsp;驱动&lt;/h1&gt;
-&lt;h3 id="cha-kan-yi-an-zhuang-de-qu-dong"&gt;查看已安装的驱动&lt;/h3&gt;
+&lt;h3 id="an zhuang xiang guan gong ju"&gt;安装相关工具&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;h1 id="usb qu dong"&gt;&lt;span class="caps"&gt;USB&lt;/span&gt;&amp;nbsp;驱动&lt;/h1&gt;
+&lt;h3 id="cha kan yi an zhuang de qu dong"&gt;查看已安装的驱动&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg list-installed | grep usb
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="an-zhuang-qu-dong-he-gong-ju"&gt;安装驱动和工具&lt;/h3&gt;
+&lt;h3 id="an zhuang qu dong he gong ju"&gt;安装驱动和工具&lt;/h3&gt;
 &lt;p&gt;如果下列驱动未出现在上一步的结果中，请务必首先安装缺失的驱动&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg install kmod-usb-core kmod-usb-storage
 &lt;/pre&gt;&lt;/div&gt;
@@ -919,7 +1004,7 @@ opkg list-installed | grep usb
 &lt;p&gt;&lt;code&gt;kmod-usb2&lt;/code&gt;:&lt;span class="caps"&gt;WRT1900ACS&lt;/span&gt; 有一个 &lt;span class="caps"&gt;USB2&lt;/span&gt;.0/eSATA&amp;nbsp;口，可以不安装&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;kmod-ata-marvell-sata&lt;/code&gt;:Marvell &lt;span class="caps"&gt;SATA&lt;/span&gt;&amp;nbsp;接口驱动，可以不安装&lt;/p&gt;
 &lt;p&gt;网上搜到的教程和官方指南里还让安装一些其他的应用，但这些都是不必要或已被编译至内核中，包括：&lt;code&gt;kmod-usb-ohci&lt;/code&gt;、&lt;code&gt;kmod-usb-uhci&lt;/code&gt;、&lt;code&gt;kmod-usb3&lt;/code&gt;、&lt;code&gt;kmod-usb-storage-uas&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id="an-zhuang-xiang-guan-gong-ju"&gt;安装相关工具&lt;/h3&gt;
+&lt;h3 id="an zhuang xiang guan gong ju"&gt;安装相关工具&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;code&gt;mount-utils&lt;/code&gt;:提供&amp;nbsp;unmount,findmnt&lt;/p&gt;
@@ -938,8 +1023,8 @@ block info &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s2"&gt;"/de
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;em&gt;小提示：硬盘格式化为什么格式最好？&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;在 Linux 和 &lt;span class="caps"&gt;LEDE&lt;/span&gt; 平台上，微软的 &lt;span class="caps"&gt;NTFS&lt;/span&gt; 和 &lt;span class="caps"&gt;FAT32&lt;/span&gt; 绝对不是一个好的格式，设计的优劣不谈，这两个格式不是 Linux 平台原生支持的，安装额外的驱动可能会带来发热、读写速度慢、不稳定等多种负面效果。所以，对于机械硬盘来说，&lt;span class="caps"&gt;EXT4&lt;/span&gt; 和 &lt;span class="caps"&gt;BTRFS&lt;/span&gt; 是最好的，对于 &lt;span class="caps"&gt;SSD&lt;/span&gt; 来说，&lt;span class="caps"&gt;F2FS&lt;/span&gt;&amp;nbsp;格式是最好的。&lt;/p&gt;
-&lt;h1 id="ying-pan-xiang-guan-cao-zuo_1"&gt;硬盘相关操作&lt;/h1&gt;
-&lt;h3 id="ying-pan-fen-qu"&gt;硬盘分区&lt;/h3&gt;
+&lt;h1 id="ying pan xiang guan cao zuo_1"&gt;硬盘相关操作&lt;/h1&gt;
+&lt;h3 id="ying pan fen qu"&gt;硬盘分区&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gdisk /dev/sda
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;根据软件提示进行操作，主要命令有：&lt;/p&gt;
@@ -949,7 +1034,7 @@ block info &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="s2"&gt;"/de
 &lt;p&gt;&lt;code&gt;p&lt;/code&gt;:打印分区列表&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;?&lt;/code&gt;:查看帮助&lt;/p&gt;
 &lt;p&gt;这里我把一块硬盘分为两个区&lt;code&gt;/dev/sda1&lt;/code&gt;，&lt;code&gt;/dev/sda2&lt;/code&gt;，分区 1 大小 700G，分区 2 大小 231G，总计&amp;nbsp;1T。&lt;/p&gt;
-&lt;h3 id="ge-shi-hua-ying-pan"&gt;格式化硬盘&lt;/h3&gt;
+&lt;h3 id="ge shi hua ying pan"&gt;格式化硬盘&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mkfs.ext4 /dev/sda1
 mkfs.ext4 /dev/sda2
 &lt;/pre&gt;&lt;/div&gt;
@@ -958,7 +1043,7 @@ mkfs.ext4 /dev/sda2
 opkg install kmod-fs-f2fs
 mkfs.f2fs /dev/sda1
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="zi-dong-gua-zai-fen-qu"&gt;自动挂载分区&lt;/h3&gt;
+&lt;h3 id="zi dong gua zai fen qu"&gt;自动挂载分区&lt;/h3&gt;
 &lt;p&gt;这一部分请根据自己&lt;code&gt;fstab&lt;/code&gt;实际内容修改使用&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;block detect &amp;gt; /etc/config/fstab
 uci &lt;span class="nb"&gt;set&lt;/span&gt; fstab.@mount&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;.enabled&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'1'&lt;/span&gt;
@@ -974,7 +1059,7 @@ uci commit
 &lt;p&gt;&lt;strong&gt;卸载/挂载服务&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;block umount &amp;amp;&amp;amp; block mount
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="ying-pan-xiu-mian"&gt;硬盘休眠&lt;/h3&gt;
+&lt;h3 id="ying pan xiu mian"&gt;硬盘休眠&lt;/h3&gt;
 &lt;h4 id="hdparm"&gt;&lt;em&gt;hdparm&lt;/em&gt;&lt;/h4&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg install hdparm luci-app-hd-idle
@@ -994,9 +1079,9 @@ hdparm -S &lt;span class="m"&gt;120&lt;/span&gt; /dev/sda2
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg install hd-idle luci-app-hd-idle
 &lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;img alt="hd-idle" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-idle.png"/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="hd-idle" src="https://ws1.sinaimg.cn/large/65f2a787ly1fxa2prebypj20f709a3yn.jpg"/&gt;&lt;/p&gt;
 &lt;h1 id="samba_2"&gt;Samba&lt;/h1&gt;
-&lt;h3 id="an-zhuang-samba"&gt;安装&amp;nbsp;Samba&lt;/h3&gt;
+&lt;h3 id="an zhuang  samba"&gt;安装&amp;nbsp;Samba&lt;/h3&gt;
 &lt;p&gt;查看可安装的版本&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg list &lt;span class="p"&gt;|&lt;/span&gt; grep samba
@@ -1004,7 +1089,7 @@ opkg list &lt;span class="p"&gt;|&lt;/span&gt; grep samba
 &lt;p&gt;根据结果，安装适当的版本&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg install samba36-server luci-app-samba luci-i18n-samba-zh-cn
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="pei-zhi-fang-huo-qiang"&gt;配置防火墙&lt;/h3&gt;
+&lt;h3 id="pei zhi fang huo qiang"&gt;配置防火墙&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;vim /etc/config/firewall&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="na"&gt;config 'rule'&lt;/span&gt;
         &lt;span class="na"&gt;option 'src' 'lan'&lt;/span&gt;
@@ -1024,7 +1109,7 @@ opkg list &lt;span class="p"&gt;|&lt;/span&gt; grep samba
         &lt;span class="na"&gt;option 'dest_port' '445'&lt;/span&gt;
         &lt;span class="na"&gt;option 'target' 'ACCEPT'&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="samba-pei-zhi"&gt;Samba&amp;nbsp;配置&lt;/h3&gt;
+&lt;h3 id="samba pei zhi"&gt;Samba&amp;nbsp;配置&lt;/h3&gt;
 &lt;p&gt;&lt;em&gt;官方&lt;strong&gt;强烈建议&lt;/strong&gt;使用 luci 来配置&amp;nbsp;Samba，然后通过修改临时文件来完成配置。&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;路由器每次重启，&lt;code&gt;/etc/samba/smb.conf&lt;/code&gt;文件都将从&lt;code&gt;/etc/samba/smb.conf.template&lt;/code&gt;文件重新创建，所以修改配置时请修改后者。&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;全局和共享配置可以在 LuCi&amp;nbsp;界面编辑也可以直接编辑文件，按照我的配置实现如下几个功能：&lt;/p&gt;
@@ -1033,7 +1118,7 @@ opkg list &lt;span class="p"&gt;|&lt;/span&gt; grep samba
 &lt;li&gt;允许匿名用户访问&lt;code&gt;/mnt/sda1&lt;/code&gt;，即 Media&amp;nbsp;文件夹&lt;/li&gt;
 &lt;li&gt;访问&lt;code&gt;/mnt/sda2&lt;/code&gt;，即 Document&amp;nbsp;文件夹必须登录，用户只能访问到自己创建的文件夹和文件&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="quan-ju-pei-zhi"&gt;&lt;strong&gt;全局配置&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="quan ju pei zhi"&gt;&lt;strong&gt;全局配置&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;vim /etc/samba/smb.conf.template&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;global&lt;span class="o"&gt;]&lt;/span&gt;
     &lt;span class="c1"&gt;#netbios name = LEDE  #不设置默认是路由器host名&lt;/span&gt;
@@ -1054,7 +1139,7 @@ opkg list &lt;span class="p"&gt;|&lt;/span&gt; grep samba
     smb passwd &lt;span class="nv"&gt;file&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; /etc/samba/smbpasswd
     map to &lt;span class="nv"&gt;guest&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; Bad User
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id="gong-xiang-wen-jian-jia-she-zhi"&gt;&lt;strong&gt;共享文件夹设置&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="gong xiang wen jian jia she zhi"&gt;&lt;strong&gt;共享文件夹设置&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;vim /etc/config/samba&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;config samba
         option charset &lt;span class="s1"&gt;'UTF-8'&lt;/span&gt;
@@ -1080,7 +1165,7 @@ config sambashare
         option name &lt;span class="s1"&gt;'Document'&lt;/span&gt;
         option guest_ok &lt;span class="s1"&gt;'no'&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id="wen-jian-jia-chu-shi-quan-xian-she-zhi"&gt;&lt;strong&gt;文件夹初始权限设置&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="wen jian jia chu shi quan xian she zhi"&gt;&lt;strong&gt;文件夹初始权限设置&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;/mnt/sda2&lt;/code&gt;其实没必要更改所属用户和组，但是强迫症就是要给统一了。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;chown -R nobody /mnt/sda1
 chgrp -R nogroup /mnt/sda1
@@ -1090,7 +1175,7 @@ chown -R nobody /mnt/sda2
 chgrp -R nogroup /mnt/sda2
 chmod -R &lt;span class="m"&gt;777&lt;/span&gt; /mnt/sda2
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id="tian-jia-yong-hu"&gt;&lt;strong&gt;添加用户&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="tian jia yong hu"&gt;&lt;strong&gt;添加用户&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;span class="caps"&gt;LEDE&lt;/span&gt; 默认不带&lt;code&gt;useradd&lt;/code&gt;命令，需要手动安装&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg install shadow-useradd
@@ -1105,42 +1190,42 @@ smbpasswd -a newuser
 /etc/init.d/samba &lt;span class="nb"&gt;enable&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;至此，Samba 设置完成，也达到了我的目的，有可以匿名随意访问的共享文件夹，也有实现了权限控制的私有文件夹。而且是全平台都可以访问，Windows、Linux 和手机（需要有支持 &lt;span class="caps"&gt;SMB&lt;/span&gt;&amp;nbsp;协议的软件）。&lt;/p&gt;
-&lt;p&gt;&lt;img alt="samba" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-samba.png"/&gt;&lt;/p&gt;
-&lt;h1 id="can-kao-lian-jie_2"&gt;参考链接&lt;/h1&gt;
+&lt;p&gt;&lt;img alt="samba" src="https://ws1.sinaimg.cn/large/65f2a787ly1fxa2prha0jj20qz0mxjsm.jpg"/&gt;&lt;/p&gt;
+&lt;h1 id="can kao lian jie_2"&gt;参考链接&lt;/h1&gt;
 &lt;p&gt;&lt;a href="https://openwrt.org/docs/guide-user/storage/usb-installing"&gt;Installing &lt;span class="caps"&gt;USB&lt;/span&gt;&amp;nbsp;Drivers&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://openwrt.org/docs/guide-user/storage/usb-drives"&gt;Using storage devices&lt;/a&gt;
 &lt;a href="https://openwrt.org/docs/guide-user/services/nas/usb-storage-samba-webinterface"&gt;Share &lt;span class="caps"&gt;USB&lt;/span&gt; Hard-drive with Samba using the Luci web-interface&lt;/a&gt;
 &lt;a href="https://openwrt.org/docs/guide-user/services/nas/samba_configuration"&gt;&lt;span class="caps"&gt;SMB&lt;/span&gt; Samba share&amp;nbsp;overview&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://openwrt.org/docs/guide-user/services/nas/cifs.server"&gt;cifs.server&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://openwrt.org/docs/guide-user/services/nas/samba"&gt;Samba&lt;/a&gt;&lt;/p&gt;</content><category term="openwrt"></category><category term="lede"></category><category term="wrt1900acs"></category><category term="samba"></category><category term="nas"></category></entry><entry><title>LEDE/OpenWRT 路由器打造家庭媒体影音中心（一）</title><link href="https://www.solarck.com/lede-media-center1.html" rel="alternate"></link><published>2018-07-10T13:07:00+08:00</published><updated>2018-07-10T13:07:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-10:/lede-media-center1.html</id><summary type="html">&lt;h1 id="qian-yan"&gt;前言&lt;/h1&gt;
-&lt;h3 id="ruan-ying-jian"&gt;软/硬件&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://openwrt.org/docs/guide-user/services/nas/samba"&gt;Samba&lt;/a&gt;&lt;/p&gt;</content><category term="openwrt"></category><category term="lede"></category><category term="wrt1900acs"></category><category term="samba"></category><category term="nas"></category></entry><entry><title>LEDE/OpenWRT 路由器打造家庭媒体影音中心（一）</title><link href="https://www.solarck.com/lede-media-center1.html" rel="alternate"></link><published>2018-07-10T13:07:00+08:00</published><updated>2018-07-10T13:07:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-07-10:/lede-media-center1.html</id><summary type="html">&lt;h1 id="qian yan"&gt;前言&lt;/h1&gt;
+&lt;h3 id="ruan /ying jian"&gt;软/硬件&lt;/h3&gt;
 &lt;p&gt;软件：本文系统都是基于 &lt;span class="caps"&gt;LEDE&lt;/span&gt;&amp;nbsp;17.01.4&lt;/p&gt;
 &lt;p&gt;硬件：Linksys &lt;span class="caps"&gt;WRT1900ACS&lt;/span&gt;&amp;nbsp;V2&lt;/p&gt;
 &lt;p&gt;其他：一台电脑，最好是 Linux 带 &lt;span class="caps"&gt;SSH&lt;/span&gt;，Windows 的话可以下个 putty&amp;nbsp;安装上&lt;/p&gt;
 &lt;p&gt;前提：我不会从头写起，而是从路由器已刷好 &lt;span class="caps"&gt;LEDE&lt;/span&gt; 17.01.4，&lt;span class="caps"&gt;WAN&lt;/span&gt; 口已联网，且已经可以 &lt;span class="caps"&gt;SSH&lt;/span&gt; 登录之后开始，其他外设，如硬盘、硬盘盒、用于 Extroot 的 U&amp;nbsp;盘都已准备好。&lt;/p&gt;
-&lt;h3 id="shi-xian-mu-de"&gt;实现目的&lt;/h3&gt;
-&lt;p&gt;基于 Linksys &lt;span class="caps"&gt;WRT1900ACS&lt;/span&gt; 强悍的性能和扩展功能丰富的 &lt;span class="caps"&gt;LEDE&lt;/span&gt;，打造一个有权限控制的 …&lt;/p&gt;</summary><content type="html">&lt;h1 id="qian-yan"&gt;前言&lt;/h1&gt;
-&lt;h3 id="ruan-ying-jian"&gt;软/硬件&lt;/h3&gt;
+&lt;h3 id="shi xian mu de"&gt;实现目的&lt;/h3&gt;
+&lt;p&gt;基于 Linksys &lt;span class="caps"&gt;WRT1900ACS&lt;/span&gt; 强悍的性能和扩展功能丰富的 &lt;span class="caps"&gt;LEDE&lt;/span&gt;，打造一个有权限控制的 …&lt;/p&gt;</summary><content type="html">&lt;h1 id="qian yan"&gt;前言&lt;/h1&gt;
+&lt;h3 id="ruan /ying jian"&gt;软/硬件&lt;/h3&gt;
 &lt;p&gt;软件：本文系统都是基于 &lt;span class="caps"&gt;LEDE&lt;/span&gt;&amp;nbsp;17.01.4&lt;/p&gt;
 &lt;p&gt;硬件：Linksys &lt;span class="caps"&gt;WRT1900ACS&lt;/span&gt;&amp;nbsp;V2&lt;/p&gt;
 &lt;p&gt;其他：一台电脑，最好是 Linux 带 &lt;span class="caps"&gt;SSH&lt;/span&gt;，Windows 的话可以下个 putty&amp;nbsp;安装上&lt;/p&gt;
 &lt;p&gt;前提：我不会从头写起，而是从路由器已刷好 &lt;span class="caps"&gt;LEDE&lt;/span&gt; 17.01.4，&lt;span class="caps"&gt;WAN&lt;/span&gt; 口已联网，且已经可以 &lt;span class="caps"&gt;SSH&lt;/span&gt; 登录之后开始，其他外设，如硬盘、硬盘盒、用于 Extroot 的 U&amp;nbsp;盘都已准备好。&lt;/p&gt;
-&lt;h3 id="shi-xian-mu-de"&gt;实现目的&lt;/h3&gt;
+&lt;h3 id="shi xian mu de"&gt;实现目的&lt;/h3&gt;
 &lt;p&gt;基于 Linksys &lt;span class="caps"&gt;WRT1900ACS&lt;/span&gt; 强悍的性能和扩展功能丰富的 &lt;span class="caps"&gt;LEDE&lt;/span&gt;，打造一个有权限控制的 &lt;span class="caps"&gt;NAS&lt;/span&gt;，支持 &lt;span class="caps"&gt;DLNA&lt;/span&gt;，可以离线下载和远程访问的 &lt;span class="caps"&gt;DDNS&lt;/span&gt;&amp;nbsp;系统的多媒体中心。&lt;/p&gt;
 &lt;h1 id="extroot_1"&gt;Extroot&lt;/h1&gt;
 &lt;p&gt;extroot 的作用就是扩充存储空间，这样就可以安装更多的软件。详细介绍可以查看很早之前我写过的一篇文章&amp;mdash;&amp;mdash;&lt;a href="https://solarck.com/openwrt-extroot.html"&gt;用 extroot 为 openwrt 扩充存储空间&lt;/a&gt;，这里就不赘述了。由于那篇文章比较老，&lt;span class="caps"&gt;LEDE&lt;/span&gt;&amp;nbsp;也早已经升级了好几个含本，所以实际的操作还是以下面的内容为主。&lt;/p&gt;
-&lt;h3 id="an-zhuang-gong-ju"&gt;安装工具&lt;/h3&gt;
+&lt;h3 id="an zhuang gong ju"&gt;安装工具&lt;/h3&gt;
 &lt;p&gt;这里我准备把 U 盘格式化为 f2fs&amp;nbsp;格式，关于各种存储格式和下面需要安装的工具的作用，我会放在下一篇文章一起讲，这一步照着做就可以了。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg install block-mount kmod-fs-ext4 kmod-usb-storage e2fsprogs kmod-fs-f2fs f2fs-tools
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="ge-shi-hua-u-pan"&gt;格式化 U&amp;nbsp;盘&lt;/h3&gt;
+&lt;h3 id="ge shi hua  u pan"&gt;格式化 U&amp;nbsp;盘&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mkfs.f2fs /dev/sda1
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="qian-yi-xi-tong"&gt;迁移系统&lt;/h3&gt;
+&lt;h3 id="qian yi xi tong"&gt;迁移系统&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mount /dev/sda1 /mnt &lt;span class="p"&gt;;&lt;/span&gt; tar -C /overlay -cvf - . &lt;span class="p"&gt;|&lt;/span&gt; tar -C /mnt -xf - &lt;span class="p"&gt;;&lt;/span&gt; umount /mnt
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="sheng-cheng-fen-qu-biao"&gt;生成分区表&lt;/h3&gt;
+&lt;h3 id="sheng cheng fen qu biao"&gt;生成分区表&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;block detect &amp;gt; /etc/config/fstab
 uci set fstab.@mount[0].target='/overlay'
 uci set fstab.@mount[0].enabled='1'
@@ -1166,7 +1251,7 @@ config mount
         option fstype 'f2fs'
         option options 'rw'
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="yan-zheng"&gt;验证&lt;/h3&gt;
+&lt;h3 id="yan zheng"&gt;验证&lt;/h3&gt;
 &lt;p&gt;重启系统后执行命令&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;df -h&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Filesystem                Size      Used Available Use% Mounted on
@@ -1185,8 +1270,8 @@ tmpfs                   512.0K         0    512.0K   0% /dev
 /dev/ubi1_0: UUID="413d13a9-0f0a-4811-a0cb-3e3786ce26d7" VERSION="w4r0" TYPE="ubifs"
 /dev/sda1: UUID="d9aa4451-780a-4fe5-b08d-d7f0a7ae0ba4" VERSION="1.8" MOUNT="/overlay" TYPE="f2fs"
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h1 id="geng-huan-yuan_1"&gt;更换源&lt;/h1&gt;
-&lt;h3 id="tian-jia-dui-https-de-zhi-chi"&gt;添加对 https&amp;nbsp;的支持&lt;/h3&gt;
+&lt;h1 id="geng huan yuan_1"&gt;更换源&lt;/h1&gt;
+&lt;h3 id="tian jia dui  https de zhi chi"&gt;添加对 https&amp;nbsp;的支持&lt;/h3&gt;
 &lt;p&gt;如果你在替换源后执行更新，那么会收到一条错误消息：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;span class="caps"&gt;SSL&lt;/span&gt; support not available, please install one of the libustream-ssl-* libraries as well as the ca-bundle and ca-certificates&amp;nbsp;packages.&lt;/p&gt;
@@ -1195,7 +1280,7 @@ tmpfs                   512.0K         0    512.0K   0% /dev
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg install ca-certificates luci-ssl-openssl
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="geng-huan-yuan_2"&gt;更换源&lt;/h3&gt;
+&lt;h3 id="geng huan yuan_2"&gt;更换源&lt;/h3&gt;
 &lt;p&gt;国内访问 &lt;span class="caps"&gt;LEDE&lt;/span&gt; 官方源比较不稳定，速度也很慢，幸好&lt;a href="https://mirrors.ustc.edu.cn/lede/"&gt;中科大&lt;/a&gt;和&lt;a href="https://mirrors.tuna.tsinghua.edu.cn/lede/"&gt;清华&lt;/a&gt;都提供了 &lt;span class="caps"&gt;LEDE&lt;/span&gt;&amp;nbsp;的软件镜像源，为了后边操作能够顺利进行，首先需要更换源。&lt;/p&gt;
 &lt;p&gt;&lt;span class="caps"&gt;LEDE&lt;/span&gt; &lt;span class="caps"&gt;OPKG&lt;/span&gt;&amp;nbsp;的软件源配置文件有两个：&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;/etc/opkg/distfeeds.conf&lt;/code&gt;：发行版本自带的官方源，需要把里面的内容全部注释掉或者清空。&lt;/p&gt;
@@ -1214,30 +1299,30 @@ opkg install ca-certificates luci-ssl-openssl
 &lt;span class="c1"&gt;#src/gz reboot_routing https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/routing&lt;/span&gt;
 &lt;span class="c1"&gt;#src/gz reboot_telephony https://mirrors.tuna.tsinghua.edu.cn/lede/releases/17.01.4/packages/arm_cortex-a9_vfpv3/telephony&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="geng-xin-xi-tong"&gt;更新系统&lt;/h3&gt;
+&lt;h3 id="geng xin xi tong"&gt;更新系统&lt;/h3&gt;
 &lt;p&gt;镜像源替换完成后，把所有已安装程序全部更新到最新&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg list-upgradable &lt;span class="p"&gt;|&lt;/span&gt; cut -f &lt;span class="m"&gt;1&lt;/span&gt; -d &lt;span class="s1"&gt;' '&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; xargs opkg upgrade
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h1 id="qi-ta_1"&gt;其他&lt;/h1&gt;
-&lt;h3 id="yi-hua"&gt;汉化&lt;/h3&gt;
+&lt;h1 id="qi ta_1"&gt;其他&lt;/h1&gt;
+&lt;h3 id="yi hua"&gt;汉化&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg install luci-i18n-base-zh-cn
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h1 id="can-kao-lian-jie_1"&gt;参考链接&lt;/h1&gt;
+&lt;h1 id="can kao lian jie_1"&gt;参考链接&lt;/h1&gt;
 &lt;p&gt;&lt;a href="https://openwrt.org/docs/guide-user/luci/getting-rid-of-luci-https-certificate-warnings"&gt;How to get rid of LuCI https certificate&amp;nbsp;warnings&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://openwrt.org/docs/guide-user/additional-software/extroot_configuration"&gt;Extroot&amp;nbsp;configuration&lt;/a&gt;&lt;/p&gt;</content><category term="openwrt"></category><category term="lede"></category><category term="wrt1900acs"></category></entry><entry><title>CentOS6 数据库服务器配置</title><link href="https://www.solarck.com/centos6-datebase-server.html" rel="alternate"></link><published>2018-06-11T16:52:00+08:00</published><updated>2018-06-11T16:52:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-06-11:/centos6-datebase-server.html</id><summary type="html">&lt;p&gt;本文章仅用于记录在公司服务器上通过 yum repo 来安装官方提供的数据库程序，而非通过编译方式来安装。通过官方仓库来安装有很多好处，比如升级、打补丁都很方便，不用编译浪费时间，更不需要安装多个版本的 gcc&amp;nbsp;来满足各种不同软件的要求。&lt;/p&gt;
 &lt;h3 id="mysql"&gt;Mysql&lt;/h3&gt;
-&lt;h4 id="xia-zai-an-zhuang-mysql-repo"&gt;&lt;strong&gt;下载安装 mysql&amp;nbsp;repo&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="xia zai an zhuang  mysql repo"&gt;&lt;strong&gt;下载安装 mysql&amp;nbsp;repo&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;rpm -Uvh https://repo.mysql.com//mysql80-community-release-el6-1.noarch.rpm&lt;/code&gt;&lt;/p&gt;
-&lt;h4 id="sheng-ji-zhi-57-ban-ben"&gt;&lt;strong&gt;升级至 57&amp;nbsp;版本&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="sheng ji zhi  57 ban ben"&gt;&lt;strong&gt;升级至 57&amp;nbsp;版本&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;yum --disablerepo=mysql80-community --enablerepo=mysql57-community upgrade&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;当前默认是 80 版本，如果未来需要升级，如果未来一直要维持在 57&amp;nbsp;版本，那么建议修改配置文件，以免每次都带上两个参数&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;vim /etc/yum.repos.d/mysql-community.repo …&lt;/code&gt;&lt;/p&gt;</summary><content type="html">&lt;p&gt;本文章仅用于记录在公司服务器上通过 yum repo 来安装官方提供的数据库程序，而非通过编译方式来安装。通过官方仓库来安装有很多好处，比如升级、打补丁都很方便，不用编译浪费时间，更不需要安装多个版本的 gcc&amp;nbsp;来满足各种不同软件的要求。&lt;/p&gt;
 &lt;h3 id="mysql"&gt;Mysql&lt;/h3&gt;
-&lt;h4 id="xia-zai-an-zhuang-mysql-repo"&gt;&lt;strong&gt;下载安装 mysql&amp;nbsp;repo&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="xia zai an zhuang  mysql repo"&gt;&lt;strong&gt;下载安装 mysql&amp;nbsp;repo&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;rpm -Uvh https://repo.mysql.com//mysql80-community-release-el6-1.noarch.rpm&lt;/code&gt;&lt;/p&gt;
-&lt;h4 id="sheng-ji-zhi-57-ban-ben"&gt;&lt;strong&gt;升级至 57&amp;nbsp;版本&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="sheng ji zhi  57 ban ben"&gt;&lt;strong&gt;升级至 57&amp;nbsp;版本&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;yum --disablerepo=mysql80-community --enablerepo=mysql57-community upgrade&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;当前默认是 80 版本，如果未来需要升级，如果未来一直要维持在 57&amp;nbsp;版本，那么建议修改配置文件，以免每次都带上两个参数&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;vim /etc/yum.repos.d/mysql-community.repo&lt;/code&gt;&lt;/p&gt;
@@ -1256,14 +1341,14 @@ opkg install luci-i18n-base-zh-cn
 &lt;span class="na"&gt;gpgcheck&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;1&lt;/span&gt;
 &lt;span class="na"&gt;gpgkey&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id="an-zhuang-mysql-server"&gt;&lt;strong&gt;安装&amp;nbsp;mysql-server&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="an zhuang  mysql-server"&gt;&lt;strong&gt;安装&amp;nbsp;mysql-server&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;yum install mysql-community-server&lt;/code&gt;&lt;/p&gt;
-&lt;h4 id="kai-qi-fu-wu"&gt;&lt;strong&gt;开启服务&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="kai qi fu wu"&gt;&lt;strong&gt;开启服务&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;service mysqld start&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;当然这时候还未配置 mysql，开启服务可能会失败。默认配置文件在&lt;code&gt;/etc/my.cnf&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;更多安装细节可以参照&lt;a href="https://dev.mysql.com/doc/mysql-yum-repo-quick-guide/en/"&gt;mysql 官方指南&lt;/a&gt;。&lt;/p&gt;
 &lt;h3 id="mongo_1"&gt;Mongo&lt;/h3&gt;
-&lt;h4 id="chuang-jian-repo-wen-jian"&gt;&lt;strong&gt;创建 repo&amp;nbsp;文件&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="chuang jian  repo wen jian"&gt;&lt;strong&gt;创建 repo&amp;nbsp;文件&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;vim /etc/yum.repos.d/mongodb-org-3.6.repo&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;[mongodb-org-3.6]&lt;/span&gt;
 &lt;span class="na"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;MongoDB Repository&lt;/span&gt;
@@ -1272,7 +1357,7 @@ opkg install luci-i18n-base-zh-cn
 &lt;span class="na"&gt;enabled&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;1&lt;/span&gt;
 &lt;span class="na"&gt;gpgkey&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;https://www.mongodb.org/static/pgp/server-3.6.asc&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id="an-zhuang-mongo-zu-jian-he-ji"&gt;&lt;strong&gt;安装 mongo&amp;nbsp;组件合集&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="an zhuang  mongo zu jian he ji"&gt;&lt;strong&gt;安装 mongo&amp;nbsp;组件合集&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;yum install -y mongodb-org&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;mongo-org&amp;nbsp;是一个合集，如果想精简安装各个组件，请参照下表。&lt;/p&gt;
 &lt;table&gt;
@@ -1305,12 +1390,12 @@ opkg install luci-i18n-base-zh-cn
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h4 id="qi-dong-fu-wu"&gt;&lt;strong&gt;启动服务&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="qi dong fu wu"&gt;&lt;strong&gt;启动服务&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;mongod -f /etc/mongod.conf&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;mongo 默认不加载 conf 文件，所以用 service&amp;nbsp;方法是无法正常启动的，暂时使用自带方法开启服务。&lt;/p&gt;
 &lt;p&gt;更多安装细节可以参照&lt;a href="https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/"&gt;mongo 官方指南&lt;/a&gt;。&lt;/p&gt;
 &lt;h3 id="nginx_1"&gt;Nginx&lt;/h3&gt;
-&lt;h4 id="chuang-jian-repo-wen-jian_1"&gt;&lt;strong&gt;创建 repo&amp;nbsp;文件&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="chuang jian  repo wen jian_1"&gt;&lt;strong&gt;创建 repo&amp;nbsp;文件&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;vim /etc/yum.repos.d/nginx.repo&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;[nginx]&lt;/span&gt;
 &lt;span class="na"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;nginx repo&lt;/span&gt;
@@ -1318,12 +1403,12 @@ opkg install luci-i18n-base-zh-cn
 &lt;span class="na"&gt;gpgcheck&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;0&lt;/span&gt;
 &lt;span class="na"&gt;enabled&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;1&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id="an-zhuang-he-kai-qi-fu-wu"&gt;&lt;strong&gt;安装和开启服务&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="an zhuang he kai qi fu wu"&gt;&lt;strong&gt;安装和开启服务&lt;/strong&gt;&lt;/h4&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yum install -y nginx
 service nginx start
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;service 方法启动 nginx 默认会加载&lt;code&gt;/etc/nginx/nginx.conf&lt;/code&gt;配置。&lt;/p&gt;
-&lt;h3 id="cha-kan-xi-tong-an-zhuang-lu-jing_1"&gt;查看系统安装路径&lt;/h3&gt;
+&lt;h3 id="cha kan xi tong an zhuang lu jing_1"&gt;查看系统安装路径&lt;/h3&gt;
 &lt;p&gt;使用仓库安装有一点不是很清晰，那就是安装目录并非自己指定，有时需要修改一些文件时找不到文件在哪里，我们可以通过如下方法找到软件的所有文件目录。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;rpm -qa |grep mongodb&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mongodb-org-mongos-3.6.5-1.el6.x86_64
@@ -1349,27 +1434,27 @@ mongodb-org-shell-3.6.5-1.el6.x86_64
 /var/log/mongodb/mongod.log
 /var/run/mongodb
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="ssh-mian-mi-deng-lu-fu-wu-qi"&gt;&lt;span class="caps"&gt;SSH&lt;/span&gt;&amp;nbsp;免密登录服务器&lt;/h3&gt;
+&lt;h3 id="ssh mian mi deng lu fu wu qi"&gt;&lt;span class="caps"&gt;SSH&lt;/span&gt;&amp;nbsp;免密登录服务器&lt;/h3&gt;
 &lt;p&gt;Linux 上免密登录通常用 &lt;span class="caps"&gt;RSA&lt;/span&gt;&amp;nbsp;公钥和密钥实现，本地生成钥匙后，公钥上传至服务器，之后便可以免密登录了。&lt;/p&gt;
-&lt;h4 id="ben-di-sheng-cheng-gong-yao-mi-yao"&gt;&lt;strong&gt;本地生成公钥密钥&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="ben di sheng cheng gong yao mi yao"&gt;&lt;strong&gt;本地生成公钥密钥&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;ssh-keygen -t rsa -b 4096&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;默认公钥会存储在&lt;code&gt;~/.ssh/id_rsa.pub&lt;/code&gt;，备用。&lt;/p&gt;
-&lt;h4 id="xiu-gai-fu-wu-qi-sshd-pei-zhi"&gt;&lt;strong&gt;修改服务器 sshd&amp;nbsp;配置&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="xiu gai fu wu qi  sshd pei zhi"&gt;&lt;strong&gt;修改服务器 sshd&amp;nbsp;配置&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;vim /etc/ssh/sshd_config&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;PubkeyAuthentication yes #解开注释
 AuthorizedKeysFile .ssh/authorized_keys #解开注释
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id="shang-chuan-ben-di-gong-yao-zhi-fu-wu-qi"&gt;&lt;strong&gt;上传本地公钥至服务器&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id="shang chuan ben di gong yao zhi fu wu qi"&gt;&lt;strong&gt;上传本地公钥至服务器&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;&lt;code&gt;ssh-copy-id -i .ssh/id_rsa.pub -p port user@ip&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;修改上面的端口、用户名和 ip，再在本地&lt;code&gt;.bashrc&lt;/code&gt;或&lt;code&gt;.zshrc&lt;/code&gt;新建一条 alias&amp;nbsp;就可以非常方便快捷的登录了。&lt;/p&gt;</content><category term="centos"></category><category term="ssh"></category><category term="linux"></category></entry><entry><title>使用 Python 发送 Gmail</title><link href="https://www.solarck.com/python-send-gmail.html" rel="alternate"></link><published>2018-06-11T14:20:00+08:00</published><updated>2018-06-11T14:20:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-06-11:/python-send-gmail.html</id><summary type="html">&lt;p&gt;本文基于一个真实的项目，使用 python3.6 和最新官方 smtplib 接口。项目的目的是爬取网站，然后通过邮件给自己发送邮件提醒新文章。最后使用 linux 系统的 crond&amp;nbsp;服务定时执行。&lt;/p&gt;
-&lt;h3 id="fa-you-jian-fang-fa"&gt;发邮件方法&lt;/h3&gt;
+&lt;h3 id="fa you jian fang fa"&gt;发邮件方法&lt;/h3&gt;
 &lt;p&gt;在定义发邮件方法之前，我们还定义了一个类和类中的爬虫，单拿出来发邮件来说，代码如下：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;sent_email&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
         &lt;span class="n"&gt;fromaddr&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'princelailai@gmail.com'&lt;/span&gt;
         &lt;span class="n"&gt;toaddrs&lt;/span&gt;  &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'princelailai@gmail.com'&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
         &lt;span class="n"&gt;subject&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"{}{}"&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;datetime&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;now&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;strftime&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'%Y年%m月&lt;/span&gt;&lt;span class="si"&gt;%d&lt;/span&gt;&lt;span class="s1"&gt;日'&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;&lt;span class="s1"&gt;'共有产权房信息'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
         &lt;span class="n"&gt;msg&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;''&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s1"&gt;'日期:&lt;/span&gt;&lt;span class="se"&gt;\t&lt;/span&gt;&lt;span class="s1"&gt;{}&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s1"&gt;标题:&lt;/span&gt;&lt;span class="se"&gt;\t&lt;/span&gt;&lt;span class="s1"&gt;{}&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s1"&gt;地址:&lt;/span&gt;&lt;span class="se"&gt;\t …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;本文基于一个真实的项目，使用 python3.6 和最新官方 smtplib 接口。项目的目的是爬取网站，然后通过邮件给自己发送邮件提醒新文章。最后使用 linux 系统的 crond&amp;nbsp;服务定时执行。&lt;/p&gt;
-&lt;h3 id="fa-you-jian-fang-fa"&gt;发邮件方法&lt;/h3&gt;
+&lt;h3 id="fa you jian fang fa"&gt;发邮件方法&lt;/h3&gt;
 &lt;p&gt;在定义发邮件方法之前，我们还定义了一个类和类中的爬虫，单拿出来发邮件来说，代码如下：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;sent_email&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
         &lt;span class="n"&gt;fromaddr&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s1"&gt;'princelailai@gmail.com'&lt;/span&gt;
@@ -1401,13 +1486,13 @@ AuthorizedKeysFile .ssh/authorized_keys #解开注释
 &lt;li&gt;如果你的 Google 账号开启了两步验证，那么你的邮箱密码就不是登录密码，而是 app 密码，关于 app 密码怎么生成可以查看这篇文章&lt;a href="https://support.google.com/accounts/answer/185833#generate"&gt;Sign in using App&amp;nbsp;Passwords&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;其他关于 smtp 地址和端口的问题，可以查看这篇文章&lt;a href="https://support.google.com/mail/answer/7126229?visit_id=1-636642850165284125-2014875658&amp;amp;hl=en&amp;amp;rd=1"&gt;Use &lt;span class="caps"&gt;IMAP&lt;/span&gt; to check Gmail on other email&amp;nbsp;clients&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id="ding-shi-qi-dong"&gt;定时启动&lt;/h3&gt;
+&lt;h3 id="ding shi qi dong"&gt;定时启动&lt;/h3&gt;
 &lt;p&gt;创建一个文本文件，用于创建单一用户的 crond&amp;nbsp;文件&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt; &lt;span class="m"&gt;6&lt;/span&gt; */3 * * /root/miniconda3/bin/python /root/monitor_house_info/monitor_house_info.py
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;关于 crond 配置，网上教程很多，或者&lt;code&gt;man 5 crontab&lt;/code&gt;就可以看到详细的用法。&lt;/p&gt;
 &lt;p&gt;最后输入&lt;code&gt;crontab file&lt;/code&gt;导入文件，就可以坐等收邮件了。&lt;/p&gt;
-&lt;h3 id="quan-bu-dai-ma"&gt;全部代码&lt;/h3&gt;
+&lt;h3 id="quan bu dai ma"&gt;全部代码&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/usr/bin/env python3&lt;/span&gt;
 &lt;span class="c1"&gt;# -*- coding: utf-8 -*-&lt;/span&gt;
 
@@ -1563,7 +1648,7 @@ Freq: S, Name: random, dtype: float64
 &lt;p&gt;方法 5 是内置的 asfreq&amp;nbsp;方法&lt;/p&gt;
 &lt;p&gt;方法 6 还是内置的 resample&amp;nbsp;方法&lt;/p&gt;
 &lt;p&gt;可以看到 resample 方法适用范围最广，既可以对时间采取多种细粒度的操作，也能对重采样后的数据进行后续操作；而 asfreq 方法只能对数据进行重采样，无法进行复杂的后续操作，只能用向前/向后填充数值；to_period 方法和字符串操作只能对时间进行整数采样，像 45 分钟，1 小时 30&amp;nbsp;分这种更细腻的操作是不支持的。&lt;/p&gt;
-&lt;h3 id="bi-jiao-su-du"&gt;比较速度&lt;/h3&gt;
+&lt;h3 id="bi jiao su du"&gt;比较速度&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;场景&amp;nbsp;1&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nf"&gt;%timeit&lt;/span&gt; &lt;span class="n"&gt;method1&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="nf"&gt;%timeit&lt;/span&gt; &lt;span class="n"&gt;method2&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;df&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -1637,7 +1722,7 @@ Freq: S, Name: random, dtype: float64
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h3 id="pandas-offset-aliases"&gt;Pandas Offset&amp;nbsp;Aliases&lt;/h3&gt;
+&lt;h3 id="pandas offset aliases"&gt;Pandas Offset&amp;nbsp;Aliases&lt;/h3&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -1756,9 +1841,9 @@ Freq: S, Name: random, dtype: float64
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h3 id="can-kao"&gt;参考&lt;/h3&gt;
+&lt;h3 id="can kao"&gt;参考&lt;/h3&gt;
 &lt;p&gt;&lt;a href="https://pandas.pydata.org/pandas-docs/stable/timeseries.html"&gt;官方文档&lt;/a&gt;&lt;/p&gt;</content><category term="python"></category><category term="pandas"></category></entry><entry><title>用数据验证定投是否优于直接投资</title><link href="https://www.solarck.com/Is-AIP-better-than-ETF.html" rel="alternate"></link><published>2018-06-06T17:27:00+08:00</published><updated>2018-06-06T17:27:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-06-06:/Is-AIP-better-than-ETF.html</id><summary type="html">&lt;p&gt;一直以来，定投的营销话术都是分批建仓，上涨时投资少降低成本，下跌时投资多赚取低估价值，但定投是否真的如宣传的那么美好？今天就用数据来模拟两种投资方式，看看孰优孰劣。&lt;/p&gt;
-&lt;h3 id="shu-ju-shuo-ming"&gt;数据说明&lt;/h3&gt;
+&lt;h3 id="shu ju shuo ming"&gt;数据说明&lt;/h3&gt;
 &lt;p&gt;本次实验使用三只 &lt;span class="caps"&gt;ETF&lt;/span&gt; 基金作为投资和定投标的，分别为华夏上证 &lt;span class="caps"&gt;50ETF&lt;/span&gt;（510050），华泰柏瑞沪深 &lt;span class="caps"&gt;300ETF&lt;/span&gt;（510300），广发中证 &lt;span class="caps"&gt;500ETF&lt;/span&gt;（510510），时间区间为 2013 年 5 月 27 日至 2018 年 6 月 7&amp;nbsp;日。&lt;/p&gt;
 &lt;p&gt;先上图了解下这段时间 &lt;span class="caps"&gt;ETF&lt;/span&gt;&amp;nbsp;基金大致走势。&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;&lt;span class="caps"&gt;50ETF&lt;/span&gt;&amp;nbsp;月线&lt;/em&gt;&lt;/p&gt;
@@ -1766,7 +1851,7 @@ Freq: S, Name: random, dtype: float64
 &lt;p&gt;&lt;em&gt;&lt;span class="caps"&gt;500ETF&lt;/span&gt;&amp;nbsp;周线&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img alt="500ETF" src="http://kevinstuchuang.qiniudn.com/blog-pic/ETF500close.png"/&gt;&lt;/p&gt;
 &lt;p&gt;这段区间整体来看是上涨的，大盘股涨的多，小盘股涨得少。分段来看 2013 年中至 2014 年中，属于震荡行情，2014 …&lt;/p&gt;</summary><content type="html">&lt;p&gt;一直以来，定投的营销话术都是分批建仓，上涨时投资少降低成本，下跌时投资多赚取低估价值，但定投是否真的如宣传的那么美好？今天就用数据来模拟两种投资方式，看看孰优孰劣。&lt;/p&gt;
-&lt;h3 id="shu-ju-shuo-ming"&gt;数据说明&lt;/h3&gt;
+&lt;h3 id="shu ju shuo ming"&gt;数据说明&lt;/h3&gt;
 &lt;p&gt;本次实验使用三只 &lt;span class="caps"&gt;ETF&lt;/span&gt; 基金作为投资和定投标的，分别为华夏上证 &lt;span class="caps"&gt;50ETF&lt;/span&gt;（510050），华泰柏瑞沪深 &lt;span class="caps"&gt;300ETF&lt;/span&gt;（510300），广发中证 &lt;span class="caps"&gt;500ETF&lt;/span&gt;（510510），时间区间为 2013 年 5 月 27 日至 2018 年 6 月 7&amp;nbsp;日。&lt;/p&gt;
 &lt;p&gt;先上图了解下这段时间 &lt;span class="caps"&gt;ETF&lt;/span&gt;&amp;nbsp;基金大致走势。&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;&lt;span class="caps"&gt;50ETF&lt;/span&gt;&amp;nbsp;月线&lt;/em&gt;&lt;/p&gt;
@@ -1776,7 +1861,7 @@ Freq: S, Name: random, dtype: float64
 &lt;p&gt;这段区间整体来看是上涨的，大盘股涨的多，小盘股涨得少。分段来看 2013 年中至 2014 年中，属于震荡行情，2014 年中至 2015 年中是暴涨行情，2015 年中至 2016 年初是暴跌行情，2016 年初至 2018&amp;nbsp;年中行情分化，大盘股再次进入牛市，中盘股属于慢牛，小盘股是横盘震荡走势。&lt;/p&gt;
 &lt;p&gt;选择这个区间的行情，是因为这五年属于一个完整的周期，活跃时波动率大，行情过后的低迷时期波动率又小，是典型的中国股市。另外从长期来看，股票波动向上才应该是上市公司内在价值增长的表现。&lt;/p&gt;
 &lt;p&gt;当然，用这个区间的数据做分析是有一个缺点的，就是这三只 &lt;span class="caps"&gt;ETF&lt;/span&gt; 基金整体涨幅都在&amp;nbsp;40%-50%之间，如果在一开始就持有至当前日期，那么一定是一次性直接投资要优于定投，不过放心，后面编程不会让这种事情发生，我会加入时间随机项，尽量减小整体上涨带来的影响。&lt;/p&gt;
-&lt;h3 id="kai-shi-shi-yan"&gt;开始实验&lt;/h3&gt;
+&lt;h3 id="kai shi shi yan"&gt;开始实验&lt;/h3&gt;
 &lt;p&gt;首先要导入用到的包&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;tushare&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;ts&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;pandas&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;pd&lt;/span&gt;
@@ -1870,7 +1955,7 @@ compare('ETF500',aip.weekly)
 #用每周定投500元ETF300来比较，共模拟10次，每次打印出走势对比图
 compare('ETF300',aip.weekly,times=10,money=500,plot=True)
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="bi-jiao-jie-guo"&gt;比较结果&lt;/h3&gt;
+&lt;h3 id="bi jiao jie guo"&gt;比较结果&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;compare('ETF50',aip.monthly)&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;from 2015-09-30 to 2017-08-31,dirctly invest ETF exceed AIP 8.07%
 from 2014-07-31 to 2016-06-30,dirctly invest ETF exceed AIP 30.34%
@@ -1911,7 +1996,7 @@ In 15 times simulation,dirctly invest ETF exceed AIP's mean is 32.02%
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;从上面的运行结果来看，把资金一次性全部投入比定投的平均收益是要高的，如果有兴趣，可以自己修改程序，改变开始和结束时间来验证结果，相信结论应该上面的相差不会太多。&lt;/p&gt;
 &lt;p&gt;当然，定投也不是一无是处，至少对于当前资金不足，只想从每月工资中拿出一部分来投资的人来说，还是一种很好的投资方式的。&lt;/p&gt;
-&lt;h3 id="wan-zheng-dai-ma"&gt;完整代码&lt;/h3&gt;
+&lt;h3 id="wan zheng dai ma"&gt;完整代码&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="ch"&gt;#!/usr/bin/env python3&lt;/span&gt;
 &lt;span class="c1"&gt;# -*- coding: utf-8 -*-&lt;/span&gt;
 
@@ -1968,49 +2053,49 @@ In 15 times simulation,dirctly invest ETF exceed AIP's mean is 32.02%
         &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'from {} to {},dirctly invest ETF exceed AIP {:.2%}'&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;strftime&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'%Y-%m-&lt;/span&gt;&lt;span class="si"&gt;%d&lt;/span&gt;&lt;span class="s1"&gt;'&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;&lt;span class="n"&gt;end&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;strftime&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'%Y-%m-&lt;/span&gt;&lt;span class="si"&gt;%d&lt;/span&gt;&lt;span class="s1"&gt;'&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;&lt;span class="n"&gt;exceed&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
         &lt;span class="n"&gt;result&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;exceed&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
     &lt;span class="k"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s1"&gt;In {} times simulation,dirctly invest ETF exceed AIP&lt;/span&gt;&lt;span class="se"&gt;\'&lt;/span&gt;&lt;span class="s1"&gt;s mean is {:.2%}'&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;times&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;pd&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;np&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;result&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</content><category term="定投"></category><category term="ETF"></category></entry><entry><title>git 和 github 主要使用方法</title><link href="https://www.solarck.com/git-and-github.html" rel="alternate"></link><published>2018-05-25T17:19:00+08:00</published><updated>2018-05-25T17:19:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-05-25:/git-and-github.html</id><summary type="html">&lt;h3 id="ssh-he-mi-yao"&gt;ssh&amp;nbsp;和密钥&lt;/h3&gt;
+&lt;/pre&gt;&lt;/div&gt;</content><category term="定投"></category><category term="ETF"></category></entry><entry><title>git 和 github 主要使用方法</title><link href="https://www.solarck.com/git-and-github.html" rel="alternate"></link><published>2018-05-25T17:19:00+08:00</published><updated>2018-05-25T17:19:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-05-25:/git-and-github.html</id><summary type="html">&lt;h3 id="ssh he mi yao"&gt;ssh&amp;nbsp;和密钥&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;ssh-keygen -t rsa -b 4096 -C "princelailai@gmail.com"&lt;/code&gt;：生成密钥&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;cat ~/.ssh/id_rsa.pub&lt;/code&gt;：查看密钥&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;ssh -T git@github.com&lt;/code&gt;：测试密钥是否可以正常登录&lt;/p&gt;
-&lt;h3 id="she-zhi"&gt;设置&lt;/h3&gt;
+&lt;h3 id="she zhi"&gt;设置&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;git config --list&lt;/code&gt;：列出当前 repo&amp;nbsp;所有设置&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git config --global user.name "princelai"&lt;/code&gt;：设置用户名&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git config --global user.email "princelailai@gmail.com"&lt;/code&gt;：设置&amp;nbsp;E-mail&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;echo "# mydotfiles" &amp;gt; README …&lt;/code&gt;&lt;/p&gt;</summary><content type="html">&lt;h3 id="ssh-he-mi-yao"&gt;ssh&amp;nbsp;和密钥&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;echo "# mydotfiles" &amp;gt; README …&lt;/code&gt;&lt;/p&gt;</summary><content type="html">&lt;h3 id="ssh he mi yao"&gt;ssh&amp;nbsp;和密钥&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;ssh-keygen -t rsa -b 4096 -C "princelailai@gmail.com"&lt;/code&gt;：生成密钥&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;cat ~/.ssh/id_rsa.pub&lt;/code&gt;：查看密钥&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;ssh -T git@github.com&lt;/code&gt;：测试密钥是否可以正常登录&lt;/p&gt;
-&lt;h3 id="she-zhi"&gt;设置&lt;/h3&gt;
+&lt;h3 id="she zhi"&gt;设置&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;git config --list&lt;/code&gt;：列出当前 repo&amp;nbsp;所有设置&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git config --global user.name "princelai"&lt;/code&gt;：设置用户名&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git config --global user.email "princelailai@gmail.com"&lt;/code&gt;：设置&amp;nbsp;E-mail&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;echo "# mydotfiles" &amp;gt; README.md&lt;/code&gt;：&lt;/p&gt;
-&lt;h3 id="ji-ben-cao-zuo"&gt;基本操作&lt;/h3&gt;
+&lt;h3 id="ji ben cao zuo"&gt;基本操作&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;git init&lt;/code&gt;：初始化，创建.git&amp;nbsp;文件夹&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git status&lt;/code&gt;：查看当前工作区/缓存区状态&lt;/p&gt;
-&lt;h3 id="tian-jia-he-ti-jiao"&gt;添加和提交&lt;/h3&gt;
+&lt;h3 id="tian jia he ti jiao"&gt;添加和提交&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;git add &amp;lt;文件&amp;gt;&lt;/code&gt;：添加文件至缓存区&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git commit -m "说明"&lt;/code&gt;：从缓存区提交至仓库&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git commit -am "说明"&lt;/code&gt;：前面两种的合并版&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git commit --amend "说明"&lt;/code&gt;：替换掉上一次的提交&lt;/p&gt;
-&lt;h3 id="shan-chu-wen-jian"&gt;删除文件&lt;/h3&gt;
+&lt;h3 id="shan chu wen jian"&gt;删除文件&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;git rm &amp;lt;文件&amp;gt;&lt;/code&gt;：从 repo&amp;nbsp;中删除文件&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git rm --cached &amp;lt;文件&amp;gt;&lt;/code&gt;：&lt;/p&gt;
-&lt;h3 id="hui-fu"&gt;恢复&lt;/h3&gt;
+&lt;h3 id="hui fu"&gt;恢复&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;git checkout -- &amp;lt;文件&amp;gt;&lt;/code&gt;：撤销文件工作区的修改&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git reset HEAD &amp;lt;文件&amp;gt;&lt;/code&gt;：撤销文件暂存区的修改，放回工作区&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git reset --hard ad93b89&lt;/code&gt;：所有文件退回至指定版本&lt;/p&gt;
-&lt;h3 id="ban-ben-he-ri-zhi"&gt;版本和日志&lt;/h3&gt;
+&lt;h3 id="ban ben he ri zhi"&gt;版本和日志&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;git log --oneline&lt;/code&gt;:简版&amp;nbsp;log&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git log --graph&lt;/code&gt;：带合并图形版&amp;nbsp;log&lt;/p&gt;
-&lt;h3 id="yuan-cheng-cang-ku"&gt;远程仓库&lt;/h3&gt;
+&lt;h3 id="yuan cheng cang ku"&gt;远程仓库&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;git remote show origin&lt;/code&gt;：查看远程仓库详情&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git clone git-url&lt;/code&gt;：从远程仓库克隆至本地&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git remote add origin git-url&lt;/code&gt;：关联远程和本地仓库&lt;/p&gt;
-&lt;h3 id="yuan-cheng-cang-ku-de-ti-jiao-he-la-qu"&gt;远程仓库的提交和拉取&lt;/h3&gt;
+&lt;h3 id="yuan cheng cang ku de ti jiao he la qu"&gt;远程仓库的提交和拉取&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;git pull origin master&lt;/code&gt;：把远程仓库拉取到本地仓库&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git push origin master&lt;/code&gt;：本地仓库推送至远程仓库，-u&amp;nbsp;用于第一次关联&lt;/p&gt;
-&lt;h3 id="fen-zhi"&gt;分支&lt;/h3&gt;
+&lt;h3 id="fen zhi"&gt;分支&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;git branch&lt;/code&gt;：列出本地分支&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git branch -r&lt;/code&gt;：列出远程分支&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git branch -a&lt;/code&gt;：列出所有分支&lt;/p&gt;
@@ -2020,80 +2105,26 @@ In 15 times simulation,dirctly invest ETF exceed AIP's mean is 32.02%
 &lt;h3 id="checkout"&gt;checkout&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;git checkout 分支&lt;/code&gt;：切换到指定分支&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git checkout -b 分支&lt;/code&gt;：创建并切换到分支&lt;/p&gt;
-&lt;h3 id="he-bing"&gt;合并&lt;/h3&gt;
+&lt;h3 id="he bing"&gt;合并&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;git merge 分支&lt;/code&gt;：把指定分支合并到当前分支&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;git merge --no-ff -m "说明" 分支&lt;/code&gt;：禁止 Fast forward 模式，创建新的&amp;nbsp;commit&lt;/p&gt;
-&lt;h3 id="can-kao"&gt;参考&lt;/h3&gt;
+&lt;h3 id="can kao"&gt;参考&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;a href="https://www.jianshu.com/p/e4e29c9c3bd9"&gt;简书&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000"&gt;廖雪峰&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://www.ruanyifeng.com/blog/2014/06/git_remote.html"&gt;阮一峰&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;</content><category term="git"></category><category term="github"></category></entry><entry><title>用股票数据说明方差和标准差的特性</title><link href="https://www.solarck.com/using-python-descript-vaiance-std.html" rel="alternate"></link><published>2018-01-15T15:35:00+08:00</published><updated>2018-01-15T15:35:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2018-01-15:/using-python-descript-vaiance-std.html</id><summary type="html">&lt;p&gt;&lt;a href="https://zh.wikipedia.org/zh-cn/%E6%96%B9%E5%B7%AE"&gt;方差&lt;/a&gt;（Variance），应用数学里的专有名词。在概率论和统计学中，一个随机变量的方差描述的是它的离散程度，也就是该变量离其期望值的距离。一个实随机变量的方差也称为它的二阶矩或二阶中心动差，恰巧也是它的二阶累积量。这里把复杂说白了，就是将各个误差将之平方（而非取绝对值，使之肯定为正数），相加之后再除以总数，透过这样的方式来算出各个数据分布、零散（相对中心点）的程度。继续延伸的话，方差的算术平方根称为该随机变量的标准差（此为相对各个数据点间）。&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://zh.wikipedia.org/zh-cn/%E6%A8%99%E6%BA%96%E5%B7%AE"&gt;标准差&lt;/a&gt;（Standard Deviation，&lt;span class="caps"&gt;SD&lt;/span&gt;），数学符号 &lt;span class="math"&gt;\(\sigma\)&lt;/span&gt;（sigma），在概率统计中最常使用作为测量一组数值的离散程度之用。标准差定义：为方差开算术平方根，反映组内个体间的离散程度；标准差与期望值之比为标准离差率。&lt;/p&gt;
-&lt;h3 id="1ding-yi"&gt;1.定义&lt;/h3&gt;
+&lt;h3 id="1.ding yi"&gt;1.定义&lt;/h3&gt;
 &lt;p&gt;方差的定义如下公式：
 &lt;/p&gt;
 &lt;div class="math"&gt;$$Var(X)=\sigma^2=E[(X-\mu)^2]$$&lt;/div&gt;
 &lt;p&gt;
 对上式化简后可得到如下公式：
 &lt;/p&gt;
-&lt;div class="math"&gt;$$\sigma^2=E[X^2]-(E …&lt;/div&gt;&lt;script type='text/javascript'&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width &lt; 768) ? "left" : align;
-        indent = (screen.width &lt; 768) ? "0em" : indent;
-        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-&lt;/script&gt;</summary><content type="html">&lt;p&gt;&lt;a href="https://zh.wikipedia.org/zh-cn/%E6%96%B9%E5%B7%AE"&gt;方差&lt;/a&gt;（Variance），应用数学里的专有名词。在概率论和统计学中，一个随机变量的方差描述的是它的离散程度，也就是该变量离其期望值的距离。一个实随机变量的方差也称为它的二阶矩或二阶中心动差，恰巧也是它的二阶累积量。这里把复杂说白了，就是将各个误差将之平方（而非取绝对值，使之肯定为正数），相加之后再除以总数，透过这样的方式来算出各个数据分布、零散（相对中心点）的程度。继续延伸的话，方差的算术平方根称为该随机变量的标准差（此为相对各个数据点间）。&lt;/p&gt;
+&lt;div class="math"&gt;$$\sigma^2=E[X^2]-(E …&lt;/div&gt;</summary><content type="html">&lt;p&gt;&lt;a href="https://zh.wikipedia.org/zh-cn/%E6%96%B9%E5%B7%AE"&gt;方差&lt;/a&gt;（Variance），应用数学里的专有名词。在概率论和统计学中，一个随机变量的方差描述的是它的离散程度，也就是该变量离其期望值的距离。一个实随机变量的方差也称为它的二阶矩或二阶中心动差，恰巧也是它的二阶累积量。这里把复杂说白了，就是将各个误差将之平方（而非取绝对值，使之肯定为正数），相加之后再除以总数，透过这样的方式来算出各个数据分布、零散（相对中心点）的程度。继续延伸的话，方差的算术平方根称为该随机变量的标准差（此为相对各个数据点间）。&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://zh.wikipedia.org/zh-cn/%E6%A8%99%E6%BA%96%E5%B7%AE"&gt;标准差&lt;/a&gt;（Standard Deviation，&lt;span class="caps"&gt;SD&lt;/span&gt;），数学符号 &lt;span class="math"&gt;\(\sigma\)&lt;/span&gt;（sigma），在概率统计中最常使用作为测量一组数值的离散程度之用。标准差定义：为方差开算术平方根，反映组内个体间的离散程度；标准差与期望值之比为标准离差率。&lt;/p&gt;
-&lt;h3 id="1ding-yi"&gt;1.定义&lt;/h3&gt;
+&lt;h3 id="1.ding yi"&gt;1.定义&lt;/h3&gt;
 &lt;p&gt;方差的定义如下公式：
 &lt;/p&gt;
 &lt;div class="math"&gt;$$Var(X)=\sigma^2=E[(X-\mu)^2]$$&lt;/div&gt;
@@ -2109,7 +2140,7 @@ In 15 times simulation,dirctly invest ETF exceed AIP's mean is 32.02%
 &lt;div class="math"&gt;$$SD(X) = \sigma = \sqrt{E(X-E(X))^2}$$&lt;/div&gt;
 &lt;div class="math"&gt;$$\sigma = \sqrt{\frac{\sum*{i=1}^NX_i^2}{N}-\mu^2}$$&lt;/div&gt;
 &lt;div class="math"&gt;$$\sigma = \sqrt{\frac{(\sum*{i=1}^{N}x_i^2-\mu^2)}{N}}$$&lt;/div&gt;
-&lt;h3 id="2zhun-bei-shu-ju"&gt;2.准备数据&lt;/h3&gt;
+&lt;h3 id="2.zhun bei shu ju"&gt;2.准备数据&lt;/h3&gt;
 &lt;p&gt;这里使用一个开源免费的股票数据模块 tushare，获取贵州茅台的数据，并截取数据的前 600 天，把数据平分为 2 部分。获取后的数据格式为&amp;nbsp;DataFrame。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;tushare&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;ts&lt;/span&gt;
 &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt; &lt;span class="kn"&gt;as&lt;/span&gt; &lt;span class="nn"&gt;np&lt;/span&gt;
@@ -2120,7 +2151,7 @@ In 15 times simulation,dirctly invest ETF exceed AIP's mean is 32.02%
 &lt;span class="n"&gt;stock_part2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;stock&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;iloc&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;stock&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;:]&lt;/span&gt;
 &lt;span class="n"&gt;stock_part2&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;300&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="3te-xing-yan-zheng"&gt;3.特性验证&lt;/h3&gt;
+&lt;h3 id="3.te xing yan zheng"&gt;3.特性验证&lt;/h3&gt;
 &lt;p&gt;对于方差的计算，我们可以把数据带入公式直接计算，python 代码可以这样写，这里使用的是无偏估计，所以分母是&amp;nbsp;N-1。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;stock&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;stock&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;stock&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -2250,7 +2281,7 @@ In 15 times simulation,dirctly invest ETF exceed AIP's mean is 32.02%
 &lt;li&gt;metavar -&amp;nbsp;使用消息中参数的名称。&lt;/li&gt;
 &lt;li&gt;dest -&amp;nbsp;要添加到由parse_args()返回的对象的属性的名称。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id="1-name-or-flags"&gt;1. name or&amp;nbsp;flags&lt;/h3&gt;
+&lt;h3 id="1. name or flags"&gt;1. name or&amp;nbsp;flags&lt;/h3&gt;
 &lt;p&gt;唯一的必填参数，可以创建位置参数（必填）和可选参数&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;parser&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;argparse&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ArgumentParser&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;prog&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'PROG'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'-s'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="s1"&gt;'--save'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -2260,7 +2291,7 @@ In 15 times simulation,dirctly invest ETF exceed AIP's mean is 32.02%
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;可选参数以&lt;code&gt;-&lt;/code&gt;或&lt;code&gt;--&lt;/code&gt;开始，其余的均为位置参数
 大部分情况下，未填的可选参数默认都是&lt;code&gt;None&lt;/code&gt;,如果有&lt;code&gt;--&lt;/code&gt;开始的参数，则参数名以后面的字符串命名。&lt;/p&gt;
-&lt;h3 id="2-action"&gt;2.&amp;nbsp;action&lt;/h3&gt;
+&lt;h3 id="2. action"&gt;2.&amp;nbsp;action&lt;/h3&gt;
 &lt;p&gt;action用于将命令和动作关联起来，常用的动作有如下几种：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;store -&amp;nbsp;仅保存参数后的值&lt;/li&gt;
@@ -2290,7 +2321,7 @@ In 15 times simulation,dirctly invest ETF exceed AIP's mean is 32.02%
 &lt;p&gt;只给出a1参数，arg1的值为0。
 没有给出a2参数，则a2的const没有被调用，使用default的值，当然default默认就是None，不写也可以。
 a3参数其实就是store_true的实现。&amp;nbsp;const和default的区别就是当命令给出但是后面未接值时，使用const值，如果命令那个都没有给出，则使用default的值。&lt;/p&gt;
-&lt;h3 id="3-nargs"&gt;3.&amp;nbsp;nargs&lt;/h3&gt;
+&lt;h3 id="3. nargs"&gt;3.&amp;nbsp;nargs&lt;/h3&gt;
 &lt;p&gt;nargs定义参数后面值的个数，可选值有几种：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
@@ -2309,7 +2340,7 @@ a3参数其实就是store_true的实现。&amp;nbsp;const和default的区别就�
 &lt;span class="n"&gt;Out&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt; &lt;span class="n"&gt;Namespace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a1&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'a'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'b'&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;args2&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;None&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;args3&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;'aa'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'bb'&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;结果很好理解，?可以配合const使用，其他的可以配合default使用，调用了就是一个列表，使用const或default就是一个值。&lt;/p&gt;
-&lt;h3 id="4-typehe-metavar"&gt;4.&amp;nbsp;type和metavar&lt;/h3&gt;
+&lt;h3 id="4. typehe metavar"&gt;4.&amp;nbsp;type和metavar&lt;/h3&gt;
 &lt;p&gt;这两个参数偶尔能用到，&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;parser&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;argparse&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ArgumentParser&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;prog&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;'PROG'&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;parser&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_argument&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'a1'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="nb"&gt;type&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -2328,7 +2359,7 @@ a3参数其实就是store_true的实现。&amp;nbsp;const和default的区别就�
   &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;a2&lt;/span&gt; &lt;span class="n"&gt;STR&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;args2&lt;/span&gt; &lt;span class="n"&gt;STR&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;metavar仅改变了help说明里的变量名。&lt;/p&gt;
-&lt;h3 id="can-kao-wen-dang"&gt;参考文档&lt;/h3&gt;
+&lt;h3 id="can kao wen dang"&gt;参考文档&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;a href="https://docs.python.org/3/library/argparse.html"&gt;官方文档&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://python.usyiyi.cn/translate/python_352/library/argparse.html"&gt;中文文档&lt;/a&gt;&lt;/li&gt;
@@ -2415,7 +2446,7 @@ axes.unicode_minus  : False
 Icon 是快捷方式的图标，没有的话可以去网上下载一个或者根据自己喜好随便放一个。
 更多内容可以参考这篇&lt;a href="https://wiki.archlinux.org/index.php/Desktop_entries_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)"&gt;Wiki&lt;/a&gt;&lt;/p&gt;</content><category term="linux"></category></entry><entry><title>VPS 搭梯子指南——shadowsocks+BBR+obfs</title><link href="https://www.solarck.com/shadowsocks-libev.html" rel="alternate"></link><published>2017-11-13T15:55:00+08:00</published><updated>2018-06-05T13:01:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2017-11-13:/shadowsocks-libev.html</id><summary type="html">&lt;p&gt;近期开会导致墙越来越高，迫不得已升级自建的 ss 服务，由于 shadowsocks 原版已经停更，shadowsocksR 也已经删库，所以就锁定 libev 版本。
 &lt;strong&gt;&lt;em&gt;注：以下服务器端内容请切换到 root&amp;nbsp;操作&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;h3 id="1-sheng-ji-debian"&gt;1. 升级&amp;nbsp;Debian&lt;/h3&gt;
+&lt;h3 id="1. sheng ji  debian"&gt;1. 升级&amp;nbsp;Debian&lt;/h3&gt;
 &lt;p&gt;在升级之前，我需要先把服务器从 Debian 8 升级到 Debian 9，如果不是 Debian&amp;nbsp;用户，或者不想升级的可以跳过，这一步不影响后续操作，但是部分代码可能需要修改。&lt;/p&gt;
 &lt;p&gt;首先要把 Debian 8&amp;nbsp;升级到最新版本&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;apt update
@@ -2424,7 +2455,7 @@ apt upgrade
 &lt;p&gt;备份源列表&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;cp /etc/apt/sources.list /etc/apt/sources.list-jessie …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;近期开会导致墙越来越高，迫不得已升级自建的 ss 服务，由于 shadowsocks 原版已经停更，shadowsocksR 也已经删库，所以就锁定 libev 版本。
 &lt;strong&gt;&lt;em&gt;注：以下服务器端内容请切换到 root&amp;nbsp;操作&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;h3 id="1-sheng-ji-debian"&gt;1. 升级&amp;nbsp;Debian&lt;/h3&gt;
+&lt;h3 id="1. sheng ji  debian"&gt;1. 升级&amp;nbsp;Debian&lt;/h3&gt;
 &lt;p&gt;在升级之前，我需要先把服务器从 Debian 8 升级到 Debian 9，如果不是 Debian&amp;nbsp;用户，或者不想升级的可以跳过，这一步不影响后续操作，但是部分代码可能需要修改。&lt;/p&gt;
 &lt;p&gt;首先要把 Debian 8&amp;nbsp;升级到最新版本&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;apt update
@@ -2443,7 +2474,7 @@ apt upgrade
  apt dist-upgrade
  apt autoremove
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="2-kai-qi-bbr"&gt;2. 开启 &lt;span class="caps"&gt;BBR&lt;/span&gt;&lt;/h3&gt;
+&lt;h3 id="2. kai qi  bbr"&gt;2. 开启 &lt;span class="caps"&gt;BBR&lt;/span&gt;&lt;/h3&gt;
 &lt;p&gt;使用一键脚本安装并开启 bbr，此步除 OpenVZ&amp;nbsp;以外的服务器都可以开启，跳过不影响后续内容。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget --no-check-certificate https://raw.githubusercontent.com/princelai/across/master/bbr.sh
 chmod +x bbr.sh
@@ -2453,13 +2484,13 @@ echo "net.ipv4.tcp_congestion_control=bbr" &amp;gt;&amp;gt; /etc/sysctl.conf
 sysctl -p
 lsmod | grep bbr
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="3-an-zhuang-shadowsocks-libev-he-simple-obfs-hun-yao"&gt;3. 安装 shadowsocks-libev 和 simple-obfs&amp;nbsp;混淆&lt;/h3&gt;
+&lt;h3 id="3. an zhuang  shadowsocks-libev he  simple-obfs hun yao"&gt;3. 安装 shadowsocks-libev 和 simple-obfs&amp;nbsp;混淆&lt;/h3&gt;
 &lt;p&gt;需要从 stretch-backports 库中安装，非 Debian 9 用户请参考&lt;a href="https://github.com/shadowsocks/shadowsocks-libev#pre-build-configure-guide"&gt;文档&lt;/a&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sh -c &lt;span class="s1"&gt;'printf "deb http://deb.debian.org/debian stretch-backports main" &amp;gt; /etc/apt/sources.list.d/stretch-backports.list'&lt;/span&gt;
 apt update
 apt -t stretch-backports install shadowsocks-libev simple-obfs
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="4-you-hua-tcp-wang-luo"&gt;4. 优化 &lt;span class="caps"&gt;TCP&lt;/span&gt;&amp;nbsp;网络&lt;/h3&gt;
+&lt;h3 id="4. you hua  tcp wang luo"&gt;4. 优化 &lt;span class="caps"&gt;TCP&lt;/span&gt;&amp;nbsp;网络&lt;/h3&gt;
 &lt;p&gt;编辑 sysctl 文件，把下面的内容复制过去，
 如果第二步中没有开启&amp;nbsp;bbr，那么请删除前两行。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;vim /etc/sysctl.conf&lt;/code&gt;&lt;/p&gt;
@@ -2489,7 +2520,7 @@ apt -t stretch-backports install shadowsocks-libev simple-obfs
 &lt;p&gt;更改保存后执行&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sysctl -p
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="5-pei-zhi-fu-wu-duan"&gt;5.&amp;nbsp;配置服务端&lt;/h3&gt;
+&lt;h3 id="5. pei zhi fu wu duan"&gt;5.&amp;nbsp;配置服务端&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;修改配置&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;编辑配置文件，填上自己的密码，端口建议使用 443，别的端口封杀的太严重。
 关于加密方式，现在新版都支持 &lt;span class="caps"&gt;AEAD&lt;/span&gt; 加密方式，详细内容请点&lt;a href="https://shadowsocks.org/en/spec/AEAD-Ciphers.html"&gt;这里&lt;/a&gt;。&lt;/p&gt;
@@ -2513,7 +2544,7 @@ apt -t stretch-backports install shadowsocks-libev simple-obfs
 systemctl start shadowsocks-libev &lt;span class="c1"&gt;#后台启动&lt;/span&gt;
 systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; shadowsocks-libev &lt;span class="c1"&gt;#开机启动&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="6-pei-zhi-ke-hu-duan"&gt;6.&amp;nbsp;配置客户端&lt;/h3&gt;
+&lt;h3 id="6. pei zhi ke hu duan"&gt;6.&amp;nbsp;配置客户端&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Windows&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;下载&lt;a href="https://github.com/shadowsocks/shadowsocks-windows/releases"&gt;shadowsocks-windows&lt;/a&gt;解压缩，
 下载&lt;a href="https://github.com/imgk/simple-obfs-Cygwin/releases"&gt;simple-obfs&lt;/a&gt;中的 obfs-local.exe 和 msys-2.0.dll 放到 shadowsocks-windows 目录中,obfs-host 随意写一个中国可以访问的网站。
@@ -2563,10 +2594,10 @@ sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt;  shadowsocks-libev@lib
 &lt;p&gt;其他内容请参考&lt;a href="https://wiki.archlinux.org/index.php/Shadowsocks_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E5.91.BD.E4.BB.A4.E8.A1.8C"&gt;Archlinux Wiki&lt;/a&gt;
 shadowsocks-qt5 目前功能严重缺失，不建议使用，Linux&amp;nbsp;平台最好是命令行模式&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif?hl=zh-CN"&gt;SwitchyOmega&lt;/a&gt;是目前 Chome 最好的代理插件，可以在&lt;a href="https://www.switchyomega.com/download.html"&gt;官网&lt;/a&gt;下载最新版本安装。&lt;/p&gt;
-&lt;h3 id="7android-ke-hu-duan-pei-zhi"&gt;7.Android&amp;nbsp;客户端配置&lt;/h3&gt;
+&lt;h3 id="7.android ke hu duan pei zhi"&gt;7.Android&amp;nbsp;客户端配置&lt;/h3&gt;
 &lt;p&gt;如果 Android 手机可以访问 Google Play，则可以直接在上面搜 shadowsocks 和 obfs&amp;nbsp;分别安装后再配置即可。&lt;/p&gt;
 &lt;p&gt;如果当前手机不能访问 Play，可以在 github releases 上分别下载&lt;a href="https://github.com/shadowsocks/shadowsocks-android/releases"&gt;shadowsocks-android&lt;/a&gt;和&lt;a href="https://github.com/shadowsocks/simple-obfs-android/releases"&gt;simple-obfs-android&lt;/a&gt;，安装后再配置自己的服务端信息。&lt;/p&gt;
-&lt;h3 id="8socks5-zhuan-httphttps"&gt;8.socks5 转&amp;nbsp;http/https&lt;/h3&gt;
+&lt;h3 id="8.socks5 zhuan  http/https"&gt;8.socks5 转&amp;nbsp;http/https&lt;/h3&gt;
 &lt;p&gt;实际使用中，经常会遇到命令行终端或本地程序需要代理，但是他们只支持 http 或 https 协议，所以就需要把 socks5 协议的代理转换协议，以 Archlinux&amp;nbsp;为例，方法也很简单。&lt;/p&gt;
 &lt;p&gt;安装&amp;nbsp;privoxy&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo pacman -S privoxy
@@ -2584,7 +2615,7 @@ sudo systemctl restart privoxy
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;https_proxy&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;127&lt;/span&gt;.0.0.1:8118
 &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;http_proxy&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;127&lt;/span&gt;.0.0.1:8118
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="9-fu-wu-qi-duan-chang-yong-de-ming-ling"&gt;9.&amp;nbsp;服务器端常用的命令&lt;/h3&gt;
+&lt;h3 id="9. fu wu qi duan chang yong de ming ling"&gt;9.&amp;nbsp;服务器端常用的命令&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;#测试ss+obfs是否正常启动&lt;/span&gt;
 ss-server -c config.json --plugin obfs-server --plugin-opts &lt;span class="s2"&gt;"obfs=http"&lt;/span&gt;
 &lt;span class="c1"&gt;#查看obfs的进程编号&lt;/span&gt;
@@ -2594,7 +2625,7 @@ ps ax&lt;span class="p"&gt;|&lt;/span&gt;grep ss-server
 &lt;span class="c1"&gt;#查看ss监听端口&lt;/span&gt;
 netstat -nlp &lt;span class="p"&gt;|&lt;/span&gt;grep ss-server
 &lt;/pre&gt;&lt;/div&gt;</content><category term="shadowsocks"></category></entry><entry><title>配置 pip 和 conda</title><link href="https://www.solarck.com/config-pip-conda.html" rel="alternate"></link><published>2017-11-07T11:43:00+08:00</published><updated>2017-11-07T11:43:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2017-11-07:/config-pip-conda.html</id><summary type="html">&lt;p&gt;首先需要确认已经安装 Python 环境，建议用于科学计算的朋友下载安装&lt;a href="https://www.anaconda.com/download/"&gt;Anaconda&lt;/a&gt;或者&lt;a href="https://conda.io/miniconda.html"&gt;Miniconda&lt;/a&gt;。&lt;/p&gt;
-&lt;h3 id="huan-jing-bian-liang-he-qi-yong-pei-zhi"&gt;环境变量和启用配置&lt;/h3&gt;
+&lt;h3 id="huan jing bian liang he qi yong pei zhi"&gt;环境变量和启用配置&lt;/h3&gt;
 &lt;p&gt;安装好后还需要把安装路径添加到系统环境变量&lt;/p&gt;
 &lt;p&gt;Linux&amp;nbsp;用户查看系统环境变量&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;$PATH&lt;/span&gt;
@@ -2612,7 +2643,7 @@ netstat -nlp &lt;span class="p"&gt;|&lt;/span&gt;grep ss-server
 &lt;p&gt;如果没有效果，可是尝试编辑~/.profile 或 ~/.bash_profile 文件
 zsh 或其他 shell&amp;nbsp;用户可以自行修改&lt;/p&gt;
 &lt;p&gt;Windows 用户在 cmd 执行如下命令，如果不是默认安装到用户目录 …&lt;/p&gt;</summary><content type="html">&lt;p&gt;首先需要确认已经安装 Python 环境，建议用于科学计算的朋友下载安装&lt;a href="https://www.anaconda.com/download/"&gt;Anaconda&lt;/a&gt;或者&lt;a href="https://conda.io/miniconda.html"&gt;Miniconda&lt;/a&gt;。&lt;/p&gt;
-&lt;h3 id="huan-jing-bian-liang-he-qi-yong-pei-zhi"&gt;环境变量和启用配置&lt;/h3&gt;
+&lt;h3 id="huan jing bian liang he qi yong pei zhi"&gt;环境变量和启用配置&lt;/h3&gt;
 &lt;p&gt;安装好后还需要把安装路径添加到系统环境变量&lt;/p&gt;
 &lt;p&gt;Linux&amp;nbsp;用户查看系统环境变量&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;$PATH&lt;/span&gt;
@@ -2633,7 +2664,7 @@ zsh 或其他 shell&amp;nbsp;用户可以自行修改&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;set&lt;/span&gt; &lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;%USERPROFILE%&lt;span class="se"&gt;\A&lt;/span&gt;naconda3&lt;span class="p"&gt;;&lt;/span&gt;%USERPROFILE%&lt;span class="se"&gt;\A&lt;/span&gt;naconda3&lt;span class="se"&gt;\L&lt;/span&gt;ibrary&lt;span class="se"&gt;\b&lt;/span&gt;in&lt;span class="p"&gt;;&lt;/span&gt;%USERPROFILE%&lt;span class="se"&gt;\A&lt;/span&gt;naconda3&lt;span class="se"&gt;\S&lt;/span&gt;cripts&lt;span class="p"&gt;;&lt;/span&gt;%PATH%
 activate root
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="geng-huan-yuan"&gt;更换源&lt;/h3&gt;
+&lt;h3 id="geng huan yuan"&gt;更换源&lt;/h3&gt;
 &lt;p&gt;conda 官方源非常慢，甚至有时候经常无法连接；pip&amp;nbsp;时快时慢，也是经常无法连接，所以我们把更新源换为国内的，加快更新速度。&lt;/p&gt;
 &lt;h4 id="pip"&gt;&lt;strong&gt;pip&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;目前国内常用的 pip 源有&lt;a href="http://mirrors.aliyun.com/help/pypi"&gt;阿里云&lt;/a&gt;和豆瓣。&lt;/p&gt;
@@ -2659,7 +2690,7 @@ conda config --set show_channel_urls yes
 conda config --add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
 conda config --set show_channel_urls yes
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="geng-xin_1"&gt;更新&lt;/h3&gt;
+&lt;h3 id="geng xin_1"&gt;更新&lt;/h3&gt;
 &lt;h4 id="conda_1"&gt;&lt;strong&gt;conda&lt;/strong&gt;&lt;/h4&gt;
 &lt;p&gt;conda&amp;nbsp;常用更新命令&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;conda update XXX        &lt;span class="c1"&gt;#更新XXX包&lt;/span&gt;
@@ -2686,22 +2717,22 @@ pip list &amp;gt; b.txt    &lt;span class="c1"&gt;#列出所有已安装的包&l
 pip list -o         &lt;span class="c1"&gt;#列出所有可更新的包&lt;/span&gt;
 pip show XXX        &lt;span class="c1"&gt;#查看包的路径和依赖等信息&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;</content><category term="pip"></category><category term="conda"></category><category term="python"></category></entry><entry><title>openwrt 开启 Samba 作为共享中心</title><link href="https://www.solarck.com/openwrt-samba.html" rel="alternate"></link><published>2014-01-05T01:29:00+08:00</published><updated>2014-01-05T01:29:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2014-01-05:/openwrt-samba.html</id><summary type="html">&lt;p&gt;为 Openwrt 接入一个大 U 盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机 &lt;span class="caps"&gt;BT&lt;/span&gt;&amp;nbsp;下载提供一个基础。&lt;/p&gt;
-&lt;h3 id="an-zhuang"&gt;安装&lt;/h3&gt;
+&lt;h3 id="an zhuang"&gt;安装&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg install samba36-server luci-app-samba
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id="pei-zhi-wen-jian"&gt;配置文件&lt;/h4&gt;
+&lt;h4 id="pei zhi wen jian"&gt;配置文件&lt;/h4&gt;
 &lt;p&gt;samba&amp;nbsp;的配置文件只有两个，而且默认配置稍作修改就可以使用&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;root@openwrt:~# vi /etc/samba/smb.conf.template
 &lt;span class="o"&gt;[&lt;/span&gt;global&lt;span class="o"&gt;]&lt;/span&gt;
     netbios &lt;span class="nv"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; OpenWrt
     display &lt;span class="nv"&gt;charset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; UTF-8
     &lt;span class="nv"&gt;interfaces&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1/8 lo &lt;span class="m"&gt;192&lt;/span&gt;.168.3.1/24 fd73:3a9a:156 …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;为 Openwrt 接入一个大 U 盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机 &lt;span class="caps"&gt;BT&lt;/span&gt;&amp;nbsp;下载提供一个基础。&lt;/p&gt;
-&lt;h3 id="an-zhuang"&gt;安装&lt;/h3&gt;
+&lt;h3 id="an zhuang"&gt;安装&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg install samba36-server luci-app-samba
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id="pei-zhi-wen-jian"&gt;配置文件&lt;/h4&gt;
+&lt;h4 id="pei zhi wen jian"&gt;配置文件&lt;/h4&gt;
 &lt;p&gt;samba&amp;nbsp;的配置文件只有两个，而且默认配置稍作修改就可以使用&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;root@openwrt:~# vi /etc/samba/smb.conf.template
 &lt;span class="o"&gt;[&lt;/span&gt;global&lt;span class="o"&gt;]&lt;/span&gt;
@@ -2765,7 +2796,7 @@ config &lt;span class="s1"&gt;'sambashare'&lt;/span&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/etc/init.d/samba restart
 /etc/init.d/samba &lt;span class="nb"&gt;enable&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="fang-wen_1"&gt;访问&lt;/h3&gt;
+&lt;h3 id="fang wen_1"&gt;访问&lt;/h3&gt;
 &lt;p&gt;Windows 用户很容易访问，在网络邻居（网络）里就可以看到 &lt;span class="caps"&gt;WORKGROUP&lt;/span&gt;&amp;mdash;&amp;gt;&lt;span class="caps"&gt;OPENWRT&lt;/span&gt;&amp;mdash;&amp;gt;Share 文件夹了，但是 linux 用户需要一些其他命令。&lt;br/&gt;
 &lt;strong&gt;1. 安装&amp;nbsp;g2sc&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yaourt -S g2sc
@@ -2804,7 +2835,7 @@ put ****    &lt;span class="c1"&gt;#上传某个文件&lt;/span&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;kevin@kevin:pts/2 ~$: mkdir /mnt/samba
 kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="wan-cheng"&gt;完成&lt;/h3&gt;
+&lt;h3 id="wan cheng"&gt;完成&lt;/h3&gt;
 &lt;p&gt;由于安装了 Luci，所以开启了 uhttp 服务，把共享目录链接到/www 目录同样可以通过浏览器直接下载，相当于把 Samba 目录同样做成了 &lt;span class="caps"&gt;FTP&lt;/span&gt;&amp;nbsp;目录。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;kevin@kevin:pts/2 ~$: ln -s /share /www/share
 &lt;/pre&gt;&lt;/div&gt;
@@ -2819,7 +2850,7 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
 而从官方的文档来看，目前 pivot-root 已经没有以前的缺点和不足，选择哪个已经是个人需求而不是技术问题了。&lt;br/&gt;
 网上大部分文章帖子都是 2009-2010 年间的，所以大部分可能都是 pivot-overlay 的。如果对这部分不太理解，请仔细阅读官方 Wiki：&lt;a href="http://wiki.openwrt.org/doc/howto/extroot/extroot.theory"&gt;ExtRoot: How it works&lt;/a&gt;,&lt;a href="http://wiki.openwrt.org/doc/techref/flash.layout"&gt;The OpenWrt Flash&amp;nbsp;Layout&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h3 id="an-zhuang-bi-yao-de-bao"&gt;安装必要的包&lt;/h3&gt;
+&lt;h3 id="an zhuang bi yao de bao"&gt;安装必要的包&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs-ext4 block-mount
 &lt;/pre&gt;&lt;/div&gt;
@@ -2827,7 +2858,7 @@ opkg install e2fsprogs kmod-usb-core kmod-usb2 kmod-usb-storage usbutils kmod-fs
 kmod-usb2 只提供了 USb2.0 的驱动，如果你的是 &lt;span class="caps"&gt;USB1&lt;/span&gt;.0（1.1）的，还需要单独安装驱动。&lt;br/&gt;
 kmod-fs-ext4 是用来挂载 ext4 文件系统的，如果你想使用 ext3 文件格式就安装相应的包。&lt;br/&gt;
 usbutils 不是必装，仅提供了 lsusb&amp;nbsp;命令。&lt;/p&gt;
-&lt;h3 id="ge-shi-hua-u-pan"&gt;格式化 U&amp;nbsp;盘&lt;/h3&gt;
+&lt;h3 id="ge shi hua  u pan"&gt;格式化 U&amp;nbsp;盘&lt;/h3&gt;
 &lt;p&gt;插好 U&amp;nbsp;盘后，先查看下是否被系统识别出来&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;root@openwrt: ~# lsusb
 Bus &lt;span class="m"&gt;001&lt;/span&gt; Device &lt;span class="m"&gt;002&lt;/span&gt;: ID &lt;span class="m"&gt;0781&lt;/span&gt;:5571 SanDisk Corp. Cruzer Fit
@@ -2854,7 +2885,7 @@ mount --bind / /tmp/cproot
 tar -C /tmp/cproot -cvf - . &lt;span class="p"&gt;|&lt;/span&gt; tar -C /mnt/ -xf -
 umount /tmp/cproot
 &lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id="bian-ji-fstab"&gt;编辑&amp;nbsp;fstab&lt;/h3&gt;
+&lt;h3 id="bian ji  fstab"&gt;编辑&amp;nbsp;fstab&lt;/h3&gt;
 &lt;p&gt;我的系统默认没有/etc/config/fstab&amp;nbsp;文件，可以用命令生成一个&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;block detect &amp;gt; /etc/config/fstab
 &lt;/pre&gt;&lt;/div&gt;
@@ -2877,15 +2908,15 @@ tmpfs                    &lt;span class="m"&gt;61&lt;/span&gt;.7M      &lt;span 
 tmpfs                   &lt;span class="m"&gt;512&lt;/span&gt;.0K         &lt;span class="m"&gt;0&lt;/span&gt;    &lt;span class="m"&gt;512&lt;/span&gt;.0K   &lt;span class="m"&gt;0&lt;/span&gt;% /dev
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;大功告成，现在系统空间足够大了，任你怎么安装怎么下载。&lt;/p&gt;</content><category term="openwrt"></category></entry><entry><title>水星（Mercury）MW4530r 刷 Openwrt</title><link href="https://www.solarck.com/install-openwrt-on-mw4530r.html" rel="alternate"></link><published>2014-01-02T01:08:00+08:00</published><updated>2014-01-02T01:08:00+08:00</updated><author><name>Kevin Chen</name></author><id>tag:www.solarck.com,2014-01-02:/install-openwrt-on-mw4530r.html</id><summary type="html">&lt;p&gt;经过两天的不屑折腾，终于为我的 Mw4530r 安装上了&amp;nbsp;Openwrt。从最后安装成功往回看，其实整个过程非常简单，但是由于是第一次接触，走了不少弯路，本应该一个小时就完成的工作，却整整花了我两天时间。再次发篇文章庆祝下，也给其他朋友一些参考。&lt;/p&gt;
-&lt;h3 id="xia-zai-wen-jian"&gt;下载文件&lt;/h3&gt;
+&lt;h3 id="xia zai wen jian"&gt;下载文件&lt;/h3&gt;
 &lt;p&gt;水星这款路由器是 ar71xx 芯片的，因为较新，所以还没有官方的稳定版。在 Openwrt 的&lt;a href="http://downloads.openwrt.org/snapshots/trunk/ar71xx/"&gt;snapshots/trunk&lt;/a&gt;目录搜索下载我们需要的刷机文件，一般情况一个型号有两个文件，一个名字里带 factory，从其他固件系统刷 Openwrt 下载这个文件；一个名字带 sysupgrade，已经是 Openwrt&amp;nbsp;系统的用此文件升级。&lt;/p&gt;
-&lt;h3 id="shua-ji"&gt;刷机&lt;/h3&gt;
+&lt;h3 id="shua ji"&gt;刷机&lt;/h3&gt;
 &lt;p&gt;组装好路由器，接通电源，电脑网卡口连接路由器任意 Lan 口，打开浏览器访问http://192.168.1.1 就可以看见水星的原厂界面。利用原厂固件的升级功能，提交下载好的 …&lt;/p&gt;</summary><content type="html">&lt;p&gt;经过两天的不屑折腾，终于为我的 Mw4530r 安装上了&amp;nbsp;Openwrt。从最后安装成功往回看，其实整个过程非常简单，但是由于是第一次接触，走了不少弯路，本应该一个小时就完成的工作，却整整花了我两天时间。再次发篇文章庆祝下，也给其他朋友一些参考。&lt;/p&gt;
-&lt;h3 id="xia-zai-wen-jian"&gt;下载文件&lt;/h3&gt;
+&lt;h3 id="xia zai wen jian"&gt;下载文件&lt;/h3&gt;
 &lt;p&gt;水星这款路由器是 ar71xx 芯片的，因为较新，所以还没有官方的稳定版。在 Openwrt 的&lt;a href="http://downloads.openwrt.org/snapshots/trunk/ar71xx/"&gt;snapshots/trunk&lt;/a&gt;目录搜索下载我们需要的刷机文件，一般情况一个型号有两个文件，一个名字里带 factory，从其他固件系统刷 Openwrt 下载这个文件；一个名字带 sysupgrade，已经是 Openwrt&amp;nbsp;系统的用此文件升级。&lt;/p&gt;
-&lt;h3 id="shua-ji"&gt;刷机&lt;/h3&gt;
+&lt;h3 id="shua ji"&gt;刷机&lt;/h3&gt;
 &lt;p&gt;组装好路由器，接通电源，电脑网卡口连接路由器任意 Lan 口，打开浏览器访问http://192.168.1.1 就可以看见水星的原厂界面。利用原厂固件的升级功能，提交下载好的 Openwrt&amp;nbsp;刷机文件即可直接刷机，非常的方便。稍等片刻等待路由器自动重启，此时刷机完成。&lt;/p&gt;
-&lt;h3 id="chu-shi-hua"&gt;初始化&lt;/h3&gt;
+&lt;h3 id="chu shi hua"&gt;初始化&lt;/h3&gt;
 &lt;p&gt;Openwrt 的固件是不带 &lt;span class="caps"&gt;UI&lt;/span&gt; 界面的，在安装用户界面之前，用户需要先进行简单的初始化工作。&lt;br/&gt;
 使用 telnet&amp;nbsp;登陆路由器&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;telnet &lt;span class="m"&gt;192&lt;/span&gt;.168.1.1
@@ -2900,7 +2931,7 @@ tmpfs                   &lt;span class="m"&gt;512&lt;/span&gt;.0K         &lt;sp
 ssh root@192.168.1.1
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;到此我们已经成功初始化了&amp;nbsp;Openwrt。&lt;/p&gt;
-&lt;h3 id="wang-luo-pei-zhi"&gt;网络配置&lt;/h3&gt;
+&lt;h3 id="wang luo pei zhi"&gt;网络配置&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;强烈建议基础配置尤其是网络设置都使用 &lt;span class="caps"&gt;CLI&lt;/span&gt; 界面，切勿乱修改原始配置，我就在这里经历的惨痛的教训&lt;/strong&gt;&lt;br/&gt;
 我使用的是联通 &lt;span class="caps"&gt;ADSL&lt;/span&gt;，所以需要拨号（pppoe）才能上网。&lt;/p&gt;
 &lt;p&gt;配置网络连接，修改 wan&amp;nbsp;部分&lt;/p&gt;
@@ -2922,7 +2953,7 @@ ifup wan
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wifi detect &amp;gt; /etc/config/wireless
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;重启后，互联网和 wifi 都应该已经正常工作，wifi 的密码和名称我们之后可以在 &lt;span class="caps"&gt;UI&lt;/span&gt;&amp;nbsp;界面修改，接下来安装用户界面。&lt;/p&gt;
-&lt;h3 id="yong-hu-jie-mian"&gt;用户界面&lt;/h3&gt;
+&lt;h3 id="yong hu jie mian"&gt;用户界面&lt;/h3&gt;
 &lt;p&gt;安装&amp;nbsp;Luci&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;opkg update
 opkg install luci luci-ssl luci-i18n-chinese
@@ -2932,7 +2963,7 @@ opkg install luci luci-ssl luci-i18n-chinese
 /etc/init.d/uhttpd &lt;span class="nb"&gt;enable&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;打开浏览器输入http://192.168.1.1 ，就可以进入 WebUI&amp;nbsp;界面了，现在就可以向普通路由器一样进行管理了。&lt;/p&gt;
-&lt;h3 id="xiao-ti-shi"&gt;小提示&lt;/h3&gt;
+&lt;h3 id="xiao ti shi"&gt;小提示&lt;/h3&gt;
 &lt;blockquote&gt;
 &lt;p&gt;1.MW4530r 进入 failsafe 的方法是：路由器断电&amp;mdash;&amp;gt;接通电源&amp;mdash;&amp;gt;断续的按面板前的 &lt;span class="caps"&gt;WPS&lt;/span&gt; 键，直到 &lt;span class="caps"&gt;SYS&lt;/span&gt; 指示灯从慢闪变为快闪就是成功进入了 failsafe 模式了。&lt;br/&gt;
 2.初始配置尽量用 &lt;span class="caps"&gt;CLI&lt;/span&gt; 方式配置（或 uci），最好不要用 WebUI。&amp;nbsp;3.不要乱动乱删配置文件，尤其是端口路由表（switch0）。&lt;/p&gt;

@@ -116,6 +116,21 @@
 
     <article>
       <header>
+        <h2><a href="https://www.solarck.com/matplotlib-chinese-fonts.html" rel="bookmark" title="Permalink to matplotlib 中文字体配置">matplotlib&nbsp;中文字体配置</a></h2>
+      </header>
+      <div><p>matplotlib 是 Python 的优秀绘图包，但是不论是在 Windows 还是 Linux 中默认都是不支持中文的，尤其是在 Linux&nbsp;中设置更加复杂一点，设置方法如下：</p>
+<p>首先我们需要获取到 matplotlib&nbsp;配置文件的文件夹</p>
+<div class="highlight"><pre><span></span>python -c <span class="s2">"import matplotlib as mpl;print(mpl.get_configdir())"</span>
+/home/kevin/.config/matplotlib
+</pre></div>
+<p>然后需要一个默认的 matplotlibrc&nbsp;文件用于修改</p>
+<div class="highlight"><pre><span></span>python -c <span class="s2">"import matplotlib as mpl;print(mpl.matplotlib_fname())"</span>
+/opt/anaconda/lib/python3.6/site-packages/matplotlib/mpl-data/matplotlibrc …</pre></div></div>
+      <div><a class="btn btn-primary" href="https://www.solarck.com/matplotlib-chinese-fonts.html"><strong>➟ 查看全文</strong></a></div>
+    </article>
+    <hr/>
+    <article>
+      <header>
         <h2><a href="https://www.solarck.com/linux-desktop-entries.html" rel="bookmark" title="Permalink to 自定义 Linux 桌面启动程序">自定义 Linux&nbsp;桌面启动程序</a></h2>
       </header>
       <div><p>Anaconda 自带的 Spyder 是一个我最喜欢使用的 <span class="caps">IDE</span>，对于科学计算有很好的支持，但是在 Linux 上它并没有自带.desktop&nbsp;文件，所以并不能在程序列表里找到，每次都要手动在命令行执行才能开启，非常不方便，所以决定自己搜索下方法，自己给它添加一个桌面快捷方式。</p>
@@ -137,7 +152,7 @@
       </header>
       <div><p>近期开会导致墙越来越高，迫不得已升级自建的 ss 服务，由于 shadowsocks 原版已经停更，shadowsocksR 也已经删库，所以就锁定 libev 版本。
 <strong><em>注：以下服务器端内容请切换到 root&nbsp;操作</em></strong></p>
-<h3 id="1-sheng-ji-debian">1. 升级&nbsp;Debian</h3>
+<h3 id="1. sheng ji  debian">1. 升级&nbsp;Debian</h3>
 <p>在升级之前，我需要先把服务器从 Debian 8 升级到 Debian 9，如果不是 Debian&nbsp;用户，或者不想升级的可以跳过，这一步不影响后续操作，但是部分代码可能需要修改。</p>
 <p>首先要把 Debian 8&nbsp;升级到最新版本</p>
 <div class="highlight"><pre><span></span>apt update
@@ -153,7 +168,7 @@ apt upgrade
         <h2><a href="https://www.solarck.com/config-pip-conda.html" rel="bookmark" title="Permalink to 配置 pip 和 conda">配置 pip 和&nbsp;conda</a></h2>
       </header>
       <div><p>首先需要确认已经安装 Python 环境，建议用于科学计算的朋友下载安装<a href="https://www.anaconda.com/download/">Anaconda</a>或者<a href="https://conda.io/miniconda.html">Miniconda</a>。</p>
-<h3 id="huan-jing-bian-liang-he-qi-yong-pei-zhi">环境变量和启用配置</h3>
+<h3 id="huan jing bian liang he qi yong pei zhi">环境变量和启用配置</h3>
 <p>安装好后还需要把安装路径添加到系统环境变量</p>
 <p>Linux&nbsp;用户查看系统环境变量</p>
 <div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">$PATH</span>
@@ -179,11 +194,11 @@ zsh 或其他 shell&nbsp;用户可以自行修改</p>
         <h2><a href="https://www.solarck.com/openwrt-samba.html" rel="bookmark" title="Permalink to openwrt 开启 Samba 作为共享中心">openwrt 开启 Samba&nbsp;作为共享中心</a></h2>
       </header>
       <div><p>为 Openwrt 接入一个大 U 盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机 <span class="caps">BT</span>&nbsp;下载提供一个基础。</p>
-<h3 id="an-zhuang">安装</h3>
+<h3 id="an zhuang">安装</h3>
 <div class="highlight"><pre><span></span>opkg update
 opkg install samba36-server luci-app-samba
 </pre></div>
-<h4 id="pei-zhi-wen-jian">配置文件</h4>
+<h4 id="pei zhi wen jian">配置文件</h4>
 <p>samba&nbsp;的配置文件只有两个，而且默认配置稍作修改就可以使用</p>
 <div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/samba/smb.conf.template
 <span class="o">[</span>global<span class="o">]</span>
@@ -191,18 +206,6 @@ opkg install samba36-server luci-app-samba
     display <span class="nv">charset</span> <span class="o">=</span> UTF-8
     <span class="nv">interfaces</span> <span class="o">=</span> <span class="m">127</span>.0.0.1/8 lo <span class="m">192</span>.168.3.1/24 fd73:3a9a:156 …</pre></div></div>
       <div><a class="btn btn-primary" href="https://www.solarck.com/openwrt-samba.html"><strong>➟ 查看全文</strong></a></div>
-    </article>
-    <hr/>
-    <article>
-      <header>
-        <h2><a href="https://www.solarck.com/openwrt-extroot.html" rel="bookmark" title="Permalink to 用 extroot 为 openwrt 扩充存储空间">用 extroot 为 openwrt&nbsp;扩充存储空间</a></h2>
-      </header>
-      <div><p>水星这款 MW4350r 内存为 128M，运行很多程序都不在话下。但是却只提供了 8M Flash 存储空间，而路由器系统还占了 1.9M，剩下的 5M 空间不足以支持安装很多软件，比如我在安装 python 的时候就报错提示存储空间不足，这确实很郁闷，但幸好 Openwrt 还提供了 extroot 方式来扩展存储，来发挥路由器和 Openwrt&nbsp;系统的真正实力。</p>
-<p><strong>pivot-overlay 还是&nbsp;pivot-root？</strong></p>
-<blockquote>
-<p>我把两种方式都试过，pivot-overlay 方式不能够把安装程序的位置移到 <span class="caps">USB</span> 存储装置上，但是 pivot-root 方式可以，所以我选择了后者。pivot-root 方式使/覆盖掉了/overlay 成为 rootfs，我认为这种方式更接近原生的 Linux 系统。<br/>
-而从官方的文档来看，目前 …</p></blockquote></div>
-      <div><a class="btn btn-primary" href="https://www.solarck.com/openwrt-extroot.html"><strong>➟ 查看全文</strong></a></div>
     </article>
     <hr/>
 
@@ -281,14 +284,6 @@ opkg install samba36-server luci-app-samba
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

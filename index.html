@@ -116,6 +116,37 @@
 
     <article>
       <header>
+        <h2><a href="https://www.solarck.com/tshark-freq-cmd.html" rel="bookmark" title="Permalink to tshark常用命令详解">tshark常用命令详解</a></h2>
+      </header>
+      <div><h3 id="wiresharkjian jie">Wireshark简介</h3>
+<blockquote>
+<p>Wireshark&nbsp;是一款免费开源的包分析器。可用于网络排错、网络分析、软件和通讯协议开发以及教学等。tshark是wireshark的cli版本</p>
+</blockquote>
+<h3 id="an zhuang">安装</h3>
+<p>Archlinux</p>
+<div class="highlight"><pre><span></span>yaourt -Syu wireshark-cli
+</pre></div>
+<p>Debian</p>
+<div class="highlight"><pre><span></span>apt-get update
+apt-get install tshark
+</pre></div>
+<p>查看权限</p>
+<div class="highlight"><pre><span></span>$ getcap /usr/bin/dumpcap
+/usr/bin/dumpcap <span class="o">=</span> cap_net_admin,cap_net_raw+eip
+</pre></div>
+<p>dumpcap的位置也可能在<code>/usr/sbin/dumpcap</code>，如果输出结果不像上面那样，则还需要设置权限</p>
+<div class="highlight"><pre><span></span># setcap 'CAP_NET_RAW+eip CAP_NET_ADMIN+eip' /usr/sbin/dumpcap
+</pre></div>
+<p>把用户添加至wireshark用户组</p>
+<div class="highlight"><pre><span></span># gpasswd -a username wireshark
+</pre></div>
+<p>切换至新用户组</p>
+<div class="highlight"><pre><span></span>$ newgrp …</pre></div></div>
+      <div><a class="btn btn-primary" href="https://www.solarck.com/tshark-freq-cmd.html"><strong>➟ 查看全文</strong></a></div>
+    </article>
+    <hr/>
+    <article>
+      <header>
         <h2><a href="https://www.solarck.com/gift-card-discount-value.html" rel="bookmark" title="Permalink to 充值卡折现价值分析">充值卡折现价值分析</a></h2>
       </header>
       <div><p>前几天，媳妇把收到的一条短信转给我，问我值不值，我的第一反应当然是不值，这种预存方式都是欺负不懂时间价值的人玩的把戏。为了说服她，特地手算折现，但是发现，嗯？好像还是挺值的啊。于是就有了这篇文章，把计算的完整思路和代码贴出来。</p>
@@ -132,61 +163,7 @@
     <span class="k">def</span> <span class="nf">discount</span><span class="p">():</span>
         <span class="n">fv</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
             <span class="n">cash_flow</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">year_yield</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">y</span> <span class="o">/</span> <span class="mi">12</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">12</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="k">return …</span></pre></div><script type='text/javascript'>if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var align = "center",
-        indent = "0em",
-        linebreak = "false";
-
-    if (false) {
-        align = (screen.width < 768) ? "left" : align;
-        indent = (screen.width < 768) ? "0em" : indent;
-        linebreak = (screen.width < 768) ? 'true' : linebreak;
-    }
-
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: '"+ align +"'," +
-        "    displayIndent: '"+ indent +"'," +
-        "    showMathMenu: true," +
-        "    messageStyle: 'normal'," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
-        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
-        "    }, " +
-        "}); " +
-        "if ('default' !== 'default') {" +
-            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
-                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
-                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
-                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
-                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
-                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
-            "});" +
-        "}";
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-</script></div>
+        <span class="k">return …</span></pre></div></div>
       <div><a class="btn btn-primary" href="https://www.solarck.com/gift-card-discount-value.html"><strong>➟ 查看全文</strong></a></div>
     </article>
     <hr/>
@@ -194,16 +171,16 @@
       <header>
         <h2><a href="https://www.solarck.com/upgrade-lede-to-1806.html" rel="bookmark" title="Permalink to 升级 Openwrt/LEDE 大版本至 18.06">升级 Openwrt/<span class="caps">LEDE</span> 大版本至&nbsp;18.06</a></h2>
       </header>
-      <div><h1 id="xia-zai-sheng-ji-bao">下载升级包</h1>
+      <div><h1 id="xia zai sheng ji bao">下载升级包</h1>
 <p>首先下载新版文件，点击下方链接中任意一个，进入你的路由器架构，然后搜索路由器型号，如果你已经是 Openwrt/<span class="caps">LEDE</span>&nbsp;系统，可以下载升级包*-squashfs-sysupgrade.bin，如果不是，则要下载完整安装包*-squashfs-factory.img。</p>
 <p><a href="https://downloads.openwrt.org/releases/18.06.0/targets/">官方下载</a></p>
 <p><a href="https://mirrors.ustc.edu.cn/lede/releases/18.06.0/targets/">中科大</a></p>
 <p><a href="https://mirrors.tuna.tsinghua.edu.cn/lede/releases/18.06.0/targets">清华大学</a></p>
-<h1 id="bei-fen-geng-xin">备份 <span class="amp">&amp;</span>&nbsp;更新</h1>
+<h1 id="bei fen  &amp; geng xin">备份 <span class="amp">&amp;</span>&nbsp;更新</h1>
 <p>下载好文件后，进入路由器 Luci 界面，System &mdash;-&gt; Backup / Flash&nbsp;Firmware</p>
-<p><img alt="backup and flash" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-backup-flash.png"/></p>
+<p><img alt="backup and flash" src="https://ws1.sinaimg.cn/large/65f2a787ly1fxa2pretyzj20qi0jugnh.jpg"/></p>
 <p>建议先备份一份配置到本地，备份好后，上传文件，开刷！等待路由器重启后进入后面的步骤。</p>
-<h1 id="geng-xin-yuan">更新源</h1>
+<h1 id="geng xin yuan">更新源</h1>
 <p>关于详细的如何更换源操作，我在<a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT 路由器打造家庭媒体影音中心（一）</a>中有写，这里仅给出自定义源文件的内容。</p>
 <p><code>vim /etc/opkg/customfeeds.conf</code></p>
 <div class="highlight"><pre><span></span><span class="c1">#Tsinghua</span>
@@ -216,8 +193,8 @@
         <h2><a href="https://www.solarck.com/compile-tensorflow-gpu.html" rel="bookmark" title="Permalink to 编译 Tensorflow 1.10 + CUDA9.2 + MKL">编译 Tensorflow 1.10 + <span class="caps">CUDA9</span>.2 + <span class="caps">MKL</span></a></h2>
       </header>
       <div><p>我的电脑系统是基于 Archlinux 的 Manjaro，软件包更新的比较激进，很早就已经是 <span class="caps">CUDA</span> 9.2 了，而目前 Tensorflow 的官方编译版本对 <span class="caps">CUDA</span> 的支持还只停留在 <span class="caps">CUDA</span> 9.0。由于还不太会用 mxnet 和 pytorch，这时倍加想念 Keras 的简单。最近忙里偷闲研究了一下编译安装&nbsp;Tensorflow，发现还挺简单的，把成功的喜悦分享出来，也供有需要的朋友参考。</p>
-<h1 id="cha-kan-xi-tong-xin-xi">查看系统信息</h1>
-<h3 id="cha-kan-xi-tong-jia-gou-he-fa-xing-ban-ben">查看系统架构和发行版本</h3>
+<h1 id="cha kan xi tong xin xi">查看系统信息</h1>
+<h3 id="cha kan xi tong jia gou he fa xing ban ben">查看系统架构和发行版本</h3>
 <p>我用的 Manjaro&nbsp;x86_64</p>
 <p><code>uname -m &amp;&amp; cat /etc/*release</code></p>
 <div class="highlight"><pre><span></span>x86_64
@@ -232,40 +209,15 @@ DISTRIB_CODENAME …</pre></div></div>
       <header>
         <h2><a href="https://www.solarck.com/systemd-wait-network-online.html" rel="bookmark" title="Permalink to 解决 Haproxy 用 Systemd 启动失败的问题">解决 Haproxy 用 Systemd&nbsp;启动失败的问题</a></h2>
       </header>
-      <div><h1 id="wen-ti-miao-shu">问题描述</h1>
+      <div><h1 id="wen ti miao shu">问题描述</h1>
 <p>配置好 Haproxy 的配置文件，手动可以无错误开启，但是<code>Systemctl enable haproxy.service</code>开机启动每次都报错，系统启动后，手动开启还是没有问题。</p>
-<h1 id="fen-xi-yuan-yin">分析原因</h1>
-<h3 id="haproxy-pei-zhi-wen-ti">haproxy&nbsp;配置问题</h3>
+<h1 id="fen xi yuan yin">分析原因</h1>
+<h3 id="haproxy pei zhi wen ti">haproxy&nbsp;配置问题</h3>
 <p><code>/etc/haproxy.cfg</code>是配置文件，因为手动指定配合文件可以启动，而且测试配置文件也没有报错或警报，所以首先排除是配置的问题。</p>
-<h3 id="systemd-fu-wu-pei-zhi-wen-ti">systemd&nbsp;服务配置问题</h3>
+<h3 id="systemd fu wu pei zhi wen ti">systemd&nbsp;服务配置问题</h3>
 <p><code>haproxy.service</code>是 systemd 用来启动服务的配置文件，第一眼看配置后，以为是创建 <span class="caps">PID</span> 没有权限，增加<code>User=root</code>字段，但是重启后依然报错。原版配置只有<code>After=network.target</code>，手动添加<code>Wants=network.target</code>重启后，依然报错。</p>
-<h3 id="cha-kan-ri-zhi">查看日志 …</h3></div>
+<h3 id="cha kan ri zhi">查看日志 …</h3></div>
       <div><a class="btn btn-primary" href="https://www.solarck.com/systemd-wait-network-online.html"><strong>➟ 查看全文</strong></a></div>
-    </article>
-    <hr/>
-    <article>
-      <header>
-        <h2><a href="https://www.solarck.com/v2ray-quick-config.html" rel="bookmark" title="Permalink to 快速配置V2ray">快速配置V2ray</a></h2>
-      </header>
-      <div><h1 id="fu-wu-qi-duan-pei-zhi">服务器端配置</h1>
-<p>服务器系统使用的是Debian 9&nbsp;x86_64，Ubuntu大部分操作都通用。如果是CentOS的话，该文章仅作为参考。</p>
-<h3 id="you-hua-wang-luo">优化网络</h3>
-<p>主要涉及bbr的安装配置，需要VPS是KVM架构，具体可以参照<a href="https://www.solarck.com/shadowsocks-libev.html">之前的文章</a>。</p>
-<h3 id="an-zhuang-v2ray">安装V2ray</h3>
-<p>官方提供了安装脚本，需要系统使用systemd管理系统</p>
-<div class="highlight"><pre><span></span>wget https://install.direct/go.sh
-bash go.sh
-</pre></div>
-<p>安装好后，主要文件如下：</p>
-<blockquote>
-<p><code>/etc/systemd/system/v2ray.service</code>：启动服务</p>
-<p><code>/etc/v2ray/config.json</code>：配置文件</p>
-<p><code>/usr/bin/v2ray/v2ray</code>：主程序</p>
-</blockquote>
-<h3 id="tlsyu-ming-zheng-shu">TLS域名证书</h3>
-<p>因为最终配置要用到TLS链接，在这步之前，你需要一个域名，免费的也无所谓。</p>
-<p>工具使用<a href="https://github.com/Neilpang/acme.sh/wiki">acme.sh …</a></p></div>
-      <div><a class="btn btn-primary" href="https://www.solarck.com/v2ray-quick-config.html"><strong>➟ 查看全文</strong></a></div>
     </article>
     <hr/>
 
@@ -337,14 +289,6 @@ bash go.sh
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

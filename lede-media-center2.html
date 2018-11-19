@@ -120,12 +120,12 @@
   
 
   <div>
-    <h1 id="usb-qu-dong"><span class="caps">USB</span>&nbsp;驱动</h1>
-<h3 id="cha-kan-yi-an-zhuang-de-qu-dong">查看已安装的驱动</h3>
+    <h1 id="usb qu dong"><span class="caps">USB</span>&nbsp;驱动</h1>
+<h3 id="cha kan yi an zhuang de qu dong">查看已安装的驱动</h3>
 <div class="highlight"><pre><span></span>opkg update
 opkg list-installed | grep usb
 </pre></div>
-<h3 id="an-zhuang-qu-dong-he-gong-ju">安装驱动和工具</h3>
+<h3 id="an zhuang qu dong he gong ju">安装驱动和工具</h3>
 <p>如果下列驱动未出现在上一步的结果中，请务必首先安装缺失的驱动</p>
 <div class="highlight"><pre><span></span>opkg install kmod-usb-core kmod-usb-storage
 </pre></div>
@@ -134,7 +134,7 @@ opkg list-installed | grep usb
 <p><code>kmod-usb2</code>:<span class="caps">WRT1900ACS</span> 有一个 <span class="caps">USB2</span>.0/eSATA&nbsp;口，可以不安装</p>
 <p><code>kmod-ata-marvell-sata</code>:Marvell <span class="caps">SATA</span>&nbsp;接口驱动，可以不安装</p>
 <p>网上搜到的教程和官方指南里还让安装一些其他的应用，但这些都是不必要或已被编译至内核中，包括：<code>kmod-usb-ohci</code>、<code>kmod-usb-uhci</code>、<code>kmod-usb3</code>、<code>kmod-usb-storage-uas</code></p>
-<h3 id="an-zhuang-xiang-guan-gong-ju">安装相关工具</h3>
+<h3 id="an zhuang xiang guan gong ju">安装相关工具</h3>
 <div class="highlight"><pre><span></span>opkg install usbutils block-mount e2fsprogs kmod-fs-ext4 gdisk fdisk
 </pre></div>
 <p><code>mount-utils</code>:提供&nbsp;unmount,findmnt</p>
@@ -153,8 +153,8 @@ block info <span class="p">|</span> grep <span class="s2">"/dev/sd"</span>
 </pre></div>
 <p><em>小提示：硬盘格式化为什么格式最好？</em></p>
 <p>在 Linux 和 <span class="caps">LEDE</span> 平台上，微软的 <span class="caps">NTFS</span> 和 <span class="caps">FAT32</span> 绝对不是一个好的格式，设计的优劣不谈，这两个格式不是 Linux 平台原生支持的，安装额外的驱动可能会带来发热、读写速度慢、不稳定等多种负面效果。所以，对于机械硬盘来说，<span class="caps">EXT4</span> 和 <span class="caps">BTRFS</span> 是最好的，对于 <span class="caps">SSD</span> 来说，<span class="caps">F2FS</span>&nbsp;格式是最好的。</p>
-<h1 id="ying-pan-xiang-guan-cao-zuo_1">硬盘相关操作</h1>
-<h3 id="ying-pan-fen-qu">硬盘分区</h3>
+<h1 id="ying pan xiang guan cao zuo_1">硬盘相关操作</h1>
+<h3 id="ying pan fen qu">硬盘分区</h3>
 <div class="highlight"><pre><span></span>gdisk /dev/sda
 </pre></div>
 <p>根据软件提示进行操作，主要命令有：</p>
@@ -164,7 +164,7 @@ block info <span class="p">|</span> grep <span class="s2">"/dev/sd"</span>
 <p><code>p</code>:打印分区列表</p>
 <p><code>?</code>:查看帮助</p>
 <p>这里我把一块硬盘分为两个区<code>/dev/sda1</code>，<code>/dev/sda2</code>，分区 1 大小 700G，分区 2 大小 231G，总计&nbsp;1T。</p>
-<h3 id="ge-shi-hua-ying-pan">格式化硬盘</h3>
+<h3 id="ge shi hua ying pan">格式化硬盘</h3>
 <div class="highlight"><pre><span></span>mkfs.ext4 /dev/sda1
 mkfs.ext4 /dev/sda2
 </pre></div>
@@ -173,7 +173,7 @@ mkfs.ext4 /dev/sda2
 opkg install kmod-fs-f2fs
 mkfs.f2fs /dev/sda1
 </pre></div>
-<h3 id="zi-dong-gua-zai-fen-qu">自动挂载分区</h3>
+<h3 id="zi dong gua zai fen qu">自动挂载分区</h3>
 <p>这一部分请根据自己<code>fstab</code>实际内容修改使用</p>
 <div class="highlight"><pre><span></span>block detect &gt; /etc/config/fstab
 uci <span class="nb">set</span> fstab.@mount<span class="o">[</span><span class="m">1</span><span class="o">]</span>.enabled<span class="o">=</span><span class="s1">'1'</span>
@@ -189,7 +189,7 @@ uci commit
 <p><strong>卸载/挂载服务</strong></p>
 <div class="highlight"><pre><span></span>block umount &amp;&amp; block mount
 </pre></div>
-<h3 id="ying-pan-xiu-mian">硬盘休眠</h3>
+<h3 id="ying pan xiu mian">硬盘休眠</h3>
 <h4 id="hdparm"><em>hdparm</em></h4>
 <div class="highlight"><pre><span></span>opkg update
 opkg install hdparm luci-app-hd-idle
@@ -209,9 +209,9 @@ hdparm -S <span class="m">120</span> /dev/sda2
 <div class="highlight"><pre><span></span>opkg update
 opkg install hd-idle luci-app-hd-idle
 </pre></div>
-<p><img alt="hd-idle" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-idle.png"/></p>
+<p><img alt="hd-idle" src="https://ws1.sinaimg.cn/large/65f2a787ly1fxa2prebypj20f709a3yn.jpg"/></p>
 <h1 id="samba_2">Samba</h1>
-<h3 id="an-zhuang-samba">安装&nbsp;Samba</h3>
+<h3 id="an zhuang  samba">安装&nbsp;Samba</h3>
 <p>查看可安装的版本</p>
 <div class="highlight"><pre><span></span>opkg update
 opkg list <span class="p">|</span> grep samba
@@ -219,7 +219,7 @@ opkg list <span class="p">|</span> grep samba
 <p>根据结果，安装适当的版本</p>
 <div class="highlight"><pre><span></span>opkg install samba36-server luci-app-samba luci-i18n-samba-zh-cn
 </pre></div>
-<h3 id="pei-zhi-fang-huo-qiang">配置防火墙</h3>
+<h3 id="pei zhi fang huo qiang">配置防火墙</h3>
 <p><code>vim /etc/config/firewall</code></p>
 <div class="highlight"><pre><span></span><span class="na">config 'rule'</span>
         <span class="na">option 'src' 'lan'</span>
@@ -239,7 +239,7 @@ opkg list <span class="p">|</span> grep samba
         <span class="na">option 'dest_port' '445'</span>
         <span class="na">option 'target' 'ACCEPT'</span>
 </pre></div>
-<h3 id="samba-pei-zhi">Samba&nbsp;配置</h3>
+<h3 id="samba pei zhi">Samba&nbsp;配置</h3>
 <p><em>官方<strong>强烈建议</strong>使用 luci 来配置&nbsp;Samba，然后通过修改临时文件来完成配置。</em></p>
 <p><em>路由器每次重启，<code>/etc/samba/smb.conf</code>文件都将从<code>/etc/samba/smb.conf.template</code>文件重新创建，所以修改配置时请修改后者。</em></p>
 <p>全局和共享配置可以在 LuCi&nbsp;界面编辑也可以直接编辑文件，按照我的配置实现如下几个功能：</p>
@@ -248,7 +248,7 @@ opkg list <span class="p">|</span> grep samba
 <li>允许匿名用户访问<code>/mnt/sda1</code>，即 Media&nbsp;文件夹</li>
 <li>访问<code>/mnt/sda2</code>，即 Document&nbsp;文件夹必须登录，用户只能访问到自己创建的文件夹和文件</li>
 </ul>
-<h4 id="quan-ju-pei-zhi"><strong>全局配置</strong></h4>
+<h4 id="quan ju pei zhi"><strong>全局配置</strong></h4>
 <p><code>vim /etc/samba/smb.conf.template</code></p>
 <div class="highlight"><pre><span></span><span class="o">[</span>global<span class="o">]</span>
     <span class="c1">#netbios name = LEDE  #不设置默认是路由器host名</span>
@@ -269,7 +269,7 @@ opkg list <span class="p">|</span> grep samba
     smb passwd <span class="nv">file</span> <span class="o">=</span> /etc/samba/smbpasswd
     map to <span class="nv">guest</span> <span class="o">=</span> Bad User
 </pre></div>
-<h4 id="gong-xiang-wen-jian-jia-she-zhi"><strong>共享文件夹设置</strong></h4>
+<h4 id="gong xiang wen jian jia she zhi"><strong>共享文件夹设置</strong></h4>
 <p><code>vim /etc/config/samba</code></p>
 <div class="highlight"><pre><span></span>config samba
         option charset <span class="s1">'UTF-8'</span>
@@ -295,7 +295,7 @@ config sambashare
         option name <span class="s1">'Document'</span>
         option guest_ok <span class="s1">'no'</span>
 </pre></div>
-<h4 id="wen-jian-jia-chu-shi-quan-xian-she-zhi"><strong>文件夹初始权限设置</strong></h4>
+<h4 id="wen jian jia chu shi quan xian she zhi"><strong>文件夹初始权限设置</strong></h4>
 <p><code>/mnt/sda2</code>其实没必要更改所属用户和组，但是强迫症就是要给统一了。</p>
 <div class="highlight"><pre><span></span>chown -R nobody /mnt/sda1
 chgrp -R nogroup /mnt/sda1
@@ -305,7 +305,7 @@ chown -R nobody /mnt/sda2
 chgrp -R nogroup /mnt/sda2
 chmod -R <span class="m">777</span> /mnt/sda2
 </pre></div>
-<h4 id="tian-jia-yong-hu"><strong>添加用户</strong></h4>
+<h4 id="tian jia yong hu"><strong>添加用户</strong></h4>
 <p><span class="caps">LEDE</span> 默认不带<code>useradd</code>命令，需要手动安装</p>
 <div class="highlight"><pre><span></span>opkg update
 opkg install shadow-useradd
@@ -320,8 +320,8 @@ smbpasswd -a newuser
 /etc/init.d/samba <span class="nb">enable</span>
 </pre></div>
 <p>至此，Samba 设置完成，也达到了我的目的，有可以匿名随意访问的共享文件夹，也有实现了权限控制的私有文件夹。而且是全平台都可以访问，Windows、Linux 和手机（需要有支持 <span class="caps">SMB</span>&nbsp;协议的软件）。</p>
-<p><img alt="samba" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-samba.png"/></p>
-<h1 id="can-kao-lian-jie_2">参考链接</h1>
+<p><img alt="samba" src="https://ws1.sinaimg.cn/large/65f2a787ly1fxa2prha0jj20qz0mxjsm.jpg"/></p>
+<h1 id="can kao lian jie_2">参考链接</h1>
 <p><a href="https://openwrt.org/docs/guide-user/storage/usb-installing">Installing <span class="caps">USB</span>&nbsp;Drivers</a></p>
 <p><a href="https://openwrt.org/docs/guide-user/storage/usb-drives">Using storage devices</a>
 <a href="https://openwrt.org/docs/guide-user/services/nas/usb-storage-samba-webinterface">Share <span class="caps">USB</span> Hard-drive with Samba using the Luci web-interface</a>
@@ -411,7 +411,7 @@ smbpasswd -a newuser
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#usb-qu-dong" title="USB&nbsp;驱动">USB&nbsp;驱动</a><ul><li><a class="toc-href" href="#cha-kan-yi-an-zhuang-de-qu-dong" title="查看已安装的驱动">查看已安装的驱动</a></li><li><a class="toc-href" href="#an-zhuang-qu-dong-he-gong-ju" title="安装驱动和工具">安装驱动和工具</a></li><li><a class="toc-href" href="#an-zhuang-xiang-guan-gong-ju" title="安装相关工具">安装相关工具</a></li></ul></li><li><a class="toc-href" href="#ying-pan-xiang-guan-cao-zuo_1" title="硬盘相关操作">硬盘相关操作</a><ul><li><a class="toc-href" href="#ying-pan-fen-qu" title="硬盘分区">硬盘分区</a></li><li><a class="toc-href" href="#ge-shi-hua-ying-pan" title="格式化硬盘">格式化硬盘</a></li><li><a class="toc-href" href="#zi-dong-gua-zai-fen-qu" title="自动挂载分区">自动挂载分区</a></li><li><a class="toc-href" href="#ying-pan-xiu-mian" title="硬盘休眠">硬盘休眠</a><ul><li><a class="toc-href" href="#hdparm" title="hdparm">hdparm</a></li><li><a class="toc-href" href="#hd-idle" title="hd-idle">hd-idle</a></li></ul></li></ul></li><li><a class="toc-href" href="#samba_2" title="Samba">Samba</a><ul><li><a class="toc-href" href="#an-zhuang-samba" title="安装&nbsp;Samba">安装&nbsp;Samba</a></li><li><a class="toc-href" href="#pei-zhi-fang-huo-qiang" title="配置防火墙">配置防火墙</a></li><li><a class="toc-href" href="#samba-pei-zhi" title="Samba&nbsp;配置">Samba&nbsp;配置</a><ul><li><a class="toc-href" href="#quan-ju-pei-zhi" title="全局配置">全局配置</a></li><li><a class="toc-href" href="#gong-xiang-wen-jian-jia-she-zhi" title="共享文件夹设置">共享文件夹设置</a></li><li><a class="toc-href" href="#wen-jian-jia-chu-shi-quan-xian-she-zhi" title="文件夹初始权限设置">文件夹初始权限设置</a></li><li><a class="toc-href" href="#tian-jia-yong-hu" title="添加用户">添加用户</a></li></ul></li></ul></li><li><a class="toc-href" href="#can-kao-lian-jie_2" title="参考链接">参考链接</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#usb qu dong" title="USB&nbsp;驱动">USB&nbsp;驱动</a><ul><li><a class="toc-href" href="#cha kan yi an zhuang de qu dong" title="查看已安装的驱动">查看已安装的驱动</a></li><li><a class="toc-href" href="#an zhuang qu dong he gong ju" title="安装驱动和工具">安装驱动和工具</a></li><li><a class="toc-href" href="#an zhuang xiang guan gong ju" title="安装相关工具">安装相关工具</a></li></ul></li><li><a class="toc-href" href="#ying pan xiang guan cao zuo_1" title="硬盘相关操作">硬盘相关操作</a><ul><li><a class="toc-href" href="#ying pan fen qu" title="硬盘分区">硬盘分区</a></li><li><a class="toc-href" href="#ge shi hua ying pan" title="格式化硬盘">格式化硬盘</a></li><li><a class="toc-href" href="#zi dong gua zai fen qu" title="自动挂载分区">自动挂载分区</a></li><li><a class="toc-href" href="#ying pan xiu mian" title="硬盘休眠">硬盘休眠</a><ul><li><a class="toc-href" href="#hdparm" title="hdparm">hdparm</a></li><li><a class="toc-href" href="#hd-idle" title="hd-idle">hd-idle</a></li></ul></li></ul></li><li><a class="toc-href" href="#samba_2" title="Samba">Samba</a><ul><li><a class="toc-href" href="#an zhuang  samba" title="安装&nbsp;Samba">安装&nbsp;Samba</a></li><li><a class="toc-href" href="#pei zhi fang huo qiang" title="配置防火墙">配置防火墙</a></li><li><a class="toc-href" href="#samba pei zhi" title="Samba&nbsp;配置">Samba&nbsp;配置</a><ul><li><a class="toc-href" href="#quan ju pei zhi" title="全局配置">全局配置</a></li><li><a class="toc-href" href="#gong xiang wen jian jia she zhi" title="共享文件夹设置">共享文件夹设置</a></li><li><a class="toc-href" href="#wen jian jia chu shi quan xian she zhi" title="文件夹初始权限设置">文件夹初始权限设置</a></li><li><a class="toc-href" href="#tian jia yong hu" title="添加用户">添加用户</a></li></ul></li></ul></li><li><a class="toc-href" href="#can kao lian jie_2" title="参考链接">参考链接</a></li></ul></div>
         </nav>
 
   </div>
@@ -435,14 +435,6 @@ smbpasswd -a newuser
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

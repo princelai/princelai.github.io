@@ -180,7 +180,7 @@ Freq: S, Name: random, dtype: float64
 <p>方法 5 是内置的 asfreq&nbsp;方法</p>
 <p>方法 6 还是内置的 resample&nbsp;方法</p>
 <p>可以看到 resample 方法适用范围最广，既可以对时间采取多种细粒度的操作，也能对重采样后的数据进行后续操作；而 asfreq 方法只能对数据进行重采样，无法进行复杂的后续操作，只能用向前/向后填充数值；to_period 方法和字符串操作只能对时间进行整数采样，像 45 分钟，1 小时 30&nbsp;分这种更细腻的操作是不支持的。</p>
-<h3 id="bi-jiao-su-du">比较速度</h3>
+<h3 id="bi jiao su du">比较速度</h3>
 <p><strong>场景&nbsp;1</strong></p>
 <div class="highlight"><pre><span></span><span class="nf">%timeit</span> <span class="n">method1</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 <span class="nf">%timeit</span> <span class="n">method2</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
@@ -254,7 +254,7 @@ Freq: S, Name: random, dtype: float64
 </tr>
 </tbody>
 </table>
-<h3 id="pandas-offset-aliases">Pandas Offset&nbsp;Aliases</h3>
+<h3 id="pandas offset aliases">Pandas Offset&nbsp;Aliases</h3>
 <table>
 <thead>
 <tr>
@@ -373,7 +373,7 @@ Freq: S, Name: random, dtype: float64
 </tr>
 </tbody>
 </table>
-<h3 id="can-kao">参考</h3>
+<h3 id="can kao">参考</h3>
 <p><a href="https://pandas.pydata.org/pandas-docs/stable/timeseries.html">官方文档</a></p>
   </div>
 
@@ -449,7 +449,7 @@ Freq: S, Name: random, dtype: float64
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#bi-jiao-su-du" title="比较速度">比较速度</a></li><li><a class="toc-href" href="#pandas-offset-aliases" title="Pandas Offset&nbsp;Aliases">Pandas Offset&nbsp;Aliases</a></li><li><a class="toc-href" href="#can-kao" title="参考">参考</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#bi jiao su du" title="比较速度">比较速度</a></li><li><a class="toc-href" href="#pandas offset aliases" title="Pandas Offset&nbsp;Aliases">Pandas Offset&nbsp;Aliases</a></li><li><a class="toc-href" href="#can kao" title="参考">参考</a></li></ul></div>
         </nav>
 
   </div>
@@ -473,14 +473,6 @@ Freq: S, Name: random, dtype: float64
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

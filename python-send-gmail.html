@@ -121,7 +121,7 @@
 
   <div>
     <p>本文基于一个真实的项目，使用 python3.6 和最新官方 smtplib 接口。项目的目的是爬取网站，然后通过邮件给自己发送邮件提醒新文章。最后使用 linux 系统的 crond&nbsp;服务定时执行。</p>
-<h3 id="fa-you-jian-fang-fa">发邮件方法</h3>
+<h3 id="fa you jian fang fa">发邮件方法</h3>
 <p>在定义发邮件方法之前，我们还定义了一个类和类中的爬虫，单拿出来发邮件来说，代码如下：</p>
 <div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">sent_email</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">fromaddr</span> <span class="o">=</span> <span class="s1">'princelailai@gmail.com'</span>
@@ -153,13 +153,13 @@
 <li>如果你的 Google 账号开启了两步验证，那么你的邮箱密码就不是登录密码，而是 app 密码，关于 app 密码怎么生成可以查看这篇文章<a href="https://support.google.com/accounts/answer/185833#generate">Sign in using App&nbsp;Passwords</a></li>
 <li>其他关于 smtp 地址和端口的问题，可以查看这篇文章<a href="https://support.google.com/mail/answer/7126229?visit_id=1-636642850165284125-2014875658&amp;hl=en&amp;rd=1">Use <span class="caps">IMAP</span> to check Gmail on other email&nbsp;clients</a></li>
 </ol>
-<h3 id="ding-shi-qi-dong">定时启动</h3>
+<h3 id="ding shi qi dong">定时启动</h3>
 <p>创建一个文本文件，用于创建单一用户的 crond&nbsp;文件</p>
 <div class="highlight"><pre><span></span><span class="m">0</span> <span class="m">6</span> */3 * * /root/miniconda3/bin/python /root/monitor_house_info/monitor_house_info.py
 </pre></div>
 <p>关于 crond 配置，网上教程很多，或者<code>man 5 crontab</code>就可以看到详细的用法。</p>
 <p>最后输入<code>crontab file</code>导入文件，就可以坐等收邮件了。</p>
-<h3 id="quan-bu-dai-ma">全部代码</h3>
+<h3 id="quan bu dai ma">全部代码</h3>
 <div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
@@ -322,7 +322,7 @@
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#fa-you-jian-fang-fa" title="发邮件方法">发邮件方法</a></li><li><a class="toc-href" href="#ding-shi-qi-dong" title="定时启动">定时启动</a></li><li><a class="toc-href" href="#quan-bu-dai-ma" title="全部代码">全部代码</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#fa you jian fang fa" title="发邮件方法">发邮件方法</a></li><li><a class="toc-href" href="#ding shi qi dong" title="定时启动">定时启动</a></li><li><a class="toc-href" href="#quan bu dai ma" title="全部代码">全部代码</a></li></ul></div>
         </nav>
 
   </div>
@@ -346,14 +346,6 @@
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

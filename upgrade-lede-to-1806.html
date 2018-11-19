@@ -120,16 +120,16 @@
   
 
   <div>
-    <h1 id="xia-zai-sheng-ji-bao">下载升级包</h1>
+    <h1 id="xia zai sheng ji bao">下载升级包</h1>
 <p>首先下载新版文件，点击下方链接中任意一个，进入你的路由器架构，然后搜索路由器型号，如果你已经是 Openwrt/<span class="caps">LEDE</span>&nbsp;系统，可以下载升级包*-squashfs-sysupgrade.bin，如果不是，则要下载完整安装包*-squashfs-factory.img。</p>
 <p><a href="https://downloads.openwrt.org/releases/18.06.0/targets/">官方下载</a></p>
 <p><a href="https://mirrors.ustc.edu.cn/lede/releases/18.06.0/targets/">中科大</a></p>
 <p><a href="https://mirrors.tuna.tsinghua.edu.cn/lede/releases/18.06.0/targets">清华大学</a></p>
-<h1 id="bei-fen-geng-xin">备份 <span class="amp">&amp;</span>&nbsp;更新</h1>
+<h1 id="bei fen  &amp; geng xin">备份 <span class="amp">&amp;</span>&nbsp;更新</h1>
 <p>下载好文件后，进入路由器 Luci 界面，System &mdash;-&gt; Backup / Flash&nbsp;Firmware</p>
-<p><img alt="backup and flash" src="http://kevinstuchuang.qiniudn.com/blog-pic/lede-backup-flash.png"/></p>
+<p><img alt="backup and flash" src="https://ws1.sinaimg.cn/large/65f2a787ly1fxa2pretyzj20qi0jugnh.jpg"/></p>
 <p>建议先备份一份配置到本地，备份好后，上传文件，开刷！等待路由器重启后进入后面的步骤。</p>
-<h1 id="geng-xin-yuan">更新源</h1>
+<h1 id="geng xin yuan">更新源</h1>
 <p>关于详细的如何更换源操作，我在<a href="https://www.solarck.com/lede-media-center1.html"><span class="caps">LEDE</span>/OpenWRT 路由器打造家庭媒体影音中心（一）</a>中有写，这里仅给出自定义源文件的内容。</p>
 <p><code>vim /etc/opkg/customfeeds.conf</code></p>
 <div class="highlight"><pre><span></span><span class="c1">#Tsinghua</span>
@@ -156,7 +156,7 @@
 <div class="highlight"><pre><span></span>opkg update
 opkg list-upgradable <span class="p">|</span> cut -f <span class="m">1</span> -d <span class="s1">' '</span> <span class="p">|</span> xargs opkg upgrade
 </pre></div>
-<h1 id="yi-ge-wu-liao-de-jiao-ben">一个无聊的脚本</h1>
+<h1 id="yi ge wu liao de jiao ben">一个无聊的脚本</h1>
 <p>整个过程到上面就已经结束了，不过本着继(凑)续(字)深(数)挖的态度，花点时间写了个 python 脚本，用来分析所有 ipk&nbsp;包的升级情况。对了，写这个脚本的时候还发现有个源网址改变了，所以写自定义源的时候一定要注意。</p>
 <div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
@@ -290,7 +290,7 @@ opkg list-upgradable <span class="p">|</span> cut -f <span class="m">1</span> -d
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#xia-zai-sheng-ji-bao" title="下载升级包">下载升级包</a></li><li><a class="toc-href" href="#bei-fen-geng-xin" title="备份 &amp;&nbsp;更新">备份 &amp;&nbsp;更新</a></li><li><a class="toc-href" href="#geng-xin-yuan" title="更新源">更新源</a></li><li><a class="toc-href" href="#yi-ge-wu-liao-de-jiao-ben" title="一个无聊的脚本">一个无聊的脚本</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#xia zai sheng ji bao" title="下载升级包">下载升级包</a></li><li><a class="toc-href" href="#bei fen  &amp; geng xin" title="备份 &amp;&nbsp;更新">备份 &amp;&nbsp;更新</a></li><li><a class="toc-href" href="#geng xin yuan" title="更新源">更新源</a></li><li><a class="toc-href" href="#yi ge wu liao de jiao ben" title="一个无聊的脚本">一个无聊的脚本</a></li></ul></div>
         </nav>
 
   </div>
@@ -314,14 +314,6 @@ opkg list-upgradable <span class="p">|</span> cut -f <span class="m">1</span> -d
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

@@ -120,12 +120,24 @@
 
     <article>
       <header>
+        <h2><a href="https://www.solarck.com/openwrt-extroot.html" rel="bookmark" title="Permalink to 用 extroot 为 openwrt 扩充存储空间">用 extroot 为 openwrt&nbsp;扩充存储空间</a></h2>
+      </header>
+      <div><p>水星这款 MW4350r 内存为 128M，运行很多程序都不在话下。但是却只提供了 8M Flash 存储空间，而路由器系统还占了 1.9M，剩下的 5M 空间不足以支持安装很多软件，比如我在安装 python 的时候就报错提示存储空间不足，这确实很郁闷，但幸好 Openwrt 还提供了 extroot 方式来扩展存储，来发挥路由器和 Openwrt&nbsp;系统的真正实力。</p>
+<p><strong>pivot-overlay 还是&nbsp;pivot-root？</strong></p>
+<blockquote>
+<p>我把两种方式都试过，pivot-overlay 方式不能够把安装程序的位置移到 <span class="caps">USB</span> 存储装置上，但是 pivot-root 方式可以，所以我选择了后者。pivot-root 方式使/覆盖掉了/overlay 成为 rootfs，我认为这种方式更接近原生的 Linux 系统。<br/>
+而从官方的文档来看，目前 …</p></blockquote></div>
+      <div><a class="btn btn-primary" href="https://www.solarck.com/openwrt-extroot.html"><strong>➟ 查看全文</strong></a></div>
+    </article>
+    <hr/>
+    <article>
+      <header>
         <h2><a href="https://www.solarck.com/install-openwrt-on-mw4530r.html" rel="bookmark" title="Permalink to 水星（Mercury）MW4530r 刷 Openwrt">水星（Mercury）MW4530r 刷&nbsp;Openwrt</a></h2>
       </header>
       <div><p>经过两天的不屑折腾，终于为我的 Mw4530r 安装上了&nbsp;Openwrt。从最后安装成功往回看，其实整个过程非常简单，但是由于是第一次接触，走了不少弯路，本应该一个小时就完成的工作，却整整花了我两天时间。再次发篇文章庆祝下，也给其他朋友一些参考。</p>
-<h3 id="xia-zai-wen-jian">下载文件</h3>
+<h3 id="xia zai wen jian">下载文件</h3>
 <p>水星这款路由器是 ar71xx 芯片的，因为较新，所以还没有官方的稳定版。在 Openwrt 的<a href="http://downloads.openwrt.org/snapshots/trunk/ar71xx/">snapshots/trunk</a>目录搜索下载我们需要的刷机文件，一般情况一个型号有两个文件，一个名字里带 factory，从其他固件系统刷 Openwrt 下载这个文件；一个名字带 sysupgrade，已经是 Openwrt&nbsp;系统的用此文件升级。</p>
-<h3 id="shua-ji">刷机</h3>
+<h3 id="shua ji">刷机</h3>
 <p>组装好路由器，接通电源，电脑网卡口连接路由器任意 Lan 口，打开浏览器访问http://192.168.1.1 就可以看见水星的原厂界面。利用原厂固件的升级功能，提交下载好的 …</p></div>
       <div><a class="btn btn-primary" href="https://www.solarck.com/install-openwrt-on-mw4530r.html"><strong>➟ 查看全文</strong></a></div>
     </article>
@@ -212,14 +224,6 @@
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

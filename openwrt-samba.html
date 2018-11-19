@@ -121,11 +121,11 @@
 
   <div>
     <p>为 Openwrt 接入一个大 U 盘，不用来作共享中心的话实在没什么用处了，这也是为日后脱机 <span class="caps">BT</span>&nbsp;下载提供一个基础。</p>
-<h3 id="an-zhuang">安装</h3>
+<h3 id="an zhuang">安装</h3>
 <div class="highlight"><pre><span></span>opkg update
 opkg install samba36-server luci-app-samba
 </pre></div>
-<h4 id="pei-zhi-wen-jian">配置文件</h4>
+<h4 id="pei zhi wen jian">配置文件</h4>
 <p>samba&nbsp;的配置文件只有两个，而且默认配置稍作修改就可以使用</p>
 <div class="highlight"><pre><span></span>root@openwrt:~# vi /etc/samba/smb.conf.template
 <span class="o">[</span>global<span class="o">]</span>
@@ -189,7 +189,7 @@ config <span class="s1">'sambashare'</span>
 <div class="highlight"><pre><span></span>/etc/init.d/samba restart
 /etc/init.d/samba <span class="nb">enable</span>
 </pre></div>
-<h3 id="fang-wen_1">访问</h3>
+<h3 id="fang wen_1">访问</h3>
 <p>Windows 用户很容易访问，在网络邻居（网络）里就可以看到 <span class="caps">WORKGROUP</span>&mdash;&gt;<span class="caps">OPENWRT</span>&mdash;&gt;Share 文件夹了，但是 linux 用户需要一些其他命令。<br/>
 <strong>1. 安装&nbsp;g2sc</strong></p>
 <div class="highlight"><pre><span></span>yaourt -S g2sc
@@ -228,7 +228,7 @@ put ****    <span class="c1">#上传某个文件</span>
 <div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: mkdir /mnt/samba
 kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
 </pre></div>
-<h3 id="wan-cheng">完成</h3>
+<h3 id="wan cheng">完成</h3>
 <p>由于安装了 Luci，所以开启了 uhttp 服务，把共享目录链接到/www 目录同样可以通过浏览器直接下载，相当于把 Samba 目录同样做成了 <span class="caps">FTP</span>&nbsp;目录。</p>
 <div class="highlight"><pre><span></span>kevin@kevin:pts/2 ~$: ln -s /share /www/share
 </pre></div>
@@ -304,7 +304,7 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#an-zhuang" title="安装">安装</a><ul><li><a class="toc-href" href="#pei-zhi-wen-jian" title="配置文件">配置文件</a></li></ul></li><li><a class="toc-href" href="#fang-wen_1" title="访问">访问</a></li><li><a class="toc-href" href="#wan-cheng" title="完成">完成</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#an zhuang" title="安装">安装</a><ul><li><a class="toc-href" href="#pei zhi wen jian" title="配置文件">配置文件</a></li></ul></li><li><a class="toc-href" href="#fang wen_1" title="访问">访问</a></li><li><a class="toc-href" href="#wan cheng" title="完成">完成</a></li></ul></div>
         </nav>
 
   </div>
@@ -328,14 +328,6 @@ kevin@kevin:pts/2 ~$: sudo mount -t cifs  -l //OPENWRT/Shares /mnt/samba
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>

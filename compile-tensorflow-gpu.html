@@ -121,8 +121,8 @@
 
   <div>
     <p>我的电脑系统是基于 Archlinux 的 Manjaro，软件包更新的比较激进，很早就已经是 <span class="caps">CUDA</span> 9.2 了，而目前 Tensorflow 的官方编译版本对 <span class="caps">CUDA</span> 的支持还只停留在 <span class="caps">CUDA</span> 9.0。由于还不太会用 mxnet 和 pytorch，这时倍加想念 Keras 的简单。最近忙里偷闲研究了一下编译安装&nbsp;Tensorflow，发现还挺简单的，把成功的喜悦分享出来，也供有需要的朋友参考。</p>
-<h1 id="cha-kan-xi-tong-xin-xi">查看系统信息</h1>
-<h3 id="cha-kan-xi-tong-jia-gou-he-fa-xing-ban-ben">查看系统架构和发行版本</h3>
+<h1 id="cha kan xi tong xin xi">查看系统信息</h1>
+<h3 id="cha kan xi tong jia gou he fa xing ban ben">查看系统架构和发行版本</h3>
 <p>我用的 Manjaro&nbsp;x86_64</p>
 <p><code>uname -m &amp;&amp; cat /etc/*release</code></p>
 <div class="highlight"><pre><span></span>x86_64
@@ -140,12 +140,12 @@ HOME_URL="https://www.manjaro.org/"
 SUPPORT_URL="https://www.manjaro.org/"
 BUG_REPORT_URL="https://bugs.manjaro.org/"
 </pre></div>
-<h3 id="cha-kan-cpu-zhi-chi-de-zhi-ling-ji">查看 <span class="caps">CPU</span>&nbsp;支持的指令集</h3>
+<h3 id="cha kan  cpu zhi chi de zhi ling ji">查看 <span class="caps">CPU</span>&nbsp;支持的指令集</h3>
 <p>嗯，这个貌似没什么用</p>
 <p><code>cat /proc/cpuinfo |grep -m1 flags |cut -f2 -d":"</code></p>
 <div class="highlight"><pre><span></span>fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 invpcid_single pti intel_ppin ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a rdseed adx smap intel_pt xsaveopt cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts
 </pre></div>
-<h3 id="cha-kan-python-huan-jing">查看 Python&nbsp;环境</h3>
+<h3 id="cha kan  python huan jing">查看 Python&nbsp;环境</h3>
 <p>我用 Anaconda 构建的虚拟环境，Python 3.6.6。这里要注意记住<code>base environment</code>环境路径。</p>
 <p><code>conda info</code></p>
 <div class="highlight"><pre><span></span>     active environment : None
@@ -171,7 +171,7 @@ BUG_REPORT_URL="https://bugs.manjaro.org/"
              netrc file : None
            offline mode : False
 </pre></div>
-<h3 id="cha-kan-gpu-xin-xi">查看 <span class="caps">GPU</span>&nbsp;信息</h3>
+<h3 id="cha kan  gpu xin xi">查看 <span class="caps">GPU</span>&nbsp;信息</h3>
 <p>如果你执行不了下面这个命令，那么证明你的驱动装的有问题，要用闭源的 Nvidia 驱动，不要用开源的。Manjaro&nbsp;安装驱动太简单了，就不详细说了。</p>
 <p>其次你还要去<a href="https://developer.nvidia.com/cuda-gpus"><span class="caps">CUDA</span> <span class="caps">GPU</span></a>根据显卡型号查询你 <span class="caps">GPU</span> 的算力，这个算力后面会用到。如果你的显卡是 Nvidia 1000 系列，且型号大于 1050，那么算力就是&nbsp;6.1。</p>
 <p><code>nvidia-smi</code></p>
@@ -198,8 +198,8 @@ BUG_REPORT_URL="https://bugs.manjaro.org/"
 |    0     13026      G   ...-token=F6A861CA29AB37BD6D50C064EC6A95F0    40MiB |
 +-----------------------------------------------------------------------------+
 </pre></div>
-<h1 id="an-zhuang-bian-yi-yi-lai_1">安装编译依赖</h1>
-<h3 id="an-zhuang-xian-qia-xiang-guan-yi-lai">安装显卡相关依赖</h3>
+<h1 id="an zhuang bian yi yi lai_1">安装编译依赖</h1>
+<h3 id="an zhuang xian qia xiang guan yi lai">安装显卡相关依赖</h3>
 <div class="highlight"><pre><span></span>yaourt -S --needed linux418-nvidia cuda cudnn
 </pre></div>
 <p>安装好之后你还需要记住 cuDNN&nbsp;的版本和路径</p>
@@ -219,20 +219,20 @@ cuda /usr/share/man/man7/libcudart.so.7.gz
 <p><code>echo $PATH</code></p>
 <div class="highlight"><pre><span></span>/opt/bin:/opt/cuda/bin:/opt/Anaconda3/bin:/opt/android-sdk/platform-tools:/opt/android-sdk/tools:/opt/android-sdk/tools/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/usr/local/sbin:/usr/local/bin:/usr/bin:/opt/android-sdk/platform-tools:/opt/android-sdk/tools:/opt/android-sdk/tools/bin:/opt/cuda/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
 </pre></div>
-<h3 id="an-zhuang-bian-yi-gong-ju">安装编译工具</h3>
+<h3 id="an zhuang bian yi gong ju">安装编译工具</h3>
 <p>Tensorflow 需要使用 bazel 构建，gcc7 编译，当前我的系统 gcc 版本是 8.1 我已经帮你试过了，Tensorflow 不允许 gcc 版本高于&nbsp;7。</p>
 <div class="highlight"><pre><span></span>yaourt -S bazel gcc7 gcc7-libs
 </pre></div>
-<h3 id="xia-zai-yuan-ma">下载源码</h3>
+<h3 id="xia zai yuan ma">下载源码</h3>
 <div class="highlight"><pre><span></span>git clone https://github.com/tensorflow/tensorflow
 </pre></div>
-<h3 id="xuan-ze-an-zhuang-ban-ben">选择安装版本</h3>
+<h3 id="xuan ze an zhuang ban ben">选择安装版本</h3>
 <p>当前稳定版本为 1.9，1.10 处于 rc2&nbsp;阶段，编译哪个版本自己选择。</p>
 <div class="highlight"><pre><span></span>cd tensorflow
 git checkout r1.10
 </pre></div>
-<h1 id="bian-yi-an-zhuang_1">编译安装</h1>
-<h3 id="bian-yi-pei-zhi">编译配置</h3>
+<h1 id="bian yi an zhuang_1">编译安装</h1>
+<h3 id="bian yi pei zhi">编译配置</h3>
 <p>如没有特殊要求，按照我的选择就可以，注意路径要换成自己的。</p>
 <div class="highlight"><pre><span></span><span class="err">$</span> <span class="p">.</span><span class="o">/</span><span class="n">configure</span>
 <span class="n">Extracting</span> <span class="n">Bazel</span> <span class="n">installation</span><span class="p">...</span>
@@ -318,7 +318,7 @@ git checkout r1.10
         <span class="o">--</span><span class="n">config</span><span class="o">=</span><span class="n">monolithic</span>     <span class="err">#</span> <span class="n">Config</span> <span class="k">for</span> <span class="n">mostly</span> <span class="k">static</span> <span class="n">monolithic</span> <span class="n">build</span><span class="p">.</span>
 <span class="n">Configuration</span> <span class="n">finished</span>
 </pre></div>
-<h3 id="kai-shi-bian-yi">开始编译</h3>
+<h3 id="kai shi bian yi">开始编译</h3>
 <p><code>--config=mkl</code>可以选择不添加，Intel <span class="caps">CPU</span>&nbsp;加了也没什么坏处。</p>
 <div class="highlight"><pre><span></span>bazel build --config=opt --config=cuda --config=mkl //tensorflow/tools/pip_package:build_pip_package
 </pre></div>
@@ -327,17 +327,17 @@ git checkout r1.10
 <span class="n">INFO</span><span class="o">:</span> <span class="mi">8105</span> <span class="n">processes</span><span class="o">:</span> <span class="mi">8105</span> <span class="n">local</span><span class="o">.</span>
 <span class="n">INFO</span><span class="o">:</span> <span class="n">Build</span> <span class="n">completed</span> <span class="n">successfully</span><span class="o">,</span> <span class="mi">8292</span> <span class="n">total</span> <span class="n">actions</span>
 </pre></div>
-<h3 id="dao-chu-wei-wheel-wen-jian">导出为 wheel&nbsp;文件</h3>
+<h3 id="dao chu wei  wheel wen jian">导出为 wheel&nbsp;文件</h3>
 <div class="highlight"><pre><span></span>$ bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 $ ls -lh /tmp/tensorflow_pkg
 -rw-r--r-- <span class="m">1</span> kevin kevin 135M Jul <span class="m">30</span> <span class="m">14</span>:03 tensorflow-1.10.0rc1-cp36-cp36m-linux_x86_64.whl
 </pre></div>
-<h3 id="pip-an-zhuang">pip&nbsp;安装</h3>
+<h3 id="pip an zhuang">pip&nbsp;安装</h3>
 <div class="highlight"><pre><span></span>pip install /tmp/tensorflow_pkg/tensorflow-1.10.0rc1-cp36-cp36m-linux_x86_64.whl
 </pre></div>
-<h1 id="ce-shi_1">测试</h1>
+<h1 id="ce shi_1">测试</h1>
 <p>安装好之后，可以通过下面两种不同的方法查看是否已经开启了 <span class="caps">GPU</span>。</p>
-<h3 id="fang-fa-yi">方法一</h3>
+<h3 id="fang fa yi">方法一</h3>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="kn">as</span> <span class="nn">tf</span>
 <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">'/gpu:0'</span><span class="p">):</span>
   <span class="n">a</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">'a'</span><span class="p">)</span>
@@ -346,13 +346,13 @@ $ ls -lh /tmp/tensorflow_pkg
 <span class="n">sess</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">ConfigProto</span><span class="p">(</span><span class="n">log_device_placement</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
 <span class="k">print</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
 </pre></div>
-<h3 id="fang-fa-er">方法二</h3>
+<h3 id="fang fa er">方法二</h3>
 <div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">gpu_device_name</span><span class="p">():</span>
     <span class="k">print</span><span class="p">(</span><span class="s1">'Default GPU Device: {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">gpu_device_name</span><span class="p">()))</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="k">print</span><span class="p">(</span><span class="s2">"Please install GPU version of TF"</span><span class="p">)</span>
 </pre></div>
-<h1 id="can-kao_1">参考</h1>
+<h1 id="can kao_1">参考</h1>
 <p><a href="https://www.tensorflow.org/install/install_sources?hl=zh-cn">从源代码安装&nbsp;TensorFlow</a></p>
   </div>
 
@@ -421,7 +421,7 @@ $ ls -lh /tmp/tensorflow_pkg
     
         <center><h4><b>目录</b></h4></center>
         <nav class="toc">
-            <div id="toc"><ul><li><a class="toc-href" href="#cha-kan-xi-tong-xin-xi" title="查看系统信息">查看系统信息</a><ul><li><a class="toc-href" href="#cha-kan-xi-tong-jia-gou-he-fa-xing-ban-ben" title="查看系统架构和发行版本">查看系统架构和发行版本</a></li><li><a class="toc-href" href="#cha-kan-cpu-zhi-chi-de-zhi-ling-ji" title="查看 CPU&nbsp;支持的指令集">查看 CPU&nbsp;支持的指令集</a></li><li><a class="toc-href" href="#cha-kan-python-huan-jing" title="查看 Python&nbsp;环境">查看 Python&nbsp;环境</a></li><li><a class="toc-href" href="#cha-kan-gpu-xin-xi" title="查看 GPU&nbsp;信息">查看 GPU&nbsp;信息</a></li></ul></li><li><a class="toc-href" href="#an-zhuang-bian-yi-yi-lai_1" title="安装编译依赖">安装编译依赖</a><ul><li><a class="toc-href" href="#an-zhuang-xian-qia-xiang-guan-yi-lai" title="安装显卡相关依赖">安装显卡相关依赖</a></li><li><a class="toc-href" href="#an-zhuang-bian-yi-gong-ju" title="安装编译工具">安装编译工具</a></li><li><a class="toc-href" href="#xia-zai-yuan-ma" title="下载源码">下载源码</a></li><li><a class="toc-href" href="#xuan-ze-an-zhuang-ban-ben" title="选择安装版本">选择安装版本</a></li></ul></li><li><a class="toc-href" href="#bian-yi-an-zhuang_1" title="编译安装">编译安装</a><ul><li><a class="toc-href" href="#bian-yi-pei-zhi" title="编译配置">编译配置</a></li><li><a class="toc-href" href="#kai-shi-bian-yi" title="开始编译">开始编译</a></li><li><a class="toc-href" href="#dao-chu-wei-wheel-wen-jian" title="导出为 wheel&nbsp;文件">导出为 wheel&nbsp;文件</a></li><li><a class="toc-href" href="#pip-an-zhuang" title="pip&nbsp;安装">pip&nbsp;安装</a></li></ul></li><li><a class="toc-href" href="#ce-shi_1" title="测试">测试</a><ul><li><a class="toc-href" href="#fang-fa-yi" title="方法一">方法一</a></li><li><a class="toc-href" href="#fang-fa-er" title="方法二">方法二</a></li></ul></li><li><a class="toc-href" href="#can-kao_1" title="参考">参考</a></li></ul></div>
+            <div id="toc"><ul><li><a class="toc-href" href="#cha kan xi tong xin xi" title="查看系统信息">查看系统信息</a><ul><li><a class="toc-href" href="#cha kan xi tong jia gou he fa xing ban ben" title="查看系统架构和发行版本">查看系统架构和发行版本</a></li><li><a class="toc-href" href="#cha kan  cpu zhi chi de zhi ling ji" title="查看 CPU&nbsp;支持的指令集">查看 CPU&nbsp;支持的指令集</a></li><li><a class="toc-href" href="#cha kan  python huan jing" title="查看 Python&nbsp;环境">查看 Python&nbsp;环境</a></li><li><a class="toc-href" href="#cha kan  gpu xin xi" title="查看 GPU&nbsp;信息">查看 GPU&nbsp;信息</a></li></ul></li><li><a class="toc-href" href="#an zhuang bian yi yi lai_1" title="安装编译依赖">安装编译依赖</a><ul><li><a class="toc-href" href="#an zhuang xian qia xiang guan yi lai" title="安装显卡相关依赖">安装显卡相关依赖</a></li><li><a class="toc-href" href="#an zhuang bian yi gong ju" title="安装编译工具">安装编译工具</a></li><li><a class="toc-href" href="#xia zai yuan ma" title="下载源码">下载源码</a></li><li><a class="toc-href" href="#xuan ze an zhuang ban ben" title="选择安装版本">选择安装版本</a></li></ul></li><li><a class="toc-href" href="#bian yi an zhuang_1" title="编译安装">编译安装</a><ul><li><a class="toc-href" href="#bian yi pei zhi" title="编译配置">编译配置</a></li><li><a class="toc-href" href="#kai shi bian yi" title="开始编译">开始编译</a></li><li><a class="toc-href" href="#dao chu wei  wheel wen jian" title="导出为 wheel&nbsp;文件">导出为 wheel&nbsp;文件</a></li><li><a class="toc-href" href="#pip an zhuang" title="pip&nbsp;安装">pip&nbsp;安装</a></li></ul></li><li><a class="toc-href" href="#ce shi_1" title="测试">测试</a><ul><li><a class="toc-href" href="#fang fa yi" title="方法一">方法一</a></li><li><a class="toc-href" href="#fang fa er" title="方法二">方法二</a></li></ul></li><li><a class="toc-href" href="#can kao_1" title="参考">参考</a></li></ul></div>
         </nav>
 
   </div>
@@ -445,14 +445,6 @@ $ ls -lh /tmp/tensorflow_pkg
                   <li>  <a href="http://getpelican.com/">
       <img src="https://besticon-demo.herokuapp.com/icon?url=getpelican.com&size=16" width="16" height="16" class="icon" alt="getpelican.com icon"/>
     Pelican
-  </a></li>
-                  <li>  <a href="http://python.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=python.org&size=16" width="16" height="16" class="icon" alt="python.org icon"/>
-    Python.org
-  </a></li>
-                  <li>  <a href="http://jinja.pocoo.org/">
-      <img src="https://besticon-demo.herokuapp.com/icon?url=jinja.pocoo.org&size=16" width="16" height="16" class="icon" alt="jinja.pocoo.org icon"/>
-    Jinja2
   </a></li>
                 </ul>
             </div>
